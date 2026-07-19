@@ -121,3 +121,62 @@ Stage Summary:
 - Phase 1 complete: folder structure, shared types (ProjectProfile, Provenance, StateMachine, Interview), Zod schemas (all money fields as int), Knowledge Package loader (5 datasets, ~1700 NIC codes, sync in-memory), Prisma schema rewritten (JSON profileData/provenanceData/completionData, 9-state status), landing page
 - Key architectural invariants implemented: verification-only engine readiness, Source × Verification provenance, field ownership table, REVIEW_PENDING state, state machine extensibility
 - Next: Phase 2 — Structured Project Profile with state machine transitions, persistence, resume/edit support
+---
+Task ID: 3-a
+Agent: Knowledge Datasets Agent
+Task: Create PMEGP knowledge datasets for Knowledge Package
+
+Work Log:
+- Created pmegp_subsidy_matrix.json with 4-category subsidy matrix (GENERAL/SPECIAL × URBAN/RURAL)
+- Created pmegp_negative_list.json with 30 NIC-coded excluded activities + 11 keyword patterns
+- Created pmegp_machinery_catalog.json with 75 machinery items across 15 NIC prefixes (1010, 1410, 1711, 2010, 2021, 2211, 2391, 2511, 2512, 2610, 2720, 3100, 4661, 4711, 4751)
+- Created pmegp_raw_materials.json with 70 raw material entries across same 15 NIC prefixes
+- Validated all 4 files: valid JSON, all monetary values are integer rupees
+
+Stage Summary:
+- 4 new data files in src/knowledge-package/data/
+- All values in integer rupees, realistic 2024 Indian market prices
+- Ready for Knowledge Engine consumption
+
+---
+Task ID: 3-b
+Agent: Main (activity defaults), Location Data Agent (location data)
+Task: Create employee, utility, capacity, and location datasets for PMEGP
+
+Work Log:
+- Created pmegp_activity_defaults.json with 18 NIC prefix entries covering employees, utilities, capacity, market, project size, synonyms (44.2 KB)
+- Created pmegp_location_data.json with aspirational districts, hill/border area data, and state-wise industry suggestions (5.9 KB)
+
+Stage Summary:
+- 2 new data files in src/knowledge-package/data/
+- 18 industry activity profiles with comprehensive defaults
+- 60+ aspirational districts, 13 hill/border states, all 28+ states covered
+- Ready for Knowledge Engine consumption
+
+---
+Task ID: 3-c
+Agent: Main
+Task: Implement Knowledge Engine (Milestone 2) and create AGENT_CONTRACTS.md
+
+Work Log:
+- Created AGENT_CONTRACTS.md (840 lines) — per-subsystem contracts for 16 subsystems
+  - Owner, Public API, Allowed Imports, Forbidden Imports, Events Emitted/Consumed
+  - Import Boundary Matrix (15×15)
+  - Milestone Readiness Checklist
+- Implemented Knowledge Engine (734 lines) replacing the stub
+  - 12 public functions: resolveActivity, suggestMachinery, suggestRawMaterials,
+    suggestEmployees, suggestUtilities, suggestCapacity, suggestMarket,
+    suggestProjectSize, isOnNegativeList, matchesNegativeKeyword,
+    getSubsidyInfo, getLocationInfo, getProjectSizeOptions, getWorkingDefaults,
+    getSchemeDefaults, getNegativeList
+- Type-check: zero errors in src/ (excluding pre-existing examples/ and skills/)
+- 3 git commits: AGENT_CONTRACTS.md, 6 knowledge datasets, Knowledge Engine
+
+Stage Summary:
+- Milestone 2 (Knowledge Engine) is COMPLETE
+- AGENT_CONTRACTS.md provides the boundary document needed before parallel agent work
+- 6 new PMEGP datasets: subsidy matrix, negative list, machinery catalog (75 items),
+  raw materials (70 items), activity defaults (18 industries), location data
+- Knowledge Engine: 12 pure functions, synonym expansion, fuzzy matching,
+  negative list checking, subsidy computation, location-aware suggestions
+- Next: Milestone 3 (AI Interview) or Milestone 4 (UI) can begin in parallel
