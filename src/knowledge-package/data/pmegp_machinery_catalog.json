@@ -1,0 +1,173 @@
+{
+  "description": "Typical machinery lists for common PMEGP activities",
+  "version": "1.0",
+  "source": "Compiled from NSIC rate contracts, KVIC guidelines, and industry surveys",
+  "currency": "INR",
+  "catalog": {
+    "1010": {
+      "nicPrefix": "1010",
+      "industryName": "Food processing (oil extraction, dal milling, rice milling, flour milling, bakery)",
+      "machinery": [
+        { "name": "Mini Dal Mill", "specification": "1 HP, 50-60 kg/hr capacity, single phase", "typicalQuantity": 1, "estimatedUnitCost": 45000, "unitCostRange": [35000, 55000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Oil Expeller (Mini)", "specification": "2 HP, 15-20 kg/hr, groundnut/mustard/soybean", "typicalQuantity": 1, "estimatedUnitCost": 38000, "unitCostRange": [30000, 48000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Flour Mill (Atta Chakki)", "specification": "3 HP, 50 kg/hr, stone or roller type", "typicalQuantity": 1, "estimatedUnitCost": 28000, "unitCostRange": [22000, 38000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Commercial Oven (Bakery)", "specification": "3-tray, 2000W, electric, with thermostat", "typicalQuantity": 1, "estimatedUnitCost": 55000, "unitCostRange": [42000, 70000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Dough Kneading Machine", "specification": "10 kg capacity, 1 HP, stainless steel", "typicalQuantity": 1, "estimatedUnitCost": 22000, "unitCostRange": [18000, 30000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "1410": {
+      "nicPrefix": "1410",
+      "industryName": "Garment making (tailoring units)",
+      "machinery": [
+        { "name": "Industrial Lock Stitch Sewing Machine", "specification": "Single needle, 1 HP, table mounted", "typicalQuantity": 5, "estimatedUnitCost": 18000, "unitCostRange": [14000, 24000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Overlock Machine (4-thread)", "specification": "High speed, differential feed", "typicalQuantity": 2, "estimatedUnitCost": 28000, "unitCostRange": [22000, 38000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Interlock Sewing Machine", "specification": "Flatbed, 3-thread", "typicalQuantity": 1, "estimatedUnitCost": 32000, "unitCostRange": [25000, 42000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Fabric Cutting Machine (Straight Knife)", "specification": "8 inch blade, electric", "typicalQuantity": 1, "estimatedUnitCost": 15000, "unitCostRange": [11000, 20000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Steam Iron with Boiler", "specification": "5 litre boiler, 1000W", "typicalQuantity": 2, "estimatedUnitCost": 8500, "unitCostRange": [6500, 12000], "isEssential": true, "category": "SECONDARY" }
+      ]
+    },
+    "1711": {
+      "nicPrefix": "1711",
+      "industryName": "Spinning, weaving and finishing of textiles",
+      "machinery": [
+        { "name": "Power Loom (Auto)", "specification": "120 inch, 4 shuttle, with dobby attachment", "typicalQuantity": 4, "estimatedUnitCost": 65000, "unitCostRange": [55000, 85000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Winding Machine", "specification": "Single spindle, automatic", "typicalQuantity": 2, "estimatedUnitCost": 35000, "unitCostRange": [25000, 45000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Jigger Dyeing Machine", "specification": "Small batch, 50 m capacity, stainless steel", "typicalQuantity": 1, "estimatedUnitCost": 75000, "unitCostRange": [60000, 95000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Stenter Machine (Mini)", "specification": "48 inch width, 2 chamber, gas heated", "typicalQuantity": 1, "estimatedUnitCost": 180000, "unitCostRange": [150000, 220000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Pirn Winding Machine", "specification": "6 spindle, for shuttle looms", "typicalQuantity": 1, "estimatedUnitCost": 25000, "unitCostRange": [20000, 35000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Calendar Machine (Mini)", "specification": "2 roller, 36 inch width", "typicalQuantity": 1, "estimatedUnitCost": 120000, "unitCostRange": [95000, 150000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2010": {
+      "nicPrefix": "2010",
+      "industryName": "Saw milling and wood products",
+      "machinery": [
+        { "name": "Circular Saw Machine", "specification": "18 inch blade, 2 HP, table type", "typicalQuantity": 1, "estimatedUnitCost": 28000, "unitCostRange": [22000, 38000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Band Saw Machine", "specification": "36 inch wheel, 3 HP, for resawing", "typicalQuantity": 1, "estimatedUnitCost": 65000, "unitCostRange": [50000, 85000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Wood Planer (Thicknesser)", "specification": "13 inch width, 2 HP", "typicalQuantity": 1, "estimatedUnitCost": 45000, "unitCostRange": [35000, 60000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Surface Planer", "specification": "12 inch, 1.5 HP, cast iron bed", "typicalQuantity": 1, "estimatedUnitCost": 22000, "unitCostRange": [17000, 30000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Wood Router (Hand-held)", "specification": "1/2 inch collet, 1.5 HP, variable speed", "typicalQuantity": 1, "estimatedUnitCost": 12000, "unitCostRange": [8000, 18000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2021": {
+      "nicPrefix": "2021",
+      "industryName": "Furniture making",
+      "machinery": [
+        { "name": "Woodworking Lathe", "specification": "36 inch between centers, 1 HP", "typicalQuantity": 1, "estimatedUnitCost": 35000, "unitCostRange": [28000, 48000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Drill Press (Bench)", "specification": "16 mm chuck, 1/2 HP", "typicalQuantity": 1, "estimatedUnitCost": 15000, "unitCostRange": [11000, 22000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Circular Saw (Table)", "specification": "14 inch blade, 1.5 HP, with rip fence", "typicalQuantity": 1, "estimatedUnitCost": 25000, "unitCostRange": [20000, 35000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Hand Sander (Belt + Disc)", "specification": "4 inch belt, 8 inch disc, 1/2 HP", "typicalQuantity": 1, "estimatedUnitCost": 9000, "unitCostRange": [6500, 13000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Air Compressor", "specification": "25 litre, 2 HP, with spray gun", "typicalQuantity": 1, "estimatedUnitCost": 18000, "unitCostRange": [14000, 25000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Edge Banding Machine", "specification": "Manual, for 0.4-3 mm tape, portable", "typicalQuantity": 1, "estimatedUnitCost": 22000, "unitCostRange": [16000, 30000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2211": {
+      "nicPrefix": "2211",
+      "industryName": "Paper products (corrugated boxes, paper bags, stationery)",
+      "machinery": [
+        { "name": "Corrugated Box Making Machine (Semi-auto)", "specification": "3-ply, 36 inch width, electric", "typicalQuantity": 1, "estimatedUnitCost": 95000, "unitCostRange": [75000, 120000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Paper Cutting Machine (Guzzler)", "specification": "32 inch cut, manual clamping", "typicalQuantity": 1, "estimatedUnitCost": 35000, "unitCostRange": [28000, 48000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Paper Bag Making Machine", "specification": "Manual/battery operated, for grocery bags", "typicalQuantity": 1, "estimatedUnitCost": 55000, "unitCostRange": [40000, 75000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Folding and Pasting Machine", "specification": "Small, for paper bags/envelopes", "typicalQuantity": 1, "estimatedUnitCost": 28000, "unitCostRange": [20000, 38000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Printing Machine (Mini Offset)", "specification": "A3 size, single color", "typicalQuantity": 1, "estimatedUnitCost": 150000, "unitCostRange": [120000, 190000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2391": {
+      "nicPrefix": "2391",
+      "industryName": "Plastic products (bags, containers, packaging)",
+      "machinery": [
+        { "name": "Blown Film Plant", "specification": "Single extruder, 25 kg/hr, with winding unit", "typicalQuantity": 1, "estimatedUnitCost": 250000, "unitCostRange": [200000, 320000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Plastic Bag Cutting and Sealing Machine", "specification": "Double line, with gussetting", "typicalQuantity": 1, "estimatedUnitCost": 65000, "unitCostRange": [50000, 85000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Injection Moulding Machine", "specification": "50 ton, microprocessor controlled", "typicalQuantity": 1, "estimatedUnitCost": 450000, "unitCostRange": [350000, 600000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Plastic Grinder (Crusher)", "specification": "15 HP, for recycling scrap", "typicalQuantity": 1, "estimatedUnitCost": 85000, "unitCostRange": [65000, 110000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Mixing Machine (Plastic)", "specification": "100 kg capacity, paddle type, 5 HP", "typicalQuantity": 1, "estimatedUnitCost": 45000, "unitCostRange": [35000, 60000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2511": {
+      "nicPrefix": "2511",
+      "industryName": "Steel furniture and fixtures",
+      "machinery": [
+        { "name": "Arc Welding Machine", "specification": "200A, 3 phase, IGBT based", "typicalQuantity": 2, "estimatedUnitCost": 18000, "unitCostRange": [14000, 25000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "MIG Welding Machine", "specification": "200A, with wire feeder and gas regulator", "typicalQuantity": 1, "estimatedUnitCost": 35000, "unitCostRange": [28000, 48000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Angle Grinder", "specification": "4 inch, 850W, with cutting and grinding discs", "typicalQuantity": 2, "estimatedUnitCost": 4500, "unitCostRange": [3000, 6500], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Drill Press (Floor)", "specification": "25 mm chuck, 1 HP", "typicalQuantity": 1, "estimatedUnitCost": 22000, "unitCostRange": [17000, 30000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Sheet Bending Machine (Manual)", "specification": "4 ft length, 16 gauge capacity", "typicalQuantity": 1, "estimatedUnitCost": 28000, "unitCostRange": [22000, 38000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Powder Coating Booth (Mini)", "specification": "With spray gun and 2 cu m oven", "typicalQuantity": 1, "estimatedUnitCost": 120000, "unitCostRange": [95000, 160000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2512": {
+      "nicPrefix": "2512",
+      "industryName": "Fabricated metal products (gates, grills, shutters)",
+      "machinery": [
+        { "name": "Arc Welding Machine", "specification": "200A, 3 phase", "typicalQuantity": 2, "estimatedUnitCost": 18000, "unitCostRange": [14000, 25000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Power Hack Saw", "specification": "14 inch blade, coolant system", "typicalQuantity": 1, "estimatedUnitCost": 18000, "unitCostRange": [14000, 25000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Bench Grinder", "specification": "8 inch wheel, 1 HP, double ended", "typicalQuantity": 1, "estimatedUnitCost": 8000, "unitCostRange": [5500, 12000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Thread Rolling Machine (Manual)", "specification": "For 6-25 mm rods", "typicalQuantity": 1, "estimatedUnitCost": 25000, "unitCostRange": [18000, 35000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Bar Cutting Machine", "specification": "32 mm capacity, hydraulic", "typicalQuantity": 1, "estimatedUnitCost": 35000, "unitCostRange": [28000, 48000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2610": {
+      "nicPrefix": "2610",
+      "industryName": "Electronic components manufacturing",
+      "machinery": [
+        { "name": "Soldering Station (Digital)", "specification": "60W, temperature controlled, with hot air", "typicalQuantity": 4, "estimatedUnitCost": 5500, "unitCostRange": [4000, 8000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "SMT Pick and Place Machine (Semi-auto)", "specification": "Desktop, for LED and small PCB assemblies", "typicalQuantity": 1, "estimatedUnitCost": 350000, "unitCostRange": [280000, 450000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Reflow Oven (Tabletop)", "specification": "Infrared, 300mm belt width", "typicalQuantity": 1, "estimatedUnitCost": 95000, "unitCostRange": [75000, 130000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Digital Multimeter (Bench)", "specification": "True RMS, with data logging", "typicalQuantity": 2, "estimatedUnitCost": 4000, "unitCostRange": [2500, 6000], "isEssential": true, "category": "SECONDARY" },
+        { "name": "Oscilloscope (Digital)", "specification": "100 MHz, 2 channel", "typicalQuantity": 1, "estimatedUnitCost": 35000, "unitCostRange": [25000, 50000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "2720": {
+      "nicPrefix": "2720",
+      "industryName": "Batteries (lead-acid, solar, inverter batteries)",
+      "machinery": [
+        { "name": "Plate Casting Machine", "specification": "For lead-antimony grids, manual", "typicalQuantity": 1, "estimatedUnitCost": 45000, "unitCostRange": [35000, 60000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Paste Mixer (Lead Oxide)", "specification": "50 kg batch, with paddle agitator", "typicalQuantity": 1, "estimatedUnitCost": 65000, "unitCostRange": [50000, 85000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Battery Assembly Line (Semi-auto)", "specification": "For inverter/tubular batteries, 12-200Ah", "typicalQuantity": 1, "estimatedUnitCost": 180000, "unitCostRange": [140000, 240000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Battery Formation and Charging Unit", "specification": "24V/48V, 20 channel, with recirculation", "typicalQuantity": 1, "estimatedUnitCost": 120000, "unitCostRange": [95000, 160000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Lead Oxide Ball Mill", "specification": "100 kg/hr, Barton pot type", "typicalQuantity": 1, "estimatedUnitCost": 250000, "unitCostRange": [200000, 320000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "3100": {
+      "nicPrefix": "3100",
+      "industryName": "Electrical equipment (wiring, cables, switchgear)",
+      "machinery": [
+        { "name": "Wire Drawing Machine", "specification": "8 die, for 0.5-8 mm copper wire", "typicalQuantity": 1, "estimatedUnitCost": 150000, "unitCostRange": [120000, 200000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Extruder (Cable Coating)", "specification": "Single screw, 60 mm, with water cooling", "typicalQuantity": 1, "estimatedUnitCost": 350000, "unitCostRange": [280000, 450000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Bunching Machine (Wire)", "specification": "12 bobbin, for stranded conductors", "typicalQuantity": 1, "estimatedUnitCost": 85000, "unitCostRange": [65000, 110000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Switchgear Assembly Fixture", "specification": "Modular, for MCB/Distribution board assembly", "typicalQuantity": 2, "estimatedUnitCost": 12000, "unitCostRange": [8000, 18000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "High Voltage Testing Set", "specification": "5 kV AC, for cable/wire testing", "typicalQuantity": 1, "estimatedUnitCost": 45000, "unitCostRange": [35000, 60000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Conductor Annealing Furnace", "specification": "Electric, 200 kg batch, with trolley", "typicalQuantity": 1, "estimatedUnitCost": 95000, "unitCostRange": [75000, 130000], "isEssential": true, "category": "PRIMARY" }
+      ]
+    },
+    "4661": {
+      "nicPrefix": "4661",
+      "industryName": "Wholesale — agricultural products",
+      "machinery": [
+        { "name": "Electronic Weighing Scale (Platform)", "specification": "500 kg capacity, 1 kg accuracy, with printer", "typicalQuantity": 1, "estimatedUnitCost": 18000, "unitCostRange": [14000, 25000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Moisture Meter (Grain)", "specification": "Digital, for paddy/wheat/pulses", "typicalQuantity": 1, "estimatedUnitCost": 8000, "unitCostRange": [5500, 12000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Packing Machine (Semi-auto)", "specification": "5-50 kg, with stitching/sealing", "typicalQuantity": 1, "estimatedUnitCost": 45000, "unitCostRange": [35000, 60000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    },
+    "4711": {
+      "nicPrefix": "4711",
+      "industryName": "Retail — food products (grocery store, supermarket)",
+      "machinery": [
+        { "name": "Deep Freezer (Commercial)", "specification": "300 litre, chest type, -18C", "typicalQuantity": 2, "estimatedUnitCost": 28000, "unitCostRange": [22000, 38000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Billing/POS Machine", "specification": "Touch screen, barcode scanner, thermal printer", "typicalQuantity": 1, "estimatedUnitCost": 25000, "unitCostRange": [18000, 35000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Display Fridge (Glass Door)", "specification": "400 litre, upright, 0-10C", "typicalQuantity": 1, "estimatedUnitCost": 65000, "unitCostRange": [50000, 85000], "isEssential": false, "category": "SECONDARY" },
+        { "name": "Electronic Weighing Scale", "specification": "30 kg, with price computing", "typicalQuantity": 2, "estimatedUnitCost": 8000, "unitCostRange": [5500, 12000], "isEssential": true, "category": "PRIMARY" }
+      ]
+    },
+    "4751": {
+      "nicPrefix": "4751",
+      "industryName": "Retail — household goods (hardware, utensils, home decor)",
+      "machinery": [
+        { "name": "Display Racks (Steel)", "specification": "6 ft x 3 ft, multi-tier, powder coated", "typicalQuantity": 8, "estimatedUnitCost": 5500, "unitCostRange": [4000, 7500], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Billing/POS Machine", "specification": "Touch screen, with barcode scanner and printer", "typicalQuantity": 1, "estimatedUnitCost": 25000, "unitCostRange": [18000, 35000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "Electronic Weighing Scale", "specification": "50 kg capacity, platform type", "typicalQuantity": 1, "estimatedUnitCost": 10000, "unitCostRange": [7000, 15000], "isEssential": true, "category": "PRIMARY" },
+        { "name": "CCTV Security System (4-camera)", "specification": "DVR, 4 dome cameras, 1 TB HDD", "typicalQuantity": 1, "estimatedUnitCost": 22000, "unitCostRange": [16000, 30000], "isEssential": false, "category": "SECONDARY" }
+      ]
+    }
+  }
+}

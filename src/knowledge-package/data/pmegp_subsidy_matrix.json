@@ -1,0 +1,47 @@
+{
+  "description": "PMEGP subsidy rate matrix — rates are percentages of bank finance",
+  "version": "1.0",
+  "source": "PMEGP Guidelines, Ministry of MSME, Govt. of India",
+  "matrix": [
+    {
+      "category": "GENERAL",
+      "area": "URBAN",
+      "subsidyRate": 15,
+      "maxProjectCost": 2500000,
+      "ownContributionPercent": 10
+    },
+    {
+      "category": "GENERAL",
+      "area": "RURAL",
+      "subsidyRate": 25,
+      "maxProjectCost": 2500000,
+      "ownContributionPercent": 10
+    },
+    {
+      "category": "SPECIAL",
+      "specialCategories": ["SC", "ST", "OBC", "MINORITY", "EX_SERVICEMEN", "PH", "NER"],
+      "area": "URBAN",
+      "subsidyRate": 25,
+      "maxProjectCost": 5000000,
+      "ownContributionPercent": 5
+    },
+    {
+      "category": "SPECIAL",
+      "specialCategories": ["SC", "ST", "OBC", "MINORITY", "EX_SERVICEMEN", "PH", "NER"],
+      "area": "RURAL",
+      "subsidyRate": 35,
+      "maxProjectCost": 5000000,
+      "ownContributionPercent": 5
+    }
+  ],
+  "notes": {
+    "specialAlsoIncludes": "Women beneficiaries, Hill & Border Area residents (treated as SPECIAL regardless of category)",
+    "manufacturingCeiling": 5000000,
+    "serviceCeiling": 2500000,
+    "bankFinanceRange": [55, 65],
+    "maxSubsidyAmount": null,
+    "interestRateTypicalRange": [8, 12],
+    "repaymentPeriodRange": [3, 7],
+    "moratoriumMonths": 6
+  }
+}

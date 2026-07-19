@@ -1,0 +1,709 @@
+{
+  "description": "Default employee, utility, capacity, market, and project size suggestions per NIC 2-digit prefix for PMEGP micro enterprises in India. Wages reflect 2024-2025 market rates.",
+  "version": "1.0",
+  "currency": "INR",
+  "activities": {
+    "1010": {
+      "nicPrefix": "1010",
+      "industryName": "Food processing",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 1, "max": 2, "estimatedMonthlyWage": 12000, "wageRange": [10000, 15000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 3000, "costRange": [2000, 5000], "description": "2-5 HP motors" },
+        "water": { "estimatedMonthlyCost": 500, "costRange": [300, 1000], "description": "Municipal supply" },
+        "rent": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "500-1000 sq ft" },
+        "transport": { "estimatedMonthlyCost": 3000, "costRange": [2000, 5000], "description": "Local delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Fire + general" },
+        "maintenance": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Machine maintenance" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Consumables" }
+      },
+      "capacity": {
+        "unit": "kg/month",
+        "typicalRange": { "min": 500, "max": 5000 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Local market", "Nearby towns", "Wholesale traders"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per kg"
+      },
+      "projectSize": {
+        "small": { "range": [100000, 500000], "description": "Home-based or tiny unit" },
+        "medium": { "range": [500000, 1500000], "description": "Small scale unit" },
+        "large": { "range": [1500000, 5000000], "description": "Medium scale unit" }
+      },
+      "synonyms": ["food processing", "food unit", "milling", "dal mill", "rice mill", "flour mill", "oil extraction", "oil ghani", "anna", "chakki"]
+    },
+    "1410": {
+      "nicPrefix": "1410",
+      "industryName": "Garment making / tailoring",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 5, "estimatedMonthlyWage": 16000, "wageRange": [15000, 18000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 2500, "costRange": [1500, 4000], "description": "Sewing machines, iron press" },
+        "water": { "estimatedMonthlyCost": 300, "costRange": [200, 500], "description": "Washing and finishing" },
+        "rent": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "500-1000 sq ft" },
+        "transport": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Fabric sourcing and delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 800, "costRange": [500, 1500], "description": "Fire + general" },
+        "maintenance": { "estimatedMonthlyCost": 800, "costRange": [500, 1500], "description": "Machine servicing" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Thread, needles, accessories" }
+      },
+      "capacity": {
+        "unit": "pieces/month",
+        "typicalRange": { "min": 200, "max": 3000 },
+        "capacityUtilPercent": 75,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Local market", "Nearby towns", "Wholesale traders", "Online platforms", "Boutique shops"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per piece"
+      },
+      "projectSize": {
+        "small": { "range": [100000, 500000], "description": "Home-based tailoring unit" },
+        "medium": { "range": [500000, 1500000], "description": "Small garment workshop" },
+        "large": { "range": [1500000, 5000000], "description": "Garment manufacturing unit" }
+      },
+      "synonyms": ["garment making", "tailoring", "silai", "darzi", "stitching unit", "readymade garments", "kapde ki dukaan", "suit stitching", "dress making", "garment unit"]
+    },
+    "1711": {
+      "nicPrefix": "1711",
+      "industryName": "Textile weaving",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 4, "max": 8, "estimatedMonthlyWage": 14000, "wageRange": [12000, 18000] },
+        "unskilled": { "min": 4, "max": 7, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 2, "estimatedMonthlyWage": 16000, "wageRange": [12000, 22000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 6000, "costRange": [4000, 10000], "description": "Power looms, 10-20 HP" },
+        "water": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Dyeing and processing" },
+        "rent": { "estimatedMonthlyCost": 8000, "costRange": [5000, 15000], "description": "1000-2000 sq ft" },
+        "transport": { "estimatedMonthlyCost": 4000, "costRange": [2000, 7000], "description": "Yarn sourcing, cloth delivery" },
+        "communication": { "estimatedMonthlyCost": 600, "costRange": [300, 1000], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Fire + machinery" },
+        "maintenance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Loom maintenance and parts" },
+        "miscellaneous": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Oil, cones, packing material" }
+      },
+      "capacity": {
+        "unit": "meters/month",
+        "typicalRange": { "min": 2000, "max": 15000 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 10,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Wholesale cloth markets", "Textile traders", "Nearby towns", "State cooperatives"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per meter"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Handloom unit (2-4 looms)" },
+        "medium": { "range": [800000, 2500000], "description": "Power loom unit (4-10 looms)" },
+        "large": { "range": [2500000, 5000000], "description": "Power loom shed (10-20 looms)" }
+      },
+      "synonyms": ["textile weaving", "loom unit", "power loom", "handloom", "kapda banaana", "bunai", "loom shed", "weaving unit", "cloth weaving", "kargha"]
+    },
+    "2010": {
+      "nicPrefix": "2010",
+      "industryName": "Saw milling and wood products",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 14000, "wageRange": [12000, 18000] },
+        "unskilled": { "min": 3, "max": 5, "estimatedMonthlyWage": 9000, "wageRange": [8000, 11000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 8000, "costRange": [5000, 15000], "description": "Saw mill, planer, 15-25 HP" },
+        "water": { "estimatedMonthlyCost": 400, "costRange": [200, 800], "description": "Dust suppression, cleaning" },
+        "rent": { "estimatedMonthlyCost": 10000, "costRange": [6000, 15000], "description": "1500-3000 sq ft, open yard" },
+        "transport": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "Log sourcing and delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile" },
+        "insurance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Fire + machinery" },
+        "maintenance": { "estimatedMonthlyCost": 2500, "costRange": [1500, 5000], "description": "Blade sharpening, machine parts" },
+        "miscellaneous": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Lubricants, consumables" }
+      },
+      "capacity": {
+        "unit": "cubic feet/month",
+        "typicalRange": { "min": 500, "max": 5000 },
+        "capacityUtilPercent": 65,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Furniture makers", "Construction sites", "Timber traders", "Local market"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per cubic feet"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Small saw mill" },
+        "medium": { "range": [800000, 2500000], "description": "Saw mill with planer" },
+        "large": { "range": [2500000, 5000000], "description": "Integrated wood processing unit" }
+      },
+      "synonyms": ["saw mill", "wood cutting", "lakhara ka kaam", "timber mill", "wood products", "lakdi kaatna", "plywood cutting", "sawing unit", "wood workshop", "aara mill"]
+    },
+    "2021": {
+      "nicPrefix": "2021",
+      "industryName": "Furniture making (wooden)",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 15000, "wageRange": [13000, 18000] },
+        "unskilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 8500, "wageRange": [7500, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 4000, "costRange": [2000, 7000], "description": "Woodworking machines, 5-10 HP" },
+        "water": { "estimatedMonthlyCost": 400, "costRange": [200, 700], "description": "Cleaning, polishing" },
+        "rent": { "estimatedMonthlyCost": 7000, "costRange": [4000, 12000], "description": "800-1500 sq ft" },
+        "transport": { "estimatedMonthlyCost": 3000, "costRange": [1500, 5000], "description": "Wood sourcing and delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Fire + general" },
+        "maintenance": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Machine servicing, blade replacement" },
+        "miscellaneous": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Nails, polish, sandpaper" }
+      },
+      "capacity": {
+        "unit": "pieces/month",
+        "typicalRange": { "min": 20, "max": 150 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Local households", "Offices", "Schools and institutions", "Furniture showrooms"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per piece"
+      },
+      "projectSize": {
+        "small": { "range": [100000, 500000], "description": "Carpentry workshop" },
+        "medium": { "range": [500000, 1500000], "description": "Furniture manufacturing unit" },
+        "large": { "range": [1500000, 5000000], "description": "Furniture factory with showroom" }
+      },
+      "synonyms": ["furniture making", "badri ka kaam", "carpentry", "lakdi ka furniture", "wooden furniture", "bartan ke kaam", "furniture workshop", "pool ka kaam", "bed set making", "almari banane ka kaam"]
+    },
+    "2211": {
+      "nicPrefix": "2211",
+      "industryName": "Paper products (notebooks, paper bags)",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 12000, "wageRange": [10000, 15000] },
+        "unskilled": { "min": 3, "max": 6, "estimatedMonthlyWage": 8000, "wageRange": [7000, 9500] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 4000, "costRange": [2500, 6000], "description": "Cutting, printing machines, 5-10 HP" },
+        "water": { "estimatedMonthlyCost": 300, "costRange": [200, 500], "description": "Minimal usage" },
+        "rent": { "estimatedMonthlyCost": 6000, "costRange": [3500, 10000], "description": "600-1200 sq ft" },
+        "transport": { "estimatedMonthlyCost": 3000, "costRange": [1500, 5000], "description": "Paper sourcing and delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 800, "costRange": [500, 1500], "description": "Fire + general" },
+        "maintenance": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Machine maintenance" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Glue, thread, pins" }
+      },
+      "capacity": {
+        "unit": "units/month",
+        "typicalRange": { "min": 5000, "max": 100000 },
+        "capacityUtilPercent": 75,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Schools", "Stationery shops", "Local market", "Wholesale traders", "Government tenders"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per unit"
+      },
+      "projectSize": {
+        "small": { "range": [100000, 500000], "description": "Paper bag / notebook making unit" },
+        "medium": { "range": [500000, 1500000], "description": "Paper products workshop" },
+        "large": { "range": [1500000, 5000000], "description": "Paper products manufacturing unit" }
+      },
+      "synonyms": ["paper products", "notebook making", "copy making", "paper bag", "kagaz ki bag", "register making", "exercise book", "stationery unit", "paper plate", "paper cup"]
+    },
+    "2391": {
+      "nicPrefix": "2391",
+      "industryName": "Plastic products (bags, containers)",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 13000, "wageRange": [11000, 16000] },
+        "unskilled": { "min": 3, "max": 5, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 8000, "costRange": [5000, 12000], "description": "Extruder, blow moulder, 15-30 HP" },
+        "water": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Cooling, cleaning" },
+        "rent": { "estimatedMonthlyCost": 7000, "costRange": [4000, 12000], "description": "800-1500 sq ft" },
+        "transport": { "estimatedMonthlyCost": 4000, "costRange": [2000, 6000], "description": "Raw material and finished goods" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Fire + machinery" },
+        "maintenance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Die and mould, heater replacement" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Colour masterbatch, packing" }
+      },
+      "capacity": {
+        "unit": "kg/month",
+        "typicalRange": { "min": 1000, "max": 10000 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Wholesale traders", "Retail shops", "Food businesses", "Packaging buyers", "Industrial units"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per kg"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Small plastic bag unit" },
+        "medium": { "range": [800000, 2500000], "description": "Plastic products workshop" },
+        "large": { "range": [2500000, 5000000], "description": "Plastic manufacturing unit" }
+      },
+      "synonyms": ["plastic products", "plastic bags", "polythene", "dabba banane ka kaam", "plastic containers", "plastic unit", "pouch making", "plastic packaging", "plastic moulding", "poly bag making"]
+    },
+    "2511": {
+      "nicPrefix": "2511",
+      "industryName": "Steel furniture",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 20000, "wageRange": [18000, 22000] },
+        "unskilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 9000, "wageRange": [8000, 11000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 16000, "wageRange": [13000, 22000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "Welding machines, grinder, 10-15 HP" },
+        "water": { "estimatedMonthlyCost": 400, "costRange": [200, 700], "description": "Cleaning, cooling" },
+        "rent": { "estimatedMonthlyCost": 8000, "costRange": [5000, 12000], "description": "1000-1500 sq ft with shed" },
+        "transport": { "estimatedMonthlyCost": 4000, "costRange": [2000, 7000], "description": "Steel sourcing and delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Fire + machinery" },
+        "maintenance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 3500], "description": "Welding rods, grinder discs" },
+        "miscellaneous": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Paint, bolts, packing" }
+      },
+      "capacity": {
+        "unit": "pieces/month",
+        "typicalRange": { "min": 30, "max": 300 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Offices", "Schools and colleges", "Government departments", "Hospitals", "Industrial buyers"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per piece"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Small fabrication unit" },
+        "medium": { "range": [800000, 2500000], "description": "Steel furniture workshop" },
+        "large": { "range": [2500000, 5000000], "description": "Steel furniture manufacturing unit" }
+      },
+      "synonyms": ["steel furniture", "loha ka furniture", "iron furniture", "steel almirah", "steel chair", "welding furniture", "fabrication unit", "steel fabrication", "lohe ka kaam", "metal furniture"]
+    },
+    "2512": {
+      "nicPrefix": "2512",
+      "industryName": "Fabricated metal (gates, grills)",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 18000, "wageRange": [16000, 22000] },
+        "unskilled": { "min": 2, "max": 3, "estimatedMonthlyWage": 8500, "wageRange": [7500, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "Welding, cutting machines, 10-15 HP" },
+        "water": { "estimatedMonthlyCost": 300, "costRange": [200, 600], "description": "Cooling and cleaning" },
+        "rent": { "estimatedMonthlyCost": 7000, "costRange": [4000, 12000], "description": "800-1500 sq ft with shed" },
+        "transport": { "estimatedMonthlyCost": 4000, "costRange": [2000, 6000], "description": "Steel bars and delivery" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile" },
+        "insurance": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Fire + machinery" },
+        "maintenance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 3500], "description": "Welding rods, cutting wheels" },
+        "miscellaneous": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Paint, bolts, packing" }
+      },
+      "capacity": {
+        "unit": "pieces/month",
+        "typicalRange": { "min": 15, "max": 100 },
+        "capacityUtilPercent": 65,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Local households", "Construction sites", "Builders", "Government projects"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per piece"
+      },
+      "projectSize": {
+        "small": { "range": [150000, 500000], "description": "Small welding shop" },
+        "medium": { "range": [500000, 1500000], "description": "Gate and grill fabrication unit" },
+        "large": { "range": [1500000, 5000000], "description": "Structural fabrication workshop" }
+      },
+      "synonyms": ["fabricated metal", "gate making", "grill making", "loha ka kaam", "welding shop", "iron gate", "safety grill", "steel gate", "jali banane ka kaam", "fabrication"]
+    },
+    "2610": {
+      "nicPrefix": "2610",
+      "industryName": "Electronic component assembly",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 3, "max": 5, "estimatedMonthlyWage": 16000, "wageRange": [14000, 20000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 8500, "wageRange": [7500, 10000] },
+        "administrative": { "min": 1, "max": 2, "estimatedMonthlyWage": 20000, "wageRange": [16000, 25000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "Soldering, testing equipment, 5-10 HP" },
+        "water": { "estimatedMonthlyCost": 300, "costRange": [200, 500], "description": "Cleaning (RO/DI)" },
+        "rent": { "estimatedMonthlyCost": 8000, "costRange": [5000, 12000], "description": "800-1200 sq ft, clean room" },
+        "transport": { "estimatedMonthlyCost": 3000, "costRange": [1500, 5000], "description": "Component sourcing and dispatch" },
+        "communication": { "estimatedMonthlyCost": 800, "costRange": [500, 1200], "description": "Mobile + broadband" },
+        "insurance": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Fire + component insurance" },
+        "maintenance": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "ESD equipment, soldering station" },
+        "miscellaneous": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Solder, flux, PCB, packing" }
+      },
+      "capacity": {
+        "unit": "units/month",
+        "typicalRange": { "min": 1000, "max": 50000 },
+        "capacityUtilPercent": 75,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["OEM buyers", "Distributors", "Online platforms", "Repair shops"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per unit"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Small assembly unit" },
+        "medium": { "range": [800000, 2500000], "description": "Electronic assembly workshop" },
+        "large": { "range": [2500000, 5000000], "description": "Electronic manufacturing unit" }
+      },
+      "synonyms": ["electronic assembly", "PCB assembly", "LED assembly", "mobile repair parts", "electronic unit", "soldering unit", "electronics manufacturing", "circuit board assembly", "LED bulb making", "charger assembly"]
+    },
+    "2720": {
+      "nicPrefix": "2720",
+      "industryName": "Battery manufacturing",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 3, "max": 5, "estimatedMonthlyWage": 16000, "wageRange": [14000, 20000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 9000, "wageRange": [8000, 11000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 18000, "wageRange": [14000, 22000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 6000, "costRange": [4000, 10000], "description": "Mixing, charging equipment, 10-20 HP" },
+        "water": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Acid dilution, cleaning" },
+        "rent": { "estimatedMonthlyCost": 10000, "costRange": [6000, 15000], "description": "1000-2000 sq ft, acid-proof" },
+        "transport": { "estimatedMonthlyCost": 4000, "costRange": [2000, 7000], "description": "Lead, acid, and battery delivery" },
+        "communication": { "estimatedMonthlyCost": 600, "costRange": [300, 1000], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Fire + chemical hazard" },
+        "maintenance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 3500], "description": "Chemical handling equipment" },
+        "miscellaneous": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "PPE, acid, separators" }
+      },
+      "capacity": {
+        "unit": "units/month",
+        "typicalRange": { "min": 200, "max": 3000 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Auto dealers", "Inverter and UPS dealers", "Wholesale battery traders", "Telecom towers"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per unit"
+      },
+      "projectSize": {
+        "small": { "range": [300000, 1000000], "description": "Battery assembly unit" },
+        "medium": { "range": [1000000, 3000000], "description": "Battery manufacturing workshop" },
+        "large": { "range": [3000000, 5000000], "description": "Battery manufacturing plant" }
+      },
+      "synonyms": ["battery manufacturing", "battery making", "battery assembly", "inverter battery", "car battery", "battery plant", "lead acid battery", "battery reconditioning", "battery repair", "betri banane ka kaam"]
+    },
+    "3100": {
+      "nicPrefix": "3100",
+      "industryName": "Electrical equipment (wiring, cables)",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 15000, "wageRange": [13000, 18000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 16000, "wageRange": [13000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 6000, "costRange": [4000, 10000], "description": "Extruder, drawing machine, 15-25 HP" },
+        "water": { "estimatedMonthlyCost": 400, "costRange": [200, 700], "description": "Cooling" },
+        "rent": { "estimatedMonthlyCost": 7000, "costRange": [4000, 12000], "description": "800-1500 sq ft" },
+        "transport": { "estimatedMonthlyCost": 4000, "costRange": [2000, 6000], "description": "Copper, PVC, finished goods" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Fire + machinery" },
+        "maintenance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 3500], "description": "Extruder dies, spooler" },
+        "miscellaneous": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "PVC granules, packing material" }
+      },
+      "capacity": {
+        "unit": "meters/month",
+        "typicalRange": { "min": 5000, "max": 100000 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Electrical wholesalers", "Hardware shops", "Construction sites", "Government tenders"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per meter"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Wire winding unit" },
+        "medium": { "range": [800000, 2500000], "description": "Cable and wire manufacturing" },
+        "large": { "range": [2500000, 5000000], "description": "Electrical equipment manufacturing" }
+      },
+      "synonyms": ["electrical equipment", "wire making", "cable making", "bijli ka saamaan", "winding unit", "switch gear", "electrical wiring", "cable manufacturing", "wire unit", "taar banane ka kaam"]
+    },
+    "3311": {
+      "nicPrefix": "3311",
+      "industryName": "Carpentry and joinery",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 15000, "wageRange": [13000, 18000] },
+        "unskilled": { "min": 1, "max": 3, "estimatedMonthlyWage": 8500, "wageRange": [7500, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 3000, "costRange": [2000, 5000], "description": "Woodworking tools, 3-7 HP" },
+        "water": { "estimatedMonthlyCost": 300, "costRange": [200, 600], "description": "Cleaning, polishing" },
+        "rent": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "500-1000 sq ft" },
+        "transport": { "estimatedMonthlyCost": 3000, "costRange": [1500, 5000], "description": "Wood and finished goods" },
+        "communication": { "estimatedMonthlyCost": 500, "costRange": [300, 800], "description": "Mobile" },
+        "insurance": { "estimatedMonthlyCost": 800, "costRange": [500, 1500], "description": "Fire + general" },
+        "maintenance": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Tool sharpening, blades" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Nails, polish, hinges" }
+      },
+      "capacity": {
+        "unit": "pieces/month",
+        "typicalRange": { "min": 15, "max": 120 },
+        "capacityUtilPercent": 70,
+        "workingDaysPerMonth": 25,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Local households", "Interior designers", "Builders", "Renovation contractors"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per piece"
+      },
+      "projectSize": {
+        "small": { "range": [100000, 500000], "description": "Carpentry shop" },
+        "medium": { "range": [500000, 1500000], "description": "Carpentry and joinery workshop" },
+        "large": { "range": [1500000, 5000000], "description": "Carpentry manufacturing unit" }
+      },
+      "synonyms": ["carpentry", "joinery", "badri", "sutar ka kaam", "wood working", "lakdi ka kaam", "interior woodwork", "door window making", "furniture repair", "timber workshop"]
+    },
+    "3520": {
+      "nicPrefix": "3520",
+      "industryName": "Leather goods (bags, shoes)",
+      "sector": "MANUFACTURING",
+      "employees": {
+        "skilled": { "min": 3, "max": 5, "estimatedMonthlyWage": 15000, "wageRange": [13000, 18000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 8000, "wageRange": [7000, 9500] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 16000, "wageRange": [13000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 3500, "costRange": [2000, 5000], "description": "Stitching, cutting machines, 3-7 HP" },
+        "water": { "estimatedMonthlyCost": 400, "costRange": [200, 700], "description": "Leather processing, cleaning" },
+        "rent": { "estimatedMonthlyCost": 6000, "costRange": [3500, 10000], "description": "600-1200 sq ft" },
+        "transport": { "estimatedMonthlyCost": 3000, "costRange": [1500, 5000], "description": "Leather sourcing and delivery" },
+        "communication": { "estimatedMonthlyCost": 600, "costRange": [300, 1000], "description": "Mobile + internet" },
+        "insurance": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Fire + general" },
+        "maintenance": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Machine servicing, needles" },
+        "miscellaneous": { "estimatedMonthlyCost": 1200, "costRange": [600, 2500], "description": "Thread, buckles, lining, glue" }
+      },
+      "capacity": {
+        "unit": "pieces/month",
+        "typicalRange": { "min": 100, "max": 2000 },
+        "capacityUtilPercent": 72,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 8,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Local market", "Wholesale traders", "Online platforms", "Export houses", "Retail shops"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per piece"
+      },
+      "projectSize": {
+        "small": { "range": [150000, 500000], "description": "Leather goods workshop" },
+        "medium": { "range": [500000, 2000000], "description": "Leather goods manufacturing unit" },
+        "large": { "range": [2000000, 5000000], "description": "Leather goods factory" }
+      },
+      "synonyms": ["leather goods", "chamda ka kaam", "bag making", "jutta banane ka kaam", "shoe making", "leather bags", "purse making", "leather unit", "chamda ki thaili", "footwear unit"]
+    },
+    "4661": {
+      "nicPrefix": "4661",
+      "industryName": "Wholesale — agricultural products",
+      "sector": "SERVICE",
+      "employees": {
+        "skilled": { "min": 1, "max": 1, "estimatedMonthlyWage": 12000, "wageRange": [10000, 15000] },
+        "unskilled": { "min": 2, "max": 4, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 15000, "wageRange": [12000, 20000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Lighting, fans, weighing scale" },
+        "water": { "estimatedMonthlyCost": 200, "costRange": [100, 400], "description": "Cleaning" },
+        "rent": { "estimatedMonthlyCost": 15000, "costRange": [10000, 25000], "description": "1500-3000 sq ft godown" },
+        "transport": { "estimatedMonthlyCost": 15000, "costRange": [8000, 25000], "description": "Truck loading, logistics" },
+        "communication": { "estimatedMonthlyCost": 1000, "costRange": [500, 1500], "description": "Mobile + landline" },
+        "insurance": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Stock + transit insurance" },
+        "maintenance": { "estimatedMonthlyCost": 500, "costRange": [200, 1000], "description": "Godown maintenance" },
+        "miscellaneous": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Packing, labour, weighing" }
+      },
+      "capacity": {
+        "unit": "tonnes/month",
+        "typicalRange": { "min": 5, "max": 100 },
+        "capacityUtilPercent": 80,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 10,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Retail shops", "Food processors", "Nearby town markets", "Mandi traders"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per quintal"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Small wholesale trading" },
+        "medium": { "range": [800000, 2500000], "description": "Wholesale with own godown" },
+        "large": { "range": [2500000, 5000000], "description": "Large wholesale trading" }
+      },
+      "synonyms": ["wholesale agriculture", "thok bazaar", "krishi upaj wholesaler", "mandi trading", "agricultural wholesale", "anaj ka byavsaap", "grain trading", "wholesale grain", "kisaan mandi", "upaj wholesaler"]
+    },
+    "4711": {
+      "nicPrefix": "4711",
+      "industryName": "Retail — food / grocery store",
+      "sector": "SERVICE",
+      "employees": {
+        "skilled": { "min": 0, "max": 1, "estimatedMonthlyWage": 11000, "wageRange": [10000, 13000] },
+        "unskilled": { "min": 1, "max": 2, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 14000, "wageRange": [12000, 18000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 2000, "costRange": [1000, 3500], "description": "Lighting, fans, refrigerator, billing" },
+        "water": { "estimatedMonthlyCost": 200, "costRange": [100, 400], "description": "Cleaning" },
+        "rent": { "estimatedMonthlyCost": 10000, "costRange": [5000, 20000], "description": "200-500 sq ft shop" },
+        "transport": { "estimatedMonthlyCost": 2000, "costRange": [1000, 4000], "description": "Stock pickup, local delivery" },
+        "communication": { "estimatedMonthlyCost": 600, "costRange": [300, 1000], "description": "Mobile + UPI device" },
+        "insurance": { "estimatedMonthlyCost": 500, "costRange": [200, 1000], "description": "Shop + stock" },
+        "maintenance": { "estimatedMonthlyCost": 300, "costRange": [100, 600], "description": "Shop maintenance" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Packing bags, billing supplies" }
+      },
+      "capacity": {
+        "unit": "per month",
+        "typicalRange": { "min": 50000, "max": 500000 },
+        "capacityUtilPercent": 85,
+        "workingDaysPerMonth": 30,
+        "workingHoursPerDay": 12,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Walk-in customers", "Local residents", "Nearby households"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per item"
+      },
+      "projectSize": {
+        "small": { "range": [100000, 500000], "description": "Kirana / provision store" },
+        "medium": { "range": [500000, 1500000], "description": "Supermarket / mini mart" },
+        "large": { "range": [1500000, 5000000], "description": "Superstore with multiple sections" }
+      },
+      "synonyms": ["grocery store", "kirana", "provision store", "saman ki dukaan", "ration shop", "kirana dukaan", "supermarket", "baniya", "general store", "sukaana"]
+    },
+    "4751": {
+      "nicPrefix": "4751",
+      "industryName": "Retail — household goods / hardware",
+      "sector": "SERVICE",
+      "employees": {
+        "skilled": { "min": 0, "max": 1, "estimatedMonthlyWage": 12000, "wageRange": [10000, 15000] },
+        "unskilled": { "min": 1, "max": 2, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 14000, "wageRange": [12000, 18000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 1500, "costRange": [800, 2500], "description": "Lighting, fans, billing" },
+        "water": { "estimatedMonthlyCost": 200, "costRange": [100, 400], "description": "Cleaning" },
+        "rent": { "estimatedMonthlyCost": 12000, "costRange": [7000, 20000], "description": "300-600 sq ft shop" },
+        "transport": { "estimatedMonthlyCost": 2500, "costRange": [1500, 5000], "description": "Stock pickup and delivery" },
+        "communication": { "estimatedMonthlyCost": 600, "costRange": [300, 1000], "description": "Mobile + UPI device" },
+        "insurance": { "estimatedMonthlyCost": 600, "costRange": [300, 1200], "description": "Shop + stock" },
+        "maintenance": { "estimatedMonthlyCost": 300, "costRange": [100, 600], "description": "Shop maintenance" },
+        "miscellaneous": { "estimatedMonthlyCost": 1000, "costRange": [500, 2000], "description": "Billing supplies, bags" }
+      },
+      "capacity": {
+        "unit": "per month",
+        "typicalRange": { "min": 30000, "max": 300000 },
+        "capacityUtilPercent": 80,
+        "workingDaysPerMonth": 30,
+        "workingHoursPerDay": 11,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Walk-in customers", "Contractors", "Local residents", "Plumbers and electricians"],
+        "competitionLevel": "MEDIUM",
+        "sellingPriceUnit": "per item"
+      },
+      "projectSize": {
+        "small": { "range": [150000, 500000], "description": "Hardware / household shop" },
+        "medium": { "range": [500000, 1500000], "description": "Hardware store with inventory" },
+        "large": { "range": [1500000, 5000000], "description": "Large hardware and home goods store" }
+      },
+      "synonyms": ["hardware store", "ghar ka saamaan", "hardware dukaan", "iron store", "paint and hardware", "plumbing store", "electrical hardware", "bathroom fittings shop", "building material shop", "abharana dukaan"]
+    },
+    "4931": {
+      "nicPrefix": "4931",
+      "industryName": "Passenger road transport",
+      "sector": "SERVICE",
+      "employees": {
+        "skilled": { "min": 1, "max": 2, "estimatedMonthlyWage": 16000, "wageRange": [14000, 20000] },
+        "unskilled": { "min": 0, "max": 1, "estimatedMonthlyWage": 8000, "wageRange": [7000, 10000] },
+        "administrative": { "min": 1, "max": 1, "estimatedMonthlyWage": 14000, "wageRange": [12000, 18000] }
+      },
+      "utilities": {
+        "power": { "estimatedMonthlyCost": 500, "costRange": [200, 1000], "description": "Office lighting, phone charging" },
+        "water": { "estimatedMonthlyCost": 300, "costRange": [100, 500], "description": "Vehicle cleaning" },
+        "rent": { "estimatedMonthlyCost": 3000, "costRange": [1500, 6000], "description": "Small office / stand" },
+        "transport": { "estimatedMonthlyCost": 20000, "costRange": [12000, 35000], "description": "Fuel (diesel/CNG), tolls, parking" },
+        "communication": { "estimatedMonthlyCost": 1000, "costRange": [500, 1500], "description": "Mobile (driver + office), GPS" },
+        "insurance": { "estimatedMonthlyCost": 4000, "costRange": [2500, 6000], "description": "Vehicle insurance, permits" },
+        "maintenance": { "estimatedMonthlyCost": 5000, "costRange": [3000, 8000], "description": "Tyres, oil, servicing, repairs" },
+        "miscellaneous": { "estimatedMonthlyCost": 1500, "costRange": [800, 3000], "description": "Cleaning, permits, challans" }
+      },
+      "capacity": {
+        "unit": "trips/month",
+        "typicalRange": { "min": 100, "max": 600 },
+        "capacityUtilPercent": 75,
+        "workingDaysPerMonth": 26,
+        "workingHoursPerDay": 10,
+        "shifts": 1
+      },
+      "market": {
+        "typicalTargetMarkets": ["Daily commuters", "Tourists", "Corporate bookings", "School and college students", "Event travel"],
+        "competitionLevel": "HIGH",
+        "sellingPriceUnit": "per trip"
+      },
+      "projectSize": {
+        "small": { "range": [200000, 800000], "description": "Auto rickshaw or e-rickshaw" },
+        "medium": { "range": [800000, 2500000], "description": "Cab or mini bus" },
+        "large": { "range": [2500000, 5000000], "description": "Fleet of 2-5 vehicles" }
+      },
+      "synonyms": ["passenger transport", "taxi service", "cab service", "auto rickshaw", "e-rickshaw", "bus service", "travels", "yaatri seva", "safar", "transport service"]
+    }
+  }
+}

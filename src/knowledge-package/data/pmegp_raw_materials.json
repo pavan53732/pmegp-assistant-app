@@ -1,0 +1,168 @@
+{
+  "description": "Typical raw materials for common PMEGP activities",
+  "version": "1.0",
+  "source": "Compiled from industry surveys and NSIC data",
+  "currency": "INR",
+  "catalog": {
+    "1010": {
+      "nicPrefix": "1010",
+      "industryName": "Food processing",
+      "rawMaterials": [
+        { "name": "Raw Paddy/Rice", "specification": "Grade A, sorted", "typicalMonthlyQuantity": 500, "unit": "kg", "estimatedUnitRate": 35, "unitRateRange": [30, 45] },
+        { "name": "Wheat Flour (Atta)", "specification": "Whole wheat, chakki fresh", "typicalMonthlyQuantity": 200, "unit": "kg", "estimatedUnitRate": 40, "unitRateRange": [35, 50] },
+        { "name": "Refined Oil (Sunflower/Soybean)", "specification": "Pouch packed, 1L", "typicalMonthlyQuantity": 50, "unit": "litre", "estimatedUnitRate": 140, "unitRateRange": [120, 160] },
+        { "name": "Sugar", "specification": "Crystal, grade 1", "typicalMonthlyQuantity": 100, "unit": "kg", "estimatedUnitRate": 45, "unitRateRange": [40, 52] },
+        { "name": "Groundnut (for oil extraction)", "specification": "Dried, cleaned, grade 1", "typicalMonthlyQuantity": 300, "unit": "kg", "estimatedUnitRate": 90, "unitRateRange": [75, 110] }
+      ]
+    },
+    "1410": {
+      "nicPrefix": "1410",
+      "industryName": "Garment making",
+      "rawMaterials": [
+        { "name": "Cotton Fabric (Grey/S dyed)", "specification": "40s count, 58-60 inch width", "typicalMonthlyQuantity": 500, "unit": "metre", "estimatedUnitRate": 85, "unitRateRange": [65, 110] },
+        { "name": "Poly-cotton Blend Fabric", "specification": "65/35 blend, printed, 58 inch", "typicalMonthlyQuantity": 300, "unit": "metre", "estimatedUnitRate": 75, "unitRateRange": [55, 100] },
+        { "name": "Sewing Thread (Polyester)", "specification": "40s/2, 5000m cones", "typicalMonthlyQuantity": 20, "unit": "cone", "estimatedUnitRate": 180, "unitRateRange": [140, 220] },
+        { "name": "Buttons and Accessories", "specification": "Assorted sizes, plastic/wooden", "typicalMonthlyQuantity": 2000, "unit": "pieces", "estimatedUnitRate": 2, "unitRateRange": [1, 4] },
+        { "name": "Elastic (Webbing)", "specification": "25mm width, black/white, per roll", "typicalMonthlyQuantity": 10, "unit": "roll", "estimatedUnitRate": 150, "unitRateRange": [110, 200] }
+      ]
+    },
+    "1711": {
+      "nicPrefix": "1711",
+      "industryName": "Spinning, weaving and finishing of textiles",
+      "rawMaterials": [
+        { "name": "Cotton Yarn", "specification": "20s/24s count, cone wound", "typicalMonthlyQuantity": 500, "unit": "kg", "estimatedUnitRate": 190, "unitRateRange": [160, 230] },
+        { "name": "Polyester Yarn", "specification": "30s count, filament", "typicalMonthlyQuantity": 200, "unit": "kg", "estimatedUnitRate": 130, "unitRateRange": [105, 160] },
+        { "name": "Dyes and Chemicals (Textile)", "specification": "Reactive dyes, sodium hydrosulphite, soda ash", "typicalMonthlyQuantity": 50, "unit": "kg", "estimatedUnitRate": 250, "unitRateRange": [180, 350] },
+        { "name": "Sizing Material (Starch/PVA)", "specification": "Textile grade", "typicalMonthlyQuantity": 100, "unit": "kg", "estimatedUnitRate": 55, "unitRateRange": [40, 70] }
+      ]
+    },
+    "2010": {
+      "nicPrefix": "2010",
+      "industryName": "Saw milling and wood products",
+      "rawMaterials": [
+        { "name": "Teak Wood Logs", "specification": "Grade B, girth 12-18 inch", "typicalMonthlyQuantity": 2000, "unit": "cubic_feet", "estimatedUnitRate": 1800, "unitRateRange": [1500, 2200] },
+        { "name": "Plywood Sheets (MR Grade)", "specification": "18mm, 8x4 ft", "typicalMonthlyQuantity": 100, "unit": "sheet", "estimatedUnitRate": 650, "unitRateRange": [520, 800] },
+        { "name": "Sal Wood Planks", "specification": "Seasoned, 1.5 inch thick", "typicalMonthlyQuantity": 500, "unit": "cubic_feet", "estimatedUnitRate": 1200, "unitRateRange": [950, 1500] },
+        { "name": "Adhesive (Wood Glue/Fevicol)", "specification": "1 kg pouch, D4 grade", "typicalMonthlyQuantity": 50, "unit": "kg", "estimatedUnitRate": 180, "unitRateRange": [140, 220] },
+        { "name": "Sandpaper (Assorted Grits)", "specification": "80-220 grit, aluminium oxide", "typicalMonthlyQuantity": 100, "unit": "sheet", "estimatedUnitRate": 15, "unitRateRange": [10, 22] }
+      ]
+    },
+    "2021": {
+      "nicPrefix": "2021",
+      "industryName": "Furniture making",
+      "rawMaterials": [
+        { "name": "Rubber Wood Planks", "specification": "Seasoned, 2 inch thick, 8 ft length", "typicalMonthlyQuantity": 400, "unit": "cubic_feet", "estimatedUnitRate": 750, "unitRateRange": [600, 950] },
+        { "name": "Plywood (BWR/BWP Grade)", "specification": "18mm, 8x4 ft, ISI marked", "typicalMonthlyQuantity": 150, "unit": "sheet", "estimatedUnitRate": 900, "unitRateRange": [700, 1200] },
+        { "name": "Laminates (Sunmica/Formica)", "specification": "1mm, 8x4 ft, textured finish", "typicalMonthlyQuantity": 80, "unit": "sheet", "estimatedUnitRate": 450, "unitRateRange": [350, 600] },
+        { "name": "Hardware Fittings", "specification": "Hinges, handles, drawer channels, locks", "typicalMonthlyQuantity": 1, "unit": "set", "estimatedUnitRate": 5000, "unitRateRange": [3500, 7000] },
+        { "name": "Wood Polish (Melamine/PU)", "specification": "1 litre cans, with thinner", "typicalMonthlyQuantity": 20, "unit": "litre", "estimatedUnitRate": 350, "unitRateRange": [280, 450] }
+      ]
+    },
+    "2211": {
+      "nicPrefix": "2211",
+      "industryName": "Paper products",
+      "rawMaterials": [
+        { "name": "Kraft Paper (Rolls)", "specification": "80-120 GSM, 36-48 inch width, recycled", "typicalMonthlyQuantity": 2000, "unit": "kg", "estimatedUnitRate": 52, "unitRateRange": [42, 65] },
+        { "name": "Corrugating Medium (Fluting Paper)", "specification": "120 GSM, 36 inch", "typicalMonthlyQuantity": 1000, "unit": "kg", "estimatedUnitRate": 48, "unitRateRange": [38, 60] },
+        { "name": "Duplex Board", "specification": "250-350 GSM, 20x30 inch, grey back", "typicalMonthlyQuantity": 800, "unit": "kg", "estimatedUnitRate": 62, "unitRateRange": [50, 78] },
+        { "name": "Printing Ink (Flexo)", "specification": "Water based, black/coloured, per kg", "typicalMonthlyQuantity": 30, "unit": "kg", "estimatedUnitRate": 220, "unitRateRange": [170, 280] },
+        { "name": "Stitching Wire", "specification": "21 SWG, 5 kg coil, galvanized", "typicalMonthlyQuantity": 10, "unit": "kg", "estimatedUnitRate": 120, "unitRateRange": [95, 150] }
+      ]
+    },
+    "2391": {
+      "nicPrefix": "2391",
+      "industryName": "Plastic products",
+      "rawMaterials": [
+        { "name": "HDPE Granules", "specification": "Blow moulding grade, 26 mm MFI", "typicalMonthlyQuantity": 500, "unit": "kg", "estimatedUnitRate": 105, "unitRateRange": [85, 130] },
+        { "name": "PP Granules", "specification": "Injection moulding grade, 10 mm MFI", "typicalMonthlyQuantity": 400, "unit": "kg", "estimatedUnitRate": 100, "unitRateRange": [80, 125] },
+        { "name": "LDPE Granules", "specification": "Film grade, 2 mm MFI, for bags", "typicalMonthlyQuantity": 300, "unit": "kg", "estimatedUnitRate": 110, "unitRateRange": [90, 140] },
+        { "name": "Masterbatch (Colour)", "specification": "Concentrated, 2-5% dosing, per kg", "typicalMonthlyQuantity": 25, "unit": "kg", "estimatedUnitRate": 280, "unitRateRange": [220, 350] },
+        { "name": "Calcium Carbonate (Filler)", "specification": "Coated, 2 micron, for PP/HDPE", "typicalMonthlyQuantity": 100, "unit": "kg", "estimatedUnitRate": 18, "unitRateRange": [12, 25] }
+      ]
+    },
+    "2511": {
+      "nicPrefix": "2511",
+      "industryName": "Steel furniture and fixtures",
+      "rawMaterials": [
+        { "name": "MS Square Pipes", "specification": "25x25x2mm, ERW, 20 ft length", "typicalMonthlyQuantity": 500, "unit": "kg", "estimatedUnitRate": 62, "unitRateRange": [52, 75] },
+        { "name": "MS Flat Bars", "specification": "40x5mm, HR, 20 ft length", "typicalMonthlyQuantity": 300, "unit": "kg", "estimatedUnitRate": 58, "unitRateRange": [48, 72] },
+        { "name": "Powder Coating Paint", "specification": "Polyester, 50-70 micron, per kg", "typicalMonthlyQuantity": 50, "unit": "kg", "estimatedUnitRate": 260, "unitRateRange": [200, 330] },
+        { "name": "MS Sheets (CR)", "specification": "1.2mm, 4x8 ft", "typicalMonthlyQuantity": 200, "unit": "kg", "estimatedUnitRate": 68, "unitRateRange": [55, 82] },
+        { "name": "Welding Electrodes", "specification": "E6013, 2.5mm/3.2mm, 1 kg pack", "typicalMonthlyQuantity": 30, "unit": "kg", "estimatedUnitRate": 95, "unitRateRange": [75, 120] }
+      ]
+    },
+    "2512": {
+      "nicPrefix": "2512",
+      "industryName": "Fabricated metal products (gates, grills, shutters)",
+      "rawMaterials": [
+        { "name": "MS Angles", "specification": "50x50x5mm, HR, 20 ft", "typicalMonthlyQuantity": 800, "unit": "kg", "estimatedUnitRate": 60, "unitRateRange": [50, 74] },
+        { "name": "MS Round Bars (Mild Steel)", "specification": "12mm, 16mm, HR", "typicalMonthlyQuantity": 600, "unit": "kg", "estimatedUnitRate": 58, "unitRateRange": [48, 70] },
+        { "name": "MS Square Bars", "specification": "10mm, 12mm, HR", "typicalMonthlyQuantity": 400, "unit": "kg", "estimatedUnitRate": 62, "unitRateRange": [52, 75] },
+        { "name": "Primer Paint (Synthetic Enamel)", "specification": "Red oxide/zinc chrome, per litre", "typicalMonthlyQuantity": 30, "unit": "litre", "estimatedUnitRate": 220, "unitRateRange": [170, 280] },
+        { "name": "Welding Electrodes", "specification": "E6013, 2.5mm, 5 kg box", "typicalMonthlyQuantity": 50, "unit": "kg", "estimatedUnitRate": 90, "unitRateRange": [70, 115] }
+      ]
+    },
+    "2610": {
+      "nicPrefix": "2610",
+      "industryName": "Electronic components manufacturing",
+      "rawMaterials": [
+        { "name": "Bare PCBs (Printed Circuit Boards)", "specification": "FR4, 1.6mm, double sided, per sq ft", "typicalMonthlyQuantity": 500, "unit": "sq_ft", "estimatedUnitRate": 35, "unitRateRange": [25, 50] },
+        { "name": "SMD Resistors (Assorted Kit)", "specification": "0805/1206 package, 1% tolerance", "typicalMonthlyQuantity": 50000, "unit": "pieces", "estimatedUnitRate": 1, "unitRateRange": [1, 2] },
+        { "name": "SMD Capacitors (MLCC Kit)", "specification": "0805, 100nF-100uF assorted", "typicalMonthlyQuantity": 30000, "unit": "pieces", "estimatedUnitRate": 1, "unitRateRange": [1, 3] },
+        { "name": "LED Chips/SMD LEDs", "specification": "2835/5050, white, per 1000", "typicalMonthlyQuantity": 50000, "unit": "pieces", "estimatedUnitRate": 1, "unitRateRange": [1, 2] },
+        { "name": "Soldering Wire (Lead-free)", "specification": "0.7mm, Sn-Ag-Cu, 500g spool", "typicalMonthlyQuantity": 5, "unit": "spool", "estimatedUnitRate": 1800, "unitRateRange": [1400, 2200] }
+      ]
+    },
+    "2720": {
+      "nicPrefix": "2720",
+      "industryName": "Batteries",
+      "rawMaterials": [
+        { "name": "Lead Ingots (Pure/Remelted)", "specification": "99.97% purity, per kg", "typicalMonthlyQuantity": 500, "unit": "kg", "estimatedUnitRate": 185, "unitRateRange": [160, 220] },
+        { "name": "Lead Antimony Alloy", "specification": "2-4% antimony, for grids", "typicalMonthlyQuantity": 200, "unit": "kg", "estimatedUnitRate": 195, "unitRateRange": [170, 230] },
+        { "name": "Battery Containers (PP)", "specification": "12V/150Ah, with lid, per set", "typicalMonthlyQuantity": 100, "unit": "set", "estimatedUnitRate": 350, "unitRateRange": [280, 450] },
+        { "name": "Sulphuric Acid (Battery Grade)", "specification": "Specific gravity 1.835, per litre", "typicalMonthlyQuantity": 200, "unit": "litre", "estimatedUnitRate": 45, "unitRateRange": [35, 58] },
+        { "name": "Separator (PE Envelope)", "specification": "For tubular/inverter plates, per sheet", "typicalMonthlyQuantity": 2000, "unit": "sheet", "estimatedUnitRate": 8, "unitRateRange": [5, 12] }
+      ]
+    },
+    "3100": {
+      "nicPrefix": "3100",
+      "industryName": "Electrical equipment (wiring, cables, switchgear)",
+      "rawMaterials": [
+        { "name": "Copper Wire Rod (8mm)", "specification": "ETP grade, bright, per kg", "typicalMonthlyQuantity": 500, "unit": "kg", "estimatedUnitRate": 730, "unitRateRange": [650, 820] },
+        { "name": "PVC Compound (Insulation Grade)", "specification": "For wire/cable sheathing, per kg", "typicalMonthlyQuantity": 300, "unit": "kg", "estimatedUnitRate": 120, "unitRateRange": [95, 150] },
+        { "name": "Aluminium Wire Rod (9.5mm)", "specification": "EC grade, for conductors, per kg", "typicalMonthlyQuantity": 400, "unit": "kg", "estimatedUnitRate": 220, "unitRateRange": [190, 260] },
+        { "name": "Bakelite/Phenolic Moulding Powder", "specification": "For switchgear parts, per kg", "typicalMonthlyQuantity": 100, "unit": "kg", "estimatedUnitRate": 160, "unitRateRange": [120, 200] }
+      ]
+    },
+    "4661": {
+      "nicPrefix": "4661",
+      "industryName": "Wholesale — agricultural products",
+      "rawMaterials": [
+        { "name": "Paddy (Raw Rice)", "specification": "Common variety, sorted, per quintal", "typicalMonthlyQuantity": 5000, "unit": "kg", "estimatedUnitRate": 32, "unitRateRange": [25, 42] },
+        { "name": "Wheat (Grain)", "specification": "Grade 1, cleaned, per quintal", "typicalMonthlyQuantity": 3000, "unit": "kg", "estimatedUnitRate": 28, "unitRateRange": [22, 38] },
+        { "name": "Pulses (Toor/Moong/Urad)", "specification": "Unprocessed, per quintal", "typicalMonthlyQuantity": 1000, "unit": "kg", "estimatedUnitRate": 85, "unitRateRange": [70, 110] },
+        { "name": "Jute/Gunny Bags", "specification": "50 kg capacity, standard size", "typicalMonthlyQuantity": 500, "unit": "pieces", "estimatedUnitRate": 35, "unitRateRange": [28, 45] }
+      ]
+    },
+    "4711": {
+      "nicPrefix": "4711",
+      "industryName": "Retail — food products",
+      "rawMaterials": [
+        { "name": "Grocery Items (Assorted)", "specification": "Rice, dal, oil, spices — wholesale purchase", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 200000, "unitRateRange": [150000, 280000] },
+        { "name": "Packaging Materials", "specification": "Carry bags, cling wrap, containers", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 5000, "unitRateRange": [3000, 8000] },
+        { "name": "Cleaning Supplies", "specification": "Detergent, disinfectant, floor cleaner", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 8000, "unitRateRange": [5000, 12000] },
+        { "name": "Stationery and Billing Supplies", "specification": "Bill books, packaging tape, labels", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 3000, "unitRateRange": [2000, 5000] }
+      ]
+    },
+    "4751": {
+      "nicPrefix": "4751",
+      "industryName": "Retail — household goods",
+      "rawMaterials": [
+        { "name": "Stainless Steel Utensils (Assorted)", "specification": "Wholesale lot — plates, bowls, glasses", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 150000, "unitRateRange": [100000, 220000] },
+        { "name": "Plastic Housewares (Assorted)", "specification": "Buckets, mugs, storage containers, brooms", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 80000, "unitRateRange": [55000, 110000] },
+        { "name": "Cleaning Tools and Supplies", "specification": "Mops, brushes, scrubbers, dusters", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 25000, "unitRateRange": [18000, 35000] },
+        { "name": "Packaging Materials", "specification": "Carry bags, bubble wrap, cardboard boxes", "typicalMonthlyQuantity": 1, "unit": "lot", "estimatedUnitRate": 4000, "unitRateRange": [2500, 6000] }
+      ]
+    }
+  }
+}
