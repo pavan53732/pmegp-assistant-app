@@ -1,0 +1,5828 @@
+[
+  {
+    "nicCode": "014101",
+    "description": "Raising and breeding of cattle and buffaloes including production of raw milk and meat",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014102",
+    "description": "Production of bovine semen",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014200",
+    "description": "Raising and breeding of horses and other equines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014300",
+    "description": "Raising and breeding of camels and camelids",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014400",
+    "description": "Raising and breeding of sheep and goat for milk, wool and meat",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014601",
+    "description": "Raising and breeding of poultry like chickens and capons, ducks, geese, turkeys and guinea fowls for eggs and meat",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014602",
+    "description": "Operation of poultry hatcheries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014901",
+    "description": "Raising and breeding of pet animals (cats, dogs, birds, hamsters etc.)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014902",
+    "description": "Bee-keeping and production of honey and beeswax",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014903",
+    "description": "Raising of silk worms, production of silk worm cocoons",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "014999",
+    "description": "Raising of other animals n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016200",
+    "description": "Support activities for animal production",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016301",
+    "description": "Preparation of crops for primary markets by cleaning, trimming, grading, disinfecting and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016302",
+    "description": "Cotton ginning, cleaning and baling",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016304",
+    "description": "Sorting, cleaning and cutting of medicinal plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016305",
+    "description": "Retting of jute, flax, coir and similar vegetable textile fibres not associated with their growing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016399",
+    "description": "Post-harvest crop activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "016400",
+    "description": "Seed preparation activities aimed at improving the propagation quality of seed on a fee or contract basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "022001",
+    "description": "Gathering and preparation of fire wood",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "022002",
+    "description": "Logging camps and loggers primarily engaged in felling timber and producing wood in the rough such as pitprops, split poles, pickets, hewn railway ties",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "022003",
+    "description": "Production of charcoal in the forest using traditional methods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "022099",
+    "description": "Other logging activities, n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "023001",
+    "description": "Gathering of tendu leaves",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "023002",
+    "description": "Gathering of lac, resins and rubber-like gums",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "023003",
+    "description": "Gathering of wild honey",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "023004",
+    "description": "Gathering of mushrooms, truffles, berries, nuts, cork, balsams, vegetable hair, eelgrass, mosses, lichens and similar items including medicinal plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "023099",
+    "description": "Gathering of non-wood forest products n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "024001",
+    "description": "Forestry service activities (forest management consulting services, forestry inventories, timber evaluation, forest pest control and other similar activities)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "024099",
+    "description": "Other Support services for forestry n.e.c. such as transport of logs within forests",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "031101",
+    "description": "Fishing on a commercial basis including taking of marine crustaceans and molluscs in ocean and coastal waters",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "031102",
+    "description": "Fishing on a commercial basis in estuaries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "031103",
+    "description": "Gathering of other marine organisms and materials such as natural pearls, sponges, coral, seaweed, and algae",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "031104",
+    "description": "Activities of vessels engaged in fishing, including on-board processing and preserving of fish",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "031201",
+    "description": "Fishing and taking of freshwater crustaceans and molluscs on a commercial basis in inland waters",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "031202",
+    "description": "Taking and gathering of freshwater aquatic animals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032101",
+    "description": "Fish farming in sea water including farming of marine ornamental fish",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032102",
+    "description": "Culture of crustaceans, bivalves, other molluscs and other aquatic animals in sea water using mariculture, cage culture technique, re-circulatory aquaculture system, etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032103",
+    "description": "Growing of edible seaweed and microalgae",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032104",
+    "description": "Land-based aquaculture activities in salt water filled tanks and reservoirs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032105",
+    "description": "Operation of marine fish hatcheries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032199",
+    "description": "Other marine aquaculture n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032201",
+    "description": "Fish farming in freshwater including farming of freshwater ornamental fish",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032202",
+    "description": "Culture of freshwater crustaceans, bivalves, other mollusks and other aquatic animals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032203",
+    "description": "Operation of fish hatcheries (fresh-water)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "032299",
+    "description": "Other freshwater aquaculture activities, n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "033000",
+    "description": "Service activities incidental to marine or freshwater fishery or aquaculture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181101",
+    "description": "Printing of newspapers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181102",
+    "description": "Printing of magazines and other periodicals, books and brochures, maps, atlases, diaries, calendars, posters, flyers and similar articles excluding flexographic printing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181103",
+    "description": "Printing of postage stams, taxation stamps, cheques and other security papers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181104",
+    "description": "Printing of bank notes, currency notes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181105",
+    "description": "Printing banners, posters and similar articles using flexographic printing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181106",
+    "description": "Printing on textiles and apparels other than leather, including laser engraving, embellishing and embossing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181107",
+    "description": "Printing on plastic, glass, metal, wood, ceramics, excluding engravings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181108",
+    "description": "Printing of photographs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181199",
+    "description": "Other printing activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181201",
+    "description": "Pre-press activities like composing, file conversion, proofing, colour correction, plate/block making and other similar activities (such as typesetting and phototypesetting)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "181202",
+    "description": "Post-press activities like cutting, folding, binding and other similar activities.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "182000",
+    "description": "Reproduction of recorded media",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331101",
+    "description": "Repair and maintenance of fabricated structural metal products such as doors, windows and their frames, shutters and rolling shutters, gates, towers, masts, trusses, bridges and similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331102",
+    "description": "Repair and maintenance of pipes and pipelines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331103",
+    "description": "Repair and maintenance of metal tanks, reservoirs, containers, steel shipping drums and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331104",
+    "description": "Repair and maintenance of steam or other vapor generators and auxiliary plant for use with steam generators such as condensers, economizers, superheaters, steam collectors, and accumulators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331199",
+    "description": "Repair and maintenance of other fabricated metal products n.e.c. including Mobile welding repair; Repair and maintenance of nuclear reactors, except isotope separators; Repair and maintenance of parts for marine or power boilers; Plate work repair of central heating boilers and radiators; Repair and maintenance of fire arms and ordnance; Repair of sporting and recreational guns",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331201",
+    "description": "Repair and maintenance of engines and turbines excluding aircraft, ships, vehicle and motor cycle engines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331202",
+    "description": "Repair and maintenance of pumps and related equipment, fluid power equipment, valves",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331203",
+    "description": "Repair and maintenance of metal cutting and metal forming machine tools and accessories, power-driven hand-tools, and other machine tools",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331204",
+    "description": "Repair and maintenance of agricultural machinery and forestry and logging machinery including agricultural tractors",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331205",
+    "description": "Repair and maintenance of mining, construction, and oil and gas field machinery; metallurgy machinery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331206",
+    "description": "Repair and maintenance of food, beverage, and tobacco processing machinery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331207",
+    "description": "Repair and maintenance of textile apparel, leather production machinery and papermaking machinery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331208",
+    "description": "Repair and maintenance of plastic and rubber machinery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331209",
+    "description": "Repair and maintenance of commercial refrigeration equipment, commercial water purifying equipment, vending machines, cash registers, photocopy machines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331299",
+    "description": "Repair and maintenance of other machinery n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331301",
+    "description": "Repair and maintenance of the measuring, testing, navigating and control equipment such as aircraft engine instruments, automotive emissions testing equipment, meteorological instruments, physical, electrical and chemical properties testing and inspection equipment, surveying instruments, radiation detection and monitoring instruments and similar equipments.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331302",
+    "description": "Repair and maintenance of systems parameters measurment equipments (Equipments used during realisation and operalisation) of Space craft and its Launch Vehicle & Orbital Station",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331303",
+    "description": "Repair and maintenance of Satellite Ground station, Gateway & VSAT, RF and Baseband equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331304",
+    "description": "Repair and maintenance of irradiation, electromedical and electrotherapeutic equipment such as magnetic resonance imaging (MRI) equipment, medical ultrasound equipment, pacemakers, hearing aids, electrocardiographs (ECG), electromedical endoscopic equipment, irradiation apparatus",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331305",
+    "description": "Repair and maintenance of optical instruments and equipment primarily for commercial use, such as binoculars, microscopes (excluding electron and proton microscopes), telescopes, prisms, and lenses (excluding ophthalmic lenses), as well as photographic equipment.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331399",
+    "description": "Repair and maintenance of other electronic and optical equipment n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331400",
+    "description": "Repair and maintenance of electrical equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331500",
+    "description": "Repair of transport equipment, except motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "331900",
+    "description": "Repair and maintenance of other equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "332001",
+    "description": "Installation of industrial machinery and equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351101",
+    "description": "Electric power generation using coal",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351102",
+    "description": "Electric power generation using petroleum products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351103",
+    "description": "Electric power generation using Natural Gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351104",
+    "description": "Electric power generation using nuclear energy (Emission free non-renewables)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351199",
+    "description": "Electric power generation using other non-renewable sources n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351201",
+    "description": "Electric power generation using hydropower",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351202",
+    "description": "Electric power generation using solar energy",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351203",
+    "description": "Electric power generation using wind",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351204",
+    "description": "Electric power generation using green hydrogen",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351205",
+    "description": "Electric power generation using biofuels",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351299",
+    "description": "Electric power generation activities using other renewable sources n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351301",
+    "description": "Operation of transmission systems delivering electricity from generation to distribution",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351302",
+    "description": "Operation of distribution systems delivering electricity from generation or transmission (including independent transmission) to end users (e.g. lines, poles, meters, and wiring)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351303",
+    "description": "Operation of charging facilities or stations for electric vehicles, e.g. electric cars, motorcycles, scooters and bicycles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "351399",
+    "description": "Other electric power transmission, storage and distribution activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "352001",
+    "description": "Production of natural and synthetic gases including coal gas except green hydrogen and compressed bio gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "352002",
+    "description": "Production of Green Hydrogen",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "352003",
+    "description": "Production of compressed Bio Gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "352004",
+    "description": "Disrtibution and sale of gaseous fuels through mains",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "352099",
+    "description": "Production of other gases n.e.c. excluding petroleum gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "353001",
+    "description": "Steam and air conditioning supply",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "353002",
+    "description": "Production of ice, including ice for food and non-food (e.g. cooling) purposes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "353099",
+    "description": "Other Steam and air conditioning supply n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "354000",
+    "description": "Activities of brokers and agents for electric power and natural gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360001",
+    "description": "Abstraction of water from rivers, lakes, ponds ground water and other sources",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360002",
+    "description": "Rainwater harvesting",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360003",
+    "description": "Treatment of water for water supply (except desalination)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360004",
+    "description": "Desalination of sea or ground water to produce water as the principal product of interest",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360005",
+    "description": "Distribution of water by mains",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360006",
+    "description": "Distribution of water by trucks/containers/tankers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360007",
+    "description": "Distribution of water by rail or ships",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360008",
+    "description": "Operation of irrigation canals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360009",
+    "description": "Rental and leasing of water distribution network",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "360099",
+    "description": "Water collection, treatment and supply n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381101",
+    "description": "Collection of mixed non-hazardous waste.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381102",
+    "description": "Collection of segregated recycleable non-hazardous waste excluding constuction and demolition waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381103",
+    "description": "Collection of construction and demolition waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381199",
+    "description": "Collection of other non-hazardous waste n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381201",
+    "description": "Collection of all medical waste including bio-hazardous waste and expired pharmaceuticals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381202",
+    "description": "Collection of E-waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "381299",
+    "description": "Collection of other hazardous waste n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382101",
+    "description": "Treatment and disposal of organic non-hazardous waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382199",
+    "description": "Treatment and disposal of other non-hazardous waste n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382201",
+    "description": "Treatment and disposal of toxic live or dead animals and other contaminated waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382202",
+    "description": "Treatment and disposal of E-Waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382203",
+    "description": "Treatment, disposal and storage of radioactive nuclear waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382204",
+    "description": "Treatment and disposal of medical waste",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "382299",
+    "description": "Treatment and disposal of other hazardous waste n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383001",
+    "description": "Shredding of metal waste, end-of-life vehicles etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383002",
+    "description": "Dismantling of automobiles (except end-of-life vehicles) for materials recovery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383003",
+    "description": "Ship-breaking and recovery of metal components from ships.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383004",
+    "description": "Recovery and processing of electronic items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383005",
+    "description": "Recovery and reclaiming of rubber materials (e.g., used tires) to produce secondary raw materials.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383006",
+    "description": "Crushing, cleaning, and sorting of glass waste to obtain secondary raw materials (e.g., glass cullet for manufacturing).",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383007",
+    "description": "Sorting and mechanical processing (e.g. cleaning, grinding) of plastics to produce secondary raw material",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "383099",
+    "description": "Materials and other waste recovery n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390001",
+    "description": "Soil & Groundwater Remediation activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390002",
+    "description": "Surface water and coastal cleaning servicies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390003",
+    "description": "Industrial & Nuclear Decontamination activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390004",
+    "description": "Other specialized pollution-control activities excluding carbon capture and storage",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390005",
+    "description": "CO2 remediation and Carbon Capture and Utilization (CCU) services including Blue carbon restoration and ocean-based carbon sequestration services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390006",
+    "description": "Mining site remidiation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "390099",
+    "description": "Remediation and other waste management service activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "410001",
+    "description": "Construction of buildings carried out on own-account basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "410002",
+    "description": "Construction of buildings carried out on a fee or contract basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "410003",
+    "description": "Activities relating to alteration, addition, repair, maintenance carried out on own account basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "410004",
+    "description": "Activities relating to alteration, addition, repair, maintenance carried out on a fee or contract basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "410005",
+    "description": "Assembly and erection of prefabricated constructions on the site",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "421001",
+    "description": "Construction and maintenance of motorways, streets, roads, other vehicular and pedestrian ways including surface work",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "421002",
+    "description": "Construction and maintenance of tunnels, subways, bridges and overpasses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "421003",
+    "description": "Construction and maintenance of airfield runways",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "421004",
+    "description": "Construction and maintenance of railway tracks/ Metro tracks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "421099",
+    "description": "Other construction of roads and railways n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422001",
+    "description": "Construction of thermal and nuclear power plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422002",
+    "description": "Construction of hydropower plants and Pumped Storage Projects",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422003",
+    "description": "Construction, erection, and maintenance of power transmission and distribution lines, including radar infrastructure for grid monitoring, load balancing, fault detection, and overhead lines or conductor rails for railways.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422004",
+    "description": "Construction, erection, and maintenance of telecommunication infrastructure such as mobile tower",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422005",
+    "description": "Construction of long distance pipelines or urban pipelines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422006",
+    "description": "Construction and maintenance of water main and line connection, water reservoirs including irrigation system (canal)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422007",
+    "description": "Construction and repair of sewer systems including sewage disposal plants and pumping stations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422008",
+    "description": "Construction of solar energy plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422009",
+    "description": "Construction of wind energy plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "422099",
+    "description": "Other Construction of utility projects n.e.c. including systems test and Integration Facility for spacecrafts, launch vehicles and orbital stations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429001",
+    "description": "Construction of industrial plants including refineries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429002",
+    "description": "Construction of waterways, harbours, and river works, marinas (including dredging of waterways)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429003",
+    "description": "Construction of dams and dykes and hydromechanical structures (e.g., locks, lifts, sluices, slipways)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429004",
+    "description": "Construction of outdoor sports facilities, playgrounds, amusement parks and theme parks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429005",
+    "description": "Construction of grain storage systems",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429006",
+    "description": "Construction of mining facilities (e.g., shafts, towers, tunnels)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "429099",
+    "description": "Other construction of other civil engineering projects n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "431100",
+    "description": "Demolition, dismantling or wrecking of buildings and other structures",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "431201",
+    "description": "Site preparation for mining including overburden removal and other development and preparation of mineral properties and sites",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "431202",
+    "description": "Site preparation including drilling, boring and core sampling for construction, geophysical, geological or similar purposes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "431203",
+    "description": "Clearing of building sites, earth moving: excavation, landfill, levelling and grading of construction sites, trench digging, rock removal, blasting etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "431204",
+    "description": "Drainage of agricultural or forestry land",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "431299",
+    "description": "Other site preparation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432101",
+    "description": "Installation, repair and maintenance of electrical wiring and fittings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432102",
+    "description": "Installation, repair and maintenance of telecommunications wiring including computer network and cable television wiring, including fiber optic",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432103",
+    "description": "Installation, repair and maintenance of radar infrastructure",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432104",
+    "description": "Installation, repair and maintenance of lighting systems (including street lighting and airport runway lighting)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432105",
+    "description": "Installation, repair and maintenance of fire alarm system and burgler alarm system",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432106",
+    "description": "Installation, repair and maintenance of power storage systems and electric charging stations for electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432107",
+    "description": "Installation, repair and maintenance of solar systems on buildings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432199",
+    "description": "Other electrical installation, repair and maintenance n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432201",
+    "description": "Installation, repair and maintenance of plumbing for water, gas, and sanitation equipment (excluding hospitals gas fittings)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432202",
+    "description": "Installation, repair and maintenance of gas fittings and medical gas distribution systems in hospitals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432203",
+    "description": "Installation, repair and maintenance of ventilation, air-conditioning equipment and heating systems (electric, gas, and oil), furnaces, cooling towers, non-electric solar energy collectors, etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432204",
+    "description": "Installation, repair and maintenance of all sprinkler systems including lawn and fire systems",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432299",
+    "description": "Other plumbing, heating, and air-conditioning installation, repair and maintenance activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432901",
+    "description": "Installation, repair and maintenance of elevators, escalators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432902",
+    "description": "Installation, repair and maintenance of thermal, sound or vibration insulation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432903",
+    "description": "Installation, repair and maintenance of automated and revolving doors",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "432999",
+    "description": "Other construction installation, repair and maintenance activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "433001",
+    "description": "Installation of doors, windows, door and window frames, fitted kitchens, of wood or other materials",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "433002",
+    "description": "Interior finishing including ceiling , flooring, tiling, partition, wall covering and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "433003",
+    "description": "Interior and exterior painting, glazing, plastering and decorating of buildings or civil engineering structures",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "433099",
+    "description": "Other building completion and finishing activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "434000",
+    "description": "Intermediation of specialised construction services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "439000",
+    "description": "Other specialized construction activities including foundation work, masonry, roofing, scaffolding, steel erection, waterproofing, road safety installations, crane rental with operator, heritage restoration.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461003",
+    "description": "Activities of commission agents dealing in wholesale trade in textile, clothing and footwear",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461004",
+    "description": "Activities of commission agents involved in wholesale of household, office and shop furniture, carpets and lighting equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461005",
+    "description": "Activities of commission agents involved in wholesale of computers, computer periheral equipment and software",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461006",
+    "description": "Activities of commission agents involved in wholesale of electronic and telecommunication equipments and parts",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461007",
+    "description": "Activities of commission agents involved in the wholesale of machinery, equipment and supplies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461008",
+    "description": "Activities of commission agents involved in the wholesale of motorvehicles of all types including electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461009",
+    "description": "Activities of commission agents involved in the wholesale of motorcycle of all types including electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461010",
+    "description": "Activities of commission agents involved in the wholesale of solid, liquid and gasous fuels and related products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461011",
+    "description": "Activities of commission agents involved in the wholesale of metal and metal ores",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461012",
+    "description": "Activities of commission agents involved in the wholesale of construction materials, hardware, plumbing and heating equipment and supplies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "461099",
+    "description": "Activities of other commission agents n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462001",
+    "description": "Wholesale of grains and seeds and seeds for planting (excluding oilseeds)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462003",
+    "description": "Wholesale of live animals (livestock) including poultry",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462004",
+    "description": "Wholesale of straw, fodder & other animal/poultry feed",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462005",
+    "description": "Wholesale of flowers and plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462006",
+    "description": "Wholesale of hides, skins and leather",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462007",
+    "description": "Wholesale of oleaginous fruits and oil seeds",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462008",
+    "description": "Wholesale of sugarcane",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462009",
+    "description": "Wholesale of unprocessed timber and similar forest products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "462099",
+    "description": "Wholesale of other agricultural raw materials n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "463001",
+    "description": "Wholesale of fruits & vegetables",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "463002",
+    "description": "Wholesale of raw milk & dairy products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "463004",
+    "description": "Wholesale of confectionery, bakery products and beverages other than Alcholoic",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "463005",
+    "description": "Wholesale of edible oils, fats, sugar , spices and condiments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "463006",
+    "description": "Wholesale of tea, coffee & cocoa",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464101",
+    "description": "Wholesale of yarn and fabrics",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464102",
+    "description": "Wholesale of clothing, parts of clothing and clothing accessories",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464103",
+    "description": "Wholesale of footwear",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464104",
+    "description": "Wholesale of made-up textile artciles including bed linens, towels, bathroom and kitchen linens, curtains and draperies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464105",
+    "description": "Wholesale of protective apparels (Eg. Bullet proof jackets, PPE kits for medical purposes, latex gloves)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464199",
+    "description": "Wholesale of other textiles, clothing and footwear related goods n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464201",
+    "description": "Wholesale of wooden furniture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464202",
+    "description": "Wholesale of furniture, excluding wooden furniture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464203",
+    "description": "Wholesale of furniture fittings (hinges, knobs, handles and other similar items)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464204",
+    "description": "Wholesale of lights and lighting equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464205",
+    "description": "Wholesale of carpets, rugs, mattress and box springs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464299",
+    "description": "Wholesale of household, office and shop furniture, carpets and lighting equipment n.e.c",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464901",
+    "description": "Wholesale of perfumeries, cosmetics, soaps and other toiletries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464902",
+    "description": "Wholesale of cutlery, utencils, kitchenware and tableware of metal and wood",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464903",
+    "description": "Wholesale of cutlery, utencils, kitchenware and tableware of china and glassware",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464904",
+    "description": "Wholesale of watches & clocks (Except smart watches)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464905",
+    "description": "Wholesale of household appliances and consumer electronics (Eg. refrigerators, ovens, stoves, washing machine, electric kettles, juicers, ACs, heaters, vaccum cleaners etc.) excluding telecommunication equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464906",
+    "description": "Wholesale of newspaper, books, magazines and stationery goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464907",
+    "description": "Wholesale of pharmaceutical and medical goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464908",
+    "description": "Wholesale of jewellery, including imitation jewellery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464909",
+    "description": "Wholesale of bicycles, e-bikes and similar articles, including related parts and accessories",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464910",
+    "description": "Wholesale of optical goods (Eg. Eyeglasses (Prescription and non-prescription), Sunglasses, contact lenses, optical instruments, magnifying glasses, opthalmic frames, optical accessories)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464911",
+    "description": "Wholesale of consumer electronics: Video equipment, audio equipment, video game consoles and similar products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464912",
+    "description": "Wholesale of photographic goods (Eg. Cameras, Lenses and similar articles)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464913",
+    "description": "Wholesale of musical instruments, games and toys, sports goods (Excluding sports clothes and footwear)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464914",
+    "description": "Wholesale of baby carriages, pushchairs, baby walkers, baby carriers, baby car seats and similar equipments for babies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464915",
+    "description": "Wholesale of suitcases, travel bags and other travel goods and accessories",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "464999",
+    "description": "Wholesale of other household goods n.e.c..",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465101",
+    "description": "Wholesale of computers, including laptops",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465102",
+    "description": "Wholesale of non-customised software, including video games, provided on physical media with right to perpetual use",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465103",
+    "description": "Wholesale of computer peripheral equipment such as printers, photocopiers, interactive whiteboards, videoconferencing equipment and similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465104",
+    "description": "Wholesale of hardware components such as motherboards, memory, GPUs, power supplies, cases, cooling systems and other similar components",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465199",
+    "description": "Wholesale of other computer peripherial equipments n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465201",
+    "description": "Wholesale of electronic valves and tubes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465202",
+    "description": "Wholesale of video equipments (LED/LCD Panels, Teleprompters, Projection Screens, Broadcasting and Streaming Equipment, Webcams), excluding television",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465203",
+    "description": "Wholesale of semiconductor devices (Eg. Capacitors, leds, transistors, integrated circuits and similar items)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465204",
+    "description": "Wholesale of communications equipment inlcuding fixed/ mobile phones, modems and smart watches in",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465299",
+    "description": "Wholesale of electronic and telecommunications equipment and parts n.e.c",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465301",
+    "description": "Wholesale of tractors and tractor attachments for agriculture and forestry",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465302",
+    "description": "Wholesale of soil preparation, cultivation and harvesting machinery such as ploughs, harrows, seeders, harvesters, threshsers and similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465303",
+    "description": "Wholesale of milking and dairy machinery such as milking machines, cream separators and similar machinery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465304",
+    "description": "Wholesale of livestock and poultry-keeping machinery such as feeders, incubators, poultry-keeping machines and similar machines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465305",
+    "description": "Wholesale of garden and landscaping equipment such as lawn mowers and similar products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465399",
+    "description": "Wholesale of other agricultural equipments and supplies, n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465901",
+    "description": "Wholesale of office machinery and equipment (Excluding computers and computer peripheral equipment)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465902",
+    "description": "Wholesale of machinery and equipment for automobile industry",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465903",
+    "description": "Wholesale of electrical material such as electrical motors, transformers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465904",
+    "description": "Wholesale of mining, construction and civil engineering machinery and equipment, e.g. excavating machines etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465905",
+    "description": "Wholesale of machinery and equipment for textile apparel and leather products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465906",
+    "description": "Wholesale of scientific, medical and surgical machinery and equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465907",
+    "description": "Wholesale of transport equipments except bicycles and motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465908",
+    "description": "Wholesale of wires and switches and other installation equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465909",
+    "description": "Wholesale of measuring/ weighing equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "465999",
+    "description": "Wholesale of other machinery and equipment n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467101",
+    "description": "Wholesale of solid fuels: such as charcoal, coal, coke, fuel wood, and pellets made from wood or biomass",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467102",
+    "description": "Wholesale liquid fuels: including crude petroleum, crude oil, diesel fuel, gasoline, fuel oil, heating oil, kerosene, biofuels, recycled carbon fuels, and synthetic fuels (whether blended or pure)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467103",
+    "description": "Wholesale of gaseous fuels: such as liquefied petroleum gases, liquefied natural gas, butane and propane gas, and their related bio and renewable forms (blended or pure)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467104",
+    "description": "Wholesale of lubricating oils, greases, and other refined petroleum products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467201",
+    "description": "Wholesale of ferrous metal ores",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467202",
+    "description": "Wholesale of non-ferrous metal ores",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467203",
+    "description": "Wholesale of ferrous metals in primary forms (e.g., iron, steel ingots, billets)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467204",
+    "description": "Wholesale of non-ferrous metals in primary forms (e.g., aluminum, copper, zinc, lead)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467205",
+    "description": "Wholesale of gold and other precious metals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467206",
+    "description": "Wholesale of semi-finished ferrous products (e.g., steel rods, and bars )",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467207",
+    "description": "Wholesale of semi-finished non-ferrous products (e.g., aluminum plates, copper wires)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467208",
+    "description": "Wholesale of finished metal products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467299",
+    "description": "Wholesale of other metals and metal ores n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467301",
+    "description": "Wholesale of wood in the rough and products of primary processing of wood",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467302",
+    "description": "Wholesale of construction materials (Eg. sand, gravel, cement, bricks and similar products)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467303",
+    "description": "Wholesale of hardware articles, eg. tubes, pipes, fittings, taps, T-pieces, connections, rubber pipes, nails, screws and similar products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467304",
+    "description": "Wholesale of paints and varnishes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467305",
+    "description": "Wholesale of flat glass (window glass, laminated glass, tempered glass, mirrors, decorative and frosted glass)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467306",
+    "description": "Wholesale of sanitary equipment (Eg. baths, washbasins, toilets and other sanitary porcelain)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467307",
+    "description": "Wholesale of hand tools, such as hammers, saws, screwdrivers including power hand tools",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467308",
+    "description": "Wholesale of tiles, marble and granite",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467309",
+    "description": "Wholesale of wallpaper and floor coverings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467399",
+    "description": "Wholesale of other construction materials, hardware, plumbing and heating equipment and supplies n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467901",
+    "description": "Wholesale of industrial chemicals such as aniline, chemical glues, synthetic resin, methanol, paraffin,soda, industrial salt, acids and sulphurs, starch derivates and similar products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467902",
+    "description": "Wholesale of fertilizers and agrochemical products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467903",
+    "description": "Wholesale of plastic materials in primary forms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467904",
+    "description": "Wholesale of rubber (Including synthetic rubber)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467905",
+    "description": "Wholesale of fibres from waste textile (natural, synethetic and man-made)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467906",
+    "description": "Wholesale of waste paper pulp including bulk paper",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467907",
+    "description": "Wholesale of metal and non-metal waste, scrap and materials for recycling, including dismantling of automobiles, computers, televisions and other equipment to obtain and re-sell usable parts (Excluding activities resulting in secondary raw materials)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467908",
+    "description": "Wholesale of fireworks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "467999",
+    "description": "Wholesale of other chemicals, waste and scrap and other products n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "469000",
+    "description": "Wholesale of a variety of goods without any particular specialisation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "471100",
+    "description": "Retail sale of a large variety of goods (such as wearing apparel, furniture, appliances, hardware, cosmetics etc.) among which however, food products, beverages",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472101",
+    "description": "Retail sale of cereals and pulses, tea, coffee, spices, flour and edible oils including activities of Fair Price Shops/ Ration Shops",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472102",
+    "description": "Retail sale of fresh and preserved fruits and vegetables (Including organic products)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472104",
+    "description": "Retail sale of bakery products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472105",
+    "description": "Retail sale of sugar confectionery, sweetmeat and chocolate products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472107",
+    "description": "Retail sale of dairy products",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472108",
+    "description": "Retail sale of poultry and eggs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472109",
+    "description": "Retail sale of tender coconuts",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472199",
+    "description": "Retail sale of other food products n.e.c. including retail sale of supplements",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "472202",
+    "description": "Retail sale of non-alcoholic beverages neither manufactured nor consumed on the premises",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "473001",
+    "description": "Retail sale of automative fuel in fuel stations, including commission sale of fuels",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "473002",
+    "description": "Retail sale of lubricating, cooling and similar products for vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "473099",
+    "description": "Retail sale of other automotive fuel n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "474001",
+    "description": "Retail sale of computers including laptops",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "474002",
+    "description": "Retail sale of computer peripheral equipment such as printers, photocopiers, flash drives and other storage devices, interactive whiteboards, videoconferencing equipment, video game consoles and similar equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "474003",
+    "description": "Retail sale of non-customised software, including video games, provided on physical media with right to perpetual use",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "474004",
+    "description": "Retail sale of smartphones, mobile phones and telephones, tablets, smart watches and their accessories such as chargers, hands-free kits, protective film and case",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "474005",
+    "description": "Retail sale of audio and video equipment including radio, television and other similar equipments (Excluding photographic equipment)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "474099",
+    "description": "Retail sale of other information and communication equipment, n.e.c..",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475101",
+    "description": "Retail sale of fabric",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475102",
+    "description": "Retail sale of basic material for textile such as yarn",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475103",
+    "description": "Retail sale of haberdashery such as needles, sewing thread, buttons, zippers and other similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475199",
+    "description": "Retail sale of other textiles n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475201",
+    "description": "Retail sale of building material such as bricks, cement, sand, gravel, TMT bars and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475202",
+    "description": "Retail sale of tiles, marble and granite",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475203",
+    "description": "Retail sale of paints, varnishes, lacquers, solvents and white spirit",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475204",
+    "description": "Retail sale of flat glass such as tempered glass, laminated glass, tinted glass, mirrors and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475205",
+    "description": "Retail sale of plumbing material and sanitary equipment such as tubes, pipes, fittings, taps, washbasins, sinks and other similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475206",
+    "description": "Retail sale of tools such as hammers, saws, screwdrivers and other hand tools, including power hand tools",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475207",
+    "description": "Retail sale of electrical material and equipment such as switches, sockets, fuse boxes, wires, cables, and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475208",
+    "description": "Retail trade of fire alarms, fire extinguishers, emergency blocks, smoke extraction system, safes, and vaults, without installation or maintenance services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475209",
+    "description": "Retail sale of doors, windows, shutters similar items of any material",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475299",
+    "description": "Retail sale of other hardware, building material, paints and glass n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475301",
+    "description": "Retail sale of carpets, rugs and other similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475302",
+    "description": "Retail sale of curtains, net curtains, blinds and upholstery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475399",
+    "description": "Retail sale of wall paper, laminates and other similar floor coverings n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475901",
+    "description": "Retail sale of furniture, mattresses and box springs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475902",
+    "description": "Retail sale of household utensils and cutlery, crockery, glassware, chinaware and pottery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475903",
+    "description": "Retail sale of lighting articles such as light bulbs, ceiling lights, wall lights, table and floor lamps, smart lighting and similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475904",
+    "description": "Retail sale of household appliances (excluding communication equipment) such as Refrigerators, Washing machines, Air Conditioners, Geysers and similar appliances",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475905",
+    "description": "Retail sale of security systems and CCTV equipments including locking devices, safes, vaults and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "475999",
+    "description": "Retail sale of other household articles and equipment n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476101",
+    "description": "Retail sale of books of all kinds",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476102",
+    "description": "Retail sale of newspapers and magazines",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476103",
+    "description": "Retail sale of stationery and office supplies such as pens, pencils, paper and other similar items (excluding retail sale of art supplies)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476201",
+    "description": "Retail sale of bicycles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476299",
+    "description": "Retail sale of other sporting equipment n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476301",
+    "description": "Retail sale of board games such as Carrom board, chess, ludo and similar board games",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476302",
+    "description": "Retail sale of toys and dolls (Including toy drones)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476303",
+    "description": "Retail sale of party supplies such as disguises, masks, party favours, magic items and similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476304",
+    "description": "Retail sale of tri-cycles, cars (not minature) and similar toys for kids",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476399",
+    "description": "Retail sale of other games and toys n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476901",
+    "description": "Retail sale of recorded media",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476902",
+    "description": "Retail sale of musical instruments and related accessories such as strings, music stands, metronomes and similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476903",
+    "description": "Retail activities of commercial art galleries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476904",
+    "description": "Retail sale of art supplies such as beads, clay, canvasses, oil, water colours and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476905",
+    "description": "Retail sale of props for drama such as wigs, stage props, handheld props, costume accessories and simlar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476906",
+    "description": "Retail sale of dance equipments such as ghungroo, wands, hoops, ballet shoes and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "476999",
+    "description": "Retail sale of other cultural and recreational goods n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477101",
+    "description": "Retail sale of readymade garments, hosiery goods, other articles of clothing and clothing accessories such as gloves, ties, braces and similar articles, excluding those made of leather",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477102",
+    "description": "Retail sale of footwear (Excluding specialised sports footwear)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477103",
+    "description": "Retail sale of bags such as wallets, sling bags, clutches, purses, tote bags, office bags, laptop bags, and similar goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477104",
+    "description": "Retail sale of readymade garments and clothing accessories made of leather",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477105",
+    "description": "Retail sale of suitcases and travel bags",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477199",
+    "description": "Retail sale of other clothing, footwear and leather articles n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477201",
+    "description": "Retail sale of pharmaceuticals, medical and orthopedic goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477202",
+    "description": "Retail sale of perfumery, cosmetic articles, and toiletries/toilet articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477301",
+    "description": "Retail sale of photographic equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477302",
+    "description": "Retail sale of watches and clocks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477303",
+    "description": "Retail sale of precious jewellery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477304",
+    "description": "Retail sale of flowers and plants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477305",
+    "description": "Retail sale of souvenirs, craftwork",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477306",
+    "description": "Retail sale of household fuel (other than LPG) for cooking and heating",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477307",
+    "description": "Retail sale of seeds, fertilizers, pesticides, herbicides and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477308",
+    "description": "Retail sale of prescription glasses along with frames",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477309",
+    "description": "Retail sale of imitation jewellery, bindis, hair clips/ pins and other similar articles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477310",
+    "description": "Retail sale of pet animals and pet food",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477311",
+    "description": "Retail sale of liquefied petroleum gas (LPG) for cooking or heating",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477312",
+    "description": "Retail sale of fireworks and crackers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477399",
+    "description": "Retail sale of other new products n.e.c. including measuring/ weighting equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477401",
+    "description": "Retail sale of second-hand books",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477402",
+    "description": "Retail sale of antiques",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477403",
+    "description": "Retail sale of second-hand clothes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477404",
+    "description": "Retail sale of second-hand furniture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477405",
+    "description": "Retail sale of second-hand household appliances",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "477499",
+    "description": "Retail sale of other second-hand goods n.e.c",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "479001",
+    "description": "Intermediation service activities for retail trade including through online platform",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "479002",
+    "description": "Activities of agents in Retail sale of motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "479003",
+    "description": "Activities of Retail auctioneering houses of both new and used third party goods, including internet Retail auctions",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "479099",
+    "description": "Other intermediation service activities for retail sale n.e.c",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "521001",
+    "description": "Warehousing and storage, refrigerated (cold storage) excluding liquids and gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "521002",
+    "description": "Warehousing and storage, non-refrigerated excluding liquids and gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "521003",
+    "description": "Warehousing and storage of liquids and gas",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "521099",
+    "description": "Warehousing and storage n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522101",
+    "description": "Car parking including motorcycle and bicycle parking",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522102",
+    "description": "Operation of toll collection facilities for highways, bridges, and other paid road infrastructures.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522103",
+    "description": "Towing services and roadside assistance for vehicles on road networks.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522104",
+    "description": "Operation of terminal facilities such as railway stations, bus stations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522199",
+    "description": "Other service activities incidental to land transportation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522201",
+    "description": "Operation of terminal facilities such as harbours and piers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522202",
+    "description": "Navigation, pilotage, tug and berthing activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522203",
+    "description": "Hydrographic surveys, vessel traffic services (VTS), and lighthouse operations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522299",
+    "description": "Other service activities incidental to water transportation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522301",
+    "description": "Operation of terminal facilities at airports",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522302",
+    "description": "Airport and air-traffic-control activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522303",
+    "description": "Ground services provided at airports, such as aircraft refueling, towing, parking, and boarding assistance of passengers, animals or freight",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522304",
+    "description": "Maintenance work on airfield infrastructure such as runways, taxiways, and airport buildings.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522305",
+    "description": "Storage of aircraft in hangars or designated parking areas.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522306",
+    "description": "Firefighting and fire prevention services at airport",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522307",
+    "description": "Maintenance work on Spacecraft Launch Pad and associated infrastructure",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522399",
+    "description": "Other service activities incidental to air transportation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522401",
+    "description": "Cargo handling incidental to land transport",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522402",
+    "description": "Cargo handling incidental to water transport",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522403",
+    "description": "Cargo handling incidental to air transport",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522901",
+    "description": "Arranging or organizing of transport operations by rail excluding activities of travel agents and tour operators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522902",
+    "description": "Arranging or organizing of transport operations by road excluding activities of travel agents and tour operators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522903",
+    "description": "Arranging or organizing of transport operations by sea excluding activities of travel agents and tour operators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522904",
+    "description": "Arranging or organizing of transport operations by air excluding activities of travel agents and tour operators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522905",
+    "description": "Activities of movers and packers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522906",
+    "description": "Weighing of goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "522999",
+    "description": "Other support activities for transportation n.e.c. including issue and procurement of transport documents and waybills (Custom House Brokerage), goods handling operations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "523100",
+    "description": "Intermediation service activities for freight transportation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "523201",
+    "description": "Operation of on-line platforms that allow passengers to book a ride",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "523299",
+    "description": "Other intermediation services for passenger transportation n.e.c. such as by buses, airways, railways, waterways",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "531000",
+    "description": "Pickup, sorting, transport and delivery (domestic or international) of letter-post and parcels and packages by postal services operating under a universal service obligation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "532001",
+    "description": "Pickup, sorting, transport and delivery (domestic or international) of letter-post and parcels and packages by postal services operating outside scope of universal service obligation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "532002",
+    "description": "Home delivery services, including parcels and food, conducted via private or public transport.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "532099",
+    "description": "Other courier activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "533001",
+    "description": "Operation of on-line platforms to allow booking of delivery including food delivery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "533099",
+    "description": "Other intermediation service activities for postal and courier activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "551001",
+    "description": "Accommodation (typically on a daily or weekly basis) for short stays provided by hotels, resorts, inns, motels, including accommodation in houseboats with reactive customer services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "551002",
+    "description": "Provision of short term lodging facilities to members of a particular organisition such as govt. guest houses, company guest houses, circuit houses and similar establishments with reactive customer services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "551099",
+    "description": "Other hotels and similar accommodation activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "552001",
+    "description": "Accommodation in bed and breakfast units",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "552002",
+    "description": "Accommodation in guest rooms provided by private households such as homestays, paying guest accomodation without reactive customer services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "552003",
+    "description": "Accommodations in hostels other than for students and workers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "552004",
+    "description": "Accommodation in visitor flats, bungalows, cottages and cabins usually without reactive customer services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "552099",
+    "description": "Other short-term accommodation activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "553000",
+    "description": "Camping grounds, recreational vehicle parks and trailer parks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "554001",
+    "description": "Accommodation intermediation services excluding time-share exchange services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "554002",
+    "description": "Time-share exchange services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "554099",
+    "description": "Other Intermediation service activities for accommodation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "559001",
+    "description": "Accommodation provided for students in hostels, residences and dormitories excluding operation of paying guest facilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "559002",
+    "description": "Worker hostels and dormitories",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "559099",
+    "description": "Other accommodation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "561001",
+    "description": "Activities of restaurants (with or without bar), cafeterias and fast-food restaurants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "561002",
+    "description": "Activities of take-out eating places and take-away restaurants in a supermarket (Units not part of the supermarket)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "561003",
+    "description": "Activities of mobile food carts, push cart vendors, mobile food operators including truck vendors and food preparation in market stalls",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "561004",
+    "description": "Activities of ice cream parlours excluding ice cream vendors",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "561005",
+    "description": "Activities of cloud kitchens and home based kitchens for commercial purpose",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "561099",
+    "description": "Other restaurants and mobile food service activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "562100",
+    "description": "Event catering that includes the food preparation and supply based on contractual agreements, at the location specified by the customer, for a specific event",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "562901",
+    "description": "Activities of food service contractors such as food service contractors for transportation companies like airways",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "562902",
+    "description": "Operation of canteens or cafeteria in a premises (premises such as factories, offices, hospitals or schools) on a concession basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "562999",
+    "description": "Other food service activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "563002",
+    "description": "Activities of coffee houses and tea rooms including roadside tea/coffee stalls",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "563003",
+    "description": "Activities of fruit juice shops",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "563004",
+    "description": "Activities of other beverage vendors, including mobile beverage vendors on streets, at airports, train station, bus terminals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "563099",
+    "description": "Other beverage serving activities n.e.c. including operation of beverage concessions at sports and similar facilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "564000",
+    "description": "Intermediation service activities for food and beverage services including through digital platforms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581101",
+    "description": "Publishing of books, brochures, leaflets and similar publications, including publishing encyclopedias (including on CD-ROM)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581102",
+    "description": "Publishing of atlases, maps and charts",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581103",
+    "description": "Publishing of audio books",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581200",
+    "description": "Publishing of newspapers, in all forms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581300",
+    "description": "Publishing of periodicals and other journals, publishing of radio and television schedules in all forms of publishing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581901",
+    "description": "Publishing of directories, mailing lists, compilations, catalogs, greeting cards, posters, reproductions, statistics, and datasets/databases in any form, excluding data processing services.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "581999",
+    "description": "Other publishing activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582100",
+    "description": "Publishing of video games and gaming applications including provision of online games, in-game and in-app purchases, by the publisher, for all users including subscribers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582901",
+    "description": "Publishing of operating systems and drivers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582902",
+    "description": "Publishing of distributed ledger technology (DLT) or financial technologies software",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582903",
+    "description": "Publishing of modelling software",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582904",
+    "description": "Publishing of cybersecurity software",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582905",
+    "description": "Intermediation service activities for software publishing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "582999",
+    "description": "Other software distribution n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591101",
+    "description": "Production of animated audiovisual works",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591102",
+    "description": "Production of vlogs and video podcasts including production of short-video contents",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591103",
+    "description": "Production of audiovisual commercials",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591104",
+    "description": "Production of television or video news programmes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591199",
+    "description": "Other motion picture, video and television programme production activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591201",
+    "description": "Editing, titling, subtitling, closed captioning and credits activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591202",
+    "description": "Animation, and special effects activities including design activities of computer-produced graphics for animations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591203",
+    "description": "Conversion to video streaming formats activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591204",
+    "description": "Reproduction of motion picture film by creating master copies, for theatrical distribution",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591299",
+    "description": "Other Motion picture, video and television programme post-production activities n.e.c. including Film/tape transfer activities; Processing films related to the motion picture and television industries, Activities of stock footage film libraries",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591301",
+    "description": "Distributing film, videos, or audiovisual works and similar productions to motion picture theatres, television networks and stations, and exhibitors",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591302",
+    "description": "OTT platform streaming services for films, TV shows, and other audiovisual content including online digital distribution of films and TV programs.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591399",
+    "description": "Other motion picture, video and television programme distribution activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "591400",
+    "description": "Activities of motion picture or audiovisual projection in cinemas, in the open air or in other projection facilities projection activities of film festivals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "592001",
+    "description": "Production of original (sound) master recordings and sound recording service activities including the production of recorded (i.e. non-live) radio programming, audio podcasts, audio for film, television, books",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "592002",
+    "description": "Conversion of sound recordings to audio streaming formats",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "592003",
+    "description": "Publishing of music sheet and activities of acquiring and registering copyrights for musical compositions (music publishing)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "592004",
+    "description": "Activities of promoting, authorizing and using musical compositions in recordings, radio, television, motion pictures, live performances, print and other media",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "592099",
+    "description": "Other sound recording and music publishing activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "601001",
+    "description": "Broadcasting audio signals through radio broadcasting studios and facilities for transmission of audio programming",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "601002",
+    "description": "Radio broadcasting activities over the internet (Internet radio stations)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "601003",
+    "description": "Third-party on-demand audio streaming distribution services and downloads live or recorded podcast broadcasting and third-party on-demand podcast streaming services and downloads",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "601004",
+    "description": "Audio book third-party on-demand streaming distribution services and downloads",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "601099",
+    "description": "Other radio broadcasting and audio distribution activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "602000",
+    "description": "Television programming and broadcasting activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "603100",
+    "description": "News syndicate and news agency activities furnishing news, pictures and features to the media, publishers and broadcasters",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "603900",
+    "description": "Social network sites and other content distribution (sharing) platforms, including blog and wiki sites online gaming/video game sites provision of e-book for downloads not associated with publishing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "611001",
+    "description": "Operating, maintaining or providing access to facilities for the transmission of voice, data, text, sound and video using wired, wireless and satellite telecommunications infrastructure excluding cable distribution systems (e.g. for distribution of data and television signals)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "611002",
+    "description": "Operating of cable distribution systems (e.g. for distribution of data and television signals) with or without providing customers with third-party video-on-demand services (OTT services)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "611099",
+    "description": "Other wired, wireless, and satellite telecommunication activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "612001",
+    "description": "Reselling and intermediation services for wired, wireless and satellite telecommunications and internet services (i.e. purchasing and reselling network capacity), including activities of telecommunications brokers and resellers of pre-paid calling cards and services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "612002",
+    "description": "Provision of telephone and Internet access in facilities open to the public including activities of cyber cafes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "612099",
+    "description": "Telecommunication reselling activities and intermediation service activities for telecommunication n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "619001",
+    "description": "Provision of specialised telecommunications applications, such as satellite Mission operation(TT&C, Data, Space Situational Awareness) , Ground Station as Service (GaSS) and radar station operations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "619002",
+    "description": "Operation of satellite terminal stations, Gateways and associated facilities operationally connected with one or more terrestrial communications systems and capable of transmitting telecommunications to or receiving telecommunications from satellite systems",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "619003",
+    "description": "Services providing automated/ interactive alerts through Text messaging (SMS), advanced data services (SMS+, MMS+),RCS Messaging and Interactive Alerts, Automated SMS alert systems powered by artificial intelligence for personalized notifications and SMS push services provision, without operating facilities for the transmission of data",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "619099",
+    "description": "Other Telecommunications activities n.e.c. including R&D, Regulation, dispute settlement",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "621100",
+    "description": "Development of video games, video game software, and video game software tools",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "621901",
+    "description": "Computer programming for third parties (clients) not including AI/ ML and cybersecurity applications",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "621902",
+    "description": "Computer AI/ ML programming for third parties (clients)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "621903",
+    "description": "Computer Cybersecurity programming for clients",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "621904",
+    "description": "Web-page designing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "621999",
+    "description": "Other computer programming activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "622001",
+    "description": "Computer hardware, software, and systems consultancy activities, excluding cybersecurity consultancy activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "622002",
+    "description": "Planning and designing of computer systems which integrate computer hardware, software and communication technologies, with or without related services such as system installation, training, and user support",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "622003",
+    "description": "Provision of on-site management and operation of clients computer systems and/or data processing facilities(including AMC services), as well as related support services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "622004",
+    "description": "Cybersecurity consultancy activities provision of advice on software and hardware requirements and provision or procurement of the hardware and software components of a computer system including cybersecurity network and system monitoring, testing and analysis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "622099",
+    "description": "Other computer consultancy and computer facilities management activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "629001",
+    "description": "Installation (setting-up) of computers and software installation services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "629002",
+    "description": "Computer disaster recovery services and Cloud-based disaster recovery as a service (DRaaS)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "629099",
+    "description": "Other information technology and computer service activities n.e.c",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631001",
+    "description": "Provision of computing infrastructure including cloud infrastructure and platform provision (IaaS, PaaS) including cloud computing (except software publishing and computer systems design)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631002",
+    "description": "Provision of technical infrastructure related to streaming services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631003",
+    "description": "Data processing services and related activities such as complete processing of data supplied by clients, generation of specialized reports, blockchain/DLT data processing activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631004",
+    "description": "Specialized hosting activities such as web hosting, application hosting",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631005",
+    "description": "Providing data entry services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631006",
+    "description": "Data centre colocation activities (i.e., rental of server and networking space in data centres) and computer data storage services (non-cloud storage)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631007",
+    "description": "Issuing of crypto assets without a corresponding liability (not by a monetary authority)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "631099",
+    "description": "Other computing infrastructure, data processing, hosting and related activities n.e.c. including analysis of satellite data",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "639001",
+    "description": "Operation of websites that use a search engine to generate and maintain extensive databases of Internet addresses and content in an easily searchable format",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "639002",
+    "description": "Operation of other websites that act as portals to the Internet, such as media sites providing periodically updated content",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "639003",
+    "description": "Telephone-based information services such as directory assistance, customer support helplines, telebanking and similar services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "639004",
+    "description": "News/Press clipping services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "639099",
+    "description": "Other web search portal activities and other information service activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641100",
+    "description": "Activities of Central Bank",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641901",
+    "description": "Activities of commercial banks, Regional Rural Banks, Local Area Banks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641902",
+    "description": "Activities of Payment, Small Finance Banks and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641903",
+    "description": "Activities of co-operative banks including Urban Co-op Banks, Primary Agricultural Credit Societies (PACS), Central Cooperative Banks (CCBs), State Cooperative Banks (SCBs) and other credit co-operatives and unions",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641904",
+    "description": "Activities of Postal giro and postal saving banks activities and money order activities and other similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641905",
+    "description": "Activities of deposit taking NBFCs (Investment and Credit Companies (ICC), Housing Finance Companies (HFC))",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641906",
+    "description": "Activities of non-deposit taking NBFCs(ICC, NBFC-Infrastructure Debt Fund, NBFC-Micro-Finance Institutions, NBFC-Non-Operating Financial Holding Companies, HFC, Standalone Primary Dealers)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641907",
+    "description": "Activities of monetary intermediation carried out by Self Help Groups (SHG)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "641999",
+    "description": "Other monetary intermediation activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "642100",
+    "description": "Activities of holding companies, i.e. units that hold the assets (owning controlling levels of equity) of one or more subsidiaries and whose only purpose is owning subsidiaries. The holding companies in this class do not provide any other service to the enterprises in which the equity is held, i.e. they do not administer or manage other units.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "642201",
+    "description": "Activities of captive financial institutions involved in intragroup lending. Companies wholly owned subsidiary of the manufacturer that provides B2B and/or B2C financing to purchasing the parent companies products and services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "642202",
+    "description": "Activities of Brass Plate Companies i.e., units that are owned (directly or indirectly) by a non-resident unit, of which large part of the balance sheet consists of claims and liabilities towards non-resident units, and that have few or no employees and little or no physical presence in the jurisdiction of incorporation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "642299",
+    "description": "Activities of other financing conduits n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643100",
+    "description": "Issuing of certificates of deposit, money market mutual funds, commercial paper and other activities of money market funds",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643200",
+    "description": "Issuing of non-money market funds for investment in financial and non-financial assets",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643301",
+    "description": "Trusts (other than family Trusts), estates or agency accounts, administered on behalf of the beneficiaries under the terms of a trust agreement, will or agency agreement",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643302",
+    "description": "Activities of companies holding financial assets for individuals and families (family trusts), home office",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643303",
+    "description": "Activities of shareholding companies, not owning controlling levels of equity",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643304",
+    "description": "Venture companies where the only financing is by shares and no fee is received",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "643399",
+    "description": "Activities of other trust, estate and agency accounts n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649100",
+    "description": "Activities of leasing where the term approximately covers the expected life of the asset and the lessee acquires substantially all the benefits of its use and takes all the risks associated with its ownership",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649200",
+    "description": "Activities of entities engaged in providing letters of credit, standby letters of credit, guarantees, collections and supply chain financing for international trade.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649300",
+    "description": "Activities of specialised factoring company or other financial organization engaged in recourse or non-recourse factoring i.e. the activity of purchasing accounts receivable (invoices) from third parties at a discount (factoring).",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649401",
+    "description": "Activities of Asset Reconstruction Companies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649402",
+    "description": "Activities to issue debt securities whose coupon and principal payments are backed by payments on specified assets or future income streams on assets that have not been originated by the issuing unit.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649501",
+    "description": "Activities of granting of consumer credit (primarily unsecured)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649502",
+    "description": "Provision of long-term finance to industry by entities other than by All Scheduled Commercial Banks (ASCB)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649503",
+    "description": "Credit granting by specialized non-depository institutions for purchse of assets like house, vehicles etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649504",
+    "description": "Activities of pawnbrokers/ money lenders",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649505",
+    "description": "Activities of Chit funds",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649599",
+    "description": "Other credit granting activities n.e.c. including Short-term financing for corporate mergers and takeovers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649901",
+    "description": "Activities of investment and trading activities on Own-account, e.g., venture capital companies or investment clubs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649902",
+    "description": "Activities of acting as a counterparty for clearing and settlement of transactions",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649903",
+    "description": "Activities of dealing in financial markets by individuals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649904",
+    "description": "Activities of trade of receivables by individuals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649905",
+    "description": "Activities of Securities and derivatives operated by individuals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649906",
+    "description": "Activities of securitization transactions of assets other than loans by issuing financial instruments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649907",
+    "description": "Activities of Issuing of crypto assets with a corresponding liability (not by a monetary authority)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649908",
+    "description": "Activities of trading of crypto assets with a corresponding liability by individuals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "649999",
+    "description": "Other financial service activities n.e.c., except insurance and pension funding activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651100",
+    "description": "Activities of providing term life insurance, permanent life insurance (including group life insurance), and the underwriting of annuities and life insurance policies, disability income insurance policies, and accidental death, funeral, and dismemberment insurance policies, with or without a substantial savings element.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651201",
+    "description": "Activities of providing medical and health insurance",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651202",
+    "description": "Activities of providing disaster and catastrophe insurance, accident insurance, fire and natural forces damage to property insurance, parametric insurance, travel insurance, agriculture/ crop insurance property and theft insurance.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651203",
+    "description": "Activities of providing insurance for motor vehicles,",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651204",
+    "description": "Activities of providing insurance for railway rolling stock, ships, aircraft, and other modes of transport",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651205",
+    "description": "Activities of providing freight insurance, financial loss and liability insurance, including credit insurance, legal expenses insurance, income protection insurance, and workers compensation insurance.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651206",
+    "description": "Activities of providing deposit insurance",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651207",
+    "description": "Activities of providing agricultural insurance",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "651299",
+    "description": "Activities of providing other non-life insurance n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "652000",
+    "description": "Activities of reinsurance, including treaty and facultative reinsurance agreements, that involve assuming all or part of the risk associated with existing insurance policies originally underwritten by other insurance providers including the activity of finite reinsurance.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "653000",
+    "description": "Activities of provision of employee benefit plans, pension funds and plans, and retirement plans.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661101",
+    "description": "Administration of Commodity contracts exchanges, futures commodity contracts exchanges, securities exchanges, stock exchanges, and stock or commodity options exchanges.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661102",
+    "description": "Financial supervisory authority for financial markets and service activities including that by regulatory organizations (excluding insurance and pension funding, and not by the central bank) e.g. SEBI, IFSCA",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661103",
+    "description": "Activities of Crypto assets exchanges",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661199",
+    "description": "Activities of administration of other financial markets (except insurance and pension funding) n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661201",
+    "description": "Dealing in financial markets on behalf of others, including stock broking, securities brokerage, and brokerage of investment funds shares",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661202",
+    "description": "Standardized commodity contracts brokerage",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661203",
+    "description": "Currency trading on behalf of others",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661204",
+    "description": "Equity-based crowdfunding, and debt-based crowdfunding offering securities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661205",
+    "description": "Activities of currency exchanges",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661299",
+    "description": "Other securities and commodity contracts brokerage n.e.c., including trade and brokerage of crypto assets with liabilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661901",
+    "description": "Financial transaction processing and settlement activities, including digital (or internet-based) payment provision and settlement activities for credit card transactions (payment gateways)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661902",
+    "description": "Investment advisors/ consultant (including robo-advisory services and analysing financial markets as an advisory service), mortgage and loan advisors, financial advisors in relation to mergers and acquisition services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661903",
+    "description": "Activities of digital currency wallet providers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661904",
+    "description": "Validation and mining for crypto assets deemed financial assets",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661905",
+    "description": "Tokenization of digital assets, including security token offerings and initial coin offerings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661906",
+    "description": "Consumer credit intermediation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661907",
+    "description": "Activities of payment providers including Fintech, e.g., electronic funds transfer services, P2P lending/ payment services and Unified Payments Interface (UPI) transactions.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661908",
+    "description": "Activities of Account Aggregators",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661909",
+    "description": "RegTech services that provide technology-driven solutions to streamline regulatory compliance, including anti-money laundering (AML) checks, fraud detection, automated reporting, real-time monitoring, and risk management tools for financial institutions.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661910",
+    "description": "Other Fintech activities including Suptech, cross-border payment platforms, GreenTech/green finance",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661911",
+    "description": "Post office/ bank agents providing investment services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "661999",
+    "description": "Other activities auxiliary to financial service activities, except insurance and pension funding n.e.c. including trustee, fiduciary, and custody services on a fee or contract basis, securities custody",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "662100",
+    "description": "Providing administrative services related to insurance, such as assessing and settling insurance claims like,assessing insurance claims, claims adjusting, risk assessing, risk and damage evaluation, average and loss adjusting, and settling insurance claims (Third Party Agents)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "662200",
+    "description": "Activities of insurance agents and brokers (insurance intermediaries) involved in selling, negotiating, or soliciting annuities, as well as insurance and reinsurance policies.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "662901",
+    "description": "Pension and insurance advisory activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "662902",
+    "description": "Administration of financial markets for insurance and pension funding services e.g. IRDA, PFRDA",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "662999",
+    "description": "Other activities auxiliary to insurance and pension funding n.e.c. including salvage administration and actuarial services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "663001",
+    "description": "Management of mutual funds",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "663002",
+    "description": "Management of pension funds",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "663003",
+    "description": "Activities of asset management including portfolio management, on a fee or contract basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "663099",
+    "description": "Other fund management activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681001",
+    "description": "Renting and operating self-owned or leased apartment buildings, homes and flats",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681002",
+    "description": "Renting and operating of office buildings, coworking spaces",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681003",
+    "description": "Renting and operating of exhibition halls, banquet halls and similar spaces",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681004",
+    "description": "Renting and operating Malls, spaces for commercial activities (including storage spaces), self storage spaces and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681005",
+    "description": "Renting and operating of real estate space for data centres and cloud infrastructure",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681006",
+    "description": "Renting of space for solar energy, wind energy and other renewable energy installations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681007",
+    "description": "Renting and operating land, including agricultural and forestry land",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681008",
+    "description": "Development of building projects for sale and for own operation, i.e. for renting space in these buildings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "681099",
+    "description": "Other real estate rental and leasing n.e.c. including renting of plant and factory buildings and letting of roofs for mobile towers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "682100",
+    "description": "Intermediation in buying, selling, and rental of real estate through direct broker-client interactions on a fee or contract basis",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "682901",
+    "description": "Activities of valuation of real estate, appraisal services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "682902",
+    "description": "Management of real estate such as property management of real estate or dwellings in joint ownership (mostly done on a fee or contract basis)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "682999",
+    "description": "Other real estate activities on a fee or contract basis n.e.c. including rent collecting",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "691001",
+    "description": "General legal counselling, advice, consultancy and representation in legal matters in civil, criminal and labour law disputes including representation before courts and other judicial bodies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "691002",
+    "description": "Activities of rent collection agencies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "691099",
+    "description": "Other legal activities n.e.c. including notary services, arbitration and mediation by legal professionals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "692001",
+    "description": "Accounting and bookkeeping services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "692002",
+    "description": "Auditing services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "692003",
+    "description": "Tax consultancy services (tax filing, planning, advisory)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "701000",
+    "description": "Activities of overseeing, managing, excersing operational control and decision making role of the enterprise or enterprise group acting as head office",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "702001",
+    "description": "Business consulting and management services (for profit) including reconstructuring consultancy",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "702002",
+    "description": "Design of accounting methods or procedures, cost accounting programmes, budgetary control procedures",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "702003",
+    "description": "Policy advocacy services (non-profit)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "702099",
+    "description": "Other Business and management consultancy services activities n.e.c. including activities of cost accountants",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "711001",
+    "description": "Building design and drafting",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "711002",
+    "description": "Town and city planning and landscape architecture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "711003",
+    "description": "Engineering design and consulting",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "711004",
+    "description": "Geophysical, geologic, seismic surveying and geodetic surveying activities such as land and boundary surveying activities, hydrologic surveying activities, Space and Launch Vehicle technology consultancy services and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "711005",
+    "description": "Naval architecture and offshore engineering",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "711099",
+    "description": "Other architectural and engineering, and related technical consultancy activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712001",
+    "description": "Food hygiene and safety testing services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712002",
+    "description": "Performance Testing of Mechanical and Electronic Equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712003",
+    "description": "Environmental Quality Testing and Monitoring Services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712004",
+    "description": "Certification of products, including consumer goods, motor vehicles, aircraft, pressurized containers etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712005",
+    "description": "Road-safety testing of motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712006",
+    "description": "Forensic and Criminal Investigation Laboratory Services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712007",
+    "description": "Quality assessment and certification services like, hallmark and similar services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "712099",
+    "description": "Other technical testing and analysis services n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721001",
+    "description": "Research and development on natural sciences",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721002",
+    "description": "Research and development on engineering and technology",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721003",
+    "description": "Research and development on medical sciences, health and life sciences, and veterinary sciences including Ayush research",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721004",
+    "description": "Research and development on biotechnology including DNA sequencing for general research on biological processes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721005",
+    "description": "Research and development on agricultural, forestry and fisheries sciences",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721006",
+    "description": "Interdisciplinary research and development, predominantly on natural sciences and engineering",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721007",
+    "description": "Research and development on Space Science",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "721099",
+    "description": "Research and experimental development on natural sciences and engineering n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "722001",
+    "description": "Research & Development on Economics and Business Administration",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "722002",
+    "description": "Research & Development on Arts, Languages and Culture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "722003",
+    "description": "Interdisciplinary Research & Development",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "722099",
+    "description": "Research & Development on other social sciences and Humanities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "731001",
+    "description": "Advertising and Marketing Services through physical mode excluding through newspaper, pamphlets and similar modes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "731002",
+    "description": "Advertising and Marketing Services through newspaper, pamphlets and similar modes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "731003",
+    "description": "Advertising and Marketing Services through digital/electronic mode",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "732001",
+    "description": "Market Research Activities other than public opinion polling activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "732002",
+    "description": "Public opinion polling activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "733000",
+    "description": "Public relations activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "741001",
+    "description": "Fashion design related to textiles, wearing apparel, shoes, jewellery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "741002",
+    "description": "Interior Designing including Furniture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "741003",
+    "description": "Services of graphic designers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "741004",
+    "description": "Industrial Design",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "741005",
+    "description": "Household Product Design, excluding Furniture",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "741099",
+    "description": "Other specialized design activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "742001",
+    "description": "Photography (Commercial and consumer)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "742002",
+    "description": "Videography (Events)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "742003",
+    "description": "Photography and videography (Journalists)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "742099",
+    "description": "Other photographic and videography activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "743000",
+    "description": "Translation and interpretation of languages, including sign language, whether spoken or written",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749101",
+    "description": "Copyright Brokering",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749102",
+    "description": "Intellectual property brokering excluding copyright brokering",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749103",
+    "description": "Marketing Services for rights to Intellectual Property",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749104",
+    "description": "Collective rights management organizations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749199",
+    "description": "Other patent brokering and marketing service activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749901",
+    "description": "Business brokerage activities excluding copyright and intellectual property brokerage",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749902",
+    "description": "Weather forecasting activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749903",
+    "description": "Security consulting activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749904",
+    "description": "Environmental consulting activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749905",
+    "description": "Activities carried out by agents and agencies on behalf of individuals usually involving the obtaining of engagements in motion picture, theatrical production or other entertainment or sports attractions and the placement of books, plays, artworks, photographs etc., with publishers, producers etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "749999",
+    "description": "Other professional, scientific and technical activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "750001",
+    "description": "Animal health care and control activities for farm animals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "750002",
+    "description": "Animal health care and control activities for pet animals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "750003",
+    "description": "Animal rehabilitation and physiotherapy activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "750099",
+    "description": "Other veterinary activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "771001",
+    "description": "Rental and leasing of passenger cars (without drivers)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "771002",
+    "description": "Renting and leasing of two wheelers such as motorcycles and scooters (without drivers), excluding bicyles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "771003",
+    "description": "Renting and leasing of auto-rickshaws and e-rickshaws (without drivers)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "771099",
+    "description": "Renting and leasing of other motor vehicles without driver n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772101",
+    "description": "Renting and leasing of bicycles, including electric bicycles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772102",
+    "description": "Renting and leasing of sailboats, yachts and similar recreational and sports equipments (Without Operator)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772103",
+    "description": "Renting and leasing of camping gear including tents and other adventure sports equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772199",
+    "description": "Renting and leasing of other recreational and sports goods n.e.c. such as beach chairs, beach umbrellas and similar goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772901",
+    "description": "Renting and leasing of furniture (excluding office furniture) and electrical appliances for household use such as Refrigerator, ACs, Geyser and similar appliances",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772902",
+    "description": "Rental and leasing of goods and equipments for events such as lighting equipments, tents, karaoke machines, fans, speakers and similar goods, excluding for household use",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772903",
+    "description": "Renting and leasing of jewellery, textile goods, wearing apparels and footwear (except for sports and recreational use)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "772999",
+    "description": "Rental and leasing of other personal and household goods n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773001",
+    "description": "Renting and operational leasing of power generation machinery/equipment such as engines, turbines, generators and similar equipments without operator",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773002",
+    "description": "Renting and operational leasing of mining, forestry and agricultural machinery and equipment such as tractors and similar machinery without operator",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773003",
+    "description": "Renting and operational leasing of construction and civil-engineering machinery and equipment such as crane lorries, work platforms and similar equipments without operator",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773004",
+    "description": "Renting and operational leasing of office machinery, furniture and equipment without operator including computers and computer peripheral equipments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773005",
+    "description": "Renting and operational leasing of land-transport equipment (Excluding motor vehicles and motorcycles) such as railroad vehicles, without drivers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773006",
+    "description": "Renting and operational leasing of water-transport equipment such as commercial boats and ships without operator excluding those for sports and recreational purposes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773007",
+    "description": "Renting and operational leasing of air transport equipment such as airplanes, hot air-baloons and similar equipments without operator",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "773099",
+    "description": "Rental and leasing of other machinery, equipment and tangible goods n.e.c. including Renting and operational leasing of Spacecraft Services and Operations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "774000",
+    "description": "Leasing of non-financial intangible assets",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "775100",
+    "description": "Intermediation service activities for rental and leasing of cars, motorhomes and trailers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "775200",
+    "description": "Intermediation service activities for rental and leasing of other tangible goods and non-financial intangible assets other than cars, motorhomes and trailers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "781000",
+    "description": "Activities of employment placement agencies where the agency is not the employer",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "782000",
+    "description": "Temporary employment agency activities and other human resource provisions where the agency is the employer",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "791100",
+    "description": "Travel agency activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "791200",
+    "description": "Tour operator activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "799000",
+    "description": "Other travel related activities such as reservation service and related activities, provision of travel information to visitors, activities of independent tourist guides, tourism promotion activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "801101",
+    "description": "Investigation services in the private, commercial, insuarance and legal field",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "801102",
+    "description": "Guard and security services activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "801199",
+    "description": "Other private security services n.e.c. such as celebrity protection, VIP protection and similar services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "801901",
+    "description": "Installation and maintenance of electronic security systems, such as burglar or theft alarms, video surveillance systems and fire alarms, if provided in connection with later monitoring and remote monitoring services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "801999",
+    "description": "Other security activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "811001",
+    "description": "Combined facilities support activities in industrial parks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "811099",
+    "description": "Other Combined facilities support activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "812100",
+    "description": "General cleaning of all types of buildings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "812901",
+    "description": "Cleaning of trains, buses, aeroplanes etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "812902",
+    "description": "Cleaning of industrial machinery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "812999",
+    "description": "Other cleaning activities n.e.c. such as swimming pool cleaning and maintenance, exterior cleaning of buildings of all types, specialised cleaning for buildings (windows, chimneys, exhausts, etc.), disinfecting activities, street sweeping and snow and ice removal, steam cleaning, sand blasting and similar activities for building exteriors",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "813000",
+    "description": "Landscape care and maintenance service activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "821000",
+    "description": "Office administrative and support service activities such as letter or resume writing, document preparation, transcription, photocopying and similar activities including services of e-Seva Kendras",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "822000",
+    "description": "Activities of call centres",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "823000",
+    "description": "Organization of conventions and trade shows",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "824001",
+    "description": "Ticket reservation and sales activities for theatrical, sports and other amusement and entertainment events",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "824099",
+    "description": "Other Intermediation service activities for business support activities n.e.c., except financial intermediation",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "829101",
+    "description": "Activities of collection agencies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "829102",
+    "description": "Activities of credit bureaus",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "829200",
+    "description": "Packaging activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "829901",
+    "description": "Donation based crowd funding activities/services other than for social work",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "829902",
+    "description": "Bar coding and bar code imprinting services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "829999",
+    "description": "Other business support activities, n.e.c. such as court reporting or stenotype recording services, repossesion services, activities of handling visa and work permit, trading and brokerage of crypto without a corresponding liability.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841101",
+    "description": "Activities of public administration bodies relating to executive at national level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841102",
+    "description": "Activities of public administration bodies relating to executive at state level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841103",
+    "description": "Activities of public administration bodies relating to executive at local level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841104",
+    "description": "Activities of public administration bodies relating to legislation at national level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841105",
+    "description": "Activities of public administration bodies relating to legislation at state level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841199",
+    "description": "Other general public administration activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841200",
+    "description": "Regulation of the activities of providing health care, education, cultural services and other social services, excluding social security and environment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841300",
+    "description": "Regulation of the activities of providing environmental services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "841400",
+    "description": "Regulation of and contribution to more efficient operation of businesses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842100",
+    "description": "Foreign affairs including visa services, aid to foreign countries and similar services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842200",
+    "description": "Administration, supervision and operation of military defence affairs and land, sea, air and space defence forces",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842301",
+    "description": "Administration and operation of police forces supported by public authorities and of port, border, coastguards and other special police forces, including including traffic regulation, alien registration, maintenance of arrest records, protection and patrol services, fishing inspection.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842302",
+    "description": "Firefighting activities and fire prevention activities including providing assistance during civic disasters, floods, road accidents and similar incidents",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842303",
+    "description": "Administration and operation of civil and criminal law courts, military tribunals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842304",
+    "description": "Activities of prison administration and provision of correctional services, including rehabilitation services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "842399",
+    "description": "Other Public order and safety activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "843000",
+    "description": "Compulsory social security activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "851001",
+    "description": "Education in Play School (including in standalone schools)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "851002",
+    "description": "Education at Aganwadi and Balwadi/ Balvatika Centres",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "851003",
+    "description": "General School Education (Class Nursery to class 2)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "852001",
+    "description": "General School Education at primary/ Preparatory level (Upto Class 5 with at least one standard above Class 2)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "852002",
+    "description": "General School education at upper primary level (Upto Class 8 with at least one standard above Class 5)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "852099",
+    "description": "Other Non-Formal Education at Preparatory, Primary and Upper Primary level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853101",
+    "description": "General school education at secondary level (Upto Class 12 with at least one standard above Class 8)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853102",
+    "description": "School education in Distance Mode at secondary level (Upto Class 12 with at least one standard above Class 8)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853201",
+    "description": "Vocational School Education in Regular Mode",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853202",
+    "description": "Vocational School Education with Distance mode",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853203",
+    "description": "Educational activities of driving schools for occupational drivers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853204",
+    "description": "Educational activities of flying schools for professional pilots",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853299",
+    "description": "Other Secondary Vocational Education n.e.c. including driving schools for professional drivers and similar institutions",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "853300",
+    "description": "Post Secondary Education at diploma level",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854001",
+    "description": "Tertiary education at Under Graduate level with programme duration of upto 4 years",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854002",
+    "description": "Professional and Second level Under Graduate Programs like B. Ed, B. Arc. LLB, and similar professional courses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854003",
+    "description": "Tertiary Medical Education",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854004",
+    "description": "Tertiary Education at Post Graduate level (Masters Degree courses) other than diploma courses and Medical courses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854005",
+    "description": "Tertiary Education at Ph.D level/ Post Doctorate Level other than Medical courses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854006",
+    "description": "Post-Graduate education diploma level other than Medical courses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "854099",
+    "description": "Other tertiary education activities n.e.c. such as activities of CA, CS Institutes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855101",
+    "description": "Activities of providing Sports instructions (Excluding Yoga) by sports academies and camps (Excluding training by sports clubs)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855102",
+    "description": "Activities of providing Yoga, Meditation and similar instructions",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855103",
+    "description": "Activities of professional sports instructors/ teachers/ coaches",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855199",
+    "description": "Other sports and recreation education activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855200",
+    "description": "Activities of providing cultural education not leading to formal education such as in Music, Art, dance, drama, and similar fields",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855301",
+    "description": "Activities of automobile driving schools (non-commercial)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855399",
+    "description": "Other driving school activities not issuing commercial certificates and permits, n.e.c. like flying, sailing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855901",
+    "description": "Activities of providing academic tutoring including through digital platforms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855902",
+    "description": "Activities of providing instruction for preparatory courses for entrance examinations of professional courses (like engineering, medical, law, etc.) including through digital platforms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855903",
+    "description": "Preparatory courses for employment examinations like UPSC, Bank PO, etc. including through digital platforms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855904",
+    "description": "Activities of providing language instruction and conversational skills instruction incuding through digital platform",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855905",
+    "description": "Activities of providing Computer training including through digital platforms",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855906",
+    "description": "Activities of providing religous instruction",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "855999",
+    "description": "Other non-formal educational courses/activities n.e.c. including Skill develoment and promotional activties in Space doamin",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "856100",
+    "description": "Educational Intermediation service activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "856901",
+    "description": "Vocational and career related counselling activities (Including activities of educational consultants)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "856902",
+    "description": "Educational testing and evaluation activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "856903",
+    "description": "Activities involving Development of curricula",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "856999",
+    "description": "Other educational support activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861001",
+    "description": "Activities of Multi-Specialty Hospitals, Super-Speciality Hospitals and General Medical Hospitals with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861002",
+    "description": "Oncology hospitals with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861003",
+    "description": "Orthopedic hospitals with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861004",
+    "description": "Dental hospitals for inpatients",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861005",
+    "description": "Cardiac hospitals with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861006",
+    "description": "Mental Health and Psychiatric hospitals with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861007",
+    "description": "Maternal, Neonatal Care, pediatric or children hospitals with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861008",
+    "description": "Opthamology hospital activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861009",
+    "description": "Ayurveda hospital activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861010",
+    "description": "Unani hospital activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861011",
+    "description": "Siddha hospital activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861012",
+    "description": "Homeopathy hospital activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861013",
+    "description": "Activities of Ayush hospitals other than those specialized in Ayurveda, Unani, Siddha, Homeopathy Hospitals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861014",
+    "description": "Gynecological and obstetrical hospital with inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "861099",
+    "description": "Hospital activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862001",
+    "description": "Medical consultation and treatment in the field of general and specialized medicine by general practitioners, medical specialists and surgeons in private clinics (other than Ayush practitioners)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862002",
+    "description": "Medical consultation and treatment in the field of general and specialized medicine by general practitioners, medical specialists and surgeons in poly clinics (other than Ayush practitioners)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862003",
+    "description": "Dental practice activities of a general or specialized nature (e.g. dentistry, orthodontic, endodontic, pediatric dentistry)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862004",
+    "description": "Family planning centres providing medical treatment (e.g. sterilization, abortion) without inpatient services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862005",
+    "description": "Activities of Homeopathy practitioners",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862006",
+    "description": "Activities of Ayurveda practitioners",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862007",
+    "description": "Activities of Unani practitioners",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862008",
+    "description": "Activities of Siddha medical practitioners",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862009",
+    "description": "Activities of Naturopathy practitioners",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "862099",
+    "description": "Medical and dental practice activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869100",
+    "description": "Intermediation service activities for medical, dental, and other human health services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869901",
+    "description": "Activities of medical laboratories such as X-ray laboratories and other diagnostic/pathological imaging centres, blood analysis laboratories",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869902",
+    "description": "Activities of blood banks, sperm banks, transplant organ banks etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869903",
+    "description": "Ambulance transport of patients by any mode of transport including airplanes",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869904",
+    "description": "Activities of nurses/compounders, midwives (excluding Ayush nurses)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869905",
+    "description": "Activities of physiotherapists, hydrotherapy, medical massage, chiropractice, acupuncture and similar professionals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869906",
+    "description": "Activities of Ayush nurses and other paramedical professionals (Allied Health Professionals) like Panchakarma Assistants and similar professionals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869907",
+    "description": "Activities of Allopathic nurses or other paramedical practitioners (Allied Health Professionals)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869908",
+    "description": "Activities of other paramedical practitioners in the field of optometry",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869909",
+    "description": "Activities of occupational therapy, speech therapy, podiatry/chiropody",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869910",
+    "description": "Activities of technicians pertaining to radiology and imaging",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869911",
+    "description": "Activities of dental paramedical personnel (Allied Health Professionals) such as dental therapists, school dental nurses, and dental hygienists",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869912",
+    "description": "Health coaching and wellness counseling (except activities of psychologists) including activities of Wellness Centres with medical services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869913",
+    "description": "Activities of pharmacists including Ayush pharmacists",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "869999",
+    "description": "Other human health activities n.e.c. (including traditional paramedical activities and independent ambulance activities)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "871001",
+    "description": "Homes for older persons with nursing care",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "871002",
+    "description": "Convalescent homes, other than mental health and substance abuse facilities without the supervision of a medical doctor",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "871099",
+    "description": "Residential nursing care activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "872001",
+    "description": "Rehabilitation centre for substance abuse",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "872002",
+    "description": "Rehabilitation centre for mental illness",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "872099",
+    "description": "Other Residential care activities for persons living with or having a diagnosis of a mental illness or substance abuse n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "873001",
+    "description": "Assisted-living facilities for older persons",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "873002",
+    "description": "Assisted-living facilities for persons with physical disabilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "873003",
+    "description": "Continuing care retirement communities and homes for older persons with minimal nursing care",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "873099",
+    "description": "Residential care activities for older persons or persons with physical disabilities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "879100",
+    "description": "Intermediation service activities for residential care activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "879901",
+    "description": "Residential and social assistance activities provided on a round-the-clock basis to special categories of persons, but where medical treatment or education are not essential elements - orphanages, childrens boarding homes and hostels, provision of residential services for homeless persons, refugees, immigrants etc., juvenile correction homes and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "879999",
+    "description": "Other residential care activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "881000",
+    "description": "Social, counselling, welfare, referral and similar services which are aimed at older persons or persons with disabilities in their homes or elsewhere and carried out by government offices, private organisations and specialists providing counselling services, national or local Self-Help Groups (SHG)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889001",
+    "description": "Welfare and guidance activities for children and adolescents adoption activities, activities for the prevention of cruelty to children and others",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889002",
+    "description": "Marriage counselling activity",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889003",
+    "description": "Financial counselling activities such as credit and debt counselling services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889004",
+    "description": "Activities for disaster victims, refugees, immigrants etc., including temporary or extended shelter for them",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889005",
+    "description": "Vocational rehabilitation activities for unemployed persons or person with disability with limited education component",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889006",
+    "description": "Child day-care activities, including for children with disability",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889007",
+    "description": "Day facilities for the homeless and other socially weak groups",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "889099",
+    "description": "Other social work activities without accommodation n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "901100",
+    "description": "Literary creation and musical composition activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "901200",
+    "description": "Visual arts creation activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "901300",
+    "description": "Other arts creation activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "901399",
+    "description": "Other arts creation activities n.e.c. including conceptual art activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "902001",
+    "description": "Activities of influencers appearing in digital/social media including vlogs",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "902099",
+    "description": "Other activities of performing arts n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "903100",
+    "description": "Operation of arts facilities and infrastructure such as concert and theatre halls, cultural centres, music venues, music clubs and similar facilities in which artists perform",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "903900",
+    "description": "Other support activities to arts creation and performing arts",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "911101",
+    "description": "Documentation and organisation of a collection of books, maps, periodicals, whether specialised or not, (including in digital forms) with reading/ listening/ viewing rooms with or without lending facilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "911102",
+    "description": "Documentation and organisation of a collection of films, records, tapes, works of art, whether specialised or not, (including in digital forms) with reading/ listening/ viewing rooms with or without lending facilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "911199",
+    "description": "Other library activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "911200",
+    "description": "Archive activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "912100",
+    "description": "Operation, management, care, preservation, appraisal and exhibition of collections of museums of all kinds such as art, military and other specialized museums",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "912201",
+    "description": "Operation and preservation of historical sites and buildings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "912202",
+    "description": "Operation and preservation of archaeological sites",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "912299",
+    "description": "Other historical site and monument activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "913000",
+    "description": "Conservation, restoration and other support activities for cultural heritage",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "914101",
+    "description": "Operation of botanical gardens",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "914102",
+    "description": "Operation of zoological gardens (Zoos) including aquariums",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "914200",
+    "description": "Operation, conservation and maintenance of nature reserves, including wildlife preservation, safari parks and similar reserve parks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931101",
+    "description": "Operation and maintenance of facilities (stadiums) for outdoor games and sports",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931102",
+    "description": "Operation and maintenance of facilities (stadiums) for indoor games and sports",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931103",
+    "description": "Activities of fitness centers and body-building clubs and facilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931104",
+    "description": "Operation of facilities for horse races and other animal races",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931105",
+    "description": "Operation and organization of motorcycle rally",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931106",
+    "description": "Activity of golf courses",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931199",
+    "description": "Other activities related to operation of sports facilities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931200",
+    "description": "Activities of sports clubs including those providing training",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931901",
+    "description": "Activities of individual own-account sportsmen and athletes, referees, judges, timekeepers,mountain guides etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931902",
+    "description": "Activities of sports leagues and sport governing bodies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931903",
+    "description": "Activities related to promotion of sports events",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931904",
+    "description": "Activities related to training of sporting and entertainment animals",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931905",
+    "description": "Activities related to organising hiking, paragliding, skiing, camping, rafting and similar activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "931999",
+    "description": "Other sports activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "932100",
+    "description": "Activities of amusement ,theme and water parks",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "932900",
+    "description": "Other amusement and recreation activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "941103",
+    "description": "Activities of chambers of commerce, and similar organisations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "941199",
+    "description": "Activities of other business and employers membership organisations n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "941201",
+    "description": "Activities of organisations whose members interests centre chiefly on a particular scholarly discipline or professional practice or technical field, e.g., medical associations, legal associations, accounting associations, engineering associations, architects associations, etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "941202",
+    "description": "Activities of cultural, creative, and media professionals associations such as associations of writers, painters, performers of various kinds, journalists, etc.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "941299",
+    "description": "Activities of other organisations that chiefly focus on a particular scholary discipline or professional or technical field, n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "942000",
+    "description": "Activities of trade unions",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "949901",
+    "description": "Activities of civic, protest, and advocacy-based membership organizations (including war veterans associations, ethnic and minority groups, consumer protection)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "949902",
+    "description": "Activities of environmental, health, animal welfare, and consumer interest associations (excluding charitable activities)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "949903",
+    "description": "Activities of social, cultural, recreational, and fraternity associations such as Rotary, youth clubs, hobby groups, veterans’ associations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "949904",
+    "description": "Activities of resident welfare associations (RWAs) and housing societies",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "949905",
+    "description": "Activities of technology user groups and open-source or digital communities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "949999",
+    "description": "Activities of other membership organizations n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "951001",
+    "description": "Repair and maintenance of smartphones, tablets, cordless phones.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "951002",
+    "description": "Repair and maintenance of desktop computers, laptops, servers, and terminals (including ATMs and POS devices)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "951003",
+    "description": "Repair and maintenance of data storage and input/output devices such as disk drives, flash drives, printers, ink and toner cartridges, scanners, bar code readers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "951004",
+    "description": "Repair and maintenance of telecommunication equipment such as routers, modems, two-way radios, transmission equipment",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "951099",
+    "description": "Repair and maintenance of other computers and communication equipment n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952100",
+    "description": "Repair and maintenance of consumer electronics such as of television, radio recievers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952201",
+    "description": "Repair and maintenance of household appliances (refrigerators, stoves, washing machines, room air conditioners and similar items)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952202",
+    "description": "Repair and maintenance of home and garden equipment such lawn mowers, edgers, trimmers and similar items",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952300",
+    "description": "Repair of footwear and leather goods",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952400",
+    "description": "Repair of furniture and home furnishings",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952901",
+    "description": "Repair of bicycles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952902",
+    "description": "Repair and alteration of clothing",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952903",
+    "description": "Repair and alteration of jewellery",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952904",
+    "description": "Repair of watches, clocks, and their parts",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952905",
+    "description": "Repair of musical instruments",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "952999",
+    "description": "Repair of other personal and household goods n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "953100",
+    "description": "Repair and maintenance of car, trucks, buses and other motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "953200",
+    "description": "Repair and maintenance of motor cycles, mopeds, scooters and three wheelers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "954001",
+    "description": "Intermediation in repair and maintenance of personal and household goods, including computers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "954002",
+    "description": "Intermediation in repair and maintenance of motorcycles and motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "961001",
+    "description": "Laundry and dry cleaning, pressing, ironing and similar services, of all kinds of clothing (including fur) and textiles",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "961002",
+    "description": "Carpet and rug shampooing and drapery and curtain cleaning, whether on clients premises or not",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "961099",
+    "description": "Washing and cleaning of other textile and fur products, n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "962100",
+    "description": "Hairdressing and barber activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "962201",
+    "description": "Beauty treatment activities (Excluding services provided by medical specialists)",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "962202",
+    "description": "Activities of Nail Salons",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "962300",
+    "description": "Activities of sauna and steam baths, day spas, reducing and slendering salons and similar facilities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "963000",
+    "description": "Funeral and related activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "964000",
+    "description": "Intermediation service activities for personal services",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969001",
+    "description": "Astrologer, priests and spiritualists activities",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969002",
+    "description": "Activities of marriage bureaus & dating sites",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969003",
+    "description": "Activities of cooks and maids",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969004",
+    "description": "Activities of aaya, dhai, governess and babysitter",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969005",
+    "description": "Activities of drivers",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969006",
+    "description": "Pet care services such as boarding, grooming, and training pets",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969007",
+    "description": "Activities of organisers for private events (except funerals), such as wedding planners, organisers of birthday parties, bachelor parties and bachelorrette parties, anniversary celebrations",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  },
+  {
+    "nicCode": "969099",
+    "description": "Other personal service activities n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "SERVICE"
+  }
+]

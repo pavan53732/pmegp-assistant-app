@@ -1,0 +1,38 @@
+{
+  "source": "Official PMEGP Portal (kviconline.gov.in)",
+  "dataVersion": "2026-07-17",
+  "description": "NIC (National Industrial Classification) codes for PMEGP-permitted activities",
+  "sectorStructure": {
+    "MANUFACTURING": "Direct sector with own project cost ceiling",
+    "SERVICE": "Direct sector containing sub-categories: SERVICE, TRADING, TRANSPORT"
+  },
+  "notes": "PMEGP accepts Manufacturing and Service sectors. Trading and Transport are not standalone sectors — certain trading and transport activities are accepted under the Service sector.",
+  "files": [
+    {
+      "filename": "nic_codes_manufacturing.json",
+      "sector": "MANUFACTURING",
+      "subCategory": "MANUFACTURING"
+    },
+    {
+      "filename": "nic_codes_service_service.json",
+      "sector": "SERVICE",
+      "subCategory": "SERVICE"
+    },
+    {
+      "filename": "nic_codes_service_trading.json",
+      "sector": "SERVICE",
+      "subCategory": "TRADING"
+    },
+    {
+      "filename": "nic_codes_service_transport.json",
+      "sector": "SERVICE",
+      "subCategory": "TRANSPORT"
+    }
+  ],
+  "schema": {
+    "nicCode": "string — 6-digit NIC classification code",
+    "description": "string — human-readable activity description",
+    "sector": "MANUFACTURING | SERVICE",
+    "subCategory": "MANUFACTURING | SERVICE | TRADING | TRANSPORT"
+  }
+}

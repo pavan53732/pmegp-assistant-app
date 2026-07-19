@@ -1,0 +1,4238 @@
+[
+    {
+        "nicCode": "051001",
+        "description": "Opencast mining (or surface mining) of hard coal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "051002",
+        "description": "Underground mining of hard coal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "051003",
+        "description": "Cleaning, sizing, grading, pulverising, compressing etc. of hard coal to classify, improve quality or facilitate transport or storage",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "051099",
+        "description": "Other operations relating to mining and agglomeration of hard coal n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "052001",
+        "description": "Opencast mining (or surface mining) of lignite (brown coal)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "052002",
+        "description": "Underground mining of lignite (brown coal) including liquification",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "052003",
+        "description": "Washing, dehydrating, pulverizing, compressing of lignite (brown coal) to improve quality or facilitate transport or storage",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "052099",
+        "description": "Other operations relating to mining and agglomeration of lignite (brown coal) n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "061001",
+        "description": "Offshore extraction of crude petroleum oils",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "061002",
+        "description": "Onshore extraction of crude petroleum oils",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "062001",
+        "description": "Offshore Extraction of natural gas",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "062002",
+        "description": "Onshore Extraction of natural gas",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "071001",
+        "description": "Opencast (or surface) mining of iron ores",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "071002",
+        "description": "Underground mining of iron ore",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "071003",
+        "description": "Operations related to Beneficiation and agglomeration of iron ores",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072100",
+        "description": "Mining of uranium and thorium ores",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072901",
+        "description": "Mining of copper ore (chalcopyrite)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072902",
+        "description": "Mining of aluminium ore (bauxite)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072903",
+        "description": "Mining of lead ore (lead sulphide/ galena/ lead glance)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072904",
+        "description": "Mining of zinc ore (calamine or smithsonite, zincite, etc)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072905",
+        "description": "Mining of manganese ore (pyrolusite, etc)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072906",
+        "description": "Mining of chrome ore",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072907",
+        "description": "Mining of precious metal ore (gold, silver)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "072999",
+        "description": "Mining of other non-ferrous metal ores n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081001",
+        "description": "Quarrying, rough trimming and sawing of marble",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081002",
+        "description": "Quarrying, rough trimming and sawing of granite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081003",
+        "description": "Quarrying, rough trimming and sawing of slate and building & monumental stone other than marble and granite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081004",
+        "description": "Mining of dolomite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081005",
+        "description": "Mining of gypsum including selenite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081006",
+        "description": "Crushing and breaking of stone for use as a flux or raw material in lime or cement manufacture or as building material, road metal or ballast and other materials for construction within quarry location",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081007",
+        "description": "Mining and quarrying of limestone, limeshell, \"Kankar\" and other calcareous minerals excluding chalk and shale and other uncalcined dolomite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081008",
+        "description": "Mining of clays (ordinary, kaolin, ball clay, wollastonite, bentonite, fullers earth, fire clay etc.)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "081099",
+        "description": "Quarrying of stone, sand and clay n.e.c. including mining of refractory non-clay minerals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089101",
+        "description": "Mining of native sulphur or pyrites and pyrrhotites valued chiefly for sulphur",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089102",
+        "description": "Mining of natural phosphates including apatite minerals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089103",
+        "description": "Mining of earth colours (ochre including red oxide)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089104",
+        "description": "Mining of fluorspar and other minerals valued chiefly as a source of chemicals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089105",
+        "description": "Mining of natural barium sulphate and carbonate (barytes and witherite), natural borates, natural magnesium sulphates (kieserite)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089199",
+        "description": "Mining of other chemical and fertilizer minerals n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089201",
+        "description": "Extraction and Agglomeration of peat",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089301",
+        "description": "Salt mining, quarrying, screening etc",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089302",
+        "description": "Salt production by evaporation of sea water or other saline waters",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089901",
+        "description": "Mining of gemstones (agate, diamond, emerald, garnet (gem), jasper, rubby/ saphire etc.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089902",
+        "description": "Mining and quarrying of abrasive materials (pumice stone, emery, corundum, garnet and other natural abrasives)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089903",
+        "description": "Mining of mica",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089904",
+        "description": "Mining of natural graphite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089905",
+        "description": "Mining of asbestos",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089906",
+        "description": "Mining of vermiculite, perlite and chlorites",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089907",
+        "description": "Mining of felspar and silica minerals including quartz, quartzite and fuch. Quartzite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089908",
+        "description": "Mining of talc/ steatite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "089999",
+        "description": "Mining of laterite, diatomite and silicious fossil meals (e.g. diatomite); and other natural fluxes; natural asphalt or bitumen and other mining n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "091001",
+        "description": "Services incidental to offshore oil extraction",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "091002",
+        "description": "Services incidental to onshore oil extraction",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "091003",
+        "description": "Services incidental to offshore gas extraction",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "091004",
+        "description": "Services incidental to onshore gas extraction",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "099000",
+        "description": "Support activities for other mining and quarrying",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103001",
+        "description": "Artificial dehydration of fruit and vegetables",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103002",
+        "description": "Radiation preservation of fruit and vegetables",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103003",
+        "description": "Manufacture of fruit or vegetable juices and their concentrates, squashes and powders",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103004",
+        "description": "Manufacture of sauces, jams, jellies, and marmalades",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103005",
+        "description": "Manufacture of pickles, chutney etc.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103006",
+        "description": "Canning of fruits and vegetables",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103007",
+        "description": "Manufacture of potato flour and meal, potato snacks and perishable prepared foods of vegetables such as salads, peeled or cut vegetables and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103008",
+        "description": "Manufacture of nut foods and pastes including roasting of nuts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "103099",
+        "description": "Preservation of fruit and vegetables n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104001",
+        "description": "Manufacture of hydrogenated oil and vanaspati ghee including margarine and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104002",
+        "description": "Manufacture of cold-pressed vegetable oils (kachhi ghaani)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104003",
+        "description": "Manufacture of other vegetable oils and fats (excluding corn oil and cold-pressed vegetable oils)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104004",
+        "description": "Manufacture of edible animal oils and fats",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104005",
+        "description": "Manufacture of (including extraction) of fish and marine mammal oils",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104006",
+        "description": "Manufacture of non-edible animal oils and fats",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104007",
+        "description": "Manufacture of oil cakes & meals incl. residual products (such as Oleostearin, Palmstearin) and non-defatted flour or meal of oilseeds, oil nuts or oil kernels and similar Products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104008",
+        "description": "Manufacture of compound cooking fats such as bakery shortening, blends/ melanges, lard compounds and similar spreads",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "104099",
+        "description": "Manufacture of other vegetable oil, animal oil and fats n.e.c",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105001",
+        "description": "Manufacture of pasteurized, sterilized, homogenized and/or ultra heat treated liquid milk (plain or flavoured)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105002",
+        "description": "Manufacture of milk-powder, cream in solid form, ice-cream powder and condensed milk except baby milk food",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105003",
+        "description": "Manufacture of butter and ghee (excluding vanaspati ghee) of all kinds including salted and unsalted",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105004",
+        "description": "Manufacture of milk products such as cream, cheese, curd, khoya, paneer, yoghurt, whey and similar products, excluding butter and ghee",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105005",
+        "description": "Manufacture of ice cream, kulfi and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105006",
+        "description": "Manufacture of milk-based drinks like lassi, chaach, smoothies and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105007",
+        "description": "Manufacture of edible ice, sorbet and other frozen dessert ices",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "105099",
+        "description": "Manufacture of other dairy products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106101",
+        "description": "Rice milling",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106102",
+        "description": "Wheat milling",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106103",
+        "description": "Dal (pulses) milling",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106104",
+        "description": "Grain (including millets) milling other than wheat, rice and dal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106105",
+        "description": "Vegetable milling excluding manufacture of potato flour",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106106",
+        "description": "Manufacture of cereal products like puffed rice, pop corn, flattened rice, corn flakes and other similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106107",
+        "description": "Manufacture of flour mixes and prepared blended flour/ dough/ batters for bread, cakes, biscuits, pancakes, idli, gulab jamun and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106199",
+        "description": "Other grain milling and processing n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106201",
+        "description": "Manufacture of starches from rice, potatoes, maize and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106202",
+        "description": "Manufacture of sago and sago products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106203",
+        "description": "Manufacture of glucose, glucose syrup, maltose and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106204",
+        "description": "Manufacture of gluten",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106205",
+        "description": "Manufacture of tapioca and tapioca substitutes prepared from starch",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106206",
+        "description": "Manufacture of corn oil",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "106299",
+        "description": "Manufacture of other starch products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107101",
+        "description": "Manufacture of bread including burger bun Kulcha, Pao, roti and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107102",
+        "description": "Manufacture of pastry, cakes, pies, tarts, rolls and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107103",
+        "description": "Manufacture of rusks, biscuits, cookies and other \"dry\" bakery products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107199",
+        "description": "Manufacture of other bakery products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107201",
+        "description": "Manufacture or refining of sugar (sucrose) from sugarcane",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107202",
+        "description": "Manufacture of `gur’ from sugarcane",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107203",
+        "description": "Manufacture of `gur’ from other than sugarcane",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107204",
+        "description": "Manufacture of `khandsari’ sugar from sugarcane",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107205",
+        "description": "Manufacture of `boora’ and candy from sugarcane",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107206",
+        "description": "Manufacture of `boora’ and candy from other than sugarcane",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107299",
+        "description": "Manufacture of sugar from other sources n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107301",
+        "description": "Manufacture of cocoa products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107302",
+        "description": "Manufacture of chocolate and chocolate confectionery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107303",
+        "description": "Manufacture of sugar confectionery (except sweetmeats)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107304",
+        "description": "Manufacture of sweetmeats including dairy based sweetmeats",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107305",
+        "description": "Preserving of fruit, nuts, fruit peels and other parts of plants in sugar",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107399",
+        "description": "Manufacture of other cocoa, chocolate, sugar confectionery products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107400",
+        "description": "Manufacture of macaroni, noodles, couscous and similar farinaceous products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107501",
+        "description": "Manufacture of readymade (i.e. prepared, seasoned and cooked) meat or poultry dishes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107502",
+        "description": "Manufacture of readymade (i.e. prepared, seasoned and cooked) fish & other marine dishes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107503",
+        "description": "Manufacture of readymade (i.e. prepared, seasoned and cooked) vegetarian dishes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107599",
+        "description": "Manufacture of other prepared meals and dishes n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107601",
+        "description": "Processing and blending of tea including manufacture of instant tea and its substitutes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107602",
+        "description": "Coffee curing, roasting, grinding blending etc. and manufacturing of coffee products and its substitutes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107901",
+        "description": "Manufacture of infant formulae, special foods for infants such as follow-up milk and other follow-up foods",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107902",
+        "description": "Manufacture of other special food such as foods containing homogenized ingredients, low-energy/energy-reduced foods, foods for medical purposes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107903",
+        "description": "Manufacture of papads, appalam and similar food products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107904",
+        "description": "Processing of salt into food-grade salt",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107905",
+        "description": "Manufacture of soups and broths (powder)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107906",
+        "description": "Grinding and processing of spices",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107907",
+        "description": "Manufacture of condiments including mayonnaise and similar products not derived from vegetable or fruits",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107908",
+        "description": "Manufacture of perishable prepared foods, such as sandwiches and fresh (uncooked) pizza",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107909",
+        "description": "Manufacture of plant based milk (eg. soya milk) and cheese substitues (eg. Tofu)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107910",
+        "description": "Manufacture of honey products like royal jelly and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "107999",
+        "description": "Manufacture of other food products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "108001",
+        "description": "Manufacture of cattle feed",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "108002",
+        "description": "Manufacture of poultry feed",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "108003",
+        "description": "Manufacture of prepared feeds for pets, including dogs, cats, birds, fish etc.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "108099",
+        "description": "Manufacture of other animal feeds n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110501",
+        "description": "Manufacture of aerated waters such as tonic water, soda",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110502",
+        "description": "Manufacture of flavoured and/or sweetened aerated drinks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110503",
+        "description": "Production of natural mineral water (including alkaline water, black water) and packaged drinking water",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110504",
+        "description": "Manufacture of beverages produced with fruit nectars",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110505",
+        "description": "Manufacture of flavoured and/or sweetened non-aerated drinks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110506",
+        "description": "Manufacture of traditional fermented probiotic beverages (kombucha, kanji, etc.)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "110599",
+        "description": "Manufacture of other non-alcoholic beverages, n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131101",
+        "description": "Preparation and spinning of cotton fibre including blended* cotton like carding and combing to produce cotton yarn/thread",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131102",
+        "description": "Preparation and spinning of silk fibre including blended* silk like reeling and washing of silk, carding and combing to produce silk yarn/thread",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131103",
+        "description": "Preparation and spinning of wool including blended* wool like degreasing and carbonising of wool and dyeing of wool fleece, carding and combing to produce wool yarn/thread",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131104",
+        "description": "Preparation and spinning of jute and mesta fibre (including blended* jute and mesta) like carding and combing to produce jute and mesta yarn",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131105",
+        "description": "Preparation and spinning of coir",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131106",
+        "description": "Preparation and spinning of man-made (including blended* man-made fibre) and technical fibre",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131107",
+        "description": "Manufacture of paper yarn",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131199",
+        "description": "Preparation and spinning of other animal and vegetable fibres including blended* fibres including coir and n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131201",
+        "description": "Manufacture of woven cotton and cotton mixture fabrics (including pile fabrics like terry fabrics, sateen fabrics, velvet and similar fabrics) using handlooms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131202",
+        "description": "Manufacture of woven cotton and cotton mixture fabrics (including pile fabrics like terry fabrics, sateen fabrics, velvet and similar fabrics) using other than handlooms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131203",
+        "description": "Manufacture of woven silk and silk mixture fabrics (including silk pile fabrics like terry fabrics, velvet and similar fabrics) using handlooms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131204",
+        "description": "Manufacture of woven silk and silk mixture fabrics (including silk pile fabrics like terry fabrics, velvet and similar fabrics) using other than handlooms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131205",
+        "description": "Manufacture of woven wool broad and wool mixture fabrics (including pile fabrics like terry fabrics, velvet and similar fabrics) using handlooms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131206",
+        "description": "Manufacture of woven wool broad and wool mixture fabrics (including pile fabrics like terry fabrics, velvet and similar fabrics) using other than handlooms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131207",
+        "description": "Manufacturing of Bamboo woven fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131208",
+        "description": "Manufacturing of woven jute, mesta, coir broad fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131209",
+        "description": "Manufacture of woven broad fabrics of man-made fibres including woven technical textiles, woven microfibre fabrics, woven fabrics of aramid threads",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131210",
+        "description": "Manufacture of technical fabrics of natural fibre",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131299",
+        "description": "Weaving of other textiles n.e.c. including artificial fur",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131301",
+        "description": "Finishing, dyeing (excluding customised embroidery & printing) of cotton fibres, cotton and blended cotton yarn and textile articles including wearing apparels of cotton (excluding jeans)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131302",
+        "description": "Finishing, dyeing (excluding customised embroidery & printing) of silk fibres, silk and blended silk yarn and textile articles including wearing apparels of silk",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131303",
+        "description": "Finishing, dyeing (excluding customised embroidery & printing) of wool fibres, wool and blended wool yarn and textile articles including wearing apparels of wool",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131304",
+        "description": "Finishing, dyeing (excluding customised embroidery & printing) of man-made fibres, man-made and blended man-made yarn and textile articles including wearing apparels of man-made fabrics (including technical fibres, yarns and textiles)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131305",
+        "description": "Finishing, dyeing of jute, mesta and other vegetable textiles fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131306",
+        "description": "Finishing, dyeing (excluding customised embroidery & printing) of jeans",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131307",
+        "description": "Customised embroidery of textile fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131308",
+        "description": "Waterproofing, coating, rubberising, or impregnating purchased garments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "131399",
+        "description": "Other finishing of textiles activities n.e.c",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139101",
+        "description": "Manufacture and processing of knitted or crocheted cotton and blended cotton fabrics including pile and terry fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139102",
+        "description": "Manufacture and processing of knitted or crocheted woolen and blended wool fabrics including pile and terry fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139103",
+        "description": "Manufacture and processing of knitted or crocheted synthetic (including blended synthetic) fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139104",
+        "description": "Manufacture of imitation fur by knitting",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139105",
+        "description": "Manufacture of knitted and crocheted net and window furnishing type fabrics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139199",
+        "description": "Manufacture of other knitted and crocheted fabrics n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139201",
+        "description": "Manufacture of bed sheets, pillow cover, curtains, valances, and bedspreads",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139202",
+        "description": "Manufacture of mosquito net",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139203",
+        "description": "Manufacture of quilts, eiderdowns, cushions (excluding of fur), pillows, sleeping bags and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139204",
+        "description": "Manufacture of blankets including travelling rugs and textile part of electric blankets",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139205",
+        "description": "Manufacture of linen for table, toilet and kitchen like tablecloths, towels, dishcloth and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139206",
+        "description": "Manufacture of home furnishings and other made up textile articles of fabric cut wastes interlaced with cotton or other yarns",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139207",
+        "description": "Manufacture of flags, banners, pennants and other similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139299",
+        "description": "Manufacture of other made-up textile articles, except apparel n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139301",
+        "description": "Manufacture of carpet of natural fibres including coir",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139302",
+        "description": "Manufacture of other floor coverings of natural fibres including coir other than carpets like rugs, mats and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139303",
+        "description": "Manufacture of carpet of man made fibres",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139304",
+        "description": "Manufacture of other floor coverings of man made fibres other than carpets like rugs, mats and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139305",
+        "description": "Manufacture of artificial grass (synthetic turf)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139399",
+        "description": "Manufacture of other floor coverings n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139401",
+        "description": "Manufacture of twine, cordage, rope and cables made of jute/mesta/coir/natural fibre whether or not treatedthed",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139402",
+        "description": "Manufacture of twine, cordage, rope and cables made of synthetic material whether or not treated",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139403",
+        "description": "Manufacture of knotted netting (nets) of twine, cordage or rope made of jute/mesta /coir/ natural fibre (excluding fishing nets)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139404",
+        "description": "Manufacture of knotted netting (nets) of twine, cordage or rope made of synthetic fibre",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139405",
+        "description": "Manufacture of fishing nets",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139499",
+        "description": "Manufacture of products of rope or netting n.e.c. such as hammocks, swings, ship fenders, unloading cushions, loading slings and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139901",
+        "description": "Manufacture of net and window furnishing type fabrics of lace",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139902",
+        "description": "Manufacture of nonwoven fabrics including those where plastic or rubber forms the bonding substance",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139903",
+        "description": "Manufacture of labels, badges and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139904",
+        "description": "Manufacture of tapes, niwar and wicks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139905",
+        "description": "Manufacture of tarpaulins, tents, sails, parachutes, loose covers for cars, machines or furniture and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139906",
+        "description": "Manufacture of textile-covered elastic materials and fabrics (excluding non-woven) impregnated, coated, or laminated",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139907",
+        "description": "Manufacture of metallized yarn (zari) or gimped yarn",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139908",
+        "description": "Manufacture of lace and embroidery, in the piece, in strips or in motifs, ornamental trimmings like braids, tassels, pompons and other similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "139999",
+        "description": "Manufacture of other textiles n.e.c., including felt, automotive trimmings, pressure sensitive cloth-tape, textiles for blinds and sun blinds, fabrics coated with gum or amylaceous substances (Buckram, etc.), tulles and other net fabrics, tyre cord fabric of high-tenacity man-made yarn and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141001",
+        "description": "Manufacture of wrap around or draped garments like Saree, Dhoti, lungi and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141002",
+        "description": "Manufacture of outerwear made of woven, knitted or crocheted and non-woven fabric including raincoats (excluding outerwear made of leather and wrap around garments like saree, dhoti, lungi)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141003",
+        "description": "Manufacture of underwear and nightwear made of woven, knitted or crocheted fabric and lace, not made directly into shape",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141004",
+        "description": "Manufacture of clothing accessories made primarily of fabrics like, handkerchiefs, caps, hats and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141005",
+        "description": "Manufacture of wearing apparel and accessories made primarily of leather or composition leather including caps and hats (caps and hats of fur also included here)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141006",
+        "description": "Custom tailoring services catering to individuals/households",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141007",
+        "description": "Tailoring services for manufacturers of ready-made garments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141008",
+        "description": "Manufacture of parts of clothing and clothing accessories such as zippers, buckles, straps, parts of footwear made of textiles and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "141099",
+        "description": "Other manufacture of wearing apparel, except fur apparel n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "142001",
+        "description": "Manufacture of wearing apparel and clothing accessories made of fur/ artificial fur",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "142002",
+        "description": "Manufacture of fur/artificial fur and skin rugs and other similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "142099",
+        "description": "Manufacture of other fur products n.e.c",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "143001",
+        "description": "Manufacture of knitted or crocheted outerwear directly into shape such as Pullovers, Cardigans, Jerseys and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "143002",
+        "description": "Manufacture of knitted or crocheted inner wear directly into shape",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "143003",
+        "description": "Manufacture of Knitted or crocheted clothing accessories (directly into shape) such as Socks, tights, stockings, pantyhose and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "143099",
+        "description": "Manufacture of other knitted and crocheted apparel n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "161001",
+        "description": "Sawing, planing and machining of wood",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "161002",
+        "description": "Manufacture of unassembled wooden flooring",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "161099",
+        "description": "Activities related to sawmilling and planing of wood n.e.c., including manufacture of wooden railway sleepers and impregnation or chemical treatment of wood with preservatives or other materials",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162101",
+        "description": "Manufacture of veneer sheets and plywood",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162102",
+        "description": "Manufacture of wood, coir and similar material based panels and boards including Manufacture of engineered boards: OSB, MDF, particle boards, fibreboards, acoustic wood panels.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162201",
+        "description": "Manufacture of wooden beams, trusses, rafters and roof struts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162202",
+        "description": "Manufacture of wooden doors, windows, shutters, stairs, railings and their frames",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162203",
+        "description": "Manufacture of wooden beading, mouldings, shingles and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162299",
+        "description": "Manufacture of other builders’ carpentry and joinery n.e.c. including Manufacture of prefabricated wooden structures and building elements.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162301",
+        "description": "Manufacture of packing cases, boxes, crates, drums and similar items of wood",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162302",
+        "description": "Manufacture of wooden/plywood storage containers such as barrels, tubs, vats, chests and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162399",
+        "description": "Manufacture of other wooden containers n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162901",
+        "description": "Manufacture of household utensils and kitchenware made of wood/plywood and articles made of leaf",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162902",
+        "description": "Manufacture of cork and cork-based products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162903",
+        "description": "Manufacture of wooden decorative articles (Eg. statuettes, ornaments, candle holders, lamp bases, Wooden frames for artists canvases and other similar items)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162904",
+        "description": "Manufacture of basket-ware and wickerwork products of straw, plaiting, willow, rattan, reed and bamboo and similar products (excluding furniture)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162905",
+        "description": "Manufacture of solid fuels from vegetable biomass (charcoal briquettes and pellets)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162906",
+        "description": "Manufacture of cow dung cakes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "162999",
+        "description": "Manufacture of other products of wood; Manufacture of other articles of cork, straw and plaiting materials n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170101",
+        "description": "Manufacture of paper not further processed",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170102",
+        "description": "Manufacture of newsprint",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170103",
+        "description": "Manufacture of paperboard",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170104",
+        "description": "Manufacture of specialty paper (including tissue paper)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170199",
+        "description": "Manufacture of other primary paper and paperboard n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170201",
+        "description": "Manufacture of corrugated paper and paperboard",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170202",
+        "description": "Manufacture of containers of corrugated paper and paperboard",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170203",
+        "description": "Manufacture of paperboard carton, boxes and cases",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170204",
+        "description": "Manufacture of sacks and bags of paper",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170299",
+        "description": "Manufacture of other containers of paper and paperboard, n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170901",
+        "description": "Manufacture of educational and commercial stationery items, such as notebooks, registers, accounting books, envelopes, photocopy paper, lables, binders, file covers, document holders and other similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170902",
+        "description": "Manufacture of paper cups, saucers, plates, hoops, cones, straws and other similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170903",
+        "description": "Manufacture of tissue and hygiene paper products, such as cleaning tissues, handkerchiefs, toilet paper, sanitary towels and tampons, napkins and napkin liners, paper facial masks, cosmetic pads and other similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170904",
+        "description": "Manufacture of wallpaper and similar wall coverings",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170905",
+        "description": "Manufacture of paper pulp articles, such as moulded containers, egg trays and other similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "170999",
+        "description": "Manufacture of other articles of paper and paperboard n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "191001",
+        "description": "Production of coke and semi-coke products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "191099",
+        "description": "Manufacture of other coke oven products n.e.c. such as gas, crude coal and lignite tars and other similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "192001",
+        "description": "Manufacture of refined petroleum products like liquid and gaseous fuels, illuminating oils, lubricating oils or greases or other products from crude petroleum or bituminous minerals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "192002",
+        "description": "Manufacture of paraffin wax, petroleum jelly, micro-crystalline petroleum wax, slack wax, ozokerite, lignite wax, petroleum coke, petroleum bitumen and other residues of petroleum oils or of oils obtained from bituminous minerals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "192003",
+        "description": "Bottling of LPG/CNG",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "192004",
+        "description": "Manufacture of fuel briquettes of hard-coal, peat and lignite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "192099",
+        "description": "Manufacture of other petroleum product n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201101",
+        "description": "Manufacture of liquefied or compressed inorganic industrial or medical gases (elemental gases, liquid or compressed air, refrigerant gases, mixed industrial gases etc.)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201102",
+        "description": "Manufacture of inorganic acids(except nitric acid) and inorganic bases (except ammonia) such as alkalis, lyes except gases",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201103",
+        "description": "Manufacture of dyes and pigments from any source in basic form or as concentrate including tanning or dying extracts; tannings and their derivatives and colouring matter (including manufacture of indigo)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201104",
+        "description": "Manufacture of organic acids and organic bases",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201105",
+        "description": "Manufacture of inorganic compounds other than dyes, pigments and synthetic aromatic products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201106",
+        "description": "Manufacture of organic compounds other than dyes, pigments and synthetic aromatic products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201107",
+        "description": "Manufacture of distilled water",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201108",
+        "description": "Manufacture of synthetic aromatic products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201199",
+        "description": "Manufacture of other basic chemicals n.e.c",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201201",
+        "description": "Manufacture of urea",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201202",
+        "description": "Manufacture of other organic fertilizers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201203",
+        "description": "Manufacture of straight, mixed, compound or complex inorganic fertilizers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201204",
+        "description": "Manufacture of associated nitrogen products (nitric and sulphonitric acids, ammonia, ammonium chloride, ammonium carbonate, nitrites and nitrates of potassium)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201205",
+        "description": "Manufacture of potting soil and soil improvers (including peat-based and mineral-mix soils)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201206",
+        "description": "Manufacture of plant bio-stimulants, growth promoters, and micronutrient fertilizers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201207",
+        "description": "Manufacture of manure/ compost",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201299",
+        "description": "Manufacture of other fertilizers and nitrogenous compounds n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201301",
+        "description": "Manufacture of plastic in primary forms (includes amino-resins, polyurethanes etc.)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201302",
+        "description": "Manufacture of synthetic rubber in primary forms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201303",
+        "description": "Manufacture of mixture of synthetic rubber and natural or rubber-like gums",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "201399",
+        "description": "Manufacture of other plastics and synthetic rubber in primary forms n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202101",
+        "description": "Manufacture of insecticides, rodenticides, fungicides, herbicides and other chemical pesticides and plant protection products excluding biological and bio-based agrochemical products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202102",
+        "description": "Manufacture of agricultural disinfectants excluding biogical and bio-based agrochemical products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202103",
+        "description": "Manufacture of mixture of synthetic rubber and natural rubber or rubber-like gums",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202104",
+        "description": "Manufacture of biological or bio-based agrochemical products such as nematodes, microbial or plant-extract-based bio-pesticides and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202199",
+        "description": "Manufacture of other agrochemical products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202201",
+        "description": "Manufacture of paints and varnishes, enamels or lacquers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202202",
+        "description": "Manufacture of pigments, prepared opacifiers and colours, vitrifiable enamels and glazes engobes and similar preparations of a kind used in the ceramic, enamelling or glass industry",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202203",
+        "description": "Manufacture of printing ink",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202204",
+        "description": "Manufacture of pigments and other colouring matter of a kind used in the manufacture of paints or by artists or other painters",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202205",
+        "description": "Manufacture of paint or varnish removers and organic composite solvents and thinners",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202299",
+        "description": "Manufacture of other paints, varnishes and similar coatings and mastics n.e.c. including caulking compounds and similar non-refractory filling or surfacing preparations, mastics and other related products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202301",
+        "description": "Manufacture of soap, face & body wash in all forms (excluding detergent and dishwashing preparations) and sanitizers including liquid forms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202302",
+        "description": "Manufacture of detergent (including detergent soap/bars), dish-washing preparations, textile softners and similar washing agents",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202303",
+        "description": "Manufacture of cleaning and polishing products (preparations for perfuming or deodorizing rooms including agarbatti; napthalene balls; artificial waxes and prepared waxes; polishes and creams for leather, wood, glass, metal etc.; scouring pastes and powders, including paper, wadding etc. coated or covered with scouring pastes and powders)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202304",
+        "description": "Manufacture of perfumes, personal deodorants, eau de cologne, itar and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202305",
+        "description": "Manufacture of preparations for oral or dental hygiene (includes manufacture of toothpastes, toothpowder, mouthwash, oral perfumes, dental fixative pastes and powders and similar products)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202306",
+        "description": "Manufacture of hair oil, shampoo, hair dye and other hair-care products (includes manufacture of hair sprays, hair fixers, hair creams and bleaches and preparations for permanent waving or straightening of the hair and similar products)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202307",
+        "description": "Manufacture of beauty and make-up preparations including moisturisers, sunburn prevention preparations, face packs, hair removal preparations and similar cosmetics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202308",
+        "description": "Manufacture of toileteries excluding bathing soaps and body wash (includes manufacture of pre-shave, shaving or after shave preparations; perfumed bath salts and other bath preparations)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202399",
+        "description": "Manufacture of other man-made fibres n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202901",
+        "description": "Manufacture of matches",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202903",
+        "description": "Manufacture of essential oils and manufacture of extracts of aromatic, odoriferous products and resinoids including aromatic distilled waters (e.g., Rose water, Tulsi Ark, Keora water, etc) and similar natural products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202904",
+        "description": "Manufacture of photographic plates, films, sensitized paper, and other sensitized unexposed materials, chemical preparations for photographic uses",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202905",
+        "description": "Manufacture of gelatine and its derivatives",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202906",
+        "description": "Manufacture of glues and prepared adhesives, including rubber-based glues and adhesives",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202907",
+        "description": "Manufacture of chemical products or preparations of a kind used in finishing of textiles, paper, leather, and similar industries",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202908",
+        "description": "Manufacture of composite diagnostic or laboratory reagents",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202909",
+        "description": "Manufacturing of lac products including processing of lac",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202910",
+        "description": "Manufacture of hydrocolloids including marine-derived hydrocolloids (agar, carrageenan, alginates)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "202999",
+        "description": "Manufacture of various other chemical products n.e.c. (antiknock preparations, anti-freeze preparations, liquids for hydraulic transmission, composite diagnostic or laboratory reagents, writing or drawing ink, chemical substance used in manufacturing of pesticides and other chemical products)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "203001",
+        "description": "Manufacture of synthetic or artificial filament tow",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "203002",
+        "description": "Manufacture of synthetic or artificial staple fibres, not carded, combed or otherwise processed for spinning",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "203003",
+        "description": "Manufacture of synthetic or artificial filament yarn, including high-tenacity yarn",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "203004",
+        "description": "Manufacture of synthetic or artificial monofilament or strip",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "203099",
+        "description": "Manufacture of other man-made fibres n.e.c. including recycled fibres",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210001",
+        "description": "Manufacture of medicinal substances used in the manufacture of pharmaceuticals: antibiotics, endocrine products, basic vitamins; opium derivatives; sulpha drugs; serums and plasmas; salicylic acid, its salts and esters; glycosides and vegetable alkaloids; chemically pure sugar etc.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210002",
+        "description": "Manufacture of allopathic pharmaceutical/ nutraceutical preparations excluding vaccines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210003",
+        "description": "Manufacture of Ayush pharmaceutical/ nutraceutical preparation",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210004",
+        "description": "Manufacture of veterinary preparations (other than veterinary vaccines) including Ayush veterinary preparations",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210005",
+        "description": "Manufacture of medical impregnated wadding, gauze, bandages, dressings, surgical gut string and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210006",
+        "description": "Manufacture of medical diagnostic preparations (e.g. pregnancy tests, COVID-19 Testing Kits, Rapid Diagnostic Tests (RDTs), In-Vitro Diagnostics (IVDs) etc.)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210007",
+        "description": "Manufacture of vaccines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210008",
+        "description": "Manufacture of biotech pharmaceuticals excluding vaccines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "210099",
+        "description": "Manufacture of other pharmaceutical and botanical products n.e.c. including processing of blood",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221101",
+        "description": "Manufacture of rubber tyres and tubes for motor vehicles, motorcycles, scooters, three-wheelers, tractors and aircraft",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221102",
+        "description": "Manufacture of rubber tyres and tubes for cycles, cycle-rickshaws, hand-pulled or hand pushed cart and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221103",
+        "description": "Retreading of tyres; replacing or rebuilding of tread on used pneumatic tyres",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221199",
+        "description": "Manufacture of other rubber tyres and tubes; retreading and rebuilding of rubber tyres n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221901",
+        "description": "Manufacture of rubber plates, sheets, strips, rods, tubes, pipes, hoses and profile -shapes and similar articles including latex sheets (Raw rubber sheets)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221902",
+        "description": "Manufacture of rubber conveyor or power transmission belts or belting",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221903",
+        "description": "Manufacture of rubber-based healthcare, personal care and medical articles like rubber gloves, contraceptive (condoms, diaphragms), catheters, tubing, hot water bottles and other similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221904",
+        "description": "Manufacture of rubber Seals, Gaskets, Rings & Fittings",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221905",
+        "description": "Manufacture of rubber based inflatable articles like mattresses, waterbed, balloons",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221906",
+        "description": "Manufacture of rubber-based bathing caps, aprons, wetsuits, latex apparel made using sealing, glue techniques (excluding products made using stitching techniques)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221907",
+        "description": "Manufacture of rubberized textiles & threads, where rubber is primary constituent",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "221999",
+        "description": "Manufacture of other rubber products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "222001",
+        "description": "Manufacture of semi-finished plastic products (plastic plates, sheets, blocks, film, foil, strip and similar articles)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "222002",
+        "description": "Manufacture of tableware, kitchenware and other household articles and toilet/ sanitary articles of plastic, including manufacture of vacuum flasks and other vacuum vessels",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "222004",
+        "description": "Manufacture of PVC/UPVC articles such as pipes, doors, windows, water storage tanks and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "222005",
+        "description": "Manufacture of plastic healthcare, personal care and medical articles like gloves and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "222099",
+        "description": "Manufacture of other plastics products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231001",
+        "description": "Manufacture of glass in primary or semi-finished forms (such as sheets & plate glass) including mirror sheets and wired, coloured, tinted, toughened or laminated glass",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231002",
+        "description": "Manufacture of glass fibre (including glass-wool) and yarn of glass fibre; nonwoven glass fabrics, mats, boards and similar non-woven products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231003",
+        "description": "Manufacture of hollow glassware (bottles, jars and similar articles) for the conveyance or packing of goods",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231004",
+        "description": "Manufacture of laboratory, hygienic or pharmaceutical glassware",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231005",
+        "description": "Manufacture of table or kitchen glassware including drinking glasses and other domestic glasses or crystal articles.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231006",
+        "description": "Manufacture of glass bangles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231007",
+        "description": "Manufacture of decorative items of glass",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "231099",
+        "description": "Manufacture of other glassware/glass products: articles of glass used in construction such as glass blocks; clock or watch glasses, optical glass and optical glass elements not optically worked; and other glass products (including glass beads) n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239101",
+        "description": "Manufacture of refractory mortars, concretes and similar materials",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239102",
+        "description": "Manufacture of refractory bricks, blocks tiles and similar refractory ceramic constructional goods",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239103",
+        "description": "Manufacture of refractory ceramic goods such as heat-insulating ceramic goods of siliceous fossil meals, retorts, crucibles, muffles, nozzles, tubes, pipes and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239199",
+        "description": "Manufacture of other refractory articles n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239201",
+        "description": "Manufacture of bricks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239202",
+        "description": "Manufacture of ceramic pipes, conduits, guttering and pipe fittings",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239299",
+        "description": "Manufacture of other clay building materials n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239301",
+        "description": "Manufacture of articles of porcelain or china, earthenware, imitation porcelain or common pottery, including earthen statues",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239302",
+        "description": "Manufacture of ceramic tableware, kitchenware and other domestic articles excluding ceramic toilet sanitary wares",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239303",
+        "description": "Manufacture of statuettes and other ornamental ceramic articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239304",
+        "description": "Manufacture of electrical insulators and insulating fittings of ceramics",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239305",
+        "description": "Manufacture of ceramic laboratory, chemical and industrial products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239306",
+        "description": "Manufacture of non-refractory ceramic sanitary wares: sinks, baths, water closet (WC)/ toilet pans, flushing cistern and similar items.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239399",
+        "description": "Manufacture of ceramic products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239401",
+        "description": "Manufacture of clinkers and hydraulic cements, including Portland, aluminous cement, slag cement and superphosphate cements",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239402",
+        "description": "Manufacture of asbestos cement",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239403",
+        "description": "Manufacture of quicklime, slaked lime and hydraulic lime (excluding chewing lime)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239404",
+        "description": "Manufacture of plasters of calcined gypsum or calcined sulphate",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239499",
+        "description": "Manufacture of other cement and plaster n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239501",
+        "description": "Manufacture of precast concrete, cement or artificial stone articles for use in construction such as tiles, flagstones, bricks, boards, sheets, panels, pipes, posts similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239502",
+        "description": "Manufacture of prefabricated structural components for buildings or civil engineering of cement, concrete or artificial stone excluding RCC bricks and blocks.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239503",
+        "description": "Manufacture of plaster articles for use in construction such as boards, sheets, panels and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239504",
+        "description": "Manufacture of building materials of vegetable substances (wood wool, straw, reeds, rushes) agglomerated with cement, plaster or other mineral binder including insulation boards.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239505",
+        "description": "Manufacture of asbestos sheets",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239506",
+        "description": "Manufacture of R.C.C. bricks and blocks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239507",
+        "description": "Manufacture of Coir-Reinforced Concrete (CFRC), Light weight cement boards Coco coir Bricks/Blocks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239508",
+        "description": "Manufacture of bricks, blocks, tiles and similar products of fly ash",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239599",
+        "description": "Manufacture of other cement and asbestos cement products n.e.c. including Ready-Mix Concrete (RMC)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239601",
+        "description": "Crushing and breaking of stone for use as a flux or raw material in lime or cement manufacture or as building material, road metal or ballast and other materials not at quarry head",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239699",
+        "description": "Other Cutting, shaping and finishing of stone n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239901",
+        "description": "Manufacture of millstones, sharpening or polishing stones and natural or artificial abrasive products, including abrasive powder or grain on a base of textile material, paper, paper board or other material",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239902",
+        "description": "Manufacture of mineral insulating materials such as slag wool, rock wool and similar mineral wools; exfoliated vermiculite, expanded clays and similar heat insulating, sound-insulating or sound-absorbing materials",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239903",
+        "description": "Manufacture of articles of diverse mineral substances such as worked mica and articles of mica, of peat, of graphite (other than electrical articles) and similar substances",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239904",
+        "description": "Manufacture of friction material and unmounted articles thereof with a base of mineral substances or of cellulose",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239905",
+        "description": "Manufacture of clay, synthetic clay",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "239999",
+        "description": "Manufacture of other non-metallic mineral products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241001",
+        "description": "Manufacture of pig iron and spiegeleisen in pigs, blocks or other primary forms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241002",
+        "description": "Manufacture of direct reduction of iron (sponge iron) and other spongy ferrous products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241003",
+        "description": "Manufacture of steel in ingots or other primary forms, and other semi-finished products of steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241004",
+        "description": "Manufacture of ferro-alloys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241005",
+        "description": "Manufacture of hot-rolled products of steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241006",
+        "description": "Manufacture of cold-rolled products of steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241007",
+        "description": "Manufacture of tube and tube fittings of basic iron and steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241008",
+        "description": "Manufacture of wire of steel by cold drawing or stretching",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "241099",
+        "description": "Manufacture of other basic iron and steel n.e.c.including manufacture of railway track material (unassembled rails) of steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242001",
+        "description": "Manufacture of Copper from ore",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242002",
+        "description": "Manufacture of copper products and alloys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242003",
+        "description": "Manufacture of Alumina from Bauxite",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242004",
+        "description": "Manufacture of Aluminium from alumina.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242005",
+        "description": "Manufacture of aluminium products and alloys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242006",
+        "description": "Manufacturing of lead, zinc and tin, their products and alloys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242007",
+        "description": "Manufacturing of chrome, manganese and nickel products and alloys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242008",
+        "description": "Production and refining of precious metals (such as gold, silver platinum etc.) and alloys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "242099",
+        "description": "Other manufacture of basic precious and other non-ferrous metals n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243101",
+        "description": "Manufacture of tubes, pipes, and hollow profiles and their fittings of cast-iron",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243102",
+        "description": "Manufacture of tubes, pipes, and hollow profiles and their fittings of cast-steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243103",
+        "description": "Casting of semi-finished and finished steel castings excluding hollow profiles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243104",
+        "description": "Manufacture of seamless tubes and pipes of steel",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243105",
+        "description": "Cast iron castings",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243199",
+        "description": "Other casting of iron n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243201",
+        "description": "Casting of copper",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243202",
+        "description": "Casting of Aluminium",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "243299",
+        "description": "Casting of other non-ferrous metals n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251101",
+        "description": "Manufacture of metal doors, windows and their frames, shutters and rolling shutters, gates and similar articles used in buildings",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251102",
+        "description": "Manufacture of metal frameworks or skeletons for construction and parts thereof (towers, masts, trusses, bridges and similar items)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251103",
+        "description": "Manufacture of industrial frameworks in metal (frameworks for blast furnaces, lifting and handling equipment and similar items)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251199",
+        "description": "Manufacture of tanks, reservoirs and containers of metal n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251201",
+        "description": "Manufacture of metal containers for compressed or liquefied gas",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251202",
+        "description": "Manufacture of reservoirs, tanks, vats and similar containers of metal, whether or not lined or heat-insulated",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251203",
+        "description": "Manufacture of central heating boilers and radiators and parts and accessories thereof",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251299",
+        "description": "Other manufacture of tanks, reservoirs and containers of metal n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251301",
+        "description": "Manufacture of steam or other vapour generating boilers and hot water boilers other than central heating boilers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251302",
+        "description": "Manufacture of nuclear reactors, except isotope separators",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251303",
+        "description": "Manufacture of auxiliary plant for use with steam generators (condensers, economizers, superheaters, steam collectors and accumulators)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "251399",
+        "description": "Manufacture of other steam generators/boilers (except central heating hot water boilers), n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259101",
+        "description": "Forging, pressing, stamping and roll-forming of metal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259102",
+        "description": "Powder metallurgy",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259201",
+        "description": "Plating, anodizing, galvanizing etc. of metals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259202",
+        "description": "Treatment of metals like heating, deburring, sandblasting, tumbling, cleaning of metals, hardening, buffing of metals and similar activities",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259203",
+        "description": "Non-metallic coating of metals: plasticizing, enameling, lacquering, colouring and engraving of metals and similar activities",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259299",
+        "description": "Treatment and coating of metals; machining n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259301",
+        "description": "Manufacture of cutlery and other kitchenware and household articles such as knives, forks, spoons, and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259302",
+        "description": "Manufacture of hand tools (non-power-driven) for agricultural/ horticulture/ forestry",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259303",
+        "description": "Manufacture of hand tools such as pliers, screwdrivers, press tools, blacksmiths’ tools, hammers, drills, punches, milling cutters and similar items.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259304",
+        "description": "Manufacture of padlocks, locks, keys, hinges and the like, hardware for buildings, furniture, vehicles and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259399",
+        "description": "Manufacture of other general hardware n.e.c. (saws and sawblades, including circular sawblades and chainsaw blades, moulding boxes, vices, clamps and similar items)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259901",
+        "description": "Manufacture of metal fasteners (nails, rivets, tacks, pins, staples, washers and similar non-threaded products and nuts, bolts, screws and other threaded products)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259902",
+        "description": "Manufacture of containers such as tins and cans for food products and boxes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259903",
+        "description": "Manufacture of metal cable and other articles made of wire (except for electric transmission) including barbed wire, wire fencing, grill, netting, wire mesh and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259904",
+        "description": "Manufacture of metal household articles (plates, saucers, pots, kettles, saucepans, frying pans, pressure cooker and other non-electrical utensils, small hand-operated kitchen appliances and accessories)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259905",
+        "description": "Manufacture of metal sanitary ware such as baths, sinks, washbasins and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259906",
+        "description": "Manufacture of reinforced safes, vaults, strong room doors, gates and metal goods for office use (other than office furniture) and other purposes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259907",
+        "description": "Manufacture of metal sculptures, decorative items, and other artisanal products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "259999",
+        "description": "Manufacture of other fabricated metal products n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261101",
+        "description": "Manufacture of solar cells",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261102",
+        "description": "Manufacture of solar panels",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261103",
+        "description": "Manufacture of photovoltaic/solar inverters",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261901",
+        "description": "Manufacture of electronic capacitors, resistors, chokes, coils, transformers (electronic) and similar components",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261902",
+        "description": "Manufacture of electron tubes, diodes, transistors and related discrete devices",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261903",
+        "description": "Manufacture of integrated circuits (analog, digital or hybrid), including Application Specific IC (ASIC)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261904",
+        "description": "Manufacture of bare printed circuit boards, loading of components onto printed circuit boards; manufacture of interface cards (e.g. sound, video, controllers, network, modems)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261905",
+        "description": "Manufacture of display components (plasma, polymer, LCD, LED)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261906",
+        "description": "Manufacture of wafers, semiconductors and fabricated components such as microprocessors, microcontrollers, system-on-chip (SoC) devices, FPGA, Memories, RFIC, MMIC",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261907",
+        "description": "Manufacture of Space Grade electronic components",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261908",
+        "description": "Manufacture of printer cables, monitor cables, USB cables with connectors",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "261999",
+        "description": "Manufacture of other electronic components n.e.c, including Manufacture of inductors; Manufacture of electronic crystals and crystal assemblies; Manufacture of solenids, switches and transducers for electronic applications",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "262001",
+        "description": "Manufacture of desktop computers, laptop computers, hand-held computers (such as PDA), mainframe computers and computer servers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "262002",
+        "description": "Manufacture of magnetic and optical storage devices such as magnetic disk drives, flash drives and other storage devices",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "262003",
+        "description": "Manufacture of monitors, keyboards, mouse, joysticks, and trackball accessories, dedicated computer terminals and similar equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "262004",
+        "description": "Manufacture of printers, scanners, including bar code scanners, smart card readers, virtual reality helmets and headsets",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "262005",
+        "description": "Manufacture of computer terminals, like automatic teller machines (ATM’s), point-of-sale (POS) terminals not mechanically operated",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "262099",
+        "description": "Manufacture of computers and peripheral equipment n.e.c. such as computer servers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263001",
+        "description": "Manufacture of cellular/ mobile/ smart phones & smart watches",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263002",
+        "description": "Manufacture of telephones, including cordless telephones and facsimile equipment, telephone answering machines, PBX equipment, excluding smartphones",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263003",
+        "description": "Manufacturing of telecom networking and security equipment such as switches,routers, firewall, UTM platforms, Satellite Ground station, Gateway & VSAT RF and Baseband equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263004",
+        "description": "Manufacture of cable television equipment, transmitting and receiving antenna including DTH dish",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263005",
+        "description": "Manufacture of radio and television studio and broadcasting equipment, including television cameras",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263006",
+        "description": "Manufacture of radio trans receivers (wireless communication sets)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263007",
+        "description": "Manufacture of telecom transmission equipment such as DWDM, OLT, OFC and SDH.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263008",
+        "description": "Manufacture of telecom mobile technology products including RAN equipment such as base station and antenna",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263009",
+        "description": "Manufacture of telecom Customer Premises Equipmentsuch as FWA, ONT, internet set top box, Wi-Fi access point and satellite CPEs",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "263099",
+        "description": "Manufacture of other communication equipments n.e.c. such as pagers, modems, carrier equipment, devices using infrared signals (like remote controllers and game controllers), User Terminals for Broadband Communication, Inflight and Meritime Communication equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "264001",
+        "description": "Manufacture of televisions, Computer Projectors and TV projectors",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "264002",
+        "description": "Manufacture of electronic gaming devices such as video game consoles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "264003",
+        "description": "Manufacture of audio recording and duplicating systems (including for commercial recordings)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "264004",
+        "description": "Manufacture of radio receivers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "264005",
+        "description": "Manufacture of stereo equipment, speaker systems, amplifiers for musical instruments and public address systems, microphones, karaoke machines and earphones/headphones",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "264099",
+        "description": "Manufacture of other electronic consumer goods n.e.c. such as CD players, DVD players, home theatre audio and video equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265101",
+        "description": "Manufacture of physical properties testing and inspection equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265102",
+        "description": "Manufacture of automotive emissions testing equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265103",
+        "description": "Manufacture of consumption meters for electricity, water or gas, flow meters and counting meters",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265104",
+        "description": "Manufacture of meteorological and environmental instruments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265105",
+        "description": "Manufacture of radar equipment, GNSS (NavIC), search, detection, navigation, aeronautical and nautical equipment, systems parameters measurment equipments (Equipments used during realisation and operalisation) for Space craft, Launch Vehicle & Orbital Station",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265106",
+        "description": "Manufacture of laboratory analytical instruments and miscellaneous laboratory apparatus for measuring and testing such as scales, balances, incubators and similar instruments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265107",
+        "description": "Manufacture of industrial process control equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265199",
+        "description": "Manufacture of other measuring, testing, navigating and control equipment n.e.c.such as polygraph machines, radiation detection and monitoring instruments, sensors and sensing equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265201",
+        "description": "Manufacture of watches and clocks of all kinds, including instrument panel clocks (excluding smart watches)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265202",
+        "description": "Manufacture of components for clocks and watches (springs, jewels, dials, hands, plates, bridges and other parts); watch and clock cases, including cases of precious metals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265203",
+        "description": "Manufacture of time-recording equipments such as time-clock, parking meters and similar equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "265299",
+        "description": "Manufacture of other components for clocks and watches n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "266001",
+        "description": "Manufacture of irradiation equipment and Diagnostic Imaging Equipment (Scanners) such as alpha,beta, gamma radiations, X-ray equipments, CT scanners, PET scanners, MRI equipments, food and milk irradiation equipment and similar equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "266002",
+        "description": "Manufacture of electromedical and electrotherapeutic equipment such as pacemakers, hearing aids, massage apparatus, electro medical ventilators.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "267001",
+        "description": "Manufacture of lenses (other than opthalmic lenses) for optical devices including video camera",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "267002",
+        "description": "Manufacture of still photographic cameras, including film and digital cameras",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "267003",
+        "description": "Manufacture of optical microscopes, binoculars and telescopes, Optics for Spacecraft payload",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "267099",
+        "description": "Manufacture of optical instruments and photographic equipment n.e.c. such as optical mirrors, unrecorded magnetic audio and video tapes, optical disks",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "268000",
+        "description": "Manufacture of magnetic and optical media",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "271001",
+        "description": "Manufacture of power generators (except battery charging alternators for internal combustion engines), motor generator sets (except turbine generator set units) and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "271002",
+        "description": "Manufacture of electric power distribution transformers, arc-welding transformers, fluorescent ballasts, transmission and distribution voltage regulators and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "271003",
+        "description": "Manufacture of electric motors (except internal combustion engine starting motors) and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "271004",
+        "description": "Manufacture of electrolisers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "271099",
+        "description": "Manufacture of other electricity distribution and control apparatus n.e.c. such as relays, sockets, voltage limiters, switches and fuses other than household type and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "272001",
+        "description": "Manufacture of primary cells and batteries",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "272002",
+        "description": "Manufacture of secondary cells and batteries",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "272003",
+        "description": "Manufacture of Battery Energy Storage Systems (BESS)/ Containerised BESS/ Battery pack",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "272099",
+        "description": "Manufacture of other batteries and accumulators n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273100",
+        "description": "Manufacture of fibre optic cable for data transmission or live transmission of images, whether or not fitted with connectors",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273201",
+        "description": "Manufacture of insulated wire and cable, made of steel, copper, aluminium",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273202",
+        "description": "Manufacture of computer cables, printer cables, USB cables, not fitted with connectors",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273203",
+        "description": "Manufacturing of Cable, Wires and Harness used in Spacecraft, Launch Vehicles and Orbiting Station",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273299",
+        "description": "Manufacture of other electronic and electric wires and cables n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273301",
+        "description": "Manufacture of switches, switch box, lamp holders, lugs and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "273399",
+        "description": "Manufacture of other wiring devices and fittings n.e.c. plastic non current carrying wiring devices, electric plugs, connectors or sockets",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "274001",
+        "description": "Manufacture of LED lighting equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "274099",
+        "description": "Manufacture of other electric lighting equipment n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "275001",
+        "description": "Manufacture of domestic electric appliances such as refrigerators, freezers, dishwashers, washing and drying machines, vacuum cleaners, floor polishers, waste disposers, grinders, blenders, juice squeezers, excluding household space cooling equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "275002",
+        "description": "Manufacture of domestic electrothermic appliances such as electric water heaters, electric blankets, electric dryers, curlers, electric smoothing irons, portable space heaters (room heaters), portable electric ovens, microwave ovens, cookers, hotplates",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "275003",
+        "description": "Manufacture of household space cooling and ventilation equipment like air conditioners ,air coolers, electric fans including exhaust fans",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "275004",
+        "description": "Manufacture of domestic non-electric cooking and heating equipments such as non-electric space heaters, cooking ranges, grates, stoves, water heaters, cooking appliances, plate warmers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "275099",
+        "description": "Manufacture of other domestic appliances n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "279001",
+        "description": "Manufacture of battery chargers & charging stations including for cars",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "279002",
+        "description": "Manufacture of uninterruptible power supplies (UPS)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "279003",
+        "description": "Manufacture of electrical capacitors, resistors, condensers, electrodes and similar products",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "279099",
+        "description": "Manufacture of other electrical equipment n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281101",
+        "description": "Manufacture of propulsion engines for water transport including factory overhaul",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281102",
+        "description": "Manufacture of propulsion engines for Railway transport",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281103",
+        "description": "Manufacture of parts and components for internal combustion engines, except for motor vehicle engines, such as pistons, piston rings, valves, carburettors, filters, inlet, exhaust valves and similar components",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281104",
+        "description": "Manufacture of steam turbines, gas turbines and other vapor turbines and turbine-generator sets",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281105",
+        "description": "Manufacture of wind turbines and integrated wind turbine-generator systems",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281106",
+        "description": "Manufacture of hydraulic turbines, water wheels, and turbine-generator sets for hydroelectric power",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281107",
+        "description": "Manufacture of internal combustion engines for machinery and equipment (excluding those used for transport application such as for propulsion in motor vehicles, Motorcycle, marine, railway, aircraft).",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281199",
+        "description": "Manufacture of other engines and turbines, except aircraft, vehicle and cycle engines n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281201",
+        "description": "Manufacture of hydraulic power engines and motors, cylinders, valves , hydraulic fluid power systems and hydraulic transmission equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281202",
+        "description": "Manufacture of pneumatic power engines and motors, cylinders, and valves",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281203",
+        "description": "Manufacture of air preparation equipment for use in pneumatic systems",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281204",
+        "description": "Manufacture of Actuators",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281299",
+        "description": "Manufacture of other fluid power equipment n.e.c. such as gas spring cylinders",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281301",
+        "description": "Manufacture of air or vacuum pumps, air or other gas compressors (including cryogenic pumps) and parts thereof",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281302",
+        "description": "Manufacture of pumps for liquids, whether or not fitted with a measuring device (including hand pumps) and parts thereof",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281303",
+        "description": "Manufacture of pumps designed for fitting to internal combustion engines (including oil, water, and fuel pumps for motor vehicles and similar articles) and parts thereof",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281304",
+        "description": "Manufacture of industrial and heating taps and valves, (including regulating valves and intake taps) and parts thereof",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281399",
+        "description": "Manufacture of other pumps, compressors, taps and valves other than for industrial and heating purposes and parts thereof n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281401",
+        "description": "Manufacture of Bearings and Bearing Component",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281402",
+        "description": "Manufacture of Gears, Gearboxes, and Speed Changers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281403",
+        "description": "Manufacture of mechanical power transmission equipment such as transmission shafts, couplings, clutches, and related components",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281404",
+        "description": "Manufacture of power transmission chains, articulated linkchains and other types of chains",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281499",
+        "description": "Manufacture of other bearings, gears, gearing and driving elements n.e.c.. such as flywheels and pulleys",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281501",
+        "description": "Manufacture of Industrial and Laboratory Furnaces, furnace burners and Incinerators",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281502",
+        "description": "Manufacture of central heating boilers, solar water heaters, and similar equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281599",
+        "description": "Manufacture of other ovens, furnaces and permanent household heating equipment n.e.c..",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281601",
+        "description": "Manufacture of lifts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281602",
+        "description": "Manufacture of manual, semi-automatic and automatic lifting, pulling and conveying equipment and systems, including people movers, such as pulley tackle, hoists, winches, capstans, jacks, conveyors, cable cars, escalators, moving walkways, and similar equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281603",
+        "description": "Manufacture of Automated (Unmanned) and Robotic Lifting and Handling Equipment including automated car parking systems",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281604",
+        "description": "Manufacture of cranes, handtrucks, wheelbarrows, derricks, straddle carriers and similar lifting, handling and transport equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281605",
+        "description": "Manufacture of Parts and Components for Lifting/Handling Equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281699",
+        "description": "Manufacture of other lifting and handling equipment n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281700",
+        "description": "Manufacture of office machinery and equipment such as photocopy machines, toner cartriges, stapling machines, hole punchers, white/ black/ marker boards, voting machines and similar equipment",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281800",
+        "description": "Manufacture of power-driven hand tools such as circular saws, chain saws, drills and hammer drillers, bufers, routers and similar tools",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281901",
+        "description": "Manufacture of refrigerating or freezing equipment for industrial use, including assemblies of major components",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281902",
+        "description": "Manufacture of air-conditioning machines for industrial use, including air conditioners for transport equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281903",
+        "description": "Manufacture of fire extinguishers and other equipment for projecting, dispersing, or spraying liquids or powders, whether or not hand-operated and parts thereof such as sandblasting machines, steam cleaning machines and similar machines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281904",
+        "description": "Manufacture of weighing machinery (other than sensitive laboratory balances).",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281905",
+        "description": "Manufacture of filtering and purifying machinery or apparatus for liquids and gases",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281906",
+        "description": "Manufacture of parts for general-purpose machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281907",
+        "description": "Manufacture of packing and wrapping machinery such as filling, closing, sealing, capsuling, or labeling machines and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "281999",
+        "description": "Manufacture of other general purpose machinery n.e.c. (fans intended for industrial applications, exhaust hoods for commercial, laboratory or industrial use; calendering or other rolling machines other than for metals or glass; gaskets and similar joints made of a combination of materials or layers of the same material and other general purpose machinery)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282101",
+        "description": "Manufacture of tractors and trailers used in agriculture and forestry",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282102",
+        "description": "Manufacture of ploughs, manure spreaders, seeders, harrows, and similar agricultural machinery for soil preparation, planting, or fertilizing",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282103",
+        "description": "Manufacture of spraying machinery for agricultural use excluding drones",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282104",
+        "description": "Manufacture of harvesting or threshing machinery such as harvesters, threshers, sorters and similar machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282105",
+        "description": "Manufacture of drones for agriculture and forestry",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282199",
+        "description": "Manufacture of other agricultural and forestry machinery n.e.c. including milking machines, poultry-keeping machinery, bee-keeping machinery, equipment for preparing fodder and similar machines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282201",
+        "description": "Manufacture of machinery and machine tools for turning, drilling, milling, shaping, planing, boring, grinding, forging and similar processes, including those using a laser beam, ultrasonic waves, plasma arc, magnetic pulse and similar techniques",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282202",
+        "description": "Manufacture of electroplating machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282203",
+        "description": "Manufacture of parts and accessories for metal forming machinery and machine tools such as work holders, dividing heads, and other special attachments for machine tools.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282204",
+        "description": "Manufacture of stamping or pressing machine tools including punch presses, hydraulic presses and hydraulic brakes, drop hammers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282205",
+        "description": "Manufacture of draw-benches, thread rollers or machines for working wires",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282299",
+        "description": "Manufacture of metal-forming machinery and machine tools n.e.c. such as electroplating machinery, presses for manufacture of particle board, stationary machines for nailing, stapling, glueing etc.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282300",
+        "description": "Manufacture of machinery for metallurgy",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282401",
+        "description": "Manufacture of continuous-action elevators and conveyors for goods and materials, for underground use",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282402",
+        "description": "Manufacture of boring, cutting, or sinking machinery for boring earth or extracting minerals or ores, or of coal or rock cutters and tunneling machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282403",
+        "description": "Manufacture of earth-moving machinery like bulldozers, angle-dozers, graders, scrapers, levellers, mechanical shovels, shovel loaders and similar machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282404",
+        "description": "Manufacture of track-laying excavators and tractors including track-laying tractors used in construction or mining",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282405",
+        "description": "Manufacture of concrete and mortar mixers, piledrivers and pile-extractors, mortar spreaders, bitumen spreaders, concrete surfacing machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282406",
+        "description": "Manufacture of parts and accessories for machinery/equipment used in construction and mining industries",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282407",
+        "description": "Manufacture of machines for mixing mineral substances with bitumen",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282408",
+        "description": "Manufacture of off-road dumping trucks, angle-dozer blades, snow-ploughs and snow-blowers.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282499",
+        "description": "Manufacture of other machinery for mining, quarrying and construction n.e.c. including for treating minerals by screening, sorting, separating, washing, crushing, grinding, mixing, or kneading earth, stone, ores, or other mineral substances, in solid (including powder or paste) form",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282501",
+        "description": "Manufacture of machinery for the dairy industry",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282502",
+        "description": "Manufacture of machinery for the grain milling industry",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282503",
+        "description": "Manufacture of presses, crushers, and similar machinery used to make wine, cider, fruit juices",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282504",
+        "description": "Manufacture of machinery for the bakery industry or for making macaroni, noodles, pasta, and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282506",
+        "description": "Manufacture of machinery for the extraction or preparation of animal or vegetable fats or oils",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282599",
+        "description": "Manufacture of other machinery for the industrial preparation or manufacture of food or drink n.e.c. including tea or coffee-making machines, machines for confectionery, cocoa, or chocolate",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282601",
+        "description": "Manufacture of machinery for preparation of textile fibers, spinning machines, machines for preparing textile yarns",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282602",
+        "description": "Manufacture of textile printing machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282603",
+        "description": "Manufacture of machinery for washing, bleaching, dyeing, dressing, finishing coating or impregnating textile fabrics, machines for reeling, unreeling, folding, cutting or pinking textile fabrics, and similar machinery for fabric processing",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282604",
+        "description": "Manufacture of weaving machines (powerlooms and handlooms), including knitting machines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282605",
+        "description": "Manufacture of sewing machines, sewing machine heads and sewing machine needles (whether or not for household use)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282606",
+        "description": "Manufacture of machinery for preparing, tanning or working hides, skins or leather, machinery for making or repairing footwear or other articles of hides, skins, leather or fur skins",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282699",
+        "description": "Manufacture of other machinery for textiles, apparel and leather production n.e.c.such as drycleaning machines, commercial washing and drying machines, fusing presses.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282901",
+        "description": "Manufacture of machinery for making paper pulp, paper, paperboard and articles of paper board",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282902",
+        "description": "Manufacture of machinery for working soft rubber or plastics or for the manufacture of products of these materials",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282903",
+        "description": "Manufacture of printing and bookbinding machines and machines for activities supporting printing on a variety of materials (other than textiles)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282904",
+        "description": "Manufacture of 3D printing machinery",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282905",
+        "description": "Manufacture of machinery used in the pharmaceutical industry like, tablet pressers, capsule fillers, coating machines, and similar machineries",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282906",
+        "description": "Manufacture of industrial robots performing multiple tasks for special purposes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "282999",
+        "description": "Manufacture of other special-purpose machinery n.e.c.such as semi-conductor manufacturing machinery, machinery for producing tiles, bricks, pipes; Aircraft launching gear, aircraft carrier catapults ; Tire alignment and balancing equipment, Spacecraft Handeling eqipments, Launch Vehicle and its stages handeling Equipments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "291001",
+        "description": "Manufacture of passenger cars (four wheelers) including electric four wheelers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "291002",
+        "description": "Manufacture of commercial vehicles for passenger transport such as buses, vans and coaches including electric vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "291003",
+        "description": "Manufacture of commercial vehicles(other than buses, vans and coaches) such as lorries, road tractors for semi-trailers and similar vehicles including electric vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "291004",
+        "description": "Manufacture of chassis fitted with engines for the motor vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "291005",
+        "description": "Manufacture of motor vehicle engines and their parts, including electric vehicle motors as well as the factory rebuilding of motor vehicle engines",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "291099",
+        "description": "Manufacture of other motor vehicles n.e.c. including snowmobiles, golf carts, amphibious motor vehicles , road sweeper trollies , crane lorries, all-terrain vehicles (ATV), go-carts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "292001",
+        "description": "Manufacture of bodies, including cabs for motor vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "292002",
+        "description": "Manufacture of trailers and semi-trailers for transport of goods or passengers including manufacture of chassis for trailers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "292003",
+        "description": "Reconditioning and customising of motor vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "292004",
+        "description": "Manufacture of containers (including containers for the transport of fluids) specially designed and equipped for carriage by one or more modes of transport",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "292099",
+        "description": "Other manufacture of bodies (coachwork) for motor vehicles; manufacture of trailers and semi-trailers n.e.c. including - Manufacture of armoured vehicles for transport of goods - Outfitting of all types of motor vehicles, trailers and semi-trailers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293001",
+        "description": "Manufacture of diverse parts and accessories for motor vehicles such as brakes, gearboxes, axles, road wheels, suspension shock absorbers, radiators, silencers, exhaust pipes, catalytic converters, clutches, steering wheels, steering columns, steering boxes and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293002",
+        "description": "Manufacture of parts and accessories of bodies for motor vehicles such as safety belts, airbags, doors, bumpers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293003",
+        "description": "Manufacture of car seats",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293004",
+        "description": "Manufacture of seat covers and floor coverings of any material",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293005",
+        "description": "Manufacture of motor vehicle electrical equipment, such as generators, alternators, spark plugs, ignition wiring harnesses, power window and door systems, assembly of purchased gauges into instrument panels, voltage regulators, lamps, and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293006",
+        "description": "Manufacture of chassis (without engine) for motor vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "293099",
+        "description": "Other manufacture of parts and accessories for motor vehicles n.e.c",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "301101",
+        "description": "Building of commercial vessels: passenger vessels, ferry-boats, cargo ships,tankers, tugs, hovercraft (except recreation-type hovercraft) and similar vessels",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "301102",
+        "description": "Building of military ships, submarines, vessels and scientific investigation ships and similar vessels",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "301103",
+        "description": "Building of fishing boats and fish-processing factory vessels",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "301104",
+        "description": "Construction of floating or submersible drilling platforms",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "301199",
+        "description": "Construction of other floating structures (floating docks, pontoons, coffer-dams, floating landing stages, buoys, floating tanks, barges, lighters, floating cranes, non-recreational inflatable rafts and similar structures)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "301200",
+        "description": "Building of pleasure and sporting boats",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "302001",
+        "description": "Manufacture of electric, diesel, steam and other rail locomotives including mining locomotives",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "302002",
+        "description": "Manufacture of self-propelled railway or tramway coaches, vans and trucks maintenance or service vehicles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "302003",
+        "description": "Manufacture of railway or tramway rolling stock, not self-propelled (passenger coaches, goods vans tank wagons, self-discharging vans and wagons, workshop vans, crane vans, tenders and similar articles)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "302004",
+        "description": "Manufacture of specialized parts of railway or tramway locomotives or of rolling stock (bogies, axles and wheels, brakes and parts of brakes; hooks and coupling devices, buffers and buffer parts; shock absorbers; wagon and locomotive frames; bodies; corridor connections and similar articles)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "302005",
+        "description": "Manufacture of mechanical and electro-mechanical signalling safety and traffic control equipment for railways, tramways, inland waterways, roads, parking facilities, airfields and similar",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "302099",
+        "description": "Manufacture of railway locomotives and rolling stock n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303001",
+        "description": "Manufacture of airplanes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303002",
+        "description": "Manufacture of helicopters",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303003",
+        "description": "Manufacture of gliders, hang-gliders, dirigibles and hot air balloons and other non-powered aircraft",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303004",
+        "description": "Manufacture of Launch Vehicles, Re-usable launch vehicles, Satellites, Crew Module & Service Module, Space Stations, Inter-palnetary orbiter, lander & rover.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303005",
+        "description": "Intercontinental ballistic (ICBM) and similar missiles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303006",
+        "description": "Manufacture of parts and accessories of Aircrafts and Space Crafts of this class (major assemblies such as fuselages, wings, doors, control surfaces, landing gear, fuel tanks, nacelles, airscrews, helicopter rotors and propelled rotor blades, motors and engines of a kind typically found on aircraft, parts of turbojets and turbopropellers for aircraft, aircraft seat)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303007",
+        "description": "Manufacture of systems of Space Crafts (Structures, Propulsion Systems, TTC & BB Systems, Navigation Guidence and Control Systems, Power Systems, Mechanism Systems, Thermal systems, Optical, Communication, Navigation Payloads and any other systems as a part of space craft)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303008",
+        "description": "Manufacturers of the accessories and systems of the Launch Vehicle and orbital station(Avionics Systems, Structurers, Engines, Propulsion Systems, Environmental & Life Support System and any other systems as a part of Launch Vehicle)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303009",
+        "description": "Manufacture of drones, Unmanned Aerial Vehicles (UAVs), excluding drones used in agriculture and forestry, drones for recreational purposes",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "303099",
+        "description": "Manufacture of air and spacecraft and related machinery n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309101",
+        "description": "Manufacture of motorcycles, scooters, mopeds and similar transportation equipments (Including electric scooters, motorcycles and mopeds)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309102",
+        "description": "Manufacture of three-wheelers (including electric three-wheelers)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309103",
+        "description": "Manufacture of engines for two and three wheelers",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309104",
+        "description": "Manufacture of parts and accessories for motorcycles and three-wheelers such as brakes, gear boxes, clutches, road wheels, silencers and exhaust pipes, and parts thereof, including side cars",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309201",
+        "description": "Manufacture of non-motorized bicycles and other cycles such as e-bicyles, including cycle- rickshaws, tricycles, tandems, children’s bicycles and tricycles (excluding those where the primary component is plastic), baby carriages also with an auxiliary electric motor",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309202",
+        "description": "Manufacture of invalid carriages with or without motor",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309203",
+        "description": "Manufacture of parts and accessories including auxilliary electric motor for bicycles, cycle -rickshaws and invalid carriages",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309901",
+        "description": "Manufacture of transportation and handeling equipments for Spacecraft, Launch Vehicle and Orbital Station stages",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "309999",
+        "description": "Manufacture of other transport equipments n.e.c. such as pushcarts, handcarts, vehicles drawn by animals",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "310101",
+        "description": "Manufacture of furniture made of wood including of engineered wood, plyboard",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "310102",
+        "description": "Manufacture of furniture made of cane & reed and similar materials",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "310201",
+        "description": "Manufacture of furniture primarily of metal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "310202",
+        "description": "Manufacture of furniture primarily of plastic",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "310203",
+        "description": "Manufacture of mattresses and of mattress supports",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "310299",
+        "description": "Manufacture of other furniture n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321101",
+        "description": "Manufacture of jewellery of gold, silver, and other precious or base metals, metal clad with precious metals or precious or semi-precious stones, or combinations thereof",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321102",
+        "description": "Production of lab-grown diamonds and working (Cutting, polishing, finishing) of diamonds",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321103",
+        "description": "Production of precious and semi-precious stones (excluding diamond) in the worked state, including the production and working of industrial quality stones and synthetic or reconstructed precious or semi-precious stones",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321104",
+        "description": "Production of worked/ cultured pearls",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321105",
+        "description": "Manufacture of coins, including coins for use as legal tender, whether or not of precious metal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321199",
+        "description": "Manufacture of other jewellery and related articles n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "321200",
+        "description": "Manufacture of imitation jewellery and related articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "322001",
+        "description": "Manufacture of stringed instruments and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "322002",
+        "description": "Manufacture of wind instruments such as accordions, harmonium and similar instruments, mouth organs, flutes, trumpets and similar instruments and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "322003",
+        "description": "Manufacture of percussion musical instruments such as tabla, drums, dhol, mridangam and similar instruments and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "322004",
+        "description": "Manufacture of musical instruments where the sound is produced electronically and their parts",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "322099",
+        "description": "Manufacture of other musical instruments n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "323000",
+        "description": "Manufacture of sports goods",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "324001",
+        "description": "Manufacture of games, toys and dolls primarily of plastic",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "324002",
+        "description": "Manufacture of games, toys and dolls primarily of wood",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "324003",
+        "description": "Manufacture of games, toys and dolls primarily of fabric",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "324004",
+        "description": "Manufacture of games, toys and dolls primarily of metal",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "324005",
+        "description": "Manufacture of electronic games",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "324099",
+        "description": "Manufacture of other games and toys n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325001",
+        "description": "Manufacture of dental fillings and cements (except denture adhesive or cement), dental wax and other dental plaster preparations; manufacture of dental laboratory furnaces, dental instruments, artificial teeth, bridges and similar products made in dental labs",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325002",
+        "description": "Manufacture of laboratory apparatus (laboratory ultrasonic cleaning machinery, laboratory sterilizers, laboratory type distilling apparatus, laboratory centrifuges and similar apparatus)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325003",
+        "description": "Manufacture of medical, surgical, dental or veterinary furniture such as operating tables, examination tables, dentists’ chairs and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325004",
+        "description": "Manufacture of syringes, needles, catheters, cannulae and similar items",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325005",
+        "description": "Manufacture of measuring instruments such as thermometers, blood pressure gauging machines, oxymeters and similar instruments",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325006",
+        "description": "Manufacture of orthopedic and prosthetic devices",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325007",
+        "description": "Manufacture of ophthalmic goods, eyeglasses, sunglasses, lenses ground to prescription, contact lenses, safety goggles and similar goods",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325008",
+        "description": "Manufacture of surgical drapes and sterile yarns and tissue, individual protective masks (e.g., FFP2, FFP3, surgical masks)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325009",
+        "description": "Manufacture of articles for use exclusively in implants in medical, surgical, dental or veterinary sciences",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "325099",
+        "description": "Manufacture of other medical and dental instruments n.e.c.",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329001",
+        "description": "Manufacture of stationary articles such as pens and pencils of all kinds, pencil leads, date, sealing or numbering stamps, hand-operated devices for printing or embossing labels, hand printing sets, prepared inked pads, globes and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329002",
+        "description": "Manufacture of protective safety equipment (fire-resistant and protective safety clothing, linemen’s safety belts and other belts for occupational use, cork life preservers, plastics hard hats and other personal safety equipment of plastics, fire-fighting protection suits, metal safety headgear and other metal personal safety devices, gas masks (excluding face masks), ear and noise plugs and similar equipments)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329003",
+        "description": "Manufacture of umbrellas, sun-umbrellas, walking sticks, seat-stick",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329004",
+        "description": "Manufacture of articles of personal use such as cigarette lighters, electronic cigarettes, smoking pipes, combs, hair slides, scent sprays, vacuum flasks and other vacuum vessels for personal or household use, wigs, false beards, eyebrows and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329005",
+        "description": "Manufacture of brooms, mops, feather dusters and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329006",
+        "description": "Manufacture of candles, tapers and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329007",
+        "description": "Manufacture of buttons, press-fasteners, snap-fasteners, press-studs, slide fasteners and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329008",
+        "description": "Manufacture of garlands, bouquets, wreaths and floral baskets; artificial flowers, fruit and foliage and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329009",
+        "description": "Manufacture of items like bindis, scrunchies, hair clips, hair pins and similar articles",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    },
+    {
+        "nicCode": "329099",
+        "description": "Manufacture of other articles n.e.c. including all types brushes, mops, tailorsdummies, burial caskets (coffins)",
+        "sector": "MANUFACTURING",
+        "subCategory": "MANUFACTURING"
+    }
+]

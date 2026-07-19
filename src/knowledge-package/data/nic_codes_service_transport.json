@@ -1,0 +1,200 @@
+[
+  {
+    "nicCode": "491100",
+    "description": "Passenger rail transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "491201",
+    "description": "Freight Transport on rail networks",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "491202",
+    "description": "Freight transport by cable cars",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492101",
+    "description": "Transportation of urban and sub-urban passengers via scheduled routes using buses(excluding chartered bus)",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492102",
+    "description": "Transportation of urban and sub-urban passengers via scheduled routes using trains excluding metro trains",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492103",
+    "description": "Transportation of urban and sub-urban passengers via scheduled routes using underground railways or elevated railways (including Town-to-Airport or Town-to-Station Passenger Transport Rail lines) such as metro trains",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492199",
+    "description": "Other urban or suburban passenger transport n.e.c. including passenger transport by cable cars",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492201",
+    "description": "Long-Distance Bus Services",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492202",
+    "description": "Charters, excursions and other occasional coach services",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492203",
+    "description": "Taxi Operation in two-, three- and four-wheelers including in scheduled routes",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492204",
+    "description": "Operation of transportations to schools (for students) and to workplaces (for employees)",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492299",
+    "description": "Other passenger land transport n.e.c. including by non-motorised vehicles (Man- or Animal-Drawn Vehicles)",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492301",
+    "description": "Motorised road freight transport including by e- vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492302",
+    "description": "Non-motorised road freight transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "492399",
+    "description": "Other freight transport activities by road n.e.c. including renting of freight road transport vehicles with operator",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "493000",
+    "description": "Transport via pipeline",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "501101",
+    "description": "Sea and coastal ferry service",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "501102",
+    "description": "Sea and coastal water cruise, water taxis and other sight seeing boats",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "501103",
+    "description": "Sea and coastal long distance water transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "501199",
+    "description": "Other sea and coastal water transport n.e.c. including renting of pleasure boats with crew for passenger transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "501200",
+    "description": "Sea and coastal freight water transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "502101",
+    "description": "Transport of passenger via rivers, canals, lakes and other inland waterways, including inside harbours and ports",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "502102",
+    "description": "Sightseeing and Excursion inland water transport such as river cruise, water taxi, boat services",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "502103",
+    "description": "Long distance river water transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "502199",
+    "description": "Other inland passenger water transport n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "502200",
+    "description": "Inland freight water transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "511001",
+    "description": "Operation of scheduled air transportation of passengers over regular routes",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "511002",
+    "description": "Operation of charter flights for passengers",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "511003",
+    "description": "Helicopter services",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "511004",
+    "description": "Rental of air transport equipment with operator for the purpose of passenger transportation",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "511099",
+    "description": "Operation of Passenger air transport n.e.c. including space tourism",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "512001",
+    "description": "Freight air transport services",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  },
+  {
+    "nicCode": "512002",
+    "description": "Launching of space craft, satellites and space vehicles and space transport",
+    "sector": "SERVICE",
+    "subCategory": "TRANSPORT"
+  }
+]

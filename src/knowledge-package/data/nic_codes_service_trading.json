@@ -1,0 +1,134 @@
+[
+  {
+    "nicCode": "461001",
+    "description": "Activities of commission agents, brokers dealing in wholesale trade of agricultural raw material and live animals",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466101",
+    "description": "Wholesale of new vehicles (passenger motor vehicles, ambulances, minibuses, jeeps, trucks, trailers and semi-trailers)",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466102",
+    "description": "Wholesale of used motor vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466201",
+    "description": "Wholesale of batteries and accumulators for motor vehicles excluding for motor cycles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466202",
+    "description": "Wholesale of new tyres excluding for motor cycles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466299",
+    "description": "Wholesale of motor vehicle parts and accessories n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466301",
+    "description": "Wholesale of new and used motorcycles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466302",
+    "description": "Wholesale of batteries and accumulators for motor cyles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466303",
+    "description": "Wholesale of new and used tyres for motor cycles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "466399",
+    "description": "Wholesale of motor cycles parts and accessories n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "472106",
+    "description": "Retail sale of fish and seafood",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478101",
+    "description": "Retail sale of new passenger cars (four wheelers) including electric four wheelers",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478102",
+    "description": "Retail sale of new heavy commercial vehicles for passenger and freight transport such as buses, vans and coaches including electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478103",
+    "description": "Retail sale of new motorized three-wheelers including electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478104",
+    "description": "Retail sale of used motor vehicles including three-wheelers",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478199",
+    "description": "Retail sale of other motor vehicles n.e.c.",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478201",
+    "description": "Retail sale of new parts, equipment and accessories for motor vehicles including those for electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478202",
+    "description": "Retail sale of used parts, equipment and accessories for motor vehicles including those for electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478301",
+    "description": "Retail sale of new motorcycles, scooters and mopeds including electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478302",
+    "description": "Retail sale of new parts and accessories for motorcycles, scooters and mopeds",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478303",
+    "description": "Retail sale of used motorcycles, scooters and mopeds including electric vehicles",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  },
+  {
+    "nicCode": "478304",
+    "description": "Retail sale of used parts and accessories for motorcycles, scooters and mopeds",
+    "sector": "SERVICE",
+    "subCategory": "TRADING"
+  }
+]
