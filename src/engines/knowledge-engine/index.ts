@@ -268,7 +268,10 @@ function getSynonymMap(): Map<string, string> {
 // ── Helper: Extract 2-digit NIC prefix ───────────────────────────────────────
 
 function extractNicPrefix(nicCode: string): string {
-  return nicCode.replace(/[^0-9]/g, "").substring(0, 2);
+  const digits = nicCode.replace(/[^0-9]/g, "");
+  // Knowledge datasets use 4-digit keys (e.g. "1010", "1410")
+  // Fall back to 2-digit if the code is shorter
+  return digits.length >= 4 ? digits.substring(0, 4) : digits.substring(0, 2);
 }
 
 // ── Helper: Fuzzy match score (0–1) ──────────────────────────────────────────
@@ -571,11 +574,15 @@ export function isOnNegativeList(nicCode: string): NegativeListEntry | null {
   const data = negativeListData as { excludedActivities: Array<{ nicCode: string; description: string; reason: string }> };
 
   // Exact NIC code match
-  const exact = data.excludedActivities.find(e => e.nicCode === nicCode);
+  const exact = data.excludedActivities.find(
+    (e) => e.nicCode && e.nicCode === nicCode
+  );
   if (exact) return exact;
 
-  // 2-digit prefix match
-  const prefixMatch = data.excludedActivities.find(e => e.nicCode.startsWith(prefix));
+  // 4-digit prefix match
+  const prefixMatch = data.excludedActivities.find(
+    (e) => e.nicCode && e.nicCode.startsWith(prefix)
+  );
   if (prefixMatch) return prefixMatch;
 
   return null;
