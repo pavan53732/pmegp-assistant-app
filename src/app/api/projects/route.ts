@@ -1,17 +1,9 @@
-import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { getProjectRepository } from "@/database/project-repository";
 
 export async function GET() {
-  const projects = await db.project.findMany({
-    orderBy: { updatedAt: "desc" },
-    select: {
-      id: true,
-      name: true,
-      status: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  const repo = getProjectRepository();
+  const projects = await repo.list();
 
   return NextResponse.json({ projects });
 }

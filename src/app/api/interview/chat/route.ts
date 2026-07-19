@@ -2,14 +2,15 @@
 // Processes a user message and returns the AI response.
 //
 // Request:  { projectId: string; message: string }
-// Response: { success: boolean; message: ChatMessage; profile: ProjectProfile; state: InterviewState }
+// Response: { success: boolean; data: { message, profile, state } }
 //
 // Uses InterviewController (one instance per request) to process messages.
 // ───────────────────────────────────────────────────────────────────────────────
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { InterviewController } from "@/features/ai/interview/orchestrator";
 import { getProjectRepository } from "@/database/project-repository";
+import { apiError, apiSuccess } from "@/app/api/error-handler";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,27 +18,18 @@ export async function POST(request: NextRequest) {
     const { projectId, message } = body;
 
     if (!projectId || typeof projectId !== "string") {
-      return NextResponse.json(
-        { success: false, error: "projectId is required." },
-        { status: 400 }
-      );
+      return apiError("projectId is required.", 400);
     }
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
-      return NextResponse.json(
-        { success: false, error: "message is required." },
-        { status: 400 }
-      );
+      return apiError("message is required.", 400);
     }
 
     // Verify project exists
     const repo = getProjectRepository();
     const project = await repo.getById(projectId);
     if (!project) {
-      return NextResponse.json(
-        { success: false, error: "Project not found." },
-        { status: 404 }
-      );
+      return apiError("Project not found.", 404);
     }
 
     // Create a controller per request (server-side, stateless)
@@ -60,8 +52,7 @@ export async function POST(request: NextRequest) {
       await repo.updateProfile(projectId, updatedProfile);
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       message: aiMessage,
       profile: updatedProfile,
       state,
@@ -69,9 +60,6 @@ export async function POST(request: NextRequest) {
   } catch (err) {
     console.error("[/api/interview/chat] Error:", err);
     const errorMessage = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    return apiError(errorMessage, 500);
   }
 }

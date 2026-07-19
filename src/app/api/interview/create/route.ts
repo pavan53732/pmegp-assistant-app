@@ -3,11 +3,12 @@
 // The client can then start the interview via /api/interview/chat.
 //
 // Request:  { name: string }
-// Response: { projectId: string }
+// Response: { success: true, data: { projectId: string } }
 // ───────────────────────────────────────────────────────────────────────────────
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { getProjectRepository } from "@/database/project-repository";
+import { apiError, apiSuccess } from "@/app/api/error-handler";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,24 +16,15 @@ export async function POST(request: NextRequest) {
     const { name } = body;
 
     if (!name || typeof name !== "string" || name.trim().length === 0) {
-      return NextResponse.json(
-        { success: false, error: "Project name is required." },
-        { status: 400 }
-      );
+      return apiError("Project name is required.", 400);
     }
 
     const repo = getProjectRepository();
     const project = await repo.create(name.trim());
 
-    return NextResponse.json({
-      success: true,
-      projectId: project.id,
-    });
+    return apiSuccess({ projectId: project.id });
   } catch (err) {
     console.error("[/api/interview/create] Error:", err);
-    return NextResponse.json(
-      { success: false, error: "Failed to create project." },
-      { status: 500 }
-    );
+    return apiError("Failed to create project.", 500);
   }
 }
