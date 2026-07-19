@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// A user's PMEGP project. All profile data is stored as serialized JSON
+/// in profileData, provenanceData, and completionData. The flat-column
+/// approach was a pre-architecture artifact and has been removed.
+///
+/// Status follows the 9-state machine from doc 16 §11:
+///   EMPTY → PARTIAL → DISCOVERING → COMPLETE → REVIEW_PENDING
+///   → VALIDATED → ELIGIBILITY_READY → FINANCIAL_READY → DPR_READY
+model Project {
+  id             String   @id @default(cuid())
+  name           String
+  /// 9-state machine: EMPTY, PARTIAL, DISCOVERING, COMPLETE,
+  /// REVIEW_PENDING, VALIDATED, ELIGIBILITY_READY, FINANCIAL_READY, DPR_READY
+  status         String   @default("EMPTY")
+  /// Full ProjectProfile serialized as JSON text.
+  profileData    String   @default("{}")
+  /// ProvenanceMetadata serialized as JSON text.
+  provenanceData String   @default("{}")
+  /// Completion metadata serialized as JSON text.
+  completionData String   @default("{}")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  financials     ProjectFinancials?
+}
+
+/// Engine output snapshot — produced by the Financial Engine.
+/// Stored separately from the profile per doc 16 §2.3 (engines never
+/// write to the profile; their outputs are snapshotted here).
+model ProjectFinancials {
+  id                  String  @id @default(cuid())
+  projectId           String  @unique
+  /// In rupees (integer, never float).
+  totalProjectCost    Int
+  ownContribution     Int
+  subsidyAmount       Int
+  bankTermLoan        Int
+  bankWorkingCapital  Int
+  subsidyRate         Float
+  /// Monthly EMI in rupees.
+  emi                 Int
+  totalInterest       Int
+  totalRepayment      Int
+  dscr                Float?
+  breakEvenPercent    Float?
+  annualRevenue       Int
+  annualExpenditure   Int
+  annualNetProfit     Int
+  project             Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+/// AI provider configuration. The API key is stored encrypted and
+/// never written to logs, never included in exports, never sent
+/// anywhere except directly to the user-configured endpoint.
+model AiProviderConfig {
+  id        String   @id @default(cuid())
+  baseUrl   String
+  modelName String
+  apiKey    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
