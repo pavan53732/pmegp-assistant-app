@@ -1,0 +1,1380 @@
+     1→# 16 — AI Interview & Project Discovery Architecture
+     2→
+     3→Status: draft for review · No application code until architecture docs are approved
+     4→Related: [01-system-architecture.md](01-system-architecture.md) · [03-data-model.md](03-data-model.md) · [04-ai-architecture.md](04-ai-architecture.md) · [09-knowledge-package.md](09-knowledge-package.md) · [15-application-workflows.md](15-application-workflows.md) · [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md)
+     5→
+     6→---
+     7→
+     8→## 1. Purpose
+     9→
+    10→This document specifies **how the AI interview builds a project** — the one architectural gap left open by the existing documentation set.
+    11→
+    12→The interview is the **first touchpoint** between the beneficiary and the application. Everything downstream — the Validation Engine, Eligibility Engine, Financial Engine, DPR Engine, and PDF Engine — consumes the same object: the **Structured Project Profile**. This document defines that object, the reasoning pipeline that constructs it, the phases the interview progresses through, the role of the Knowledge Package in assisting beneficiaries who cannot answer technical questions, and the confidence and suggestion models that track provenance for every field.
+    13→
+    14→This document sits between the user and the Validation Engine in the pipeline:
+    15→
+    16→```
+    17→User
+    18→  ↓
+    19→AI Interview (this document)
+    20→  ↓
+    21→Structured Project Profile (Section 2)
+    22→  ↓
+    23→Validation Engine (doc 05 of doc 04 §5, doc 15 §2)
+    24→```
+    25→
+    26→**No application code should be written until this document is reviewed and approved.**
+    27→
+    28→---
+    29→
+    30→## 2. The Structured Project Profile (canonical schema)
+    31→
+    32→The Structured Project Profile is the **single data contract** between the interview layer and every downstream engine. Both the AI interview and the guided forms produce an identical instance of this object. Downstream engines consume only this object — never raw conversation messages, never partial AI outputs, never form state.
+    33→
+    34→The profile is a **typed, Zod-validated** object. The canonical type definition lives in `shared/types/project-profile.ts`. The shape below is the **specification** — implementation will mirror it exactly.
+    35→
+    36→### 2.1 Schema overview
+    37→
+    38→```
+    39→ProjectProfile {
+    40→  // ── APPLICANT ──────────────────────────────────────────────
+    41→  applicant: {
+    42→    name:                   string
+    43→    age:                    number
+    44→    gender:                 "MALE" | "FEMALE" | "OTHER"
+    45→    category:               "GEN" | "SC" | "ST" | "OBC" | "MINORITY"
+    46→                            | "EX_SERVICEMEN" | "PH" | "NER"
+    47→    isWomen:                boolean        // derived from gender; stored for subsidy calc
+    48→    phone?:                 string
+    49→    email?:                 string
+    50→    education:              "NONE" | "BELOW_8TH" | "8TH_PASS" | "10TH_PASS"
+    51→                            | "12TH_PASS" | "GRADUATE" | "POST_GRADUATE" | "PROFESSIONAL"
+    52→                            | "OTHER"
+    53→    educationDetail?:       string         // free text if OTHER
+    54→    entityType:             "INDIVIDUAL" | "SHG" | "TRUST" | "SOCIETY"
+    55→                            | "COOP" | "PARTNERSHIP" | "LLP" | "PRIVATE_LIMITED"
+    56→    entityRegistrationNo?:  string
+    57→    aadhaarNo?:             string         // stored encrypted, masked in logs/prompts
+    58→    panNo?:                 string
+    59→    priorSubsidy:           boolean        // availed PMEGP/PMRY/other govt subsidy?
+    60→    priorSubsidyDetail?:    string
+    61→    edpCompleted:           boolean        // EDP training done?
+    62→    edpCertificateNo?:      string
+    63→    experienceYears?:       number
+    64→    experienceDetail?:      string
+    65→  }
+    66→
+    67→  // ── BUSINESS ───────────────────────────────────────────────
+    68→  business: {
+    69→    name:                   string         // proposed unit/project name
+    70→    description:            string         // what the beneficiary wants to do, in their words
+    71→    activityType:           "MANUFACTURING" | "SERVICE"  // fixed after activity resolution
+    72→    nicCode:                string?        // 6-digit NIC code — fixed after activity resolution
+    73→    nicDescription:         string?        // human-readable NIC label — fixed after activity resolution
+    74→    sector:                 "MANUFACTURING" | "SERVICE"  // derived from NIC; fixed after activity resolution
+    75→    subCategory:            "MANUFACTURING" | "SERVICE" | "TRADING" | "TRANSPORT"
+    76→                                           // derived from NIC; fixed after activity resolution
+    77→  }
+    78→
+    79→  // ── LOCATION ───────────────────────────────────────────────
+    80→  location: {
+    81→    state:                  string
+    82→    district:               string
+    83→    mandal?:                string
+    84→    village?:               string
+    85→    pinCode?:               string
+    86→    area:                   "URBAN" | "RURAL"
+    87→    premisesAddress?:       string
+    88→    isHillBorderArea:       boolean        // Hill & Border Area (affects subsidy categorization)
+    89→    isAspirationalDistrict: boolean        // Aspirational District
+    90→    industrialAreaName?:    string
+    91→    industrialAreaType?:    "INDUSTRIAL_ESTATE" | "SEZ" | "CLUSTER"
+    92→                          | "DAC" | "OTHER" | null
+    93→  }
+    94→
+    95→  // ── LAND ───────────────────────────────────────────────────
+    96→  land: {
+    97→    status:                 "OWN" | "RENTED" | "LEASED" | "NONE" | "FAMILY"
+    98→    areaSqFt?:              number
+    99→    areaSqMt?:              number
+   100→    ownedLandValue?:        number         // in rupees (for project cost)
+   101→    monthlyRent?:           number         // in rupees
+   102→    leaseAmount?:           number
+   103→    leaseYears?:            number
+   104→    buildingType?:          "OWN" | "RENTED" | "CONSTRUCT"
+   105→    buildingAreaSqFt?:      number
+   106→    constructionCost?:      number         // in rupees (for project cost)
+   107→  }
+   108→
+   109→  // ── CAPACITY & PRODUCTION ──────────────────────────────────
+   110→  capacity: {
+   111→    installedCapacity: {
+   112→      unit:                 string         // e.g., "kg/month", "units/month", "litres/day"
+   113→      value:                number
+   114→    }
+   115→    projectedCapacityUtil:  number         // percentage, typically 60-80%
+   116→    workingDaysPerMonth:    number         // typically 25-26
+   117→    workingHoursPerDay:     number         // typically 8
+   118→    shifts:                 number         // 1, 2, or 3
+   119→  }
+   120→
+   121→  // ── MACHINERY & EQUIPMENT ──────────────────────────────────
+   122→  machinery: {
+   123→    items:                  MachineryItem[]
+   124→    totalCost:              number         // in rupees — sum of items, authoritative for project cost
+   125→  }
+   126→
+   127→  MachineryItem {
+   128→    name:                   string
+   129→    specification?:         string
+   130→    quantity:               number
+   131→    unitCost:               number         // in rupees
+   132→    totalCost:              number         // quantity × unitCost
+   133→    supplier?:              string
+   134→    quotationRef?:          string         // links to attachment if OCR'd quotation exists
+   135→    source:                 "USER_ENTERED" | "AI_EXTRACTED" | "KNOWLEDGE_SUGGESTED"
+   136→                            | "OCR_EXTRACTED"
+   137→  }
+   138→
+   139→  // ── RAW MATERIALS ──────────────────────────────────────────
+   140→  rawMaterials: {
+   141→    items:                  RawMaterialItem[]
+   142→    totalMonthlyCost:       number         // in rupees — sum of items
+   143→  }
+   144→
+   145→  RawMaterialItem {
+   146→    name:                   string
+   147→    specification?:         string
+   148→    monthlyQuantity:        number
+   149→    unit:                   string
+   150→    unitRate:               number         // in rupees
+   151→    totalMonthlyCost:       number         // quantity × unitRate
+   152→    source:                 "USER_ENTERED" | "AI_EXTRACTED" | "KNOWLEDGE_SUGGESTED"
+   153→                            | "OCR_EXTRACTED"
+   154→  }
+   155→
+   156→  // ── EMPLOYEES ──────────────────────────────────────────────
+   157→  employees: {
+   158→    skilled: {
+   159→      male:                 number
+   160→      female:               number
+   161→      monthlyWagePerPerson: number
+   162→    }
+   163→    unskilled: {
+   164→      male:                 number
+   165→      female:               number
+   166→      monthlyWagePerPerson: number
+   167→    }
+   168→    administrative: {
+   169→      count:                number
+   170→      monthlyWagePerPerson: number
+   171→    }
+   172→    totalMonthlyWages:      number         // computed sum
+   173→    totalEmployment:        number         // total persons
+   174→  }
+   175→
+   176→  // ── UTILITIES & OVERHEADS ──────────────────────────────────
+   177→  utilities: {
+   178→    monthlyPowerCost:       number         // in rupees
+   179→    monthlyWaterCost:       number
+   180→    monthlyRentCost:        number
+   181→    monthlyMaintenanceCost: number
+   182→    monthlyTransportCost:   number
+   183→    monthlyCommunicationCost: number
+   184→    monthlyInsuranceCost:   number
+   185→    monthlyMiscCost:        number
+   186→    totalMonthlyOverheads:  number         // computed sum
+   187→  }
+   188→
+   189→  // ── FINANCIAL ASSUMPTIONS ──────────────────────────────────
+   190→  financials: {
+   191→    machineryAndEquipment:  number         // in rupees — alias for machinery.totalCost
+   192→    otherFixedAssets:       number         // in rupees
+   193→    preOperativeExpenses:   number         // in rupees
+   194→    buildingAndCivilWorks:  number         // in rupees
+   195→    totalFixedCapital:      number         // computed sum of above
+   196→    workingCapital:         number         // in rupees
+   197→    totalProjectCost:       number         // fixedCapital + workingCapital
+   198→    interestRate:           number         // annual % (user-provided or Knowledge Package default)
+   199→    loanTenureYears:        number
+   200→    repaymentMoratoriumMonths: number      // typically 6
+   201→    collateralOffered?:     string
+   202→    projectedMonthlySales:  number         // in rupees
+   203→  }
+   204→
+   205→  // ── WORKING CAPITAL BREAKDOWN ──────────────────────────────
+   206→  workingCapitalDetail: {
+   207→    rawMaterialDays:        number         // typically 30-45 days
+   208→    workInProgressDays:     number         // typically 7-15 days
+   209→    finishedGoodsDays:      number         // typically 15-30 days
+   210→    creditorsDays:          number         // typically 15-30 days
+   211→    computedWorkingCapital: number?        // days-based calculation result, in rupees
+   212→    method:                 "USER_PROVIDED" | "DAYS_BASED" | "PERCENTAGE_OF_PROJECT_COST"
+   213→  }
+   214→
+   215→  // ── MARKET ─────────────────────────────────────────────────
+   216→  market: {
+   217→    targetMarket:           string         // description of target customers/area
+   218→    marketDemand?:          string         // demand assessment
+   219→    competition?:           string
+   220→    marketingStrategy?:     string
+   221→    sellingPricePerUnit?:   number
+   222→    sellingPriceUnit?:      string
+   223→  }
+   224→
+   225→  // ── QUOTATIONS & ATTACHMENTS ───────────────────────────────
+   226→  attachments: {
+   227→    items:                  AttachmentRef[]
+   228→  }
+   229→
+   230→  AttachmentRef {
+   231→    id:                     string
+   232→    type:                   "QUOTATION" | "IDENTITY_PROOF" | "ADDRESS_PROOF"
+   233→                            | "LAND_DOCUMENT" | "EDP_CERTIFICATE" | "OTHER"
+   234→    fileName:               string
+   235→    ocrExtractedFields?:    Record<string, string>   // from OCR engine
+   236→    linkedMachineryIndex?:  number         // index into machinery.items[]
+   237→    status:                 "PENDING_REVIEW" | "CONFIRMED" | "REJECTED"
+   238→  }
+   239→
+   240→  // ── VALIDATION METADATA ────────────────────────────────────
+   241→  validation: {
+   242→    completeness:           number         // 0–100, computed by Validation Engine
+   243→    missingFields:          string[]       // mandatory fields not yet filled
+   244→    errors:                 ValidationError[]
+   245→    contradictions:         Contradiction[]
+   246→  }
+   247→
+   248→  ValidationError {
+   249→    fieldPath:              string         // e.g., "applicant.age"
+   250→    code:                   string         // e.g., "TOO_LOW", "INVALID_FORMAT"
+   251→    message:                string
+   252→  }
+   253→
+   254→  Contradiction {
+   255→    fields:                 string[]       // e.g., ["land.status", "land.ownedLandValue"]
+   256→    description:            string
+   257→  }
+   258→
+   259→  // ── CONFIDENCE METADATA ────────────────────────────────────
+   260→  confidence: {
+   261→    perField:               Record<string, FieldConfidence>
+   262→    aggregate:              number         // 0–1, weighted average of confirmed fields
+   263→  }
+   264→
+   265→  FieldConfidence {
+   266→    status:                 "MISSING" | "USER_ENTERED" | "AI_EXTRACTED"
+   267→                            | "OCR_EXTRACTED" | "KNOWLEDGE_SUGGESTED" | "USER_CONFIRMED"
+   268→    source:                 string         // which interaction produced this value
+   269→    confirmedAt?:           string         // ISO timestamp of user confirmation
+   270→    extractConfidence?:     number         // 0–1, from AI/OCR extraction confidence
+   271→  }
+   272→
+   273→  // ── COMPLETION METADATA ────────────────────────────────────
+   274→  completion: {
+   275→    currentPhase:           InterviewPhase // which interview phase is active
+   276→    phaseProgress:          Record<InterviewPhase, PhaseProgress>
+   277→    startedAt:              string         // ISO timestamp
+   278→    lastUpdatedAt:          string         // ISO timestamp
+   279→    interactionCount:       number         // number of AI or form interactions
+   280→  }
+   281→
+   282→  PhaseProgress {
+   283→    status:                 "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED" | "NEEDS_REVIEW"
+   284→    completedFields:        number
+   285→    totalFields:            number
+   286→  }
+   287→}
+   288→
+   289→InterviewPhase =
+   290→  | "APPLICANT_DISCOVERY"
+   291→  | "BUSINESS_DISCOVERY"
+   292→  | "ACTIVITY_RESOLUTION"
+   293→  | "PROJECT_SIZING"
+   294→  | "FINANCIAL_PLANNING"
+   295→  | "REVIEW"
+   296→  | "VALIDATION_COMPLETION"
+   297→```
+   298→
+   299→### 2.2 Design rules for the profile
+   300→
+   301→1. **Every downstream engine consumes this object.** The Eligibility Engine, Financial Engine, DPR Engine, and PDF Engine all receive (a subset of) the `ProjectProfile` as their primary input. None reads conversation history, form state, or partial data.
+   302→
+   303→2. **Money is never stored as floating point.** All rupee amounts are integers (whole rupees or paise — decided at implementation, recorded in [05-financial-engine.md](05-financial-engine.md)). The Financial Engine consumes integer values and returns integer values.
+   304→
+   305→3. **The profile is the output of the interview, not the interview itself.** Conversation messages, UI state, and the question-selection logic live in `features/ai/` — they are not part of the profile.
+   306→
+   307→4. **Optional fields (`?`) vs mandatory fields.** The Validation Engine defines which fields are mandatory for the profile to be considered complete. The schema itself allows `?` for fields that may be unknown or inapplicable — the Validation Engine enforces the business rules.
+   308→
+   309→5. **The profile is immutable during a single engine run.** An engine receives a snapshot of the profile; it does not observe mid-interview mutations.
+   310→
+   311→6. **Both interaction models produce the same type.** There is no `AiProjectProfile` vs `FormProjectProfile`. The Zod schema that validates the AI interview output is the same Zod schema that validates the guided forms.
+   312→
+   313→---
+   314→
+   315→## 3. The AI Reasoning Pipeline
+   316→
+   317→Every user message during the AI interview triggers a **deterministic, multi-stage reasoning pipeline** inside `features/ai/`. This pipeline is **orchestration code** — it lives in the feature layer, not in any engine, not in the AI provider. The AI model is called at specific stages; the rest is deterministic logic.
+   318→
+   319→### 3.1 Pipeline stages
+   320→
+   321→```
+   322→User message received
+   323→  │
+   324→  ▼
+   325→┌──────────────────────────────────────────────────────────────────┐
+   326→│ STAGE 1 — Response Parsing                                       │
+   327→│                                                                  │
+   328→│ Parse the raw user message into a structured intermediate         │
+   329→│ representation. This is NOT field extraction — it is parsing the  │
+   330→│ user's intent and content into a form the next stages can        │
+   331→│ process.                                                         │
+   332→│                                                                  │
+   333→│ Responsibilities:                                                │
+   334→│ • Detect if the user is answering a question, asking a           │
+   335→│   question, correcting a previous answer, or requesting          │
+   336→│   navigation (e.g., "go back", "show me what you have").         │
+   337→│ • Detect "I don't know" / uncertain responses.                   │
+   338→│ • Detect corrections and contradictions with previous answers.    │
+   339→│ • Detect when the user provides information for a field not      │
+   340→│   currently being asked about (opportunistic extraction).        │
+   341→│ Output: ParsedUserResponse { intent, content, targetField?,      │
+   342→│         uncertainty, corrections? }                               │
+   343→└───────────────────────────┬──────────────────────────────────────┘
+   344→                            │
+   345→                            ▼
+   346→┌──────────────────────────────────────────────────────────────────┐
+   347→│ STAGE 2 — Structured Field Extraction                            │
+   348→│                                                                  │
+   349→│ Extract structured field values from the parsed response.         │
+   350→│ This is the stage where the AI model is called to map natural    │
+   351→│ language to profile fields.                                      │
+   352→│                                                                  │
+   353→│ Responsibilities:                                                │
+   354→│ • Map user's natural-language answer to one or more              │
+   355→│   ProjectProfile fields.                                         │
+   356→│ • Handle partial answers (e.g., "about 5 lakhs" → 500000 with    │
+   357→│   low extraction confidence).                                     │
+   358→│ • Handle multi-field answers (e.g., "I'm 32, from Anantapur,    │
+   359→│   SC category" → three fields extracted).                         │
+   360→│ • When the user says "I don't know" or gives an uncertain        │
+   361→│   answer, produce no extraction — flag the field for suggestion   │
+   362→│   (Stage 6).                                                     │
+   363→│ • All extractions carry a confidence score (0–1).                 │
+   364→│                                                                  │
+   365→│ AI is called here. The AI receives the conversation context and   │
+   366→│ the current profile state, and returns structured field           │
+   367→│ extractions with confidence.                                     │
+   368→│                                                                  │
+   369→│ Output: FieldExtraction[] { fieldPath, value, confidence,         │
+   370→│         source: "AI_EXTRACTED" }                                  │
+   371→└───────────────────────────┬──────────────────────────────────────┘
+   372→                            │
+   373→                            ▼
+   374→┌──────────────────────────────────────────────────────────────────┐
+   375→│ STAGE 3 — Profile Update                                         │
+   376→│                                                                  │
+   377→│ Apply extracted fields to the in-memory Structured Project        │
+   378→│ Profile.                                                         │
+   379→│                                                                  │
+   380→│ Responsibilities:                                                │
+   381→│ • Apply each FieldExtraction to the profile.                     │
+   382→│ • If a field already has a value and the user is correcting it,  │
+   383→│   update the value and mark as USER_ENTERED.                     │
+   384→│ • If the AI extracted a value but confidence is below threshold,  │
+   385→│   do NOT apply to the profile — instead, present it as a         │
+   386→│   suggestion for user confirmation (see Section 8).               │
+   387→│ • Track provenance: every applied field gets a FieldConfidence   │
+   388→│   entry with status and source.                                  │
+   389→│ • Trigger derived-field updates (e.g., if gender changes,         │
+   390→│   re-derive isWomen).                                            │
+   391→│ Output: Updated ProjectProfile                                   │
+   392→└───────────────────────────┬──────────────────────────────────────┘
+   393→                            │
+   394→                            ▼
+   395→┌──────────────────────────────────────────────────────────────────┐
+   396→│ STAGE 4 — Validation                                             │
+   397→│                                                                  │
+   398→│ Run the Validation Engine against the updated profile.           │
+   399→│                                                                  │
+   400→│ Responsibilities:                                                │
+   401→│ • Compute completeness percentage.                               │
+   402→│ • Identify missing mandatory fields.                             │
+   403→│ • Run Zod and business-rule validation on all populated fields.  │
+   404→│ • Detect contradictions between fields.                          │
+   405→│ • Update confidence metadata.                                    │
+   406→│                                                                  │
+   407→│ This calls engines/validation-engine — a pure, deterministic,    │
+   408→│ independently testable engine. The AI is NOT involved here.      │
+   409→│                                                                  │
+   410→│ Output: ValidationState { completeness, missingFields,           │
+   411→│         errors, contradictions, updated confidence }             │
+   412→└───────────────────────────┬──────────────────────────────────────┘
+   413→                            │
+   414→                            ▼
+   415→┌──────────────────────────────────────────────────────────────────┐
+   416→│ STAGE 5 — Dependency Evaluation                                 │
+   417→│                                                                  │
+   418→│ Evaluate the field dependency graph (see Section 7) to           │
+   419→│ determine what downstream fields are now answerable or need      │
+   420→│ revision.                                                        │
+   421→│                                                                  │
+   422→│ Responsibilities:                                                │
+   423→│ • When a field changes, check which other fields depend on it    │
+   424→│   (e.g., NIC code fixed → sector fixed → cost ceiling known).   │
+   425→│ • If a dependency change invalidates a previously-set field,      │
+   426→│   flag it for re-confirmation (but do NOT silently clear it).    │
+   427→│ • Determine which interview phase we are now in based on         │
+   428→│   completed dependencies.                                        │
+   429→│ • When activity resolution completes (NIC code fixed),           │
+   430→│   trigger Knowledge Engine lookups for machinery, raw materials,  │
+   431→│   and process defaults.                                          │
+   432→│ Output: DependencyEffects { invalidatedFields, newPhase?,        │
+   433→│         knowledgeQueries? }                                       │
+   434→└───────────────────────────┬──────────────────────────────────────┘
+   435→                            │
+   436→                            ▼
+   437→┌──────────────────────────────────────────────────────────────────┐
+   438→│ STAGE 6 — Knowledge Retrieval & Suggestion Generation            │
+   439→│                                                                  │
+   440→│ Query the Knowledge Package (via Knowledge Engine) for           │
+   441→│ contextual data and suggestions.                                 │
+   442→│                                                                  │
+   443→│ Responsibilities:                                                │
+   444→│ • If the user gave an uncertain/"I don't know" answer,          │
+   445→│   query the Knowledge Package for suggested values               │
+   446→│   (machinery lists, indicative costs, raw material defaults,     │
+   447→│   wage benchmarks).                                              │
+   448→│ • If a new NIC code was fixed, retrieve associated machinery,    │
+   449→│   raw materials, process descriptions, and indicative costs.     │
+   450→│ • If the user is in PROJECT_SIZING, retrieve benchmark           │
+   451→│   project costs for similar activities.                           │
+   452→│ • Suggestions carry their source and are NEVER treated as        │
+   453→│   facts — they are presented to the user for confirmation.       │
+   454→│                                                                  │
+   455→│ This calls engines/knowledge-engine — a pure, deterministic       │
+   456→│ engine that searches the Knowledge Package data.                 │
+   457→│                                                                  │
+   458→│ Output: Suggestion[] { fieldPath, suggestedValue, source,        │
+   459→│         reasoning }                                               │
+   460→└───────────────────────────┬──────────────────────────────────────┘
+   461→                            │
+   462→                            ▼
+   463→┌──────────────────────────────────────────────────────────────────┐
+   464→│ STAGE 7 — Question Planning                                      │
+   465→│                                                                  │
+   466→│ Determine the next question the AI should ask.                   │
+   467→│                                                                  │
+   468→│ Responsibilities:                                                │
+   469→│ • Read Validation State: prioritize missing mandatory fields.     │
+   470→│ • Read dependency graph: only ask questions whose dependencies   │
+   471→│   are satisfied.                                                  │
+   472→│ • Read interview phase: follow the phase sequence (Section 4).  │
+   473→│ • If there are suggestions pending (from Stage 6), the next      │
+   474→│   "question" may be a suggestion-present-and-confirm step.       │
+   475→│ • If there are contradictions, prioritize resolving those        │
+   476→│   before collecting new fields.                                   │
+   477→│ • If validation errors exist on recently-changed fields,         │
+   478→│   present them for correction before moving on.                   │
+   479→│ • If completeness >= threshold and no blockers remain,            │
+   480→│   transition to the REVIEW or VALIDATION_COMPLETION phase.       │
+   481→│ • The planned question maps to a specific field or field group    │
+   482→│   in the ProjectProfile schema (principle 15).                   │
+   483→│                                                                  │
+   484→│ Output: PlannedQuestion { targetField, questionType,              │
+   485→│         suggestions?, context, phase }                            │
+   486→│                                                                  │
+   487→│ QuestionType = "FIELD_COLLECTION" | "SUGGESTION_CONFIRMATION"     │
+   488→│              | "CONTRADICTION_RESOLUTION" | "ERROR_CORRECTION"    │
+   489→│              | "PHASE_TRANSITION" | "REVIEW"                      │
+   490→└───────────────────────────┬──────────────────────────────────────┘
+   491→                            │
+   492→                            ▼
+   493→┌──────────────────────────────────────────────────────────────────┐
+   494→│ STAGE 8 — Natural-Language Response Generation                   │
+   495→│                                                                  │
+   496→│ Convert the planned question (and any suggestions, validation    │
+   497→│ feedback, or context) into a natural-language response to the    │
+   498→│ user.                                                            │
+   499→│                                                                  │
+   500→│ Responsibilities:                                                │
+   501→│ • Generate a conversational question that maps to the planned    │
+   502→│   target field(s).                                               │
+   503→│ • If suggestions exist, present them with clear labeling:         │
+   504→│   "Based on similar [activity] units, typical machinery includes  │
+   505→│   X, Y, Z. Would you like to use these or add your own?"         │
+   506→│ • If there are validation errors, explain them in user-friendly   │
+   507→│   language.                                                      │
+   508→│ • If transitioning phases, provide a brief summary of what was    │
+   509→│   collected and what comes next.                                  │
+   510→│ • Maintain conversational warmth while staying focused on         │
+   511→│   schema-driven data collection.                                  │
+   512→│ • Never ask a question not mapped to the ProjectProfile schema.  │
+   513→│                                                                  │
+   514→│ AI is called here to generate the natural-language response.      │
+   515→│ The planned question provides the structure; the AI provides      │
+   516→│ the phrasing.                                                    │
+   517→│                                                                  │
+   518→│ Output: string (the message displayed to the user)                │
+   519→└──────────────────────────────────────────────────────────────────┘
+   520→```
+   521→
+   522→### 3.2 Where AI is and is not called
+   523→
+   524→| Stage | AI called? | Why |
+   525→|-------|-----------|-----|
+   526→| 1. Response Parsing | Optional | Can be rule-based for simple intents; AI for ambiguous cases |
+   527→| 2. Field Extraction | Yes | Natural language → structured fields requires language understanding |
+   528→| 3. Profile Update | No | Pure deterministic logic |
+   529→| 4. Validation | No | Validation Engine — deterministic |
+   530→| 5. Dependency Evaluation | No | Pure graph traversal |
+   531→| 6. Knowledge Retrieval | No | Knowledge Engine — deterministic search |
+   532→| 7. Question Planning | No | Pure logic reading validation state |
+   533→| 8. Response Generation | Yes | Structured plan → natural language |
+   534→
+   535→AI is called at most twice per turn (stages 2 and 8). The other six stages are deterministic and testable without any AI model.
+   536→
+   537→### 3.3 Prompt construction
+   538→
+   539→The prompts sent to the AI provider include:
+   540→
+   541→- **The system prompt** (from the Knowledge Package's `default prompt templates`).
+   542→- **The relevant portion of the ProjectProfile** — only fields relevant to the current phase and the planned question. PII is minimized; the full profile is never sent.
+   543→- **The planned question metadata** (target field, question type, suggestions).
+   544→- **Any recent conversation context** needed for coherence (last N turns, not the full history).
+   545→
+   546→PII redaction is applied before any data enters the prompt. See [13-security-and-privacy.md](13-security-and-privacy.md).
+   547→
+   548→---
+   549→
+   550→## 4. Interview Phases
+   551→
+   552→The interview is not one long, unstructured conversation. It progresses through **named phases**, each with a clear objective. Phases are sequential — a phase does not begin until the previous phase's objective is substantially met. Within a phase, the AI may ask questions in any order that feels natural, but it cannot skip ahead to fields whose dependencies are unsatisfied.
+   553→
+   554→### Phase 1 — Applicant Discovery
+   555→
+   556→**Objective:** Establish who the applicant is and their eligibility category.
+   557→
+   558→Fields collected: `applicant.name`, `applicant.age`, `applicant.gender`, `applicant.category`, `applicant.entityType`, `applicant.education`, `applicant.experienceYears`, `applicant.priorSubsidy`, `applicant.edpCompleted`.
+   559→
+   560→Exit condition: Applicant identity and category are known. Eligibility pre-checks (age, prior subsidy) can be evaluated. If the applicant is clearly ineligible (e.g., age < 18), the interview surfaces this immediately — the user is informed but not blocked from continuing (they may wish to review or adjust).
+   561→
+   562→**Why this is first:** Category and area determine subsidy rates and cost ceilings — everything downstream depends on knowing who the applicant is.
+   563→
+   564→### Phase 2 — Business Discovery
+   565→
+   566→**Objective:** Understand what the applicant wants to do, in their own words, and where.
+   567→
+   568→Fields collected: `business.description`, `business.name`, `location.state`, `location.district`, `location.area` (urban/rural), `location.mandal`, `location.village`, `location.pinCode`.
+   569→
+   570→Exit condition: A natural-language business description exists and the geographic context is established. The AI has enough to begin activity resolution.
+   571→
+   572→**Why this is second:** The business description is the input to activity resolution (Phase 3). The location determines the area classification (urban/rural) which affects subsidy rates.
+   573→
+   574→### Phase 3 — Activity Resolution
+   575→
+   576→**Objective:** Map the business description to a specific NIC code, sector, and sub-category. This is the **critical juncture** where the Knowledge Engine is most heavily involved.
+   577→
+   578→Process: See Section 6 (Activity Discovery Lifecycle) for the full specification.
+   579→
+   580→Exit condition: `business.nicCode`, `business.nicDescription`, `business.sector`, and `business.subCategory` are fixed. PMEGP rules for this sector/category/area combination are now determined.
+   581→
+   582→**Why this is third:** The NIC code determines the sector, which determines the project cost ceiling, eligible subsidy rate, and what machinery/raw materials are relevant. No financial planning can proceed without this.
+   583→
+   584→### Phase 4 — Project Sizing
+   585→
+   586→**Objective:** Determine the physical scale of the project — land, building, machinery, employees, production capacity.
+   587→
+   588→Fields collected: `land.*`, `capacity.*`, `machinery.*` (items), `employees.*`, `utilities.*`, `attachments.*` (if quotation scanning).
+   589→
+   590→Exit condition: Machinery list is populated (with at least indicative items), employee count is known, production capacity is defined, and land/building status is clear.
+   591→
+   592→**Why this is fourth:** Machinery and building costs drive the capital expenditure, which is the largest component of project cost. The Knowledge Package assists here with activity-specific machinery and raw material suggestions.
+   593→
+   594→### Phase 5 — Financial Planning
+   595→
+   596→**Objective:** Determine the financial parameters — working capital, interest rate, loan tenure, projected sales.
+   597→
+   598→Fields collected: `rawMaterials.*`, `financials.*`, `workingCapitalDetail.*`, `market.*`.
+   599→
+   600→Exit condition: Total project cost can be computed. Working capital is determined. Interest rate and tenure are set. Projected monthly sales are estimated.
+   601→
+   602→**Why this is fifth:** Financial planning requires knowing the capital expenditure (from Phase 4) to compute total project cost, working capital, and the subsidy/loan/own-contribution split.
+   603→
+   604→### Phase 6 — Review
+   605→
+   606→**Objective:** Present the complete profile to the user for review and correction. This is a human-in-the-loop checkpoint before any engine runs.
+   607→
+   608→Behavior:
+   609→- Display the structured profile in a readable, sectioned format.
+   610→- Highlight any fields with confidence < 1.0 (suggested or extracted, not user-confirmed).
+   611→- Highlight any validation warnings or soft contradictions.
+   612→- Allow the user to edit any field.
+   613→- Show a completeness summary and list of any remaining issues.
+   614→
+   615→Exit condition: The user explicitly confirms the profile is correct, or edits are applied and validation is re-run.
+   616→
+   617→**Why this exists:** The beneficiary must see and approve the data before engines produce numbers that go into a bank document. This is the last point where data quality is a human responsibility.
+   618→
+   619→### Phase 7 — Validation Completion
+   620→
+   621→**Objective:** Run the final Validation Engine check. If the profile passes (completeness at threshold, no blocking errors, no unresolved contradictions), unlock downstream engines.
+   622→
+   623→Behavior:
+   624→- The Validation Engine runs one final time.
+   625→- If blockers exist, return to the relevant phase to resolve them.
+   626→- If the profile passes, transition the project status to "validated" and unlock Eligibility → Financial → DPR engines.
+   627→- The user is informed that the project is ready for processing.
+   628→
+   629→Exit condition: Validation Engine passes. Project status becomes "validated." Downstream engines are unlocked.
+   630→
+   631→**Why this is last:** This is the gate described in Design Principle 14 and doc 04 §5. No engine runs until this passes.
+   632→
+   633→---
+   634→
+   635→## 5. Knowledge-Assisted Interview
+   636→
+   637→Most beneficiaries do not know their NIC code, what machinery they need, or what their working capital should be. They know: "I want to start a poultry farm" or "I want to buy a goods vehicle." The Knowledge Package bridges this gap.
+   638→
+   639→### 5.1 How it works
+   640→
+   641→When the beneficiary provides a business description or cannot answer a technical question, the interview orchestration queries the Knowledge Package through the Knowledge Engine:
+   642→
+   643→```
+   644→Beneficiary says: "I want to do poultry farming."
+   645→
+   646→    ↓ (features/ai/ calls Knowledge Engine)
+   647→
+   648→Knowledge Engine searches:
+   649→  • activities/NIC codes → "Poultry farming" matches NIC 0146xx
+   650→  • machinery database → "Poultry sheds, feeders, waterers, incubator..."
+   651→  • raw material database → "Feed, chicks, vaccines, medicines..."
+   652→  • financial benchmarks → "Typical project cost for 1000-bird unit: ₹X lakhs"
+   653→  • FAQ → "Common questions about poultry farming under PMEGP"
+   654→
+   655→    ↓ (Knowledge Engine returns structured results)
+   656→
+   657→Interview presents:
+   658→  "Poultry farming falls under NIC 014612 (Poultry farming). This is classified
+   659→   as a Service sector activity with a maximum project cost of ₹25 lakhs.
+   660→
+   661→   Based on similar projects, typical machinery includes:
+   662→   1. Poultry shed (2000 sq ft) — ₹3,50,000
+   663→   2. Feeders (20 units) — ₹20,000
+   664→   3. Waterers (20 units) — ₹15,000
+   665→   4. Incubator (1 unit) — ₹50,000
+   666→
+   667→   Would you like to use these as a starting point?"
+   668→
+   669→    ↓ (User confirms or edits)
+   670→
+   671→Only confirmed values enter the Structured Project Profile.
+   672→Suggestions are never treated as facts.
+   673→```
+   674→
+   675→### 5.2 Rules for knowledge assistance
+   676→
+   677→1. **Knowledge queries are initiated by the interview, not by the user.** The user does not interact with the Knowledge Engine directly. The AI interview decides when to query and what to query for.
+   678→
+   679→2. **Suggestions are presented, not applied.** Every suggestion from the Knowledge Package is shown to the user with a clear label ("Based on typical [activity] projects...") and requires explicit acceptance. See Section 10 (Suggestion Lifecycle).
+   680→
+   681→3. **The user can always override.** A suggested machinery list, raw material cost, or working capital amount is a starting point — the user can add, remove, or edit any item.
+   682→
+   683→4. **Knowledge assists; it does not decide.** The Knowledge Package does not determine eligibility, calculate subsidy, or compute financials. It provides reference data that the interview presents for human confirmation.
+   684→
+   685→5. **Knowledge queries are deterministic and offline.** The Knowledge Engine searches bundled data; no network call is required. If AI is unavailable, the guided forms present the same Knowledge Package data as pre-populated defaults in the form fields.
+   686→
+   687→---
+   688→
+   689→## 6. Activity Discovery Lifecycle
+   690→
+   691→Activity discovery is the process of mapping the beneficiary's business description to a specific NIC code, sector, and sub-category. This is a **responsibility of the Knowledge Engine** (as specified in [AGENTS.md](../AGENTS.md)) — no new engine is introduced.
+   692→
+   693→### 6.1 The lifecycle
+   694→
+   695→```
+   696→┌──────────────────────────────────────────────────────────────────┐
+   697→│ STEP 1 — Business Description Received                           │
+   698→│                                                                  │
+   699→│ The beneficiary provides a natural-language description of       │
+   700→│ what they want to do. This happens during Phase 2 (Business     │
+   701→│ Discovery) and flows into Phase 3.                              │
+   702→│                                                                  │
+   703→│ Example: "I want to start a small bakery in my village."        │
+   704→└───────────────────────────┬──────────────────────────────────────┘
+   705→                            │
+   706→                            ▼
+   707→┌──────────────────────────────────────────────────────────────────┐
+   708→│ STEP 2 — Knowledge Engine Search                                 │
+   709→│                                                                  │
+   710→│ The interview orchestration sends the business description to    │
+   711→│ the Knowledge Engine, which searches the NIC code database       │
+   712→│ using:                                                          │
+   713→│ • Exact text matching against NIC descriptions                  │
+   714→│ • Text search (fuzzy matching, keyword extraction)               │
+   715→│ • Synonym expansion (e.g., "bakery" → "bread making",           │
+   716→│   "confectionery production")                                   │
+   717→│                                                                  │
+   718→│ The Knowledge Engine returns a ranked list of candidate NIC      │
+   719→│ activities.                                                     │
+   720→└───────────────────────────┬──────────────────────────────────────┘
+   721→                            │
+   722→                            ▼
+   723→┌──────────────────────────────────────────────────────────────────┐
+   724→│ STEP 3 — Candidate NIC Activities Presented                      │
+   725→│                                                                  │
+   726→│ The interview presents the top candidates to the beneficiary:    │
+   727→│                                                                  │
+   728→│ "We found these matching activities:                            │
+   729→│  1. [10701] Manufacture of bread, cakes, pastries (Manufacturing)│
+   730→│  2. [10702] Manufacture of biscuits and cookies (Manufacturing) │
+   731→│  3. [56211] Retail sale of bread and bakery products (Service — │
+   732→│     Trading)                                                     │
+   733→│                                                                  │
+   734→│  Are you planning to manufacture bakery products, or sell them?" │
+   735→└───────────────────────────┬──────────────────────────────────────┘
+   736→                            │
+   737→                            ▼
+   738→┌──────────────────────────────────────────────────────────────────┐
+   739→│ STEP 4 — User Confirmation                                       │
+   740→│                                                                  │
+   741→│ The user selects (or clarifies) which activity matches their     │
+   742→│ intention. The user may also describe further if none of the     │
+   743→│ candidates match.                                                │
+   744→│                                                                  │
+   745→│ If no match is found, the interview asks follow-up questions     │
+   746→│ to narrow down the search (e.g., "Are you making products or     │
+   747→│ providing a service?").                                          │
+   748→└───────────────────────────┬──────────────────────────────────────┘
+   749→                            │
+   750→                            ▼
+   751→┌──────────────────────────────────────────────────────────────────┐
+   752→│ STEP 5 — NIC Code Fixed                                          │
+   753→│                                                                  │
+   754→│ Once the user confirms a NIC code:                              │
+   755→│ • business.nicCode is set                                        │
+   756→│ • business.nicDescription is set                                 │
+   757→│ • business.sector is derived from the NIC entry                  │
+   758→│ • business.subCategory is derived from the NIC entry             │
+   759→│ • business.activityType is derived (MANUFACTURING or SERVICE)    │
+   760→│                                                                  │
+   761→│ These fields are marked as USER_CONFIRMED in the confidence      │
+   762→│ metadata. They become authoritative.                             │
+   763→└───────────────────────────┬──────────────────────────────────────┘
+   764→                            │
+   765→                            ▼
+   766→┌──────────────────────────────────────────────────────────────────┐
+   767→│ STEP 6 — PMEGP Rules Determined                                  │
+   768→│                                                                  │
+   769→│ With sector and subCategory fixed, the applicable PMEGP rules    │
+   770→│ are now known:                                                   │
+   771→│ • Project cost ceiling (Manufacturing: ₹50 lakhs,                 │
+   772→│   Service: ₹25 lakhs)                                           │
+   773→│ • Subsidy rate (from category × area matrix)                     │
+   774→│ • Own-contribution percentage                                   │
+   775→│ • Eligibility criteria for this activity type                    │
+   776→│ • Negative-list check (if applicable)                            │
+   777→│                                                                  │
+   778→│ These rules are NOT stored in the profile — they are looked up   │
+   779→│ from the Knowledge Package by the engines when they run. The     │
+   780→│ profile stores only the beneficiary's data and their chosen       │
+   781→│ activity.                                                        │
+   782→└───────────────────────────┬──────────────────────────────────────┘
+   783→                            │
+   784→                            ▼
+   785→┌──────────────────────────────────────────────────────────────────┐
+   786→│ STEP 7 — Interview Continues                                      │
+   787→│                                                                  │
+   788→│ With the NIC code fixed, the interview transitions to Phase 4    │
+   789→│ (Project Sizing). The Knowledge Engine now has the context to    │
+   790→│ provide activity-specific suggestions for machinery, raw         │
+   791→│ materials, and benchmarks.                                       │
+   792→└──────────────────────────────────────────────────────────────────┘
+   793→```
+   794→
+   795→### 6.2 Ambiguity and multi-match handling
+   796→
+   797→- If multiple NIC codes match with similar relevance, the interview presents all candidates and asks the user to choose.
+   798→- If no NIC code matches, the interview asks clarifying questions (manufacturing vs service, product vs service delivery, etc.) and re-searches.
+   799→- The interview never silently assigns a NIC code. The user must confirm.
+   800→- If the beneficiary's description is too vague for any match, the interview explains what information is needed and asks follow-up questions.
+   801→
+   802→### 6.3 Trading and Transport
+   803→
+   804→Trading and Transport are not standalone sectors in PMEGP — they are sub-categories under Service. The activity discovery lifecycle handles this transparently:
+   805→
+   806→- A beneficiary saying "I want to start a general store" is matched to a Trading NIC code under the Service sector.
+   807→- A beneficiary saying "I want to buy a goods vehicle" is matched to a Transport NIC code under the Service sector.
+   808→- The sector and cost ceiling are correctly determined (Service: ₹25 lakhs) even though the activity is Trading or Transport.
+   809→- The user never needs to know this distinction — the Knowledge Engine resolves it.
+   810→
+   811→---
+   812→
+   813→## 7. Field Dependency Graph
+   814→
+   815→The interview cannot ask questions in arbitrary order. Many fields depend on other fields being known first. The dependency graph enforces this ordering.
+   816→
+   817→### 7.1 Core dependency chains
+   818→
+   819→```
+   820→applicant.category + location.area
+   821→    → subsidy rate (determined by Eligibility/Financial Engine, not stored)
+   822→
+   823→business.nicCode
+   824→    → business.sector
+   825→    → business.subCategory
+   826→    → business.activityType
+   827→    → project cost ceiling (from Knowledge Package, used by engines)
+   828→    → eligible machinery (from Knowledge Package)
+   829→    → eligible raw materials (from Knowledge Package)
+   830→
+   831→location.area
+   832→    → subsidy rate determination
+   833→
+   834→machinery.items[]
+   835→    → financials.machineryAndEquipment
+   836→    → financials.totalFixedCapital
+   837→    → financials.totalProjectCost
+   838→
+   839→land.buildingType + land.constructionCost
+   840→    → financials.buildingAndCivilWorks
+   841→    → financials.totalFixedCapital
+   842→    → financials.totalProjectCost
+   843→
+   844→rawMaterials.items[]
+   845→    → rawMaterials.totalMonthlyCost
+   846→    → working capital computation
+   847→    → financials.workingCapital
+   848→    → financials.totalProjectCost
+   849→
+   850→financials.totalProjectCost
+   851→    → financials.totalFixedCapital + financials.workingCapital
+   852→    → Eligibility Engine (cost.ceiling check)
+   853→    → Financial Engine (subsidy, loan, EMI, DSCR, P&L)
+   854→
+   855→capacity.installedCapacity + capacity.projectedCapacityUtil
+   856→    → projected monthly production
+   857→    → market.sellingPricePerUnit → projectedMonthlySales
+   858→    → Financial Engine (revenue projections)
+   859→
+   860→employees.*
+   861→    → employees.totalMonthlyWages
+   862→    → utilities + wages = operating expenses
+   863→    → Financial Engine (P&L, cash flow)
+   864→```
+   865→
+   866→### 7.2 Dependency rules for the interview
+   867→
+   868→1. **A field is only asked when all its dependencies are satisfied.** The question planner (Stage 7 of the pipeline) checks the dependency graph before selecting the next question.
+   869→
+   870→2. **If a dependency changes, dependents are flagged.** For example, if the user changes the NIC code (going back to Phase 3), all machinery, raw material, and financial data that was based on the old NIC code is flagged for review — not silently cleared.
+   871→
+   872→3. **The dependency graph is a read-only reference structure.** It is defined once (in the Knowledge Package or in `shared/types`) and consumed by the interview orchestration and the Validation Engine. It is not modified at runtime.
+   873→
+   874→4. **Dependencies flow forward only.** A field in a later phase never determines a field in an earlier phase. This ensures the interview never needs to "go back" for data — though the user can always manually navigate back to edit.
+   875→
+   876→5. **The guided wizard follows the same dependency order.** The wizard's step sequence mirrors the phase structure, and the Validation Engine's `missingFields` output respects the same dependency graph.
+   877→
+   878→---
+   879→
+   880→## 8. "I Don't Know" Strategy
+   881→
+   882→Most PMEGP beneficiaries are first-time entrepreneurs from rural areas. They often cannot answer questions about machinery costs, working capital requirements, or financial projections. The application must handle this gracefully without blocking progress or degrading the quality of the final DPR.
+   883→
+   884→### 8.1 The flow
+   885→
+   886→```
+   887→User says "I don't know" / "Mujhe nahi pata" / gives an uncertain answer
+   888→  │
+   889→  ▼
+   890→┌──────────────────────────────────────────────────────────────────┐
+   891→│ STEP 1 — Detect Uncertainty                                      │
+   892→│                                                                  │
+   893→│ Stage 1 (Response Parsing) detects the uncertainty. The field   │
+   894→│ extraction (Stage 2) produces NO extraction for this field.      │
+   895→│ The field remains in its current state (MISSING or unchanged).  │
+   896→└───────────────────────────┬──────────────────────────────────────┘
+   897→                            │
+   898→                            ▼
+   899→┌──────────────────────────────────────────────────────────────────┐
+   900→│ STEP 2 — Knowledge Package Suggestion                           │
+   901→│                                                                  │
+   902→│ Stage 6 (Knowledge Retrieval) queries the Knowledge Package      │
+   903→│ for a suggested value based on:                                 │
+   904→│ • The current NIC code / activity type                          │
+   905→│ • The beneficiary's location (district/state benchmarks)        │
+   906→│ • Activity-specific defaults from the Knowledge Package          │
+   907→│ • Financial benchmarks for similar project sizes                │
+   908→│                                                                  │
+   909→│ The Knowledge Engine returns a structured suggestion with       │
+   910→│ source attribution.                                             │
+   911→└───────────────────────────┬──────────────────────────────────────┘
+   912→                            │
+   913→                            ▼
+   914→┌──────────────────────────────────────────────────────────────────┐
+   915→│ STEP 3 — AI Explains the Suggestion                             │
+   916→│                                                                  │
+   917→│ Stage 8 (Response Generation) produces a natural-language        │
+   918→│ explanation of the suggestion:                                  │
+   919→│                                                                  │
+   920→│ "That's completely fine! For a bakery unit in a rural area,     │
+   921→│  typical machinery costs around ₹2-3 lakhs. Based on common      │
+   922→│  setups, here's what most people include:                       │
+   923→│  • Oven — ₹80,000                                                │
+   924→│  • Dough mixer — ₹45,000                                         │
+   925→│  • Display counter — ₹25,000                                     │
+   926→│                                                                  │
+   927→│  Would you like to start with these and adjust later?"           │
+   928→└───────────────────────────┬──────────────────────────────────────┘
+   929→                            │
+   930→                            ▼
+   931→┌──────────────────────────────────────────────────────────────────┐
+   932→│ STEP 4 — User Reviews and Decides                                │
+   933→│                                                                  │
+   934→│ The user has three options:                                      │
+   935→│                                                                  │
+   936→│ a) ACCEPT — The suggested value(s) are applied to the profile     │
+   937→│    with confidence status = KNOWLEDGE_SUGGESTED.                 │
+   938→│                                                                  │
+   939→│ b) EDIT — The user provides their own value, which is applied    │
+   940→│    with confidence status = USER_ENTERED.                        │
+   941→│                                                                  │
+   942→│ c) SKIP — The field remains MISSING. The interview moves on.     │
+   943→│    The Validation Engine will flag this field as missing. The    │
+   944→│    profile cannot pass validation until all mandatory fields are  │
+   945→│    resolved (either user-entered or user-confirmed suggestions). │
+   946→└───────────────────────────┬──────────────────────────────────────┘
+   947→                            │
+   948→                            ▼
+   949→┌──────────────────────────────────────────────────────────────────┐
+   950→│ STEP 5 — Confidence Tracking                                     │
+   951→│                                                                  │
+   952→│ Regardless of the user's choice, the confidence metadata is      │
+   953→│ updated:                                                         │
+   954→│                                                                  │
+   955→│ • ACCEPTED suggestion → status: KNOWLEDGE_SUGGESTED              │
+   956→│ • User-provided value → status: USER_ENTERED                     │
+   957→│ • Skipped → status: MISSING                                       │
+   958→│                                                                  │
+   959→│ The Validation Engine reads confidence metadata to compute       │
+   960→│ aggregate confidence. Only USER_CONFIRMED and USER_ENTERED       │
+   961→│ fields contribute fully to aggregate confidence.                  │
+   962→│ KNOWLEDGE_SUGGESTED fields contribute at a reduced weight.       │
+   963→│ MISSING fields contribute zero.                                   │
+   964→└──────────────────────────────────────────────────────────────────┘
+   965→```
+   966→
+   967→### 8.2 Rules for unknown answers
+   968→
+   969→1. **"I don't know" is never an error.** The interview treats it as a normal response and offers assistance.
+   970→
+   971→2. **The user is never forced to provide a value immediately.** They can skip and come back. The Validation Engine will eventually require all mandatory fields, but the interview does not block mid-conversation.
+   972→
+   973→3. **Suggestions are based on the current activity context.** A bakery suggestion is different from a poultry suggestion. The Knowledge Engine uses the fixed NIC code (if available) or the business description to provide relevant defaults.
+   974→
+   975→4. **Suggested values are clearly labeled.** The user must always know which values they entered and which were suggested. The Review phase (Phase 6) highlights all suggested values for explicit confirmation.
+   976→
+   977→5. **The interview does not invent financial figures.** Even when suggesting machinery costs or working capital, the values come from the Knowledge Package — never from the AI model's parametric knowledge. The AI's role is to phrase the suggestion naturally, not to generate the number.
+   978→
+   979→---
+   980→
+   981→## 9. Confidence Model
+   982→
+   983→Every field in the Structured Project Profile carries confidence metadata that tracks **how the value was obtained and whether it has been confirmed**. This metadata serves multiple purposes:
+   984→
+   985→- **Interview guidance:** Low-confidence fields are prioritized for re-confirmation.
+   986→- **Validation input:** The Validation Engine uses confidence to compute aggregate completeness.
+   987→- **Review visibility:** The Review phase highlights unconfirmed fields.
+   988→- **DPR provenance:** The DPR can note which values were beneficiary-provided vs. knowledge-suggested.
+   989→
+   990→### 9.1 Field confidence states
+   991→
+   992→| Status | Meaning | Source | Aggregate contribution |
+   993→|--------|---------|--------|----------------------|
+   994→| `MISSING` | No value has been provided | — | 0% |
+   995→| `USER_ENTERED` | User typed or selected the value themselves | Form input or AI interview extraction | 100% |
+   996→| `AI_EXTRACTED` | AI extracted the value from a conversational response, below confirmation threshold | AI model | 50% (until confirmed) |
+   997→| `OCR_EXTRACTED` | Value extracted from a scanned document by the OCR Engine | OCR engine | 50% (until confirmed) |
+   998→| `KNOWLEDGE_SUGGESTED` | Value suggested by the Knowledge Package, accepted by user | Knowledge Package | 50% (until confirmed) |
+   999→| `USER_CONFIRMED` | User explicitly confirmed a previously suggested or extracted value | User action | 100% |
+  1000→
+  1001→### 9.2 Confidence transitions
+  1002→
+  1003→```
+  1004→MISSING ──[user types value]──→ USER_ENTERED
+  1005→MISSING ──[AI extracts with high confidence]──→ USER_ENTERED
+  1006→MISSING ──[AI extracts with low confidence]──→ AI_EXTRACTED
+  1007→MISSING ──[user says "I don't know", accepts suggestion]──→ KNOWLEDGE_SUGGESTED
+  1008→MISSING ──[OCR scan, user accepts]──→ OCR_EXTRACTED
+  1009→
+  1010→AI_EXTRACTED ──[user explicitly confirms]──→ USER_CONFIRMED
+  1011→AI_EXTRACTED ──[user edits the value]──→ USER_ENTERED
+  1012→AI_EXTRACTED ──[user rejects]──→ MISSING
+  1013→
+  1014→OCR_EXTRACTED ──[user explicitly confirms]──→ USER_CONFIRMED
+  1015→OCR_EXTRACTED ──[user edits the value]──→ USER_ENTERED
+  1016→OCR_EXTRACTED ──[user rejects]──→ MISSING
+  1017→
+  1018→KNOWLEDGE_SUGGESTED ──[user explicitly confirms]──→ USER_CONFIRMED
+  1019→KNOWLEDGE_SUGGESTED ──[user edits the value]──→ USER_ENTERED
+  1020→KNOWLEDGE_SUGGESTED ──[user rejects]──→ MISSING
+  1021→
+  1022→USER_ENTERED ──[user edits]──→ USER_ENTERED (updated)
+  1023→USER_CONFIRMED ──[user edits]──→ USER_ENTERED (updated, confidence drops)
+  1024→```
+  1025→
+  1026→### 9.3 Aggregate confidence
+  1027→
+  1028→The Validation Engine computes an aggregate confidence score:
+  1029→
+  1030→```
+  1031→aggregateConfidence = Σ(confidenceWeight(field) for each mandatory field)
+  1032→                    / count(mandatory fields)
+  1033→
+  1034→where:
+  1035→  confidenceWeight(MISSING)             = 0
+  1036→  confidenceWeight(USER_ENTERED)        = 1.0
+  1037→  confidenceWeight(USER_CONFIRMED)      = 1.0
+  1038→  confidenceWeight(AI_EXTRACTED)        = 0.5
+  1039→  confidenceWeight(OCR_EXTRACTED)       = 0.5
+  1040→  confidenceWeight(KNOWLEDGE_SUGGESTED) = 0.5
+  1041→```
+  1042→
+  1043→The aggregate confidence is displayed to the user as part of the project completeness indicator. A profile with 100% completeness but 60% aggregate confidence means many fields are suggested, not confirmed — the Review phase (Phase 6) will draw attention to these.
+  1044→
+  1045→### 9.4 Confidence and downstream engines
+  1046→
+  1047→Downstream engines (Eligibility, Financial, DPR) **do not consume confidence metadata**. They consume the field values. Confidence is an interview-layer concern — it determines *whether* a field is ready for engine consumption, not *how* the engine processes it.
+  1048→
+  1049→**However, the Validation Engine enforces a confidence gate.** A profile cannot transition to `VALIDATED` (and thus unlock downstream engines) if any mandatory field has a confidence status of `MISSING`, `AI_EXTRACTED`, `OCR_EXTRACTED`, or `KNOWLEDGE_SUGGESTED`. Every mandatory field must reach `USER_ENTERED` or `USER_CONFIRMED` before the profile is considered engine-ready.
+  1050→
+  1051→This means:
+  1052→- A `KNOWLEDGE_SUGGESTED` value may exist in the profile during the interview (so the user can see and edit it), but it **blocks** the validation gate.
+  1053→- The Review phase (Phase 6) is the mandatory checkpoint where all suggested/extracted values must be confirmed.
+  1054→- The interview can progress past an unconfirmed field (to avoid blocking the conversation), but it cannot complete until all fields are confirmed.
+  1055→- When the Validation Engine runs, it returns `unconfirmedMandatoryFields` alongside `missingFields` — both must be empty for the gate to pass.
+  1056→
+  1057→This is the enforcement of the principle that **suggested values never reach deterministic engines until the user confirms them.**
+  1058→
+  1059→---
+  1060→
+  1061→## 10. Suggestion Lifecycle
+  1062→
+  1063→Suggestions are how the Knowledge Package assists beneficiaries who cannot answer technical questions on their own. The lifecycle ensures suggestions are helpful but never authoritative.
+  1064→
+  1065→```
+  1066→┌──────────────────────────────────────────────────────────────────┐
+  1067→│ 1. KNOWLEDGE PACKAGE                                              │
+  1068→│                                                                  │
+  1069→│    Contains reference data: machinery lists, raw material lists, │
+  1070→│    indicative costs, wage benchmarks, financial ratios, etc.     │
+  1071→│    This data is versioned, sourced, and read-only at runtime.    │
+  1072→└───────────────────────────┬──────────────────────────────────────┘
+  1073→                            │
+  1074→                            ▼
+  1075→┌──────────────────────────────────────────────────────────────────┐
+  1076→│ 2. KNOWLEDGE ENGINE (engines/knowledge-engine/)                   │
+  1077→│                                                                  │
+  1078→│    Receives a query from the interview (e.g., "machinery for     │
+  1079→│    NIC 10701") and searches the Knowledge Package.               │
+  1080→│    Returns structured results — never free text.                  │
+  1081→│    This is a deterministic, pure, offline search engine.         │
+  1082→│                                                                  │
+  1083→│    Output: SuggestionResult { items: KnowledgeItem[], source,    │
+  1084→│            confidence }                                           │
+  1085→└───────────────────────────┬──────────────────────────────────────┘
+  1086→                            │
+  1087→                            ▼
+  1088→┌──────────────────────────────────────────────────────────────────┐
+  1089→│ 3. SUGGESTION                                                     │
+  1090→│                                                                  │
+  1091→│    The interview orchestration wraps the Knowledge Engine        │
+  1092→│    result into a Suggestion object that includes:                │
+  1093→│    • The suggested value(s)                                       │
+  1094→│    • The source (which Knowledge Package entry)                   │
+  1095→│    • A reasoning string (for the AI to explain to the user)      │
+  1096→│    • The target field path(s) in the ProjectProfile              │
+  1097→│                                                                  │
+  1098→│    The suggestion is NOT yet applied to the profile.             │
+  1099→└───────────────────────────┬──────────────────────────────────────┘
+  1100→                            │
+  1101→                            ▼
+  1102→┌──────────────────────────────────────────────────────────────────┐
+  1103→│ 4. USER REVIEW                                                    │
+  1104→│                                                                  │
+  1105→│    The suggestion is presented to the user — either by the AI    │
+  1106→│    interview (natural language) or by the guided forms (pre-     │
+  1107→│    populated form fields with a "Suggested" badge).             │
+  1108→│                                                                  │
+  1109→│    The user sees:                                                │
+  1110→│    • What value is being suggested                               │
+  1111→│    • Why (e.g., "Based on typical bakery projects")              │
+  1112→│    • Options: Accept, Edit, or Skip                              │
+  1113→└───────────────────────────┬──────────────────────────────────────┘
+  1114→                            │
+  1115→                            ▼
+  1116→┌──────────────────────────────────────────────────────────────────┐
+  1117→│ 5. ACCEPTANCE                                                     │
+  1118→│                                                                  │
+  1119→│    a) ACCEPT: Value is written to the profile with               │
+  1120→│       confidence.status = KNOWLEDGE_SUGGESTED.                   │
+  1121→│                                                                  │
+  1122→│    b) EDIT: User provides their own value. Written to profile    │
+  1123→│       with confidence.status = USER_ENTERED.                      │
+  1124→│                                                                  │
+  1125→│    c) SKIP: Field remains MISSING. Interview continues.          │
+  1126→└───────────────────────────┬──────────────────────────────────────┘
+  1127→                            │
+  1128→                            ▼
+  1129→┌──────────────────────────────────────────────────────────────────┐
+  1130→│ 6. STRUCTURED PROJECT PROFILE                                     │
+  1131→│                                                                  │
+  1132→│    The profile now contains the value (if accepted or edited).   │
+  1133→│    The confidence metadata records how it arrived.                │
+  1134→└───────────────────────────┬──────────────────────────────────────┘
+  1135→                            │
+  1136→                            ▼
+  1137→┌──────────────────────────────────────────────────────────────────┐
+  1138→│ 7. VALIDATION ENGINE                                              │
+  1139→│                                                                  │
+  1140→│    Runs on the updated profile. Checks completeness,             │
+  1141→│    validation rules, contradictions, and confidence.             │
+  1142→│    Determines if the profile is ready for downstream engines.    │
+  1143→└───────────────────────────┬──────────────────────────────────────┘
+  1144→                            │
+  1145→                            ▼
+  1146→┌──────────────────────────────────────────────────────────────────┐
+  1147→│ 8. DETERMINISTIC ENGINES                                         │
+  1148→│                                                                  │
+  1149→│    Eligibility Engine, Financial Engine, DPR Engine, PDF Engine.  │
+  1150→│    These engines receive the profile values. They do NOT know    │
+  1151→│    and do NOT care whether a value was user-entered or           │
+  1152→│    knowledge-suggested. The confidence model is invisible to      │
+  1153→│    engines.                                                       │
+  1154→└──────────────────────────────────────────────────────────────────┘
+  1155→```
+  1156→
+  1157→### 10.1 Inviolable rules
+  1158→
+  1159→1. **Suggestions must never bypass confirmation.** A suggestion that is not explicitly accepted by the user is never written to the profile. The AI interview cannot silently apply a suggestion.
+  1160→
+  1161→2. **The Knowledge Engine returns data, not decisions.** It returns matching items from the Knowledge Package. The interview (feature layer) decides what to present and how.
+  1162→
+  1163→3. **AI-generated suggestions are prohibited.** The AI model must not invent machinery lists, cost estimates, or financial benchmarks. All suggestions originate from the Knowledge Package. The AI's role is to present them in natural language, not to generate them.
+  1164→
+  1165→4. **Suggested values are provisional, not authoritative.** A `KNOWLEDGE_SUGGESTED` value is written to the profile so the user can see and edit it, but it is **not** engine-ready. The Validation Engine will not pass the profile to downstream engines until every mandatory field reaches `USER_ENTERED` or `USER_CONFIRMED`. See Section 9.4 (confidence gate) and Section 11 (state machine — a profile in `DISCOVERING` or `COMPLETE` state cannot reach `VALIDATED` while unconfirmed mandatory fields exist).
+  1166→
+  1167→5. **The Review phase is the safety net.** Phase 6 (Review) presents all `KNOWLEDGE_SUGGESTED` and `AI_EXTRACTED` fields for explicit confirmation. This is the user's opportunity to catch any suggested value that is wrong for their specific situation.
+  1168→
+  1169→---
+  1170→
+  1171→## 11. Project Profile State Machine
+  1172→
+  1173→The interview phases (Section 4) describe *what* the interview does at each stage. The state machine describes *how the profile evolves* as a whole — including resume, edit, validation, and engine execution. This is the single source of truth for what transitions are legal and what each state means for the rest of the application.
+  1174→
+  1175→### 11.1 States
+  1176→
+  1177→```
+  1178→EMPTY
+  1179→  │
+  1180→  ▼
+  1181→PARTIAL
+  1182→  │
+  1183→  ▼
+  1184→DISCOVERING
+  1185→  │
+  1186→  ▼
+  1187→COMPLETE
+  1188→  │
+  1189→  ▼
+  1190→VALIDATED
+  1191→  │
+  1192→  ▼
+  1193→ELIGIBILITY_READY
+  1194→  │
+  1195→  ▼
+  1196→FINANCIAL_READY
+  1197→  │
+  1198→  ▼
+  1199→DPR_READY
+  1200→```
+  1201→
+  1202→| State | Meaning | Who sets it | Who consumes it |
+  1203→|-------|---------|-----------|----------------|
+  1204→| `EMPTY` | Project created, no data collected. | App shell (on "New Project") | Interview / Guided Forms |
+  1205→| `PARTIAL` | Some fields populated, but Phase 1 (Applicant Discovery) is not yet substantially complete. No eligibility pre-checks possible. | Interview orchestration | Interview (determines which phase to enter) |
+  1206→| `DISCOVERING` | Applicant identity and category are known. Interview is in Phases 2–5. Business description, NIC code, and/or financial data may be partially collected. Activity-specific suggestions from the Knowledge Package may be present as `KNOWLEDGE_SUGGESTED` values. | Interview orchestration | Interview, Knowledge Engine (for contextual suggestions) |
+  1207→| `COMPLETE` | All interview phases finished. All mandatory fields have values. However, some values may still be `KNOWLEDGE_SUGGESTED` or `AI_EXTRACTED` — not yet confirmed. The profile is *data-complete* but not yet *engine-ready*. | Interview orchestration (Phase 6 Review exit or Phase 7 exit) | Review UI (highlights unconfirmed fields), Validation Engine |
+  1208→| `VALIDATED` | The Validation Engine has passed: completeness ≥ threshold, no blocking errors, no unresolved contradictions, **and all mandatory fields are `USER_ENTERED` or `USER_CONFIRMED`**. The profile is engine-ready. | Validation Engine | All downstream engines (gate is open) |
+  1209→| `ELIGIBILITY_READY` | The Eligibility Engine has run and produced an `EligibilityResult`. This result is snapshotted in the database. The profile is unchanged. | Eligibility Engine (called by feature orchestration) | Financial Engine (may use eligibility context), DPR Engine |
+  1210→| `FINANCIAL_READY` | The Financial Engine has run and produced a `FinancialResult`. This result is snapshotted in the database. | Financial Engine (called by feature orchestration) | DPR Engine (requires both eligibility + financials) |
+  1211→| `DPR_READY` | The DPR Engine has assembled the document. The PDF Engine has rendered it. The user can view, share, or save the DPR. | DPR Engine + PDF Engine (called by feature orchestration) | User (view, share, save), Import/Export Engine |
+  1212→
+  1213→### 11.2 Forward transitions
+  1214→
+  1215→```
+  1216→EMPTY ──────────[user starts interview or guided wizard]─────→ PARTIAL
+  1217→
+  1218→PARTIAL ────────[applicant identity + category known]──────→ DISCOVERING
+  1219→
+  1220→DISCOVERING ────[all interview phases complete]────────────→ COMPLETE
+  1221→
+  1222→COMPLETE ───────[Validation Engine passes
+  1223→                 (all mandatory fields confirmed)]─────────→ VALIDATED
+  1224→
+  1225→VALIDATED ──────[Eligibility Engine runs]──────────────────→ ELIGIBILITY_READY
+  1226→
+  1227→ELIGIBILITY_READY ──[Financial Engine runs]────────────────→ FINANCIAL_READY
+  1228→
+  1229→FINANCIAL_READY ──[DPR + PDF Engine runs]──────────────────→ DPR_READY
+  1230→```
+  1231→
+  1232→### 11.3 Edit transitions (going backward)
+  1233→
+  1234→When the user edits a previously-collected field, the profile may need to move backward:
+  1235→
+  1236→```
+  1237→DPR_READY ──────[user edits any input]─────────────────────→ COMPLETE
+  1238→FINANCIAL_READY ──[user edits financial inputs]────────────→ VALIDATED
+  1239→ELIGIBILITY_READY ──[user edits financial inputs]──────────→ VALIDATED
+  1240→                 (eligibility may still be valid;
+  1241→                  financial result is invalidated)
+  1242→
+  1243→VALIDATED ──────[user edits any field]─────────────────────→ COMPLETE
+  1244→                 (re-validation required;
+  1245→                  downstream engine results are invalidated
+  1246→                  but NOT deleted — they become stale snapshots)
+  1247→
+  1248→ANY pre-validation state ──[user edits a dependency root
+  1249→                 (NIC code, sector, category)]────────────→ DISCOVERING
+  1250→                 (dependents flagged for re-collection)
+  1251→```
+  1252→
+  1253→**Rules for edit transitions:**
+  1254→
+  1255→1. **Edits invalidate forward, never backward.** Editing the NIC code (Phase 3 data) invalidates machinery and financials (Phase 4–5 data), but does not invalidate the applicant's name (Phase 1 data).
+  1256→2. **Invalidated engine results are not deleted.** They become stale snapshots in the database, tagged with the `knowledgeVersion` and profile version that produced them. This preserves reproducibility and audit history.
+  1257→3. **The user must explicitly regenerate.** After an edit, the app informs the user which downstream results are now stale and offers to re-run the affected engines. Already-generated DPRs are never silently rewritten.
+  1258→4. **State moves forward one step at a time through the engine pipeline.** The user cannot jump from `DPR_READY` directly to re-running just the Financial Engine — the app walks through `VALIDATED` → `ELIGIBILITY_READY` → `FINANCIAL_READY`, re-running each engine in sequence. This ensures every gate is re-evaluated.
+  1259→
+  1260→### 11.4 Resume behavior
+  1261→
+  1262→When the user opens an existing project:
+  1263→
+  1264→1. Load the persisted profile from SQLite.
+  1265→2. Determine the current state from the stored `status` column and the presence/absence of engine snapshots.
+  1266→3. If state is `EMPTY` through `DISCOVERING`: resume the interview at the last active phase.
+  1267→4. If state is `COMPLETE`: enter the Review phase (Phase 6) to confirm any unconfirmed fields, then attempt validation.
+  1268→5. If state is `VALIDATED` or later: present the project dashboard showing engine results. The user can edit (which moves the state backward per §11.3) or view/export the DPR.
+  1269→6. If the user's edit moves the state backward, re-run the interview/workflow from the appropriate point.
+  1270→
+  1271→### 11.5 State machine and the validation gate
+  1272→
+  1273→The state machine **is** the enforcement of Design Principle 14 ("Project Completion & Validation gates the engines").
+  1274→
+  1275→- States `EMPTY` through `COMPLETE` are **pre-validation**. No engine may run.
+  1276→- The transition `COMPLETE → VALIDATED` is the **gate**. It requires the Validation Engine to pass — completeness, no errors, no contradictions, and all mandatory fields confirmed (`USER_ENTERED` or `USER_CONFIRMED`).
+  1277→- States `VALIDATED` through `DPR_READY` are **post-validation**. Engines run sequentially, each producing a snapshot that the next engine consumes.
+  1278→
+  1279→### 11.6 Persistence
+  1280→
+  1281→The profile state is stored in the `project` table (doc 03) as the `status` column. The column holds the current state string (`EMPTY`, `PARTIAL`, `DISCOVERING`, `COMPLETE`, `VALIDATED`, `ELIGIBILITY_READY`, `FINANCIAL_READY`, `DPR_READY`). Engine snapshots are stored in their respective tables (`project_financials`, `dpr_document`) keyed to the project.
+  1282→
+  1283→The state column is the single source of truth for the UI (which screens to show), the interview (whether to resume or present results), and the feature orchestration (which engines to run or re-run).
+  1284→
+  1285→### 11.7 State machine and confidence interaction
+  1286→
+  1287→The state machine and the confidence model (Section 9) interact at one critical point: the `COMPLETE → VALIDATED` transition.
+  1288→
+  1289→- A profile in `COMPLETE` state has all mandatory fields populated but some may be `KNOWLEDGE_SUGGESTED` or `AI_EXTRACTED`.
+  1290→- The Validation Engine checks for `unconfirmedMandatoryFields` (see Section 9.4).
+  1291→- If any unconfirmed mandatory fields exist, the transition is **blocked**. The profile remains in `COMPLETE` and the user is directed to confirm those fields (via the Review phase).
+  1292→- Only when all mandatory fields are `USER_ENTERED` or `USER_CONFIRMED` does the transition to `VALIDATED` succeed.
+  1293→
+  1294→This ensures the reviewer's Rule 4 is enforced at the architectural level: **suggested values never reach deterministic engines until the user confirms them.**
+  1295→
+  1296→---
+  1297→
+  1298→## 12. Relationship to Existing Architecture
+  1299→
+  1300→This document fills the gap between the user and the Validation Engine. It does not change any existing architectural decisions — it specifies what was previously left implicit.
+  1301→
+  1302→### 12.1 What this document defines (new)
+  1303→
+  1304→| Concept | Where it was before | Where it is now |
+  1305→|---------|-------------------|-----------------|
+  1306→| Structured Project Profile schema | Referenced everywhere, never specified | Canonical definition in Section 2 |
+  1307→| AI reasoning pipeline | Implicitly described in doc 04 §4 | Full 8-stage pipeline in Section 3 |
+  1308→| Interview phases | Not specified | 7-phase model in Section 4 |
+  1309→| Knowledge-assisted interview | Briefly mentioned in AGENTS.md | Full specification in Section 5 |
+  1310→| Activity discovery lifecycle | Partially in AGENTS.md §Knowledge Engine | Full lifecycle in Section 6 |
+  1311→| Field dependency graph | Not specified | Defined in Section 7 |
+  1312→| "I don't know" handling | Not specified | Full strategy in Section 8 |
+  1313→| Confidence model | Referenced in doc 04 §5 and doc 15 §2 | Full model in Section 9 |
+  1314→| Suggestion lifecycle | Not specified | Full lifecycle in Section 10 |
+  1315→
+  1316→### 12.2 What this document does NOT change
+  1317→
+  1318→- Design Principles (principles 1–15) — unchanged
+  1319→- Engine responsibilities (Financial, Eligibility, DPR, PDF, Validation, Knowledge) — unchanged
+  1320→- Provider abstraction — unchanged
+  1321→- Data model (SQLite schema in doc 03) — the profile schema in Section 2 is the *application-level* contract; the SQLite schema in doc 03 is the *persistence-level* contract. They map 1:1 but serve different readers.
+  1322→- Folder structure (doc 02) — no new engine or folder is introduced. The interview orchestration lives in `features/ai/`, as already specified.
+  1323→- Knowledge Package boundaries (doc 09, AGENTS.md) — unchanged. Suggestions come from Knowledge Package data, not from AI.
+  1324→- Security and privacy (doc 13) — unchanged. PII is redacted before prompts; suggestions contain no PII.
+  1325→
+  1326→### 12.3 Where each concern lives
+  1327→
+  1328→| Concern | Owner | Document |
+  1329→|---------|-------|----------|
+  1330→| Structured Project Profile definition | This document | Section 2 |
+  1331→| Interview reasoning pipeline | This document | Section 3 |
+  1332→| Interview phases | This document | Section 4 |
+  1333→| Knowledge-assisted interview | This document | Section 5 |
+  1334→| Activity discovery | This document | Section 6 |
+  1335→| Field dependencies | This document | Section 7 |
+  1336→| "I don't know" handling | This document | Section 8 |
+  1337→| Confidence model | This document | Section 9 |
+  1338→| Suggestion lifecycle | This document | Section 10 |
+  1339→| Validation (gate) | Validation Engine | [04 §5](04-ai-architecture.md), [15 §2](15-application-workflows.md) |
+  1340→| Eligibility determination | Eligibility Engine | [06](06-eligibility-engine.md) |
+  1341→| Financial calculations | Financial Engine | [05](05-financial-engine.md) |
+  1342→| DPR assembly | DPR Engine | [07](07-dpr-engine.md) |
+  1343→| AI provider abstraction | Provider Manager | [04 §3](04-ai-architecture.md) |
+  1344→| Knowledge Package data | Knowledge Package | [09](09-knowledge-package.md) |
+  1345→| Offline behavior | System architecture | [01 §5](01-system-architecture.md) |
+  1346→| Privacy & PII | Security architecture | [13](13-security-and-privacy.md) |
+  1347→| Prompt templates | Knowledge Package | [09 §2](09-knowledge-package.md), [04 §9](04-ai-architecture.md) |
+  1348→
+  1349→---
+  1350→
+  1351→## 13. Success Criteria
+  1352→
+  1353→This architecture document must answer these questions unambiguously:
+  1354→
+  1355→1. **What exactly is a Structured Project Profile?**
+  1356→   → Section 2. A typed, Zod-validated object with 13 top-level sections covering applicant, business, location, land, capacity, machinery, raw materials, employees, utilities, financials, working capital, market, attachments, validation metadata, confidence metadata, and completion metadata. Both the AI interview and guided forms produce an identical instance.
+  1357→
+  1358→2. **How does the AI decide the next question?**
+  1359→   → Section 3, Stages 4–7. The Validation Engine identifies missing fields and contradictions. The dependency graph determines which fields are askable. The phase model determines the current focus area. The question planner selects the highest-priority askable field.
+  1360→
+  1361→3. **How are NIC activities discovered?**
+  1362→   → Section 6. The Knowledge Engine searches the NIC code database using the beneficiary's business description. Candidates are presented for user confirmation. Once confirmed, NIC code, sector, sub-category, and activity type are fixed. PMEGP rules are then determined.
+  1363→
+  1364→4. **How does the Knowledge Package assist beneficiaries?**
+  1365→   → Section 5. When a beneficiary cannot answer a technical question, the interview queries the Knowledge Package for suggested values (machinery, costs, benchmarks). Suggestions are presented for explicit acceptance — never silently applied.
+  1366→
+  1367→5. **How are suggestions handled?**
+  1368→   → Section 10. Knowledge Package → Knowledge Engine → Suggestion → User Review → Acceptance → Profile → Validation → Engines. Suggestions never bypass confirmation. AI-generated suggestions are prohibited.
+  1369→
+  1370→6. **How are unknown answers handled?**
+  1371→   → Section 8. Uncertainty is detected → Knowledge Package provides suggestion → AI explains suggestion → User accepts, edits, or skips. "I don't know" is never an error and never blocks the conversation.
+  1372→
+  1373→7. **How does confidence propagate?**
+  1374→   → Section 9. Every field carries a confidence status (MISSING, USER_ENTERED, AI_EXTRACTED, OCR_EXTRACTED, KNOWLEDGE_SUGGESTED, USER_CONFIRMED). The Validation Engine computes aggregate confidence. Downstream engines consume values only — confidence is invisible to them.
+  1375→
+  1376→8. **How do interview phases work?**
+  1377→   → Section 4. Seven sequential phases: Applicant Discovery → Business Discovery → Activity Resolution → Project Sizing → Financial Planning → Review → Validation Completion. Each phase has a clear objective and exit condition. Within a phase, question order is flexible; phase order is fixed by dependencies.
+  1378→
+  1379→9. **How do deterministic engines receive clean, validated data?**
+  1380→   → The Validation Engine (doc 04 §5, doc 15 §2) gates all downstream engines. Engines receive the Structured Project Profile only after validation passes. The profile is the single data contract — engines never see conversation messages, form state, or confidence metadata.

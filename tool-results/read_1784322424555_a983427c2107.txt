@@ -1,0 +1,384 @@
+  1130→
+  1131→A profile with 100% completeness but 50% aggregate provenance means all fields have values but none are confirmed — the REVIEW_PENDING screen will draw attention to this.
+  1132→
+  1133→### 9.7 Provenance and downstream engines
+  1134→
+  1135→Downstream engines (Eligibility, Financial, DPR) **do not consume provenance metadata**. They consume the field values. Provenance is an interview-layer concern — it determines *whether* a field is ready for engine consumption, not *how* the engine processes it.
+  1136→
+  1137→**However, the Validation Engine enforces a provenance gate.** A profile cannot transition from `REVIEW_PENDING` to `VALIDATED` (and thus unlock downstream engines) until all mandatory fields have verification=CONFIRMED. In practice, pressing "Confirm Project" on the REVIEW_PENDING screen stamps all fields CONFIRMED, so this gate passes unless the user edited a field back to UNVERIFIED. See Section 11 (state machine) for the full gate logic.
+  1138→
+  1139→This means:
+  1140→- An `UNVERIFIED` value may exist in the profile during the interview (so the user can see and edit it), but it is **not** engine-ready.
+  1141→- The Review phase (Phase 6) offers early inline confirmation for individual fields, but the mandatory checkpoint is the REVIEW_PENDING screen.
+  1142→- The interview can progress past an unconfirmed field (to avoid blocking the conversation), but the profile cannot reach `VALIDATED` until the user presses "Confirm Project."
+  1143→- When the Validation Engine runs, it returns `nonEngineReadyMandatoryFields` alongside `missingFields`. Both must be empty for the final gate to pass.
+  1144→
+  1145→This is the enforcement of the principle that **suggested values never reach deterministic engines until the user confirms them.**
+  1146→
+  1147→### 9.8 Provenance for DPR annotation
+  1148→
+  1149→The DPR Engine can use the provenance metadata to annotate the generated document:
+  1150→
+  1151→- Fields with `source=KNOWLEDGE` can be footnoted: *"Based on typical values for this activity."*
+  1152→- Fields with `source=OCR` can be footnoted: *"Extracted from uploaded document."*
+  1153→- Fields with `source=USER` need no annotation — they are the beneficiary's own values.
+  1154→- The `knowledgeSource` field in `FieldProvenance` provides the specific Knowledge Package entry reference for traceability.
+  1155→
+  1156→---
+  1157→
+  1158→## 10. Suggestion Lifecycle
+  1159→
+  1160→Suggestions are how the Knowledge Package assists beneficiaries who cannot answer technical questions on their own. The lifecycle ensures suggestions are helpful but never authoritative.
+  1161→
+  1162→```
+  1163→┌──────────────────────────────────────────────────────────────────┐
+  1164→│ 1. KNOWLEDGE PACKAGE                                              │
+  1165→│                                                                  │
+  1166→│    Contains reference data: machinery lists, raw material lists, │
+  1167→│    indicative costs, wage benchmarks, financial ratios, etc.     │
+  1168→│    This data is versioned, sourced, and read-only at runtime.    │
+  1169→└───────────────────────────┬──────────────────────────────────────┘
+  1170→                            │
+  1171→                            ▼
+  1172→┌──────────────────────────────────────────────────────────────────┐
+  1173→│ 2. KNOWLEDGE ENGINE (engines/knowledge-engine/)                   │
+  1174→│                                                                  │
+  1175→│    Receives a query from the interview (e.g., "machinery for     │
+  1176→│    NIC 10701") and searches the Knowledge Package.               │
+  1177→│    Returns structured results — never free text.                  │
+  1178→│    This is a deterministic, pure, offline search engine.         │
+  1179→│                                                                  │
+  1180→│    Output: SuggestionResult { items: KnowledgeItem[], source,    │
+  1181→│            confidence }                                           │
+  1182→└───────────────────────────┬──────────────────────────────────────┘
+  1183→                            │
+  1184→                            ▼
+  1185→┌──────────────────────────────────────────────────────────────────┐
+  1186→│ 3. SUGGESTION                                                     │
+  1187→│                                                                  │
+  1188→│    The interview orchestration wraps the Knowledge Engine        │
+  1189→│    result into a Suggestion object that includes:                │
+  1190→│    • The suggested value(s)                                       │
+  1191→│    • The source (which Knowledge Package entry)                   │
+  1192→│    • A reasoning string (for the AI to explain to the user)      │
+  1193→│    • The target field path(s) in the ProjectProfile              │
+  1194→│                                                                  │
+  1195→│    The suggestion is NOT yet applied to the profile.             │
+  1196→└───────────────────────────┬──────────────────────────────────────┘
+  1197→                            │
+  1198→                            ▼
+  1199→┌──────────────────────────────────────────────────────────────────┐
+  1200→│ 4. USER REVIEW                                                    │
+  1201→│                                                                  │
+  1202→│    The suggestion is presented to the user — either by the AI    │
+  1203→│    interview (natural language) or by the guided forms (pre-     │
+  1204→│    populated form fields with a "Suggested" badge).             │
+  1205→│                                                                  │
+  1206→│    The user sees:                                                │
+  1207→│    • What value is being suggested                               │
+  1208→│    • Why (e.g., "Based on typical bakery projects")              │
+  1209→│    • Options: Accept, Edit, or Skip                              │
+  1210→└───────────────────────────┬──────────────────────────────────────┘
+  1211→                            │
+  1212→                            ▼
+  1213→┌──────────────────────────────────────────────────────────────────┐
+  1214→│ 5. ACCEPTANCE                                                     │
+  1215→│                                                                  │
+  1216→│    a) ACCEPT: Value is written to the profile with               │
+  1217→│       provenance.source = KNOWLEDGE, provenance.verification = UNVERIFIED. │
+  1218→│                                                                  │
+  1219→│    b) EDIT: User provides their own value. Written to profile    │
+  1220→│       with provenance.source = USER, provenance.verification = UNVERIFIED. │
+  1221→│                                                                  │
+  1222→│    c) SKIP: Field remains source=null (MISSING). Interview continues. │
+  1223→└───────────────────────────┬──────────────────────────────────────┘
+  1224→                            │
+  1225→                            ▼
+  1226→┌──────────────────────────────────────────────────────────────────┐
+  1227→│ 6. STRUCTURED PROJECT PROFILE                                     │
+  1228→│                                                                  │
+  1229→│    The profile now contains the value (if accepted or edited).   │
+  1230→│    The provenance metadata records how it arrived.                │
+  1231→└───────────────────────────┬──────────────────────────────────────┘
+  1232→                            │
+  1233→                            ▼
+  1234→┌──────────────────────────────────────────────────────────────────┐
+  1235→│ 7. VALIDATION ENGINE                                              │
+  1236→│                                                                  │
+  1237→│    Runs on the updated profile. Checks completeness,             │
+  1238→│    validation rules, contradictions, and provenance.              │
+  1239→│    Determines if the profile is ready for downstream engines.    │
+  1240→└───────────────────────────┬──────────────────────────────────────┘
+  1241→                            │
+  1242→                            ▼
+  1243→┌──────────────────────────────────────────────────────────────────┐
+  1244→│ 8. DETERMINISTIC ENGINES                                         │
+  1245→│                                                                  │
+  1246→│    Eligibility Engine, Financial Engine, DPR Engine, PDF Engine.  │
+  1247→│    These engines receive the profile values. They do NOT know    │
+  1248→│    and do NOT care whether a value was user-entered or           │
+  1249→│    knowledge-suggested. The provenance model is invisible to     │
+  1250→│    engines.                                                       │
+  1251→└──────────────────────────────────────────────────────────────────┘
+  1252→```
+  1253→
+  1254→### 10.1 Inviolable rules
+  1255→
+  1256→1. **Suggestions must never bypass confirmation.** A suggestion that is not explicitly accepted by the user is never written to the profile. The AI interview cannot silently apply a suggestion.
+  1257→
+  1258→2. **The Knowledge Engine returns data, not decisions.** It returns matching items from the Knowledge Package. The interview (feature layer) decides what to present and how.
+  1259→
+  1260→3. **AI-generated suggestions are prohibited.** The AI model must not invent machinery lists, cost estimates, or financial benchmarks. All suggestions originate from the Knowledge Package. The AI's role is to present them in natural language, not to generate them.
+  1261→
+  1262→4. **Suggested values are provisional, not authoritative.** A `KNOWLEDGE`/`UNVERIFIED` value is written to the profile so the user can see and edit it, but it is **not** engine-ready. No field is engine-ready until verification=CONFIRMED (via the REVIEW_PENDING "Confirm Project" action; see Section 9.4). See Section 11 (state machine — the REVIEW_PENDING screen is the single confirmation point for all fields).
+  1263→
+  1264→5. **The Review phase is the early safety net.** Phase 6 (Review) presents AI/OCR/KNOWLEDGE-sourced fields prominently so the user can catch issues early. But the mandatory confirmation point for ALL fields is the REVIEW_PENDING screen.
+  1265→
+  1266→---
+  1267→
+  1268→## 11. Project Profile State Machine
+  1269→
+  1270→The interview phases (Section 4) describe *what* the interview does at each stage. The state machine describes *how the profile evolves* as a whole — including resume, edit, validation, and engine execution. This is the single source of truth for what transitions are legal and what each state means for the rest of the application.
+  1271→
+  1272→### 11.1 States
+  1273→
+  1274→```
+  1275→EMPTY
+  1276→  │
+  1277→  ▼
+  1278→PARTIAL
+  1279→  │
+  1280→  ▼
+  1281→DISCOVERING
+  1282→  │
+  1283→  ▼
+  1284→COMPLETE
+  1285→  │
+  1286→  ▼
+  1287→REVIEW_PENDING
+  1288→  │
+  1289→  ▼
+  1290→VALIDATED
+  1291→  │
+  1292→  ▼
+  1293→ELIGIBILITY_READY
+  1294→  │
+  1295→  ▼
+  1296→FINANCIAL_READY
+  1297→  │
+  1298→  ▼
+  1299→DPR_READY
+  1300→```
+  1301→
+  1302→| State | Meaning | Who sets it | Who consumes it |
+  1303→|-------|---------|-----------|----------------|
+  1304→| `EMPTY` | Project created, no data collected. | App shell (on "New Project") | Interview / Guided Forms |
+  1305→| `PARTIAL` | Some fields populated, but Phase 1 (Applicant Discovery) is not yet substantially complete. No eligibility pre-checks possible. | Interview orchestration | Interview (determines which phase to enter) |
+  1306→| `DISCOVERING` | Applicant identity and category are known. Interview is in Phases 2–5. Business description, NIC code, and/or financial data may be partially collected. Activity-specific suggestions from the Knowledge Package may be present with source=KNOWLEDGE, verification=UNVERIFIED. | Interview orchestration | Interview, Knowledge Engine (for contextual suggestions) |
+  1307→| `COMPLETE` | All interview phases finished. All mandatory fields have values (no MISSING mandatory fields). However, no fields are yet confirmed — all are verification=UNVERIFIED. The profile is *data-complete* but not yet *engine-ready*. | Interview orchestration (Phase 6 Review exit or Phase 7 exit) | Review UI (highlights AI/OCR/KNOWLEDGE-sourced fields), Validation Engine (pre-check) |
+  1308→| `REVIEW_PENDING` | All mandatory fields have values and the Validation Engine's pre-check has passed (completeness ≥ threshold, no blocking errors, no contradictions). The profile is displayed as a **project summary** (machinery, costs, employees, loan, subsidy, working capital) and the user must explicitly press **"Confirm Project"** — this action stamps all fields with verification=CONFIRMED. This is the mandatory banking review step: the beneficiary's final acknowledgment that everything is correct. | Validation Engine (pre-check passes) → user action (Confirm Project) | User (project summary screen), Validation Engine (final gate) |
+  1309→| `VALIDATED` | The user has pressed "Confirm Project" (all fields stamped verification=CONFIRMED) and the Validation Engine's final gate has passed (Zod, business rules, contradictions). All mandatory fields are now engine-ready (verification=CONFIRMED or VALIDATED). The profile is fully engine-ready. | User action (Confirm Project) + Validation Engine (final gate) | All downstream engines (gate is open) |
+  1310→| `ELIGIBILITY_READY` | The Eligibility Engine has run and produced an `EligibilityResult`. This result is snapshotted in the database. The profile is unchanged. | Eligibility Engine (called by feature orchestration) | Financial Engine (may use eligibility context), DPR Engine |
+  1311→| `FINANCIAL_READY` | The Financial Engine has run and produced a `FinancialResult`. This result is snapshotted in the database. | Financial Engine (called by feature orchestration) | DPR Engine (requires both eligibility + financials) |
+  1312→| `DPR_READY` | The DPR Engine has assembled the document. The PDF Engine has rendered it. The user can view, share, or save the DPR. | DPR Engine + PDF Engine (called by feature orchestration) | User (view, share, save), Import/Export Engine |
+  1313→
+  1314→### 11.2 Forward transitions
+  1315→
+  1316→```
+  1317→EMPTY ──────────[user starts interview or guided wizard]─────→ PARTIAL
+  1318→
+  1319→PARTIAL ────────[applicant identity + category known]──────→ DISCOVERING
+  1320→
+  1321→DISCOVERING ────[all interview phases complete]────────────→ COMPLETE
+  1322→
+  1323→COMPLETE ───────[Validation Engine pre-check passes
+  1324→                 (all mandatory fields have values, no errors)]──→ REVIEW_PENDING
+  1325→
+  1326→REVIEW_PENDING ──[user presses "Confirm Project" +
+  1327→                 Validation Engine final gate passes]─────────→ VALIDATED
+  1328→
+  1329→VALIDATED ──────[Eligibility Engine runs]──────────────────→ ELIGIBILITY_READY
+  1330→
+  1331→ELIGIBILITY_READY ──[Financial Engine runs]────────────────→ FINANCIAL_READY
+  1332→
+  1333→FINANCIAL_READY ──[DPR + PDF Engine runs]──────────────────→ DPR_READY
+  1334→```
+  1335→
+  1336→### 11.3 Edit transitions (going backward)
+  1337→
+  1338→When the user edits a previously-collected field, the profile may need to move backward:
+  1339→
+  1340→```
+  1341→DPR_READY ──────[user edits any input]─────────────────────→ REVIEW_PENDING
+  1342→FINANCIAL_READY ──[user edits financial inputs]────────────→ REVIEW_PENDING
+  1343→ELIGIBILITY_READY ──[user edits financial inputs]──────────→ REVIEW_PENDING
+  1344→                 (eligibility may still be valid;
+  1345→                  financial result is invalidated)
+  1346→
+  1347→REVIEW_PENDING ──[user edits any field]────────────────────→ COMPLETE
+  1348→                 (re-validation required;
+  1349→                  downstream engine results are invalidated
+  1350→                  but NOT deleted — they become stale snapshots)
+  1351→
+  1352→VALIDATED ──────[user edits any field]─────────────────────→ REVIEW_PENDING
+  1353→                 (re-confirmation required;
+  1354→                  downstream engine results are invalidated
+  1355→                  but NOT deleted — they become stale snapshots)
+  1356→
+  1357→ANY pre-validation state ──[user edits a dependency root
+  1358→                 (NIC code, sector, category)]────────────→ DISCOVERING
+  1359→                 (dependents flagged for re-collection)
+  1360→```
+  1361→
+  1362→**Rules for edit transitions:**
+  1363→
+  1364→1. **Edits invalidate forward, never backward.** Editing the NIC code (Phase 3 data) invalidates machinery and financials (Phase 4–5 data), but does not invalidate the applicant's name (Phase 1 data).
+  1365→2. **Invalidated engine results are not deleted.** They become stale snapshots in the database, tagged with the `knowledgeVersion` and profile version that produced them. This preserves reproducibility and audit history.
+  1366→3. **The user must explicitly regenerate.** After an edit, the app informs the user which downstream results are now stale and offers to re-run the affected engines. Already-generated DPRs are never silently rewritten.
+  1367→4. **State moves forward one step at a time through the engine pipeline.** The user cannot jump from `DPR_READY` directly to re-running just the Financial Engine — the app walks through `REVIEW_PENDING` → `VALIDATED` → `ELIGIBILITY_READY` → `FINANCIAL_READY`, re-running each engine in sequence. This ensures every gate is re-evaluated.
+  1368→
+  1369→### 11.4 Resume behavior
+  1370→
+  1371→When the user opens an existing project:
+  1372→
+  1373→1. Load the persisted profile from SQLite.
+  1374→2. Determine the current state from the stored `status` column and the presence/absence of engine snapshots.
+  1375→3. If state is `EMPTY` through `DISCOVERING`: resume the interview at the last active phase.
+  1376→4. If state is `COMPLETE`: enter the Review phase (Phase 6) to confirm any non-engine-ready fields, then attempt the validation pre-check.
+  1377→5. If state is `REVIEW_PENDING`: present the project summary screen. The user can edit (which moves state backward per §11.3) or press "Confirm Project" to proceed.
+  1378→6. If state is `VALIDATED` or later: present the project dashboard showing engine results. The user can edit (which moves the state backward per §11.3) or view/export the DPR.
+  1379→7. If the user's edit moves the state backward, re-run the interview/workflow from the appropriate point.
+  1380→
+  1381→### 11.5 State machine and the validation gate
+  1382→
+  1383→The state machine **is** the enforcement of Design Principle 14 ("Project Completion & Validation gates the engines").
+  1384→
+  1385→- States `EMPTY` through `COMPLETE` are **pre-validation**. No engine may run.
+  1386→- The transition `COMPLETE → REVIEW_PENDING` requires the Validation Engine's **pre-check** to pass — all mandatory fields must have values (no MISSING fields), completeness must meet the threshold, and no blocking errors or unresolved contradictions. Verification is NOT checked here — that is the purpose of REVIEW_PENDING.
+  1387→- `REVIEW_PENDING` is the **user review and confirmation checkpoint**. The app displays a project summary (machinery, project cost, employees, loan amount, subsidy, working capital). When the user presses **"Confirm Project,"** all fields are stamped with verification=CONFIRMED. This creates a clean audit trail: the beneficiary has seen and approved the full project before any calculation runs.
+  1388→- The transition `REVIEW_PENDING → VALIDATED` requires the Validation Engine's **final gate** to pass — Zod schema validation, business rules, and contradiction checks run against the now-confirmed profile. This is a lightweight check since data presence and completeness were already verified at the pre-check.
+  1389→- States `VALIDATED` through `DPR_READY` are **post-validation**. Engines run sequentially, each producing a snapshot that the next engine consumes.
+  1390→
+  1391→### 11.6 Persistence
+  1392→
+  1393→The profile state is stored in the `project` table (doc 03) as the `status` column. The column holds the current state string (`EMPTY`, `PARTIAL`, `DISCOVERING`, `COMPLETE`, `REVIEW_PENDING`, `VALIDATED`, `ELIGIBILITY_READY`, `FINANCIAL_READY`, `DPR_READY`). Engine snapshots are stored in their respective tables (`project_financials`, `dpr_document`) keyed to the project.
+  1394→
+  1395→The state column is the single source of truth for the UI (which screens to show), the interview (whether to resume or present results), and the feature orchestration (which engines to run or re-run).
+  1396→
+  1397→### 11.6.1 Extensibility
+  1398→
+  1399→The state machine is designed to accommodate future post-DPR states without breaking existing transitions. Potential additions (not for v1, but architecturally expected):
+  1400→
+  1401→- **`BANK_SUBMITTED`** — The DPR has been submitted to a bank or financial institution.
+  1402→- **`FINALIZED`** — The project is locked — no further edits permitted. The DPR is the authoritative version.
+  1403→
+  1404→These would extend the pipeline after `DPR_READY`. Adding them would not change any existing transitions — they would add new forward transitions from `DPR_READY` and new edit transitions (e.g., `BANK_SUBMITTED → REVIEW_PENDING` if the bank requests changes).
+  1405→
+  1406→The `status` column uses a free-text string (not an enum in SQLite), so new states can be added without a schema migration.
+  1407→
+  1408→### 11.7 State machine and provenance interaction
+  1409→
+  1410→The state machine and the provenance model (Section 9) interact at two critical points:
+  1411→
+  1412→**1. The `COMPLETE → REVIEW_PENDING` transition (data gate):**
+  1413→
+  1414→- A profile in `COMPLETE` state has all mandatory fields populated (no MISSING fields).
+  1415→- The Validation Engine checks completeness, blocking errors, and contradictions.
+  1416→- Verification is NOT a factor here — fields are expected to be UNVERIFIED at this point.
+  1417→- If any mandatory field is MISSING, or if there are blocking errors/contradictions, the transition is **blocked**.
+  1418→
+  1419→**2. The `REVIEW_PENDING → VALIDATED` transition (confirmation gate + final validation):**
+  1420→
+  1421→- The user has pressed "Confirm Project," which stamps all fields with verification=CONFIRMED.
+  1422→- The Validation Engine performs the **final gate** check: Zod validation, business rules, contradictions.
+  1423→- On success, all field provenance entries have their `verification` stamped to `VALIDATED`.
+  1424→
+  1425→This ensures the principle is enforced at the architectural level: **no value reaches a deterministic engine without user confirmation.** The REVIEW_PENDING screen is the single, non-bypassable confirmation point for all fields regardless of source.
+  1426→
+  1427→---
+  1428→
+  1429→## 12. Relationship to Existing Architecture
+  1430→
+  1431→This document fills the gap between the user and the Validation Engine. It does not change any existing architectural decisions — it specifies what was previously left implicit.
+  1432→
+  1433→### 12.1 What this document defines (new)
+  1434→
+  1435→| Concept | Where it was before | Where it is now |
+  1436→|---------|-------------------|-----------------|
+  1437→| Structured Project Profile schema | Referenced everywhere, never specified | Canonical definition in Section 2 |
+  1438→| AI reasoning pipeline | Implicitly described in doc 04 §4 | Full 8-stage pipeline in Section 3 |
+  1439→| Interview phases | Not specified | 7-phase model in Section 4 |
+  1440→| Knowledge-assisted interview | Briefly mentioned in AGENTS.md | Full specification in Section 5 |
+  1441→| Activity discovery lifecycle | Partially in AGENTS.md §Knowledge Engine | Full lifecycle in Section 6 |
+  1442→| Field dependency graph | Not specified | Defined in Section 7 |
+  1443→| "I don't know" handling | Not specified | Full strategy in Section 8 |
+  1444→| Confidence model | Referenced in doc 04 §5 and doc 15 §2 | Two-dimensional provenance model (Source × Verification) in Section 9 |
+  1445→| Suggestion lifecycle | Not specified | Full lifecycle in Section 10 |
+  1446→| Field ownership | Not specified | Defined in Section 2.3 |
+  1447→
+  1448→### 12.2 What this document does NOT change
+  1449→
+  1450→- Design Principles (principles 1–15) — unchanged
+  1451→- Engine responsibilities (Financial, Eligibility, DPR, PDF, Validation, Knowledge) — unchanged
+  1452→- Provider abstraction — unchanged
+  1453→- Data model (SQLite schema in doc 03) — the profile schema in Section 2 is the *application-level* contract; the SQLite schema in doc 03 is the *persistence-level* contract. They map 1:1 but serve different readers.
+  1454→- Folder structure (doc 02) — no new engine or folder is introduced. The interview orchestration lives in `features/ai/`, as already specified.
+  1455→- Knowledge Package boundaries (doc 09, AGENTS.md) — unchanged. Suggestions come from Knowledge Package data, not from AI.
+  1456→- Security and privacy (doc 13) — unchanged. PII is redacted before prompts; suggestions contain no PII.
+  1457→
+  1458→### 12.3 Where each concern lives
+  1459→
+  1460→| Concern | Owner | Document |
+  1461→|---------|-------|----------|
+  1462→| Structured Project Profile definition | This document | Section 2 |
+  1463→| Interview reasoning pipeline | This document | Section 3 |
+  1464→| Interview phases | This document | Section 4 |
+  1465→| Knowledge-assisted interview | This document | Section 5 |
+  1466→| Activity discovery | This document | Section 6 |
+  1467→| Field dependencies | This document | Section 7 |
+  1468→| "I don't know" handling | This document | Section 8 |
+  1469→| Provenance model | This document | Section 9 |
+  1470→| Suggestion lifecycle | This document | Section 10 |
+  1471→| Field ownership | This document | Section 2.3 |
+  1472→| Validation (gate) | Validation Engine | [04 §5](04-ai-architecture.md), [15 §2](15-application-workflows.md) |
+  1473→| Eligibility determination | Eligibility Engine | [06](06-eligibility-engine.md) |
+  1474→| Financial calculations | Financial Engine | [05](05-financial-engine.md) |
+  1475→| DPR assembly | DPR Engine | [07](07-dpr-engine.md) |
+  1476→| AI provider abstraction | Provider Manager | [04 §3](04-ai-architecture.md) |
+  1477→| Knowledge Package data | Knowledge Package | [09](09-knowledge-package.md) |
+  1478→| Offline behavior | System architecture | [01 §5](01-system-architecture.md) |
+  1479→| Privacy & PII | Security architecture | [13](13-security-and-privacy.md) |
+  1480→| Prompt templates | Knowledge Package | [09 §2](09-knowledge-package.md), [04 §9](04-ai-architecture.md) |
+  1481→
+  1482→---
+  1483→
+  1484→## 13. Success Criteria
+  1485→
+  1486→This architecture document must answer these questions unambiguously:
+  1487→
+  1488→1. **What exactly is a Structured Project Profile?**
+  1489→   → Section 2. A typed, Zod-validated object with 13 top-level sections covering applicant, business, location, land, capacity, machinery, raw materials, employees, utilities, financials, working capital, market, attachments, validation metadata, provenance metadata, and completion metadata. Both the AI interview and guided forms produce an identical instance.
+  1490→
+  1491→2. **How does the AI decide the next question?**
+  1492→   → Section 3, Stages 4–7. The Validation Engine identifies missing fields and contradictions. The dependency graph determines which fields are askable. The phase model determines the current focus area. The question planner selects the highest-priority askable field.
+  1493→
+  1494→3. **How are NIC activities discovered?**
+  1495→   → Section 6. The Knowledge Engine searches the NIC code database using the beneficiary's business description. Candidates are presented for user confirmation. Once confirmed, NIC code, sector, sub-category, and activity type are fixed. PMEGP rules are then determined.
+  1496→
+  1497→4. **How does the Knowledge Package assist beneficiaries?**
+  1498→   → Section 5. When a beneficiary cannot answer a technical question, the interview queries the Knowledge Package for suggested values (machinery, costs, benchmarks). Suggestions are presented for explicit acceptance — never silently applied.
+  1499→
+  1500→5. **How are suggestions handled?**
+  1501→   → Section 10. Knowledge Package → Knowledge Engine → Suggestion → User Review → Acceptance → Profile → Validation → Engines. Suggestions never bypass confirmation. AI-generated suggestions are prohibited.
+  1502→
+  1503→6. **How are unknown answers handled?**
+  1504→   → Section 8. Uncertainty is detected → Knowledge Package provides suggestion → AI explains suggestion → User accepts, edits, or skips. "I don't know" is never an error and never blocks the conversation.
+  1505→
+  1506→7. **How does provenance work?**
+  1507→   → Section 9. Every field carries two orthogonal dimensions: Source (USER, AI, OCR, KNOWLEDGE, null) and Verification (UNVERIFIED, CONFIRMED, VALIDATED). Engine readiness is determined solely by verification — a field must be CONFIRMED or VALIDATED for engines to consume it. Source is for audit trails and DPR annotation, not for gate logic. The REVIEW_PENDING screen is the single mandatory confirmation point for all fields.
+  1508→
+  1509→8. **How do interview phases work?**
+  1510→   → Section 4. Seven sequential phases: Applicant Discovery → Business Discovery → Activity Resolution → Project Sizing → Financial Planning → Review → Validation Completion. Each phase has a clear objective and exit condition. Within a phase, question order is flexible; phase order is fixed by dependencies.
+  1511→
+  1512→9. **How do deterministic engines receive clean, validated data?**
+  1513→   → The Validation Engine (doc 04 §5, doc 15 §2) gates all downstream engines. Engines receive the Structured Project Profile only after validation passes. The profile is the single data contract — engines never see conversation messages, form state, or provenance metadata.

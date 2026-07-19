@@ -1,0 +1,123 @@
+---
+Task ID: 2
+Agent: Main
+Task: Address architecture review feedback — fix Rule 4 gap and add Project Profile State Machine
+
+Work Log:
+- Reviewed the 4 architectural rules from the reviewer
+- Identified Rule 4 gap: original doc said KNOWLEDGE_SUGGESTED values were "full citizens" visible to engines — this was wrong
+- Fixed Section 9.4 (Confidence and downstream engines): added confidence gate — Validation Engine now enforces that all mandatory fields must be USER_ENTERED or USER_CONFIRMED before the profile can transition to VALIDATED; KNOWLEDGE_SUGGESTED values block the gate
+- Fixed Section 10.1 Rule 4: changed from "Suggested values are full citizens" to "Suggested values are provisional, not authoritative" with cross-references to §9.4 and §11
+- Added Section 11: Project Profile State Machine (reviewer's recommended improvement)
+  - 8 states: EMPTY → PARTIAL → DISCOVERING → COMPLETE → VALIDATED → ELIGIBILITY_READY → FINANCIAL_READY → DPR_READY
+  - §11.2: Forward transitions with trigger conditions
+  - §11.3: Edit transitions (going backward) with 4 rules (invalidate forward, don't delete snapshots, explicit regeneration, one-step-at-a-time)
+  - §11.4: Resume behavior (6-step process for opening existing projects)
+  - §11.5: State machine as enforcement of Design Principle 14
+  - §11.6: Persistence (status column in project table)
+  - §11.7: State machine and confidence interaction (the COMPLETE → VALIDATED gate requires all mandatory fields confirmed)
+- Renumbered old §11 → §12, old §12 → §13
+- Updated docs/README.md description for doc 16 to include "project profile state machine"
+
+Stage Summary:
+- Rule 4 gap is now closed: suggested values physically cannot reach engines until user confirms them — enforced at two levels (§9.4 confidence gate + §11.7 state machine interaction)
+- The state machine makes resume, editing, validation, and engine execution rules explicit and unambiguous
+- No existing architectural principles or engine boundaries were changed
+- No application code was written
+
+---
+Task ID: Phase 1 — Foundation Skeleton
+Agent: Main
+Task: Build clean architecture skeleton with NO business logic
+
+Work Log:
+
+1. **Read Architecture Documents** — Thoroughly read docs 16 (§2 schema, §2.3 field ownership, §9 provenance, §11 state machine), 02 (modules & folder structure, dependency rule), 03 (SQLite persistence), 09 (Knowledge Package structure).
+
+2. **Folder Structure Created**:
+   - `src/shared/types/` — TypeScript type definitions
+   - `src/shared/types/schemas/` — Zod validation schemas
+   - `src/shared/utils/` — Pure utility functions (empty, ready for Phase 2)
+   - `src/engines/validation-engine/` — Stub
+   - `src/engines/knowledge-engine/` — Stub
+   - `src/engines/financial-engine/` — Stub
+   - `src/engines/eligibility-engine/` — Stub
+   - `src/engines/dpr-engine/` — Stub
+   - `src/features/project-profile/` — Feature folder (empty, ready)
+   - `src/features/ai/` — Feature folder (empty, ready)
+   - `src/knowledge-package/` — Loader + types + data
+   - `src/providers/` — AI provider stub
+
+3. **Moved NIC Code Data** — Moved 5 JSON files from `src/data/` to `src/knowledge-package/data/`. Removed empty `src/data/` directory.
+
+4. **Shared Types Created** (`src/shared/types/`):
+   - `project-profile.ts` — The canonical ProjectProfile type with ALL 13 sections: applicant, business, location, land, capacity, machinery, rawMaterials, employees, utilities, financials, workingCapitalDetail, market, attachments, validation, provenance, completion. Includes all sub-types (MachineryItem, RawMaterialItem, AttachmentRef, etc.). Money fields are `number` (to be enforced as integer by Zod).
+   - `provenance.ts` — FieldProvenance and ProvenanceMetadata with ProvenanceSource, VerificationStatus.
+   - `state-machine.ts` — ProjectStatus (9 states), ItemSource.
+   - `interview.ts` — InterviewPhase (7 phases), PhaseProgress.
+   - `index.ts` — Barrel re-export of everything.
+
+5. **Zod Schemas Created** (`src/shared/types/schemas/`):
+   - `project-profile.ts` — Full Zod schema tree mirroring TypeScript types exactly. Money fields use `z.number().int().min(0)`. Section-level schemas exported individually. Inferred types exported. Includes projectProfileSchema (root), fieldProvenanceSchema, provenanceMetadataSchema, projectStatusSchema, phaseProgressSchema, and all 13 section schemas.
+   - `index.ts` — Barrel re-export.
+
+6. **Knowledge Package Loader** (`src/knowledge-package/`):
+   - `types.ts` — NicCodeEntry, NicSector, NicSubCategory, NicCodeMetadata.
+   - `loader.ts` — Singleton loader: `searchNicCodes(query)`, `getNicCode(code)`, `getNicCodesByType(type)`, `getMetadata()`, `getTotalCount()`. All synchronous, memory-cached.
+   - `index.ts` — Public API barrel.
+
+7. **Prisma Schema Rewritten** (`prisma/schema.prisma`):
+   - `Project` — Simplified to: id, name, status (9-state machine), profileData (JSON), provenanceData (JSON), completionData (JSON), timestamps. All flat columns removed per architecture.
+   - `ProjectFinancials` — Kept with onDelete: Cascade. Integer money fields. Comments added.
+   - `AiProviderConfig` — Kept as-is.
+   - `db:push` executed successfully, fresh database created.
+
+8. **Engine Stubs** — 5 engines with `export {}` stubs and descriptive comments. `providers/index.ts` stub added.
+
+9. **Landing Page** (`src/app/page.tsx`):
+   - "PMEGP Assistant" header with Indian Rupee icon.
+   - "New Project" button (disabled, Phase 2).
+   - Project list fetched from `/api/projects` with loading skeleton and empty state.
+   - Two info cards (Scheme Guidelines, DPR Generation).
+   - Sticky footer with Phase 1 notice.
+   - Responsive design, semantic HTML.
+
+10. **API Route** (`src/app/api/projects/route.ts`) — GET endpoint returning project list (id, name, status, timestamps).
+
+11. **Layout Updated** — Metadata changed from Z.ai scaffold to PMEGP Assistant.
+
+12. **Verification**:
+    - ESLint: clean (0 errors, 0 warnings).
+    - Dev server: running, `/` returns 200, `/api/projects` returns `{"projects":[]}`.
+
+Stage Summary:
+- Clean architecture skeleton is complete. All 13 sections of the Structured Project Profile are typed, Zod-validated, and barrel-exported.
+- Knowledge Package loader works with ~1,700 NIC codes across 4 files.
+- Prisma schema matches the frozen architecture (JSON blob storage, 9-state status).
+- No business logic, no engine code, no AI provider code, no feature code — only the foundation.
+- Dependency rule is structurally enforced: engines/ and shared/ have no cross-imports with features/ or providers/.
+
+What's Next (Phase 2):
+- Implement the AI interview pipeline (features/ai/) — user message parsing, structured field extraction, profile update.
+- Wire the "New Project" button → create Project → enter interview.
+- Implement the Validation Engine (engines/validation-engine/).
+- Add Knowledge Engine NIC code lookup integration.
+- Build the guided-form alternative to the AI interview (features/project-profile/).
+- Implement the Zustand store for client-side project state.
+---
+Task ID: 3
+Agent: Main
+Task: Architecture freeze + Phase 1 Foundation build
+
+Work Log:
+- Created ARCHITECTURE_VERSION.md in pmegp-repo (v1.0, FROZEN)
+- Pushed 4 commits to main: doc 16 initial, provenance model + REVIEW_PENDING, verification-only + field ownership + extensibility, architecture freeze
+- Delegated Phase 1 foundation to full-stack-developer agent
+- Verified: lint clean, dev server running, / returns 200, /api/projects returns data
+- Browser-verified: PMEGP Assistant landing page renders with "New Project" (disabled), "Your Projects" section
+
+Stage Summary:
+- Architecture frozen at v1.0 with 10 frozen contracts
+- Phase 1 complete: folder structure, shared types (ProjectProfile, Provenance, StateMachine, Interview), Zod schemas (all money fields as int), Knowledge Package loader (5 datasets, ~1700 NIC codes, sync in-memory), Prisma schema rewritten (JSON profileData/provenanceData/completionData, 9-state status), landing page
+- Key architectural invariants implemented: verification-only engine readiness, Source × Verification provenance, field ownership table, REVIEW_PENDING state, state machine extensibility
+- Next: Phase 2 — Structured Project Profile with state machine transitions, persistence, resume/edit support
