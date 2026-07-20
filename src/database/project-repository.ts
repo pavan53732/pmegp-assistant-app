@@ -2,6 +2,10 @@ import { db } from "@/lib/db";
 import type { IProjectRepository, ProjectSummary } from "./interfaces";
 import type { ProjectProfile } from "@/shared/types/project-profile";
 import type { ProjectStatus } from "@/shared/types/state-machine";
+import type { ChatMessage } from "@/features/ai/interview/types";
+
+/** Maximum number of chat messages stored per project. */
+const MAX_CHAT_MESSAGES = 200;
 
 function extractSummary(project: { id: string; name: string; status: string; profileData: string; createdAt: Date; updatedAt: Date }): ProjectSummary {
   let profile: ProjectProfile | null = null;
@@ -47,6 +51,7 @@ export class ProjectRepository implements IProjectRepository {
         profileData: JSON.stringify(emptyProfile),
         provenanceData: JSON.stringify(emptyProfile.provenance),
         completionData: JSON.stringify(emptyProfile.completion),
+        chatHistory: "[]",
       },
     });
 
@@ -81,6 +86,49 @@ export class ProjectRepository implements IProjectRepository {
 
   async delete(id: string): Promise<void> {
     await db.project.delete({ where: { id } });
+  }
+
+  async getChatHistory(id: string): Promise<ChatMessage[]> {
+    const project = await db.project.findUnique({
+      where: { id },
+      select: { chatHistory: true },
+    });
+    if (!project) return [];
+    try {
+      const parsed = JSON.parse(project.chatHistory) as ChatMessage[];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  async appendChatMessages(id: string, messages: ChatMessage[]): Promise<void> {
+    if (messages.length === 0) return;
+
+    const project = await db.project.findUnique({
+      where: { id },
+      select: { chatHistory: true },
+    });
+    if (!project) return;
+
+    let existing: ChatMessage[] = [];
+    try {
+      const parsed = JSON.parse(project.chatHistory);
+      if (Array.isArray(parsed)) existing = parsed;
+    } catch {
+      // corrupted data, start fresh
+    }
+
+    const combined = [...existing, ...messages];
+    // Keep only the last MAX_CHAT_MESSAGES messages
+    const trimmed = combined.length > MAX_CHAT_MESSAGES
+      ? combined.slice(combined.length - MAX_CHAT_MESSAGES)
+      : combined;
+
+    await db.project.update({
+      where: { id },
+      data: { chatHistory: JSON.stringify(trimmed) },
+    });
   }
 }
 

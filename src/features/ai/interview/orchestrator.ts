@@ -75,6 +75,10 @@ function maskPII(text: string): string {
 /**
  * Convert dot-path strings to the field descriptor format expected
  * by extractFieldsFromMessage / buildExtractionPrompt.
+ *
+ * Looks up the actual field type, label, and enum options from PHASE_CONFIGS
+ * so that local extraction can handle ENUM, NUMBER, CURRENCY, and BOOLEAN
+ * fields correctly instead of falling through to the AI path for every field.
  */
 function toFieldDescriptors(
   dotPaths: string[]
@@ -84,11 +88,33 @@ function toFieldDescriptors(
   type: "TEXT" | "NUMBER" | "ENUM" | "BOOLEAN" | "CURRENCY" | "DATE";
   enumOptions?: string[];
 }> {
-  return dotPaths.map((dp) => ({
-    dotPath: dp,
-    label: dp.split(".").pop() ?? dp,
-    type: "TEXT" as const,
-  }));
+  return dotPaths.map((dp) => {
+    /** Look up the actual FieldConfig from PHASE_CONFIGS by dot-path. */
+    let foundType: "TEXT" | "NUMBER" | "ENUM" | "BOOLEAN" | "CURRENCY" | "DATE" = "TEXT";
+    let foundLabel = dp.split(".").pop() ?? dp;
+    let foundEnumOptions: string[] | undefined;
+
+    for (const config of Object.values(PHASE_CONFIGS)) {
+      for (const group of config.fieldGroups) {
+        for (const field of group.fields) {
+          if (field.dotPath === dp) {
+            foundType = field.type;
+            foundLabel = field.label;
+            if (field.enumOptions) {
+              foundEnumOptions = field.enumOptions.map((o) => o.value);
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      dotPath: dp,
+      label: foundLabel,
+      type: foundType,
+      enumOptions: foundEnumOptions,
+    };
+  });
 }
 
 // ── InterviewController ────────────────────────────────────────────────────
@@ -168,6 +194,10 @@ export class InterviewController {
     this.state.messages.push(userMsg);
     this.state.interactionCount++;
     this.state.lastActivityAt = new Date().toISOString();
+
+    // Push the user's actual message to the AI provider history so the AI
+    // can see what the user really said (not just the question context).
+    this.messageHistory.push({ role: "user", content: message });
 
     // 2. Parse user intent
     let intent: ParsedUserIntent;
@@ -323,6 +353,12 @@ export class InterviewController {
     const fieldsNeedingAI = localResult.needsAI;
 
     if (fieldsNeedingAI.length > 0) {
+      /**
+       * Use try/finally to guarantee the extraction prompt is always removed
+       * from messageHistory, even if getAIResponse or parseAIExtractionResponse
+       * throws an unexpected error. Without this, the extraction prompt would
+       * leak into the conversation history permanently.
+       */
       try {
         const aiFieldDescriptors = toFieldDescriptors(fieldsNeedingAI);
         const extractionPrompt = buildExtractionPrompt(
@@ -331,13 +367,16 @@ export class InterviewController {
           phase
         );
         this.messageHistory.push({ role: "user", content: extractionPrompt });
-        const aiResp = await getAIResponse(this.messageHistory);
-        if (aiResp.success && aiResp.content) {
-          const parsed = parseAIExtractionResponse(aiResp.content, fieldsNeedingAI);
-          aiExtractions.push(...parsed);
+        try {
+          const aiResp = await getAIResponse(this.messageHistory);
+          if (aiResp.success && aiResp.content) {
+            const parsed = parseAIExtractionResponse(aiResp.content, fieldsNeedingAI);
+            aiExtractions.push(...parsed);
+          }
+        } finally {
+          // Remove the extraction prompt from history (it was internal)
+          this.messageHistory.pop();
         }
-        // Remove the extraction prompt from history (it was internal)
-        this.messageHistory.pop();
       } catch (err) {
         console.error("[InterviewController] AI extraction failed:", err);
       }

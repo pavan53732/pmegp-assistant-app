@@ -35,7 +35,12 @@ import { Separator } from "@/components/ui/separator";
 import { PhaseIndicator } from "./phase-indicator";
 import { ChatMessageBubble } from "./chat-message";
 import { ChatInput } from "./chat-input";
-import { sendChatMessage, formatIndianCurrency } from "@/lib/interview-api";
+import {
+  streamChatMessage,
+  fetchChatHistory,
+  sendChatMessage,
+  formatIndianCurrency,
+} from "@/lib/interview-api";
 import type { ChatMessage, InterviewState } from "@/features/ai/interview/types";
 import type { ProjectProfile } from "@/shared/types/project-profile";
 import type { InterviewPhase, PhaseProgress } from "@/shared/types/interview";
@@ -504,16 +509,58 @@ export function ChatView({
   const [error, setError] = useState<string | null>(null);
   const [interviewState, setInterviewState] = useState<InterviewState | null>(null);
   const [profile, setProfile] = useState<ProjectProfile | null>(initialProfile ?? null);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  // Send a message and handle the response
+  // Load chat history on mount
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadHistory() {
+      try {
+        const history = await fetchChatHistory(projectId);
+        if (cancelled) return;
+
+        if (history.length > 0) {
+          setMessages(history);
+        }
+        setHistoryLoaded(true);
+      } catch (err) {
+        // Silently ignore history load errors — user sees a fresh chat
+        if (!cancelled) setHistoryLoaded(true);
+      }
+    }
+
+    // Only load history if the project already has interactions
+    if (initialProfile && initialProfile.completion.interactionCount > 0) {
+      loadHistory();
+    } else {
+      setHistoryLoaded(true);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [projectId, initialProfile]);
+
+  // Handle stream abort (stop button)
+  const handleStop = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setLoading(false);
+  }, []);
+
+  // Send a message and handle the response (with streaming)
   const handleSend = useCallback(
     async (text: string) => {
       setError(null);
@@ -529,29 +576,129 @@ export function ChatView({
       };
       setMessages((prev) => [...prev, userMsg]);
 
-      try {
-        const res = await sendChatMessage(projectId, text);
+      // Create an AbortController for this request
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
 
-        if (res.message) {
-          setMessages((prev) => [...prev, res.message!]);
+      // Create a placeholder AI message for streaming into
+      const aiMsgId = `ai-${Date.now()}`;
+      const currentPhase = interviewState?.currentPhase ?? "APPLICANT_DISCOVERY";
+      const streamingMsg: ChatMessage = {
+        id: aiMsgId,
+        role: "ASSISTANT",
+        content: "",
+        timestamp: new Date().toISOString(),
+        phase: currentPhase,
+      };
+
+      // Add the empty AI message immediately (will be updated via streaming)
+      setMessages((prev) => [...prev, streamingMsg]);
+
+      try {
+        const result = await streamChatMessage(
+          projectId,
+          text,
+          // onChunk: update the streaming message content
+          (cumulativeContent: string) => {
+            setMessages((prev) =>
+              prev.map((m) =>
+                m.id === aiMsgId
+                  ? { ...m, content: cumulativeContent }
+                  : m
+              )
+            );
+          },
+          abortController.signal,
+        );
+
+        // Stream completed successfully — update with final metadata
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === aiMsgId && result.message
+              ? {
+                  ...m,
+                  id: result.message.id || aiMsgId,
+                  content: result.message.content || m.content,
+                  targetField: result.message.targetField,
+                  extractions: result.message.extractions,
+                  phase: result.message.phase || m.phase,
+                }
+              : m
+          )
+        );
+
+        if (result.profile) {
+          setProfile(result.profile);
         }
-        if (res.profile) {
-          setProfile(res.profile);
-        }
-        if (res.state) {
-          setInterviewState(res.state);
+        if (result.state) {
+          setInterviewState(result.state);
 
           // If we've reached the REVIEW phase, notify parent with the latest profile
-          if (res.state.currentPhase === "REVIEW" && !res.state.isComplete && res.profile) {
-            onEnterReview(res.profile);
+          if (result.state.currentPhase === "REVIEW" && !result.state.isComplete && result.profile) {
+            onEnterReview(result.profile);
           }
         }
       } catch (err) {
-        const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
-        setError(msg);
-        toast.error("Error", { description: msg });
+        // Check if it was an abort
+        if (err instanceof Error && err.name === "AbortError") {
+          // User clicked stop — keep whatever content was streamed
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === aiMsgId && m.content === ""
+                ? prev[prev.length - 2]?.role === "USER"
+                  ? { ...m, id: prev.length - 2 <= 0 ? m.id : m.id }
+                  : m
+                : m
+            )
+          );
+          // Remove the empty placeholder if nothing was streamed
+          setMessages((prev) => {
+            const lastMsg = prev[prev.length - 1];
+            if (lastMsg && lastMsg.id === aiMsgId && lastMsg.content === "") {
+              return prev.slice(0, -1);
+            }
+            return prev;
+          });
+          return;
+        }
+
+        // Remove the empty streaming placeholder on error
+        setMessages((prev) => {
+          const lastMsg = prev[prev.length - 1];
+          if (lastMsg && lastMsg.id === aiMsgId && lastMsg.content === "") {
+            return prev.slice(0, -1);
+          }
+          return prev;
+        });
+
+        // Fall back to non-streaming on stream failure
+        try {
+          const res = await sendChatMessage(projectId, text);
+
+          // Remove the streaming placeholder and add the real message
+          setMessages((prev) => {
+            const filtered = prev.filter((m) => m.id !== aiMsgId);
+            if (res.message) {
+              return [...filtered, res.message];
+            }
+            return filtered;
+          });
+
+          if (res.profile) setProfile(res.profile);
+          if (res.state) {
+            setInterviewState(res.state);
+            if (res.state.currentPhase === "REVIEW" && !res.state.isComplete && res.profile) {
+              onEnterReview(res.profile);
+            }
+          }
+        } catch (fallbackErr) {
+          const msg = fallbackErr instanceof Error ? fallbackErr.message : "Something went wrong. Please try again.";
+          setError(msg);
+          toast.error("Error", { description: msg });
+        }
       } finally {
         setLoading(false);
+        abortControllerRef.current = null;
       }
     },
     [projectId, interviewState, onEnterReview]
@@ -588,6 +735,9 @@ export function ChatView({
   const currentPhase: InterviewPhase = interviewState?.currentPhase ?? profile?.completion?.currentPhase ?? "APPLICANT_DISCOVERY";
   const phaseProgress = profile?.completion?.phaseProgress ?? makeDefaultPhaseProgress();
   const completeness = profile?.validation?.completeness ?? 0;
+
+  // Whether we should show the welcome screen
+  const showWelcome = messages.length === 0 && !loading && historyLoaded;
 
   return (
     <div className="flex flex-col h-[calc(100vh-1px)] sm:h-screen bg-background">
@@ -646,7 +796,7 @@ export function ChatView({
       {/* ── Messages Area ───────────────────────────────────────── */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 space-y-4">
-          {messages.length === 0 && !loading && (
+          {showWelcome && (
             <WelcomeScreen onSend={handleSend} />
           )}
 
@@ -662,7 +812,7 @@ export function ChatView({
             ))}
           </AnimatePresence>
 
-          {loading && (
+          {loading && messages.length > 0 && messages[messages.length - 1]?.content === "" && (
             <ThinkingIndicator currentPhase={currentPhase} />
           )}
 
@@ -679,7 +829,11 @@ export function ChatView({
       </div>
 
       {/* ── Input Area (sticky bottom) ──────────────────────────── */}
-      <ChatInput onSend={handleSend} disabled={loading} />
+      <ChatInput
+        onSend={handleSend}
+        disabled={loading}
+        onStop={handleStop}
+      />
     </div>
   );
 }

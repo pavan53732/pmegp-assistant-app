@@ -1,5 +1,6 @@
 import type { ProjectProfile } from "@/shared/types/project-profile";
 import type { ProjectStatus } from "@/shared/types/state-machine";
+import type { ChatMessage } from "@/features/ai/interview/types";
 
 /** Lightweight project summary for list views. */
 export interface ProjectSummary {
@@ -26,4 +27,8 @@ export interface IProjectRepository {
   updateProfile(id: string, profile: ProjectProfile, status?: ProjectStatus): Promise<void>;
   updateStatus(id: string, status: ProjectStatus): Promise<void>;
   delete(id: string): Promise<void>;
+  /** Fetch the chat message history for a project. */
+  getChatHistory(id: string): Promise<ChatMessage[]>;
+  /** Append messages to the chat history for a project. */
+  appendChatMessages(id: string, messages: ChatMessage[]): Promise<void>;
 }

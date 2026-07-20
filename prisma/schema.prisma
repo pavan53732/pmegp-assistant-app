@@ -26,6 +26,8 @@ model Project {
   provenanceData String   @default("{}")
   /// Completion metadata serialized as JSON text.
   completionData String   @default("{}")
+  /// Chat message history serialized as JSON array text.
+  chatHistory    String   @default("[]")
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
