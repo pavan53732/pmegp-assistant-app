@@ -120,3 +120,284 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ── Smooth scrolling ─────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Custom scrollbar (webkit) ─────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(0.7 0.1 160 / 40%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.6 0.12 160 / 60%);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: oklch(0.4 0.08 160 / 50%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.5 0.1 160 / 70%);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ── Selection color ───────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: oklch(0.8 0.15 163 / 50%);
+  color: inherit;
+}
+
+.dark ::selection {
+  background-color: oklch(0.3 0.1 163 / 60%);
+  color: inherit;
+}
+
+/* ── Focus ring (emerald) ──────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid oklch(0.6 0.15 163);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Remove default focus outline for mouse users ──────────────────────────── */
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Custom select dropdown arrow ─────────────────────────────────────────── */
+
+select:not([data-slot]) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+/* ── Card micro-interactions ──────────────────────────────────────────────── */
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Smooth card transitions ────────────────────────────────────────────── */
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ── Phase indicator shimmer animation ──────────────────────────────────── */
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* ── Breathing animation for bot icon ───────────────────────────────────── */
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* ── Fade in up animation ─────────────────────────────────────────────── */
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+/* ── Glow pulse animation ─────────────────────────────────────────────── */
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 oklch(0.6 0.15 163 / 0%);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px oklch(0.6 0.15 163 / 25%);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ── Slide in right animation ─────────────────────────────────────────── */
+
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Dot blink animation ──────────────────────────────────────────────── */
+
+@keyframes dot-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-dot-blink {
+  animation: dot-blink 1.5s ease-in-out infinite;
+}
+
+/* ── Gradient text utility ────────────────────────────────────────────── */
+
+@layer utilities {
+  .text-gradient-emerald {
+    background: linear-gradient(135deg, oklch(0.6 0.15 163), oklch(0.55 0.12 180));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .dark .text-gradient-emerald {
+    background: linear-gradient(135deg, oklch(0.7 0.15 163), oklch(0.65 0.12 180));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ── Glassmorphism card utility ───────────────────────────────────────── */
+
+@layer utilities {
+  .glass-card {
+    background: oklch(1 0 0 / 70%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid oklch(0.922 0 0 / 50%);
+  }
+  .dark .glass-card {
+    background: oklch(0.205 0 0 / 60%);
+    border: 1px solid oklch(1 0 0 / 8%);
+  }
+}
+
+/* ── Subtle noise texture overlay ─────────────────────────────────────── */
+
+@layer utilities {
+  .noise-bg {
+    position: relative;
+  }
+  .noise-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+    z-index: 0;
+    border-radius: inherit;
+  }
+  .noise-bg > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ── Custom scrollbar for Firefox ─────────────────────────────────────── */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.7 0.1 160 / 40%) transparent;
+}
+
+.dark * {
+  scrollbar-color: oklch(0.4 0.08 160 / 50%) transparent;
+}
+
+/* ── Smooth transitions for all interactive elements ──────────────────── */
+
+a, button, [role="button"], input, select, textarea {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Print styles ─────────────────────────────────────────────────────── */
+
+@media print {
+  header, footer, nav, .no-print {
+    display: none !important;
+  }
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  * {
+    color: black !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+}
