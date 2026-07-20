@@ -1,0 +1,1319 @@
+     1→"use client";
+     2→
+     3→import { useCallback, useEffect, useState } from "react";
+     4→import { AnimatePresence, motion } from "framer-motion";
+     5→import { toast } from "sonner";
+     6→import {
+     7→  Card,
+     8→  CardContent,
+     9→  CardDescription,
+    10→  CardHeader,
+    11→  CardTitle,
+    12→} from "@/components/ui/card";
+    13→import { Button } from "@/components/ui/button";
+    14→import { Badge } from "@/components/ui/badge";
+    15→import { Skeleton } from "@/components/ui/skeleton";
+    16→import {
+    17→  Dialog,
+    18→  DialogContent,
+    19→  DialogDescription,
+    20→  DialogFooter,
+    21→  DialogHeader,
+    22→  DialogTitle,
+    23→  DialogTrigger,
+    24→} from "@/components/ui/dialog";
+    25→import {
+    26→  AlertDialog,
+    27→  AlertDialogAction,
+    28→  AlertDialogCancel,
+    29→  AlertDialogContent,
+    30→  AlertDialogDescription,
+    31→  AlertDialogFooter,
+    32→  AlertDialogHeader,
+    33→  AlertDialogTitle,
+    34→  AlertDialogTrigger,
+    35→} from "@/components/ui/alert-dialog";
+    36→import { Input } from "@/components/ui/input";
+    37→import { Label } from "@/components/ui/label";
+    38→import { Progress } from "@/components/ui/progress";
+    39→import { Separator } from "@/components/ui/separator";
+    40→import {
+    41→  Collapsible,
+    42→  CollapsibleContent,
+    43→  CollapsibleTrigger,
+    44→} from "@/components/ui/collapsible";
+    45→import {
+    46→  Plus,
+    47→  FolderOpen,
+    48→  FileText,
+    49→  IndianRupee,
+    50→  ShieldCheck,
+    51→  Loader2,
+    52→  CheckCircle2,
+    53→  ArrowLeft,
+    54→  Search,
+    55→  Trash2,
+    56→  Calculator,
+    57→  ClipboardCheck,
+    58→  Info,
+    59→  ChevronDown,
+    60→  Clock,
+    61→  TrendingUp,
+    62→  BarChart3,
+    63→  Briefcase,
+    64→  Sparkles,
+    65→  X,
+    66→  Eye,
+    67→  Download,
+    68→  Building2,
+    69→  MapPin,
+    70→  Users,
+    71→  Pencil,
+    72→  CreditCard,
+    73→  SearchCode,
+    74→} from "lucide-react";
+    75→
+    76→import { ChatView } from "@/components/interview/chat-view";
+    77→import { ReviewView } from "@/components/interview/review-view";
+    78→import { SubsidyCalculator } from "@/components/dashboard/subsidy-calculator";
+    79→import { EligibilityChecker } from "@/components/dashboard/eligibility-checker";
+    80→import { SchemeInfo } from "@/components/dashboard/scheme-info";
+    81→import { NicCodeSearch } from "@/components/dashboard/nic-code-search";
+    82→import { EmiCalculator } from "@/components/dashboard/emi-calculator";
+    83→import { ProjectCard } from "@/components/dashboard/project-card";
+    84→import HowItWorks from "@/components/dashboard/how-it-works";
+    85→import {
+    86→  createProject,
+    87→  fetchProjects,
+    88→  sendChatMessage,
+    89→  formatIndianCurrency,
+    90→  formatIndianDate,
+    91→} from "@/lib/interview-api";
+    92→import type { ProjectProfile } from "@/shared/types/project-profile";
+    93→
+    94→// ── View type ──────────────────────────────────────────────────────────────
+    95→
+    96→type ViewType = "dashboard" | "interview" | "review" | "status";
+    97→
+    98→// ── Types ──────────────────────────────────────────────────────────────────
+    99→
+   100→interface ProjectSummary {
+   101→  id: string;
+   102→  name: string;
+   103→  status: string;
+   104→  createdAt: string;
+   105→  updatedAt: string;
+   106→}
+   107→
+   108→// ── Status badge config ────────────────────────────────────────────────────
+   109→
+   110→const STATUS_VARIANT: Record<string, "default" | "secondary" | "outline"> = {
+   111→  EMPTY: "outline",
+   112→  PARTIAL: "secondary",
+   113→  DISCOVERING: "secondary",
+   114→  COMPLETE: "default",
+   115→  REVIEW_PENDING: "default",
+   116→  VALIDATED: "default",
+   117→  ELIGIBILITY_READY: "default",
+   118→  FINANCIAL_READY: "default",
+   119→  DPR_READY: "default",
+   120→};
+   121→
+   122→const STATUS_LABEL: Record<string, string> = {
+   123→  EMPTY: "Empty",
+   124→  PARTIAL: "In Progress",
+   125→  DISCOVERING: "Discovering",
+   126→  COMPLETE: "Complete",
+   127→  REVIEW_PENDING: "Review Pending",
+   128→  VALIDATED: "Validated",
+   129→  ELIGIBILITY_READY: "Eligibility Checked",
+   130→  FINANCIAL_READY: "Financials Ready",
+   131→  DPR_READY: "DPR Ready",
+   132→};
+   133→
+   134→const STATUS_BADGE_CLASS: Record<string, string> = {
+   135→  EMPTY: "bg-muted text-muted-foreground hover:bg-muted",
+   136→  PARTIAL: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/30",
+   137→  DISCOVERING: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30",
+   138→  COMPLETE: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   139→  REVIEW_PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/30",
+   140→  VALIDATED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   141→  ELIGIBILITY_READY: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   142→  FINANCIAL_READY: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   143→  DPR_READY: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   144→};
+   145→
+   146→// ── Main Page Component ────────────────────────────────────────────────────
+   147→
+   148→export default function Home() {
+   149→  // View state
+   150→  const [view, setView] = useState<ViewType>("dashboard");
+   151→
+   152→  // Dashboard state
+   153→  const [projects, setProjects] = useState<ProjectSummary[]>([]);
+   154→  const [projectsLoading, setProjectsLoading] = useState(true);
+   155→
+   156→  // New project dialog
+   157→  const [dialogOpen, setDialogOpen] = useState(false);
+   158→  const [newProjectName, setNewProjectName] = useState("");
+   159→  const [creating, setCreating] = useState(false);
+   160→
+   161→  // Interview state
+   162→  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+   163→  const [interviewProfile, setInterviewProfile] = useState<ProjectProfile | null>(null);
+   164→
+   165→  // Review state
+   166→  const [reviewProfile, setReviewProfile] = useState<ProjectProfile | null>(null);
+   167→  const [confirming, setConfirming] = useState(false);
+   168→
+   169→  // Status view state
+   170→  const [statusProfile, setStatusProfile] = useState<ProjectProfile | null>(null);
+   171→
+   172→  // ── Load projects ──────────────────────────────────────────────
+   173→
+   174→  const reloadProjects = useCallback(async () => {
+   175→    setProjectsLoading(true);
+   176→    try {
+   177→      const list = await fetchProjects();
+   178→      setProjects(list);
+   179→    } catch {
+   180→      toast.error("Failed to load projects");
+   181→    } finally {
+   182→      setProjectsLoading(false);
+   183→    }
+   184→  }, []);
+   185→
+   186→  useEffect(() => {
+   187→    reloadProjects();
+   188→  }, [reloadProjects]);
+   189→
+   190→  // ── Create new project ─────────────────────────────────────────
+   191→
+   192→  const handleCreateProject = useCallback(async () => {
+   193→    const name = newProjectName.trim() || `Project ${projects.length + 1}`;
+   194→    setCreating(true);
+   195→    try {
+   196→      const projectId = await createProject(name);
+   197→      setDialogOpen(false);
+   198→      setNewProjectName("");
+   199→      toast.success("Project created!", { description: name });
+   200→      setActiveProjectId(projectId);
+   201→      setInterviewProfile(null);
+   202→      setView("interview");
+   203→    } catch (err) {
+   204→      const msg = err instanceof Error ? err.message : "Failed to create project";
+   205→      toast.error("Error", { description: msg });
+   206→    } finally {
+   207→      setCreating(false);
+   208→    }
+   209→  }, [newProjectName, projects.length]);
+   210→
+   211→  // ── Open existing project ──────────────────────────────────────
+   212→
+   213→  const handleOpenProject = useCallback(
+   214→    async (project: ProjectSummary) => {
+   215→      if (project.status === "DPR_READY" || project.status === "VALIDATED") {
+   216→        toast.info("This project has been confirmed.");
+   217→        setView("status");
+   218→        return;
+   219→      }
+   220→      setActiveProjectId(project.id);
+   221→      setInterviewProfile(null);
+   222→      setView("interview");
+   223→    },
+   224→    []
+   225→  );
+   226→
+   227→  // ── Delete project ─────────────────────────────────────────────
+   228→
+   229→  const handleDeleteProject = useCallback(async (projectId: string, projectName: string, e?: React.MouseEvent) => {
+   230→    if (e) e.stopPropagation();
+   231→    try {
+   232→      const res = await fetch(`/api/projects/${encodeURIComponent(projectId)}`, {
+   233→        method: "DELETE",
+   234→      });
+   235→      const data = await res.json();
+   236→      if (data.success) {
+   237→        toast.success("Project deleted", { description: projectName });
+   238→        setProjects((prev) => prev.filter((p) => p.id !== projectId));
+   239→      } else {
+   240→        toast.error("Failed to delete", { description: data.error?.message ?? "Unknown error" });
+   241→      }
+   242→    } catch {
+   243→      toast.error("Failed to delete project");
+   244→    }
+   245→  }, []);
+   246→
+   247→  // ── Rename project ─────────────────────────────────────────────
+   248→
+   249→  const handleRenameProject = useCallback(async (projectId: string, newName: string) => {
+   250→    if (!newName.trim()) return;
+   251→    try {
+   252→      const res = await fetch(`/api/projects/${encodeURIComponent(projectId)}`, {
+   253→        method: "PATCH",
+   254→        headers: { "Content-Type": "application/json" },
+   255→        body: JSON.stringify({ name: newName.trim() }),
+   256→      });
+   257→      const data = await res.json();
+   258→      if (data.success) {
+   259→        toast.success("Project renamed", { description: newName.trim() });
+   260→        setProjects((prev) =>
+   261→          prev.map((p) => (p.id === projectId ? { ...p, name: newName.trim() } : p))
+   262→        );
+   263→      } else {
+   264→        toast.error("Failed to rename", { description: data.error?.message ?? "Unknown error" });
+   265→      }
+   266→    } catch {
+   267→      toast.error("Failed to rename project");
+   268→    }
+   269→  }, []);
+   270→
+   271→  // ── Interview callbacks ────────────────────────────────────────
+   272→
+   273→  const handleGoBack = useCallback(() => {
+   274→    setActiveProjectId(null);
+   275→    setInterviewProfile(null);
+   276→    setReviewProfile(null);
+   277→    setStatusProfile(null);
+   278→    setView("dashboard");
+   279→    reloadProjects();
+   280→  }, [reloadProjects]);
+   281→
+   282→  const handleEnterReview = useCallback((profile: ProjectProfile) => {
+   283→    setReviewProfile(profile);
+   284→    setView("review");
+   285→  }, []);
+   286→
+   287→  // ── Review callbacks ───────────────────────────────────────────
+   288→
+   289→  const handleConfirmReview = useCallback(async () => {
+   290→    if (!activeProjectId) return;
+   291→    setConfirming(true);
+   292→    try {
+   293→      const res = await sendChatMessage(activeProjectId, "confirm");
+   294→      if (res.profile) {
+   295→        setStatusProfile(res.profile);
+   296→        setReviewProfile(res.profile);
+   297→      }
+   298→      setView("status");
+   299→      toast.success("Project confirmed!");
+   300→    } catch (err) {
+   301→      const msg = err instanceof Error ? err.message : "Failed to confirm";
+   302→      toast.error("Error", { description: msg });
+   303→    } finally {
+   304→      setConfirming(false);
+   305→    }
+   306→  }, [activeProjectId]);
+   307→
+   308→  const handleReviewGoBack = useCallback(() => {
+   309→    setView("interview");
+   310→  }, []);
+   311→
+   312→  // ── Render ─────────────────────────────────────────────────────
+   313→
+   314→  return (
+   315→    <AnimatePresence mode="wait">
+   316→      {view === "dashboard" && (
+   317→        <motion.div
+   318→          key="dashboard"
+   319→          initial={{ opacity: 0 }}
+   320→          animate={{ opacity: 1 }}
+   321→          exit={{ opacity: 0 }}
+   322→          transition={{ duration: 0.2 }}
+   323→        >
+   324→          <DashboardView
+   325→            projects={projects}
+   326→            loading={projectsLoading}
+   327→            onCreateClick={() => setDialogOpen(true)}
+   328→            onProjectClick={handleOpenProject}
+   329→            onDeleteProject={handleDeleteProject}
+   330→            onRenameProject={handleRenameProject}
+   331→            dialogOpen={dialogOpen}
+   332→            setDialogOpen={setDialogOpen}
+   333→            newProjectName={newProjectName}
+   334→            setNewProjectName={setNewProjectName}
+   335→            creating={creating}
+   336→            onCreateProject={handleCreateProject}
+   337→          />
+   338→        </motion.div>
+   339→      )}
+   340→
+   341→      {view === "interview" && activeProjectId && (
+   342→        <motion.div
+   343→          key="interview"
+   344→          initial={{ opacity: 0, x: 20 }}
+   345→          animate={{ opacity: 1, x: 0 }}
+   346→          exit={{ opacity: 0, x: -20 }}
+   347→          transition={{ duration: 0.2 }}
+   348→        >
+   349→          <ChatView
+   350→            projectId={activeProjectId}
+   351→            initialProfile={interviewProfile ?? undefined}
+   352→            onGoBack={handleGoBack}
+   353→            onEnterReview={handleEnterReview}
+   354→          />
+   355→        </motion.div>
+   356→      )}
+   357→
+   358→      {view === "review" && reviewProfile && (
+   359→        <motion.div
+   360→          key="review"
+   361→          initial={{ opacity: 0, x: 20 }}
+   362→          animate={{ opacity: 1, x: 0 }}
+   363→          exit={{ opacity: 0, x: -20 }}
+   364→          transition={{ duration: 0.2 }}
+   365→        >
+   366→          <ReviewView
+   367→            profile={reviewProfile}
+   368→            projectId={activeProjectId ?? ""}
+   369→            onConfirm={handleConfirmReview}
+   370→            onGoBack={handleReviewGoBack}
+   371→            loading={confirming}
+   372→          />
+   373→        </motion.div>
+   374→      )}
+   375→
+   376→      {view === "status" && (
+   377→        <motion.div
+   378→          key="status"
+   379→          initial={{ opacity: 0 }}
+   380→          animate={{ opacity: 1 }}
+   381→          exit={{ opacity: 0 }}
+   382→          transition={{ duration: 0.2 }}
+   383→        >
+   384→          <StatusView
+   385→            profile={statusProfile}
+   386→            onGoBack={handleGoBack}
+   387→          />
+   388→        </motion.div>
+   389→      )}
+   390→    </AnimatePresence>
+   391→  );
+   392→}
+   393→
+   394→// ── Dashboard View ─────────────────────────────────────────────────────────
+   395→
+   396→interface DashboardViewProps {
+   397→  projects: ProjectSummary[];
+   398→  loading: boolean;
+   399→  onCreateClick: () => void;
+   400→  onProjectClick: (p: ProjectSummary) => void;
+   401→  onDeleteProject: (id: string, name: string, e?: React.MouseEvent) => void;
+   402→  onRenameProject: (id: string, newName: string) => void;
+   403→  dialogOpen: boolean;
+   404→  setDialogOpen: (open: boolean) => void;
+   405→  newProjectName: string;
+   406→  setNewProjectName: (name: string) => void;
+   407→  creating: boolean;
+   408→  onCreateProject: () => void;
+   409→}
+   410→
+   411→function DashboardView({
+   412→  projects,
+   413→  loading,
+   414→  onCreateClick,
+   415→  onProjectClick,
+   416→  onDeleteProject,
+   417→  onRenameProject,
+   418→  dialogOpen,
+   419→  setDialogOpen,
+   420→  newProjectName,
+   421→  setNewProjectName,
+   422→  creating,
+   423→  onCreateProject,
+   424→}: DashboardViewProps) {
+   425→  const [searchQuery, setSearchQuery] = useState("");
+   426→  const [openTool, setOpenTool] = useState<string | null>(null);
+   427→
+   428→  const filteredProjects = projects.filter((p) =>
+   429→    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+   430→  );
+   431→
+   432→  const stats = {
+   433→    total: projects.length,
+   434→    inProgress: projects.filter(
+   435→      (p) => p.status === "PARTIAL" || p.status === "DISCOVERING" || p.status === "EMPTY"
+   436→    ).length,
+   437→    completed: projects.filter(
+   438→      (p) => p.status === "VALIDATED" || p.status === "DPR_READY"
+   439→    ).length,
+   440→    dprReady: projects.filter((p) => p.status === "DPR_READY").length,
+   441→  };
+   442→
+   443→  const statCards = [
+   444→    {
+   445→      label: "Total Projects",
+   446→      value: stats.total,
+   447→      icon: Briefcase,
+   448→      color: "text-emerald-600 dark:text-emerald-400",
+   449→      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+   450→    },
+   451→    {
+   452→      label: "In Progress",
+   453→      value: stats.inProgress,
+   454→      icon: TrendingUp,
+   455→      color: "text-amber-600 dark:text-amber-400",
+   456→      bg: "bg-amber-100 dark:bg-amber-900/30",
+   457→    },
+   458→    {
+   459→      label: "Completed",
+   460→      value: stats.completed,
+   461→      icon: CheckCircle2,
+   462→      color: "text-emerald-600 dark:text-emerald-400",
+   463→      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+   464→    },
+   465→    {
+   466→      label: "DPR Ready",
+   467→      value: stats.dprReady,
+   468→      icon: BarChart3,
+   469→      color: "text-teal-600 dark:text-teal-400",
+   470→      bg: "bg-teal-100 dark:bg-teal-900/30",
+   471→    },
+   472→  ];
+   473→
+   474→  const quickTools = [
+   475→    {
+   476→      id: "calculator",
+   477→      title: "Subsidy Calculator",
+   478→      description: "Estimate your PMEGP subsidy based on project cost, category, and area.",
+   479→      icon: Calculator,
+   480→      content: <SubsidyCalculator />,
+   481→    },
+   482→    {
+   483→      id: "emi",
+   484→      title: "EMI Calculator",
+   485→      description: "Calculate monthly loan EMI, interest breakdown, and amortization.",
+   486→      icon: CreditCard,
+   487→      content: <EmiCalculator />,
+   488→    },
+   489→    {
+   490→      id: "nic",
+   491→      title: "NIC Code Search",
+   492→      description: "Find the right NIC code for your business activity.",
+   493→      icon: SearchCode,
+   494→      content: <NicCodeSearch />,
+   495→    },
+   496→    {
+   497→      id: "checker",
+   498→      title: "Eligibility Checker",
+   499→      description: "Check if you meet PMEGP eligibility criteria.",
+   500→      icon: ClipboardCheck,
+   501→      content: <EligibilityChecker />,
+   502→    },
+   503→    {
+   504→      id: "scheme",
+   505→      title: "Scheme Info",
+   506→      description: "Key facts about the PMEGP scheme — limits, rates, and more.",
+   507→      icon: Info,
+   508→      content: <SchemeInfo />,
+   509→    },
+   510→  ];
+   511→
+   512→  return (
+   513→    <div className="min-h-screen flex flex-col bg-background">
+   514→      {/* ── Header ──────────────────────────────────────────── */}
+   515→      <header className="border-b bg-card/80 backdrop-blur-sm sticky top-0 z-30">
+   516→        <div className="max-w-5xl mx-auto px-4 py-4 sm:px-6">
+   517→          <div className="flex items-center gap-3">
+   518→            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md shadow-emerald-500/20">
+   519→              <IndianRupee className="w-5 h-5" />
+   520→            </div>
+   521→            <div>
+   522→              <h1 className="text-lg sm:text-xl font-bold tracking-tight">
+   523→                PMEGP Assistant
+   524→              </h1>
+   525→              <p className="text-xs text-muted-foreground hidden sm:block">
+   526→                Prime Minister&apos;s Employment Generation Programme
+   527→              </p>
+   528→            </div>
+   529→          </div>
+   530→        </div>
+   531→      </header>
+   532→
+   533→      {/* ── Main ────────────────────────────────────────────── */}
+   534→      <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8 sm:px-6 sm:py-10">
+   535→        {/* ── Hero Section ───────────────────────────────── */}
+   536→        <motion.div
+   537→          initial={{ opacity: 0, y: -8 }}
+   538→          animate={{ opacity: 1, y: 0 }}
+   539→          transition={{ duration: 0.5 }}
+   540→          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900 p-6 sm:p-10 mb-8 shadow-lg shadow-emerald-900/20"
+   541→        >
+   542→          {/* Decorative elements */}
+   543→          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none" />
+   544→          <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-400/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl pointer-events-none" />
+   545→          <div className="absolute top-4 right-4 sm:top-6 sm:right-8 grid grid-cols-3 gap-1.5 opacity-20 pointer-events-none">
+   546→            {Array.from({ length: 9 }).map((_, i) => (
+   547→              <div key={i} className="w-2 h-2 rounded-full bg-white" />
+   548→            ))}
+   549→          </div>
+   550→          {/* Animated decorative line */}
+   551→          <motion.div
+   552→            className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-emerald-300/40 to-transparent"
+   553→            initial={{ width: "0%" }}
+   554→            animate={{ width: "100%" }}
+   555→            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
+   556→          />
+   557→
+   558→          <div className="relative z-10">
+   559→            <div className="flex items-center gap-2 mb-3">
+   560→              <motion.div
+   561→                animate={{ rotate: [0, 15, -15, 0] }}
+   562→                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+   563→              >
+   564→                <Sparkles className="w-5 h-5 text-emerald-300" />
+   565→              </motion.div>
+   566→              <span className="text-emerald-200 text-xs font-medium uppercase tracking-wider">
+   567→                AI-Powered Application Builder
+   568→              </span>
+   569→            </div>
+   570→            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
+   571→              Build Your PMEGP
+   572→              <br />
+   573→              <span className="bg-gradient-to-r from-emerald-200 to-emerald-100 bg-clip-text text-transparent">
+   574→                Project Application
+   575→              </span>
+   576→            </h2>
+   577→            <p className="text-emerald-100/80 text-sm sm:text-base max-w-xl mb-6 leading-relaxed">
+   578→              Create a complete PMEGP application with AI-guided interviews. From applicant
+   579→              details to financial projections and DPR generation — everything in one place.
+   580→            </p>
+   581→
+   582→            {/* New Project Dialog — BUG FIXED: removed forceMount and modal=false */}
+   583→            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+   584→              <DialogTrigger asChild>
+   585→                <Button
+   586→                  className="bg-white text-emerald-700 hover:bg-emerald-50 font-semibold shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-emerald-900/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+   587→                  onClick={onCreateClick}
+   588→                >
+   589→                  <Plus className="w-4 h-4 mr-2" />
+   590→                  New Project
+   591→                </Button>
+   592→              </DialogTrigger>
+   593→              <DialogContent className="sm:max-w-md">
+   594→                <DialogHeader>
+   595→                  <DialogTitle>Create New Project</DialogTitle>
+   596→                  <DialogDescription>
+   597→                    Give your PMEGP application a name. You can change it later.
+   598→                  </DialogDescription>
+   599→                </DialogHeader>
+   600→                <div className="space-y-4 py-4">
+   601→                  <div className="space-y-2">
+   602→                    <Label htmlFor="project-name">Project Name</Label>
+   603→                    <Input
+   604→                      id="project-name"
+   605→                      placeholder="e.g. Paper Plate Manufacturing"
+   606→                      value={newProjectName}
+   607→                      onChange={(e) => setNewProjectName(e.target.value)}
+   608→                      onKeyDown={(e) => {
+   609→                        if (e.key === "Enter") onCreateProject();
+   610→                      }}
+   611→                      disabled={creating}
+   612→                    />
+   613→                  </div>
+   614→                </div>
+   615→                <DialogFooter>
+   616→                  <Button
+   617→                    variant="outline"
+   618→                    onClick={() => setDialogOpen(false)}
+   619→                    disabled={creating}
+   620→                  >
+   621→                    Cancel
+   622→                  </Button>
+   623→                  <Button
+   624→                    onClick={onCreateProject}
+   625→                    disabled={creating}
+   626→                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   627→                  >
+   628→                    {creating ? (
+   629→                      <>
+   630→                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+   631→                        Creating…
+   632→                      </>
+   633→                    ) : (
+   634→                      "Create & Start Interview"
+   635→                    )}
+   636→                  </Button>
+   637→                </DialogFooter>
+   638→              </DialogContent>
+   639→            </Dialog>
+   640→          </div>
+   641→        </motion.div>
+   642→
+   643→        {/* ── Statistics Grid ─────────────────────────────── */}
+   644→        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+   645→          {statCards.map((stat, idx) => (
+   646→            <motion.div
+   647→              key={stat.label}
+   648→              initial={{ opacity: 0, y: 16 }}
+   649→              animate={{ opacity: 1, y: 0 }}
+   650→              transition={{ duration: 0.4, delay: 0.1 + idx * 0.08 }}
+   651→              className="group relative flex items-center gap-3 rounded-xl border bg-card p-4 shadow-sm hover:shadow-lg hover:border-emerald-200 dark:hover:border-emerald-800 transition-all duration-300 cursor-default overflow-hidden"
+   652→            >
+   653→              {/* Subtle gradient overlay on hover */}
+   654→              <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/0 to-teal-50/0 group-hover:from-emerald-50/60 group-hover:to-teal-50/30 dark:group-hover:from-emerald-950/20 dark:group-hover:to-teal-950/10 transition-all duration-300" />
+   655→              <div className={`relative flex items-center justify-center w-11 h-11 rounded-xl ${stat.bg} ${stat.color} shrink-0 shadow-sm`}>
+   656→                <stat.icon className="w-5 h-5" />
+   657→              </div>
+   658→              <div className="relative">
+   659→                <motion.p
+   660→                  className="text-2xl font-bold leading-none tabular-nums"
+   661→                  key={stat.value}
+   662→                  initial={{ scale: 1.2, opacity: 0 }}
+   663→                  animate={{ scale: 1, opacity: 1 }}
+   664→                  transition={{ duration: 0.3 }}
+   665→                >
+   666→                  {stat.value}
+   667→                </motion.p>
+   668→                <p className="text-xs text-muted-foreground mt-1 font-medium">{stat.label}</p>
+   669→              </div>
+   670→            </motion.div>
+   671→          ))}
+   672→        </div>
+   673→
+   674→        {/* ── How It Works Section ────────────────────────── */}
+   675→        <div className="mb-8">
+   676→          <HowItWorks />
+   677→        </div>
+   678→
+   679→        {/* ── Project List Section ────────────────────────── */}
+   680→        <section aria-labelledby="projects-heading" className="mb-10">
+   681→          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+   682→            <div className="flex items-center gap-2">
+   683→              <FolderOpen className="w-5 h-5 text-emerald-600" />
+   684→              <h2 id="projects-heading" className="text-lg font-semibold">
+   685→                Projects
+   686→              </h2>
+   687→              {projects.length > 0 && (
+   688→                <Badge variant="secondary" className="ml-1 text-xs">
+   689→                  {projects.length}
+   690→                </Badge>
+   691→              )}
+   692→            </div>
+   693→            {projects.length > 0 && (
+   694→              <div className="relative sm:ml-auto sm:max-w-[220px]">
+   695→                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+   696→                <Input
+   697→                  placeholder="Search projects…"
+   698→                  value={searchQuery}
+   699→                  onChange={(e) => setSearchQuery(e.target.value)}
+   700→                  className="pl-8 h-8 text-sm"
+   701→                />
+   702→                {searchQuery && (
+   703→                  <button
+   704→                    onClick={() => setSearchQuery("")}
+   705→                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   706→                    aria-label="Clear search"
+   707→                  >
+   708→                    <X className="h-3.5 w-3.5" />
+   709→                  </button>
+   710→                )}
+   711→              </div>
+   712→            )}
+   713→          </div>
+   714→
+   715→          {loading ? (
+   716→            <div className="space-y-3">
+   717→              <Skeleton className="h-24 w-full rounded-xl" />
+   718→              <Skeleton className="h-24 w-full rounded-xl" />
+   719→              <Skeleton className="h-24 w-full rounded-xl" />
+   720→            </div>
+   721→          ) : projects.length === 0 ? (
+   722→            <div className="rounded-xl border border-dashed bg-muted/30 p-10 sm:p-14 text-center">
+   723→              <div className="mx-auto w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-4">
+   724→                <FileText className="w-8 h-8 text-emerald-500" />
+   725→              </div>
+   726→              <h3 className="text-base font-semibold mb-1.5">No projects yet</h3>
+   727→              <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-5">
+   728→                Create your first PMEGP application. The AI interview will guide you through
+   729→                every section — from applicant details to financial planning.
+   730→              </p>
+   731→              <Button
+   732→                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   733→                onClick={onCreateClick}
+   734→              >
+   735→                <Plus className="w-4 h-4 mr-2" />
+   736→                Create Your First Project
+   737→              </Button>
+   738→            </div>
+   739→          ) : filteredProjects.length === 0 ? (
+   740→            <div className="rounded-xl border bg-card p-8 text-center">
+   741→              <Search className="w-8 h-8 mx-auto mb-3 text-muted-foreground/50" />
+   742→              <p className="text-sm text-muted-foreground">
+   743→                No projects match &ldquo;{searchQuery}&rdquo;
+   744→              </p>
+   745→            </div>
+   746→          ) : (
+   747→            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
+   748→              {filteredProjects.map((project) => (
+   749→                <ProjectCard
+   750→                  key={project.id}
+   751→                  id={project.id}
+   752→                  name={project.name}
+   753→                  status={project.status}
+   754→                  createdAt={project.createdAt}
+   755→                  updatedAt={project.updatedAt}
+   756→                  onOpen={() => onProjectClick(project)}
+   757→                  onDelete={() => onDeleteProject(project.id, project.name)}
+   758→                  onRename={(newName) => onRenameProject(project.id, newName)}
+   759→                  formatDate={formatIndianDate}
+   760→                />
+   761→              ))}
+   762→            </div>
+   763→          )}
+   764→        </section>
+   765→
+   766→        {/* ── Quick Tools Section ─────────────────────────── */}
+   767→        <section aria-labelledby="tools-heading" className="mb-10">
+   768→          <div className="flex items-center gap-2 mb-4">
+   769→            <Sparkles className="w-5 h-5 text-emerald-600" />
+   770→            <h2 id="tools-heading" className="text-lg font-semibold">
+   771→              Quick Tools
+   772→            </h2>
+   773→            <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full ml-1">
+   774→              {quickTools.length} tools
+   775→            </span>
+   776→          </div>
+   777→          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+   778→            {quickTools.map((tool) => {
+   779→              const isOpen = openTool === tool.id;
+   780→              return (
+   781→                <Collapsible
+   782→                  key={tool.id}
+   783→                  open={isOpen}
+   784→                  onOpenChange={(open) => setOpenTool(open ? tool.id : null)}
+   785→                >
+   786→                  <Card
+   787→                    className="hover:shadow-md transition-all duration-200 cursor-pointer border-0 shadow-sm"
+   788→                    onClick={() => setOpenTool(isOpen ? null : tool.id)}
+   789→                  >
+   790→                    <CollapsibleTrigger asChild>
+   791→                      <CardHeader className="pb-3">
+   792→                        <div className="flex items-center justify-between">
+   793→                          <div className="flex items-center gap-3">
+   794→                            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
+   795→                              <tool.icon className="w-4 h-4" />
+   796→                            </div>
+   797→                            <div className="text-left">
+   798→                              <CardTitle className="text-sm">{tool.title}</CardTitle>
+   799→                              <CardDescription className="text-xs mt-0.5">
+   800→                                {tool.description}
+   801→                              </CardDescription>
+   802→                            </div>
+   803→                          </div>
+   804→                          <ChevronDown
+   805→                            className={`h-4 w-4 text-muted-foreground transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180" : ""}`}
+   806→                          />
+   807→                        </div>
+   808→                      </CardHeader>
+   809→                    </CollapsibleTrigger>
+   810→                    <CollapsibleContent>
+   811→                      <CardContent className="pt-0">
+   812→                        <Separator className="mb-4" />
+   813→                        {tool.content}
+   814→                      </CardContent>
+   815→                    </CollapsibleContent>
+   816→                  </Card>
+   817→                </Collapsible>
+   818→              );
+   819→            })}
+   820→          </div>
+   821→        </section>
+   822→      </main>
+   823→
+   824→      {/* ── Footer ──────────────────────────────────────────── */}
+   825→      <footer className="border-t bg-muted/40 mt-auto">
+   826→        <div className="max-w-5xl mx-auto px-4 py-6 sm:px-6">
+   827→          <div className="grid sm:grid-cols-2 gap-4">
+   828→            <div>
+   829→              <div className="flex items-center gap-2 mb-2">
+   830→                <div className="flex items-center justify-center w-6 h-6 rounded-md bg-emerald-600 text-white">
+   831→                  <IndianRupee className="w-3 h-3" />
+   832→                </div>
+   833→                <span className="text-sm font-semibold">PMEGP Assistant</span>
+   834→              </div>
+   835→              <p className="text-xs text-muted-foreground leading-relaxed">
+   836→                AI-powered project application builder for the Prime Minister&apos;s
+   837→                Employment Generation Programme.
+   838→              </p>
+   839→            </div>
+   840→            <div className="sm:text-right space-y-1">
+   841→              <p className="text-xs font-medium text-muted-foreground">Resources</p>
+   842→              <p className="text-xs text-muted-foreground">
+   843→                <a
+   844→                  href="https://www.kvic.org.in/pmegp"
+   845→                  target="_blank"
+   846→                  rel="noopener noreferrer"
+   847→                  className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+   848→                >
+   849→                  KVIC PMEGP Portal
+   850→                </a>
+   851→                <span className="mx-1.5">·</span>
+   852→                <a
+   853→                  href="https://msme.gov.in"
+   854→                  target="_blank"
+   855→                  rel="noopener noreferrer"
+   856→                  className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+   857→                >
+   858→                  MoMSME
+   859→                </a>
+   860→              </p>
+   861→            </div>
+   862→          </div>
+   863→          <Separator className="my-4" />
+   864→          <p className="text-xs text-muted-foreground/70 text-center">
+   865→            All calculations are indicative. Verify against latest KVIC/MoMSME guidelines
+   866→            before submission.
+   867→          </p>
+   868→        </div>
+   869→      </footer>
+   870→    </div>
+   871→  );
+   872→}
+   873→
+   874→// ── Status View ────────────────────────────────────────────────────────────
+   875→
+   876→// ── Success Checkmark Animation ─────────────────────────────────────────────
+   877→
+   878→function SuccessCheckAnimation() {
+   879→  const radius = 36;
+   880→  const circumference = 2 * Math.PI * radius;
+   881→  const checkPathLength = 40;
+   882→
+   883→  return (
+   884→    <div className="relative flex items-center justify-center w-24 h-24 mx-auto">
+   885→      <motion.svg
+   886→        width="96"
+   887→        height="96"
+   888→        viewBox="0 0 96 96"
+   889→        className="-rotate-90"
+   890→      >
+   891→        {/* Background circle */}
+   892→        <circle
+   893→          cx="48"
+   894→          cy="48"
+   895→          r={radius}
+   896→          fill="none"
+   897→          stroke="currentColor"
+   898→          strokeWidth="4"
+   899→          className="text-emerald-200 dark:text-emerald-900/60"
+   900→        />
+   901→        {/* Animated ring */}
+   902→        <motion.circle
+   903→          cx="48"
+   904→          cy="48"
+   905→          r={radius}
+   906→          fill="none"
+   907→          stroke="currentColor"
+   908→          strokeWidth="4"
+   909→          strokeLinecap="round"
+   910→          className="text-emerald-500"
+   911→          strokeDasharray={circumference}
+   912→          initial={{ strokeDashoffset: circumference }}
+   913→          animate={{ strokeDashoffset: 0 }}
+   914→          transition={{ duration: 0.8, ease: "easeInOut" }}
+   915→        />
+   916→        {/* Checkmark */}
+   917→        <motion.path
+   918→          d="M30 50 L43 63 L66 37"
+   919→          fill="none"
+   920→          stroke="currentColor"
+   921→          strokeWidth="4"
+   922→          strokeLinecap="round"
+   923→          strokeLinejoin="round"
+   924→          className="text-emerald-600 dark:text-emerald-400"
+   925→          strokeDasharray={checkPathLength}
+   926→          strokeDashoffset={checkPathLength}
+   927→          initial={{ strokeDashoffset: checkPathLength }}
+   928→          animate={{ strokeDashoffset: 0 }}
+   929→          transition={{ duration: 0.5, ease: "easeOut", delay: 0.7 }}
+   930→          style={{ transform: "rotate(0deg)", transformOrigin: "center" }}
+   931→        />
+   932→      </motion.svg>
+   933→      {/* Glow pulse behind */}
+   934→      <motion.div
+   935→        className="absolute inset-0 rounded-full bg-emerald-400/20 blur-xl"
+   936→        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+   937→        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+   938→      />
+   939→    </div>
+   940→  );
+   941→}
+   942→
+   943→// ── Timeline Step ───────────────────────────────────────────────────────────
+   944→
+   945→function TimelineStep({
+   946→  step,
+   947→  title,
+   948→  description,
+   949→  isActive,
+   950→  isCompleted,
+   951→  delay,
+   952→}: {
+   953→  step: number;
+   954→  title: string;
+   955→  description: string;
+   956→  isActive: boolean;
+   957→  isCompleted: boolean;
+   958→  delay: number;
+   959→}) {
+   960→  return (
+   961→    <motion.div
+   962→      initial={{ opacity: 0, x: -16 }}
+   963→      animate={{ opacity: 1, x: 0 }}
+   964→      transition={{ duration: 0.35, delay }}
+   965→      className="relative flex gap-4"
+   966→    >
+   967→      {/* Vertical line + circle */}
+   968→      <div className="flex flex-col items-center">
+   969→        <motion.div
+   970→          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 z-10 ${
+   971→            isCompleted
+   972→              ? "bg-emerald-500 text-white"
+   973→              : isActive
+   974→                ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-400 ring-offset-2 ring-offset-background dark:ring-offset-background"
+   975→                : "bg-muted text-muted-foreground"
+   976→          }`}
+   977→          animate={isActive && !isCompleted ? { scale: [1, 1.1, 1] } : {}}
+   978→          transition={isActive && !isCompleted ? { duration: 1.5, repeat: Infinity, ease: "easeInOut" } : {}}
+   979→        >
+   980→          {isCompleted ? (
+   981→            <CheckCircle2 className="w-4 h-4" />
+   982→          ) : (
+   983→            step
+   984→          )}
+   985→        </motion.div>
+   986→        {/* Connecting line */}
+   987→        <div className="w-0.5 flex-1 min-h-[24px] bg-border" />
+   988→      </div>
+   989→
+   990→      {/* Content */}
+   991→      <div className="pb-6 -mt-1">
+   992→        <p className={`text-sm font-medium ${isCompleted ? "text-emerald-700 dark:text-emerald-300" : isActive ? "text-foreground" : "text-muted-foreground"}`}>
+   993→          {title}
+   994→        </p>
+   995→        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+   996→          {description}
+   997→        </p>
+   998→      </div>
+   999→    </motion.div>
+  1000→  );
+  1001→}
+  1002→
+  1003→// ── Engine Stage Indicator ──────────────────────────────────────────────────
+  1004→
+  1005→function EngineStages({ currentStep }: { currentStep: number }) {
+  1006→  const stages = [
+  1007→    { label: "Interview", icon: <Briefcase className="w-3.5 h-3.5" /> },
+  1008→    { label: "Validation", icon: <ShieldCheck className="w-3.5 h-3.5" /> },
+  1009→    { label: "Eligibility", icon: <ClipboardCheck className="w-3.5 h-3.5" /> },
+  1010→    { label: "Financial", icon: <Calculator className="w-3.5 h-3.5" /> },
+  1011→    { label: "DPR Gen", icon: <FileText className="w-3.5 h-3.5" /> },
+  1012→  ];
+  1013→
+  1014→  return (
+  1015→    <div className="flex items-center gap-1">
+  1016→      {stages.map((stage, i) => {
+  1017→        const done = i <= currentStep;
+  1018→        return (
+  1019→          <div key={stage.label} className="flex items-center gap-1">
+  1020→            <motion.div
+  1021→              initial={{ scale: 0.8, opacity: 0 }}
+  1022→              animate={{ scale: 1, opacity: 1 }}
+  1023→              transition={{ delay: i * 0.1 + 0.5, duration: 0.3 }}
+  1024→              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[10px] font-medium whitespace-nowrap transition-colors ${
+  1025→                done
+  1026→                  ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"
+  1027→                  : "bg-muted text-muted-foreground"
+  1028→              }`}
+  1029→            >
+  1030→              {stage.icon}
+  1031→              {stage.label}
+  1032→            </motion.div>
+  1033→            {i < stages.length - 1 && (
+  1034→              <div className={`w-4 h-0.5 ${i < currentStep ? "bg-emerald-400" : "bg-border"}`} />
+  1035→            )}
+  1036→          </div>
+  1037→        );
+  1038→      })}
+  1039→    </div>
+  1040→  );
+  1041→}
+  1042→
+  1043→// ── Status View ─────────────────────────────────────────────────────────────
+  1044→
+  1045→function StatusView({
+  1046→  profile,
+  1047→  onGoBack,
+  1048→}: {
+  1049→  profile: ProjectProfile | null;
+  1050→  onGoBack: () => void;
+  1051→}) {
+  1052→  return (
+  1053→    <div className="min-h-screen flex flex-col bg-background">
+  1054→      <header className="border-b bg-card shrink-0">
+  1055→        <div className="max-w-4xl mx-auto px-4 py-4 sm:px-6 flex items-center gap-3">
+  1056→          <Button variant="ghost" size="icon" onClick={onGoBack} aria-label="Back to dashboard">
+  1057→            <ArrowLeft className="w-4 h-4" />
+  1058→          </Button>
+  1059→          <div className="flex-1">
+  1060→            <h1 className="text-lg font-semibold">Project Status</h1>
+  1061→            <p className="text-xs text-muted-foreground">Your application is being processed</p>
+  1062→          </div>
+  1063→          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+  1064→        </div>
+  1065→      </header>
+  1066→
+  1067→      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8 sm:px-6">
+  1068→        {profile ? (
+  1069→          <div className="space-y-6">
+  1070→            {/* Success animation */}
+  1071→            <motion.div
+  1072→              initial={{ opacity: 0, y: -10 }}
+  1073→              animate={{ opacity: 1, y: 0 }}
+  1074→              transition={{ duration: 0.4 }}
+  1075→              className="text-center pt-2 pb-4"
+  1076→            >
+  1077→              <SuccessCheckAnimation />
+  1078→              <motion.h2
+  1079→                initial={{ opacity: 0, y: 8 }}
+  1080→                animate={{ opacity: 1, y: 0 }}
+  1081→                transition={{ delay: 1.0, duration: 0.4 }}
+  1082→                className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mt-4"
+  1083→              >
+  1084→                Application Confirmed!
+  1085→              </motion.h2>
+  1086→              <motion.p
+  1087→                initial={{ opacity: 0 }}
+  1088→                animate={{ opacity: 1 }}
+  1089→                transition={{ delay: 1.2, duration: 0.4 }}
+  1090→                className="text-sm text-muted-foreground mt-1 max-w-md mx-auto"
+  1091→              >
+  1092→                Your project profile has been submitted and will go through
+  1093→                validation, eligibility checks, and financial analysis.
+  1094→              </motion.p>
+  1095→            </motion.div>
+  1096→
+  1097→            {/* Engine stage progress indicator */}
+  1098→            <motion.div
+  1099→              initial={{ opacity: 0, y: 12 }}
+  1100→              animate={{ opacity: 1, y: 0 }}
+  1101→              transition={{ delay: 1.3, duration: 0.4 }}
+  1102→              className="p-4 rounded-xl border bg-card overflow-x-auto"
+  1103→            >
+  1104→              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-3">Engine Pipeline</p>
+  1105→              <EngineStages currentStep={0} />
+  1106→            </motion.div>
+  1107→
+  1108→            {/* Project Summary with icons */}
+  1109→            <motion.div
+  1110→              initial={{ opacity: 0, y: 12 }}
+  1111→              animate={{ opacity: 1, y: 0 }}
+  1112→              transition={{ delay: 1.4, duration: 0.4 }}
+  1113→            >
+  1114→              <Card>
+  1115→                <CardHeader className="pb-3">
+  1116→                  <CardTitle className="text-sm">Project Summary</CardTitle>
+  1117→                </CardHeader>
+  1118→                <CardContent>
+  1119→                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  1120→                    <SummaryItem
+  1121→                      icon={<Building2 className="w-4 h-4" />}
+  1122→                      iconBg="bg-violet-100 dark:bg-violet-900/40"
+  1123→                      iconColor="text-violet-600 dark:text-violet-400"
+  1124→                      label="Business"
+  1125→                      value={profile.business?.name || profile.business?.description || "—"}
+  1126→                    />
+  1127→                    <SummaryItem
+  1128→                      icon={<MapPin className="w-4 h-4" />}
+  1129→                      iconBg="bg-rose-100 dark:bg-rose-900/40"
+  1130→                      iconColor="text-rose-600 dark:text-rose-400"
+  1131→                      label="Location"
+  1132→                      value={profile.location?.district && profile.location?.state ? `${profile.location.district}, ${profile.location.state}` : "—"}
+  1133→                    />
+  1134→                    <SummaryItem
+  1135→                      icon={<IndianRupee className="w-4 h-4" />}
+  1136→                      iconBg="bg-emerald-100 dark:bg-emerald-900/40"
+  1137→                      iconColor="text-emerald-600 dark:text-emerald-400"
+  1138→                      label="Project Cost"
+  1139→                      value={formatIndianCurrency(profile.financials?.totalProjectCost ?? 0)}
+  1140→                    />
+  1141→                    <SummaryItem
+  1142→                      icon={<Users className="w-4 h-4" />}
+  1143→                      iconBg="bg-orange-100 dark:bg-orange-900/40"
+  1144→                      iconColor="text-orange-600 dark:text-orange-400"
+  1145→                      label="Total Employment"
+  1146→                      value={String(profile.employees?.totalEmployment ?? 0)}
+  1147→                    />
+  1148→                  </div>
+  1149→                  <Separator className="my-3" />
+  1150→                  <div className="grid grid-cols-2 gap-3">
+  1151→                    <Row label="NIC Code" value={profile.business?.nicCode ? `${profile.business.nicCode} — ${profile.business.nicDescription}` : "—"} />
+  1152→                    <Row label="Sector" value={profile.business?.sector ?? "—"} />
+  1153→                    <Row label="Area Type" value={profile.location?.area ?? "—"} />
+  1154→                    <Row label="Completeness" value={`${profile.validation?.completeness ?? 0}%`} />
+  1155→                  </div>
+  1156→                </CardContent>
+  1157→              </Card>
+  1158→            </motion.div>
+  1159→
+  1160→            {/* Next Steps — Vertical Timeline */}
+  1161→            <motion.div
+  1162→              initial={{ opacity: 0, y: 12 }}
+  1163→              animate={{ opacity: 1, y: 0 }}
+  1164→              transition={{ delay: 1.5, duration: 0.4 }}
+  1165→            >
+  1166→              <Card>
+  1167→                <CardHeader className="pb-3">
+  1168→                  <CardTitle className="text-sm">Next Steps</CardTitle>
+  1169→                </CardHeader>
+  1170→                <CardContent>
+  1171→                  <TimelineStep
+  1172→                    step={1}
+  1173→                    title="Validation Engine"
+  1174→                    description="Check all fields for consistency and completeness"
+  1175→                    isCompleted={true}
+  1176→                    isActive={false}
+  1177→                    delay={1.6}
+  1178→                  />
+  1179→                  <TimelineStep
+  1180→                    step={2}
+  1181→                    title="Eligibility Engine"
+  1182→                    description="Verify PMEGP scheme eligibility based on category, area, and project parameters"
+  1183→                    isCompleted={false}
+  1184→                    isActive={true}
+  1185→                    delay={1.75}
+  1186→                  />
+  1187→                  <TimelineStep
+  1188→                    step={3}
+  1189→                    title="Financial Engine"
+  1190→                    description="Generate detailed financial projections, subsidy calculations, and repayment schedules"
+  1191→                    isCompleted={false}
+  1192→                    isActive={false}
+  1193→                    delay={1.9}
+  1194→                  />
+  1195→                  <TimelineStep
+  1196→                    step={4}
+  1197→                    title="DPR Generation"
+  1198→                    description="Detailed Project Report will be generated for download and submission"
+  1199→                    isCompleted={false}
+  1200→                    isActive={false}
+  1201→                    delay={2.05}
+  1202→                  />
+  1203→                </CardContent>
+  1204→              </Card>
+  1205→            </motion.div>
+  1206→
+  1207→            {/* What You Can Do — Action Cards */}
+  1208→            <motion.div
+  1209→              initial={{ opacity: 0, y: 12 }}
+  1210→              animate={{ opacity: 1, y: 0 }}
+  1211→              transition={{ delay: 1.7, duration: 0.4 }}
+  1212→            >
+  1213→              <h3 className="text-sm font-semibold mb-3">What You Can Do</h3>
+  1214→              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+  1215→                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+  1216→                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+  1217→                    <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+  1218→                      <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+  1219→                        <Eye className="w-5 h-5" />
+  1220→                      </div>
+  1221→                      <span className="text-sm font-medium">View Application</span>
+  1222→                      <span className="text-[10px] text-muted-foreground">Review submitted details</span>
+  1223→                    </CardContent>
+  1224→                  </Card>
+  1225→                </motion.div>
+  1226→                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+  1227→                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+  1228→                    <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+  1229→                      <div className="w-10 h-10 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+  1230→                        <Download className="w-5 h-5" />
+  1231→                      </div>
+  1232→                      <span className="text-sm font-medium">Download DPR</span>
+  1233→                      <span className="text-[10px] text-muted-foreground">Get your project report</span>
+  1234→                    </CardContent>
+  1235→                  </Card>
+  1236→                </motion.div>
+  1237→                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={onGoBack}>
+  1238→                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+  1239→                    <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+  1240→                      <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+  1241→                        <Plus className="w-5 h-5" />
+  1242→                      </div>
+  1243→                      <span className="text-sm font-medium">Start New Project</span>
+  1244→                      <span className="text-[10px] text-muted-foreground">Begin another application</span>
+  1245→                    </CardContent>
+  1246→                  </Card>
+  1247→                </motion.div>
+  1248→              </div>
+  1249→            </motion.div>
+  1250→          </div>
+  1251→        ) : (
+  1252→          <div className="flex flex-col items-center justify-center py-16 text-center">
+  1253→            <SuccessCheckAnimation />
+  1254→            <h2 className="text-lg font-semibold mb-1">Confirmed!</h2>
+  1255→            <p className="text-sm text-muted-foreground max-w-sm">
+  1256→              Your project has been confirmed. Go back to the dashboard to see
+  1257→              your projects.
+  1258→            </p>
+  1259→          </div>
+  1260→        )}
+  1261→
+  1262→        <div className="mt-8 mb-8">
+  1263→          <Button variant="outline" onClick={onGoBack} className="w-full sm:w-auto">
+  1264→            <ArrowLeft className="w-4 h-4 mr-2" />
+  1265→            Back to Dashboard
+  1266→          </Button>
+  1267→        </div>
+  1268→      </main>
+  1269→
+  1270→      <footer className="border-t bg-muted/40 mt-auto">
+  1271→        <div className="max-w-4xl mx-auto px-4 py-4 sm:px-6">
+  1272→          <p className="text-xs text-muted-foreground text-center">
+  1273→            PMEGP Assistant — Processing complete. Further engines will run
+  1274→            automatically.
+  1275→          </p>
+  1276→        </div>
+  1277→      </footer>
+  1278→    </div>
+  1279→  );
+  1280→}
+  1281→
+  1282→// ── Summary Item with Icon ──────────────────────────────────────────────────
+  1283→
+  1284→function SummaryItem({
+  1285→  icon,
+  1286→  iconBg,
+  1287→  iconColor,
+  1288→  label,
+  1289→  value,
+  1290→}: {
+  1291→  icon: React.ReactNode;
+  1292→  iconBg: string;
+  1293→  iconColor: string;
+  1294→  label: string;
+  1295→  value: string;
+  1296→}) {
+  1297→  return (
+  1298→    <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+  1299→      <div className={`w-8 h-8 rounded-lg ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
+  1300→        {icon}
+  1301→      </div>
+  1302→      <div className="min-w-0">
+  1303→        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</p>
+  1304→        <p className="text-sm font-medium truncate">{value}</p>
+  1305→      </div>
+  1306→    </div>
+  1307→  );
+  1308→}
+  1309→
+  1310→// ── Tiny helper ────────────────────────────────────────────────────────────
+  1311→
+  1312→function Row({ label, value }: { label: string; value: string }) {
+  1313→  return (
+  1314→    <div className="flex justify-between gap-4">
+  1315→      <span className="text-muted-foreground text-xs shrink-0">{label}</span>
+  1316→      <span className="font-medium text-xs text-right truncate">{value}</span>
+  1317→    </div>
+  1318→  );
+  1319→}

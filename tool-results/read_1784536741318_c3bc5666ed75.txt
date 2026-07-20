@@ -1,0 +1,685 @@
+     1→     1→"use client";
+     2→     2→
+     3→     3→import {
+     4→     4→  useCallback,
+     5→     5→  useEffect,
+     6→     6→  useMemo,
+     7→     7→  useRef,
+     8→     8→  useState,
+     9→     9→} from "react";
+    10→    10→import { AnimatePresence, motion } from "framer-motion";
+    11→    11→import { toast } from "sonner";
+    12→    12→import {
+    13→    13→  ArrowLeft,
+    14→    14→  AlertCircle,
+    15→    15→  Bot,
+    16→    16→  Sparkles,
+    17→    17→  MessageSquareText,
+    18→    18→  Store,
+    19→    19→  UtensilsCrossed,
+    20→    20→  RefreshCw,
+    21→    21→  RotateCcw,
+    22→    22→  Bot as BotIcon,
+    23→    23→  ShieldCheck,
+    24→    24→  Calculator,
+    25→    25→  FileText,
+    26→    26→} from "lucide-react";
+    27→    27→import { Button } from "@/components/ui/button";
+    28→    28→import {
+    29→    29→  Sheet,
+    30→    30→  SheetContent,
+    31→    31→  SheetTrigger,
+    32→    32→  SheetTitle,
+    33→    33→} from "@/components/ui/sheet";
+    34→    34→import { Separator } from "@/components/ui/separator";
+    35→    35→import { PhaseIndicator } from "./phase-indicator";
+    36→    36→import { ChatMessageBubble } from "./chat-message";
+    37→    37→import { ChatInput } from "./chat-input";
+    38→    38→import { sendChatMessage, formatIndianCurrency } from "@/lib/interview-api";
+    39→    39→import type { ChatMessage, InterviewState } from "@/features/ai/interview/types";
+    40→    40→import type { ProjectProfile } from "@/shared/types/project-profile";
+    41→    41→import type { InterviewPhase, PhaseProgress } from "@/shared/types/interview";
+    42→    42→
+    43→    43→// ── Props ──────────────────────────────────────────────────────────────────
+    44→    44→
+    45→    45→interface ChatViewProps {
+    46→    46→  projectId: string;
+    47→    47→  initialProfile?: ProjectProfile;
+    48→    48→  onGoBack: () => void;
+    49→    49→  onEnterReview: (profile: ProjectProfile) => void;
+    50→    50→}
+    51→    51→
+    52→    52→// ── Example prompts for welcome screen ─────────────────────────────────────
+    53→    53→
+    54→    54→const EXAMPLE_PROMPTS = [
+    55→    55→  {
+    56→    56→    text: "I want to start a papad making unit",
+    57→    57→    icon: UtensilsCrossed,
+    58→    58→  },
+    59→    59→  {
+    60→    60→    text: "Help me apply for PMEGP for a tailoring shop",
+    61→    61→    icon: Store,
+    62→    62→  },
+    63→    63→  {
+    64→    64→    text: "I plan to open a small bakery",
+    65→    65→    icon: Sparkles,
+    66→    66→  },
+    67→    67→  {
+    68→    68→    text: "I want to set up a small agarbatti manufacturing unit",
+    69→    69→    icon: MessageSquareText,
+    70→    70→  },
+    71→    71→];
+    72→    72→
+    73→    73→// ── Feature cards for welcome screen ───────────────────────────────────────
+    74→    74→
+    75→    75→const FEATURES = [
+    76→    76→  {
+    77→    77→    icon: BotIcon,
+    78→    78→    title: "AI-Guided Interview",
+    79→    79→    description: "Step-by-step questions to build your application",
+    80→    80→  },
+    81→    81→  {
+    82→    82→    icon: ShieldCheck,
+    83→    83→    title: "Auto Validation",
+    84→    84→    description: "Real-time checks for PMEGP eligibility",
+    85→    85→  },
+    86→    86→  {
+    87→    87→    icon: Calculator,
+    88→    88→    title: "Financial Projections",
+    89→    89→    description: "Automated cost and revenue calculations",
+    90→    90→  },
+    91→    91→  {
+    92→    92→    icon: FileText,
+    93→    93→    title: "DPR Generation",
+    94→    94→    description: "Generate a complete Detailed Project Report",
+    95→    95→  },
+    96→    96→];
+    97→    97→
+    98→    98→// ── Floating particles for welcome screen ──────────────────────────────────
+    99→    99→
+   100→   100→function FloatingParticles() {
+   101→   101→  const particles = useMemo(() => {
+   102→   102→    return Array.from({ length: 20 }, (_, i) => ({
+   103→   103→      id: i,
+   104→   104→      x: Math.random() * 100,
+   105→   105→      y: Math.random() * 100,
+   106→   106→      size: 2 + Math.random() * 4,
+   107→   107→      duration: 8 + Math.random() * 12,
+   108→   108→      delay: Math.random() * 5,
+   109→   109→    }));
+   110→   110→  }, []);
+   111→   111→
+   112→   112→  return (
+   113→   113→    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+   114→   114→      {particles.map((p) => (
+   115→   115→        <motion.div
+   116→   116→          key={p.id}
+   117→   117→          className="absolute rounded-full bg-emerald-400/20 dark:bg-emerald-500/15"
+   118→   118→          style={{
+   119→   119→            width: p.size,
+   120→   120→            height: p.size,
+   121→   121→            left: `${p.x}%`,
+   122→   122→            top: `${p.y}%`,
+   123→   123→          }}
+   124→   124→          animate={{
+   125→   125→            y: [0, -30, 0],
+   126→   126→            opacity: [0.3, 0.7, 0.3],
+   127→   127→          }}
+   128→   128→          transition={{
+   129→   129→            duration: p.duration,
+   130→   130→            repeat: Infinity,
+   131→   131→            delay: p.delay,
+   132→   132→            ease: "easeInOut",
+   133→   133→          }}
+   134→   134→        />
+   135→   135→      ))}
+   136→   136→    </div>
+   137→   137→  );
+   138→   138→}
+   139→   139→
+   140→   140→// ── Shimmer border wrapper ─────────────────────────────────────────────────
+   141→   141→
+   142→   142→function ShimmerBorder({ children, className }: { children: React.ReactNode; className?: string }) {
+   143→   143→  return (
+   144→   144→    <div className={`relative overflow-hidden rounded-xl ${className ?? ""}`}>
+   145→   145→      {/* Animated gradient border */}
+   146→   146→      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-300/40 via-teal-200/60 to-emerald-300/40 dark:from-emerald-600/30 dark:via-teal-500/40 dark:to-emerald-600/30 animate-shimmer" />
+   147→   147→      <div className="relative">{children}</div>
+   148→   148→    </div>
+   149→   149→  );
+   150→   150→}
+   151→   151→
+   152→   152→// ── Thinking indicator ─────────────────────────────────────────────────────
+   153→   153→
+   154→   154→const THINKING_LABELS: Record<string, string> = {
+   155→   155→  APPLICANT_DISCOVERY: "Analyzing your personal details…",
+   156→   156→  BUSINESS_DISCOVERY: "Understanding your business idea…",
+   157→   157→  ACTIVITY_RESOLUTION: "Resolving activity classification…",
+   158→   158→  PROJECT_SIZING: "Calculating project requirements…",
+   159→   159→  FINANCIAL_PLANNING: "Building financial projections…",
+   160→   160→  REVIEW: "Preparing your review summary…",
+   161→   161→  VALIDATION_COMPLETION: "Validating your application…",
+   162→   162→};
+   163→   163→
+   164→   164→function ThinkingIndicator({ currentPhase }: { currentPhase: InterviewPhase }) {
+   165→   165→  const label = THINKING_LABELS[currentPhase] ?? "Thinking…";
+   166→   166→
+   167→   167→  return (
+   168→   168→    <motion.div
+   169→   169→      initial={{ opacity: 0, y: 8 }}
+   170→   170→      animate={{ opacity: 1, y: 0 }}
+   171→   171→      exit={{ opacity: 0, y: -8 }}
+   172→   172→      className="flex items-center gap-2.5 text-sm text-muted-foreground"
+   173→   173→    >
+   174→   174→      <div className="relative flex-shrink-0">
+   175→   175→        <div className="absolute inset-0 rounded-full bg-emerald-400/40 animate-ping" />
+   176→   176→        <div className="relative w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 flex items-center justify-center">
+   177→   177→          <Bot className="w-4 h-4" />
+   178→   178→        </div>
+   179→   179→      </div>
+   180→   180→
+   181→   181→      {/* Thinking bubble with gradient animation */}
+   182→   182→      <motion.div
+   183→   183→        className="flex items-center gap-2 bg-card border border-border rounded-2xl rounded-bl-md px-4 py-2.5 shadow-sm relative overflow-hidden"
+   184→   184→        animate={{
+   185→   185→          borderColor: [
+   186→   186→            "hsl(var(--border))",
+   187→   187→            "rgba(16,185,129,0.3)",
+   188→   188→            "hsl(var(--border))",
+   189→   189→          ],
+   190→   190→        }}
+   191→   191→        transition={{
+   192→   192→          duration: 2,
+   193→   193→          repeat: Infinity,
+   194→   194→          ease: "easeInOut",
+   195→   195→        }}
+   196→   196→      >
+   197→   197→        {/* Subtle gradient shimmer inside bubble */}
+   198→   198→        <motion.div
+   199→   199→          className="absolute inset-0 bg-gradient-to-r from-emerald-50/0 via-emerald-50/30 to-emerald-50/0 dark:from-emerald-900/0 dark:via-emerald-900/20 dark:to-emerald-900/0 pointer-events-none"
+   200→   200→          animate={{ x: ["-100%", "200%"] }}
+   201→   201→          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+   202→   202→        />
+   203→   203→
+   204→   204→        {/* Animated dots */}
+   205→   205→        <div className="flex items-center gap-1 relative">
+   206→   206→          {[0, 1, 2].map((i) => (
+   207→   207→            <motion.span
+   208→   208→              key={i}
+   209→   209→              className="w-1.5 h-1.5 rounded-full bg-emerald-500"
+   210→   210→              animate={{
+   211→   211→                opacity: [0.3, 1, 0.3],
+   212→   212→                y: [0, -3, 0],
+   213→   213→              }}
+   214→   214→              transition={{
+   215→   215→                duration: 1,
+   216→   216→                repeat: Infinity,
+   217→   217→                delay: i * 0.2,
+   218→   218→                ease: "easeInOut",
+   219→   219→              }}
+   220→   220→            />
+   221→   221→          ))}
+   222→   222→        </div>
+   223→   223→
+   224→   224→        <span className="text-xs relative">{label}</span>
+   225→   225→      </motion.div>
+   226→   226→    </motion.div>
+   227→   227→  );
+   228→   228→}
+   229→   229→
+   230→   230→// ── Welcome screen ────────────────────────────────────────────────────────
+   231→   231→
+   232→   232→function WelcomeScreen({ onSend }: { onSend: (text: string) => void }) {
+   233→   233→  return (
+   234→   234→    <motion.div
+   235→   235→      initial={{ opacity: 0, y: 20 }}
+   236→   236→      animate={{ opacity: 1, y: 0 }}
+   237→   237→      transition={{ duration: 0.6, ease: "easeOut" }}
+   238→   238→      className="relative flex flex-col items-center justify-center py-12 sm:py-20 text-center px-4"
+   239→   239→    >
+   240→   240→      {/* Floating particles */}
+   241→   241→      <FloatingParticles />
+   242→   242→
+   243→   243→      {/* Gradient card */}
+   244→   244→      <motion.div
+   245→   245→        initial={{ scale: 0.9, opacity: 0 }}
+   246→   246→        animate={{ scale: 1, opacity: 1 }}
+   247→   247→        transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+   248→   248→        className="relative w-full max-w-md mb-8"
+   249→   249→      >
+   250→   250→        {/* Decorative blurred circles */}
+   251→   251→        <div className="absolute -top-10 -left-10 w-32 h-32 bg-emerald-300/30 dark:bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+   252→   252→        <div className="absolute -bottom-8 -right-8 w-28 h-28 bg-teal-300/20 dark:bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
+   253→   253→
+   254→   254→        <div className="relative rounded-2xl p-8 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-700 shadow-xl shadow-emerald-500/25 dark:shadow-emerald-500/10">
+   255→   255→          {/* Bot icon with breathing glow ring */}
+   256→   256→          <div className="relative mx-auto w-16 h-16 mb-5">
+   257→   257→            <div className="absolute inset-0 rounded-full bg-white/20 animate-breathe" />
+   258→   258→            <div className="relative w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+   259→   259→              <Bot className="w-8 h-8 text-white" />
+   260→   260→            </div>
+   261→   261→          </div>
+   262→   262→
+   263→   263→          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+   264→   264→            PMEGP Interview
+   265→   265→          </h2>
+   266→   266→          <p className="text-emerald-100 text-sm leading-relaxed max-w-sm mx-auto">
+   267→   267→            I&apos;ll help you build your PMEGP application step by step.
+   268→   268→            Tell me about your business idea and I&apos;ll guide you through the entire process.
+   269→   269→          </p>
+   270→   270→        </div>
+   271→   271→      </motion.div>
+   272→   272→
+   273→   273→      {/* Welcome bot message bubble */}
+   274→   274→      <motion.div
+   275→   275→        initial={{ opacity: 0, y: 10 }}
+   276→   276→        animate={{ opacity: 1, y: 0 }}
+   277→   277→        transition={{ duration: 0.4, delay: 0.25, ease: "easeOut" }}
+   278→   278→        className="w-full max-w-lg mb-6"
+   279→   279→      >
+   280→   280→        <div className="flex items-start gap-3">
+   281→   281→          {/* Bot avatar */}
+   282→   282→          <div className="relative flex-shrink-0">
+   283→   283→            <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 flex items-center justify-center shadow-sm">
+   284→   284→              <Bot className="w-4 h-4" />
+   285→   285→            </div>
+   286→   286→            {/* Online status dot */}
+   287→   287→            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-background dark:border-card" />
+   288→   288→          </div>
+   289→   289→          {/* Chat bubble */}
+   290→   290→          <div className="rounded-2xl rounded-bl-md bg-card border shadow-sm px-4 py-3 text-left relative overflow-hidden">
+   291→   291→            {/* Emerald left border accent */}
+   292→   292→            <div className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-gradient-to-b from-emerald-400 via-emerald-500 to-teal-400" />
+   293→   293→            <p className="text-sm text-foreground/90 leading-relaxed pl-1">
+   294→   294→              Hello! I&apos;m your PMEGP Assistant. I&apos;ll help you build a complete project application step by step. Tell me about your business idea to get started.
+   295→   295→            </p>
+   296→   296→          </div>
+   297→   297→        </div>
+   298→   298→      </motion.div>
+   299→   299→
+   300→   300→      {/* Gradient line separator */}
+   301→   301→      <div className="w-full max-w-lg mb-6">
+   302→   302→        <div className="h-px bg-gradient-to-r from-transparent via-emerald-300/60 dark:via-emerald-600/40 to-transparent" />
+   303→   303→      </div>
+   304→   304→
+   305→   305→      {/* Example prompts with shimmer borders */}
+   306→   306→      <motion.div
+   307→   307→        initial={{ opacity: 0, y: 12 }}
+   308→   308→        animate={{ opacity: 1, y: 0 }}
+   309→   309→        transition={{ duration: 0.4, delay: 0.35, ease: "easeOut" }}
+   310→   310→        className="w-full max-w-md"
+   311→   311→      >
+   312→   312→        <p className="text-sm font-medium text-muted-foreground mb-3">
+   313→   313→          Try saying…
+   314→   314→        </p>
+   315→   315→        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+   316→   316→          {EXAMPLE_PROMPTS.map((prompt, i) => {
+   317→   317→            const Icon = prompt.icon;
+   318→   318→            return (
+   319→   319→              <motion.button
+   320→   320→                key={prompt.text}
+   321→   321→                initial={{ opacity: 0, x: i % 2 === 0 ? -8 : 8 }}
+   322→   322→                animate={{ opacity: 1, x: 0 }}
+   323→   323→                transition={{ duration: 0.3, delay: 0.45 + i * 0.08 }}
+   324→   324→                onClick={() => onSend(prompt.text)}
+   325→   325→                className="group relative flex items-start gap-3 rounded-xl border border-border bg-card/80 hover:bg-card hover:border-emerald-300 dark:hover:border-emerald-700 px-4 py-3 text-left transition-all duration-200 hover:shadow-md hover:shadow-emerald-500/5 cursor-pointer overflow-hidden"
+   326→   326→              >
+   327→   327→                {/* Shimmer effect on hover */}
+   328→   328→                <motion.div
+   329→   329→                  className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-100/0 to-transparent dark:via-emerald-900/0 group-hover:via-emerald-100/40 dark:group-hover:via-emerald-900/20 pointer-events-none"
+   330→   330→                  animate={{ x: ["-100%", "200%"] }}
+   331→   331→                  transition={{ duration: 0, ease: "linear" }}
+   332→   332→                  whileHover={{
+   333→   333→                    transition: { duration: 0.8, repeat: Infinity, ease: "linear" },
+   334→   334→                  }}
+   335→   335→                />
+   336→   336→                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mt-0.5 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 transition-colors relative">
+   337→   337→                  <Icon className="w-4 h-4 relative" />
+   338→   338→                </div>
+   339→   339→                <span className="text-sm text-foreground leading-snug relative">
+   340→   340→                  {prompt.text}
+   341→   341→                </span>
+   342→   342→              </motion.button>
+   343→   343→            );
+   344→   344→          })}
+   345→   345→        </div>
+   346→   346→
+   347→   347→        {/* Feature cards row */}
+   348→   348→        <motion.div
+   349→   349→          initial={{ opacity: 0, y: 10 }}
+   350→   350→          animate={{ opacity: 1, y: 0 }}
+   351→   351→          transition={{ duration: 0.4, delay: 0.7 }}
+   352→   352→          className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-6"
+   353→   353→        >
+   354→   354→          {FEATURES.map((feature, i) => {
+   355→   355→            const FeatureIcon = feature.icon;
+   356→   356→            return (
+   357→   357→              <motion.div
+   358→   358→                key={feature.title}
+   359→   359→                initial={{ opacity: 0, y: 8 }}
+   360→   360→                animate={{ opacity: 1, y: 0 }}
+   361→   361→                transition={{ duration: 0.3, delay: 0.8 + i * 0.08 }}
+   362→   362→                className="flex flex-col items-center gap-1.5 rounded-lg border border-border/60 bg-card/50 px-3 py-3 text-center hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors"
+   363→   363→              >
+   364→   364→                <div className="w-7 h-7 rounded-md bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+   365→   365→                  <FeatureIcon className="w-3.5 h-3.5" />
+   366→   366→                </div>
+   367→   367→                <span className="text-[11px] font-medium text-foreground/80 leading-tight">
+   368→   368→                  {feature.title}
+   369→   369→                </span>
+   370→   370→                <span className="text-[10px] text-muted-foreground/70 leading-tight hidden sm:block">
+   371→   371→                  {feature.description}
+   372→   372→                </span>
+   373→   373→              </motion.div>
+   374→   374→            );
+   375→   375→          })}
+   376→   376→        </motion.div>
+   377→   377→
+   378→   378→        {/* Tip at the bottom */}
+   379→   379→        <motion.p
+   380→   380→          initial={{ opacity: 0 }}
+   381→   381→          animate={{ opacity: 1 }}
+   382→   382→          transition={{ duration: 0.3, delay: 1.1 }}
+   383→   383→          className="mt-5 text-xs text-muted-foreground/60 text-center"
+   384→   384→        >
+   385→   385→          💡 You can also type freely — I&apos;ll understand your intent
+   386→   386→        </motion.p>
+   387→   387→      </motion.div>
+   388→   388→    </motion.div>
+   389→   389→  );
+   390→   390→}
+   391→   391→
+   392→   392→// ── Profile summary for side panel ─────────────────────────────────────────
+   393→   393→
+   394→   394→function ProfileSummary({ profile }: { profile: ProjectProfile | null }) {
+   395→   395→  const rows = useMemo(() => {
+   396→   396→    if (!profile) return [] as { label: string; value: string }[];
+   397→   397→    const r: { label: string; value: string }[] = [];
+   398→   398→    if (profile.applicant?.name) r.push({ label: "Name", value: profile.applicant.name });
+   399→   399→    if (profile.applicant?.category) r.push({ label: "Category", value: profile.applicant.category });
+   400→   400→    if (profile.business?.description) r.push({ label: "Business", value: profile.business.description.slice(0, 60) });
+   401→   401→    if (profile.business?.nicCode) r.push({ label: "NIC Code", value: `${profile.business.nicCode} — ${profile.business.nicDescription ?? ""}` });
+   402→   402→    if (profile.location?.state) r.push({ label: "Location", value: `${profile.location.district}, ${profile.location.state}` });
+   403→   403→    if (profile.financials?.totalProjectCost)
+   404→   404→      r.push({ label: "Project Cost", value: formatIndianCurrency(profile.financials.totalProjectCost) });
+   405→   405→    return r;
+   406→   406→  }, [profile]);
+   407→   407→
+   408→   408→  if (rows.length === 0) return <p className="text-xs text-muted-foreground">No details collected yet.</p>;
+   409→   409→
+   410→   410→  return (
+   411→   411→    <div className="space-y-2">
+   412→   412→      {rows.map((r) => (
+   413→   413→        <div key={r.label} className="flex justify-between text-xs gap-2">
+   414→   414→          <span className="text-muted-foreground shrink-0">{r.label}</span>
+   415→   415→          <span className="font-medium text-right truncate">{r.value}</span>
+   416→   416→        </div>
+   417→   417→      ))}
+   418→   418→    </div>
+   419→   419→  );
+   420→   420→}
+   421→   421→
+   422→   422→// ── Default phase progress ─────────────────────────────────────────────────
+   423→   423→
+   424→   424→function makeDefaultPhaseProgress(): Record<InterviewPhase, PhaseProgress> {
+   425→   425→  return {
+   426→   426→    APPLICANT_DISCOVERY: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   427→   427→    BUSINESS_DISCOVERY: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   428→   428→    ACTIVITY_RESOLUTION: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   429→   429→    PROJECT_SIZING: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   430→   430→    FINANCIAL_PLANNING: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   431→   431→    REVIEW: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   432→   432→    VALIDATION_COMPLETION: { status: "NOT_STARTED", completedFields: 0, totalFields: 0 },
+   433→   433→  };
+   434→   434→}
+   435→   435→
+   436→   436→// ── Error display component ─────────────────────────────────────────────────
+   437→   437→
+   438→   438→function ErrorDisplay({
+   439→   439→  error,
+   440→   440→  onRetry,
+   441→   441→  onStartOver,
+   442→   442→}: {
+   443→   443→  error: string;
+   444→   444→  onRetry: () => void;
+   445→   445→  onStartOver: () => void;
+   446→   446→}) {
+   447→   447→  return (
+   448→   448→    <motion.div
+   449→   449→      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+   450→   450→      animate={{ opacity: 1, y: 0, scale: 1 }}
+   451→   451→      transition={{ duration: 0.25, ease: "easeOut" }}
+   452→   452→      className="rounded-xl border border-red-200 dark:border-red-800/60 bg-red-50/80 dark:bg-red-950/20 p-4 space-y-3"
+   453→   453→    >
+   454→   454→      {/* Error header */}
+   455→   455→      <div className="flex items-start gap-3">
+   456→   456→        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 flex items-center justify-center">
+   457→   457→          <AlertCircle className="w-4 h-4" />
+   458→   458→        </div>
+   459→   459→        <div className="flex-1 min-w-0">
+   460→   460→          <p className="text-sm font-medium text-red-800 dark:text-red-300">
+   461→   461→            Something went wrong
+   462→   462→          </p>
+   463→   463→          <p className="text-xs text-red-600/80 dark:text-red-400/80 mt-0.5 leading-relaxed">
+   464→   464→            {error}
+   465→   465→          </p>
+   466→   466→        </div>
+   467→   467→      </div>
+   468→   468→
+   469→   469→      {/* Action buttons */}
+   470→   470→      <div className="flex items-center gap-2 pl-11">
+   471→   471→        <Button
+   472→   472→          variant="outline"
+   473→   473→          size="sm"
+   474→   474→          onClick={onRetry}
+   475→   475→          className="text-xs h-8 gap-1.5 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-800 dark:hover:text-red-200 cursor-pointer"
+   476→   476→        >
+   477→   477→          <RefreshCw className="w-3 h-3" />
+   478→   478→          Retry
+   479→   479→        </Button>
+   480→   480→        <Button
+   481→   481→          variant="ghost"
+   482→   482→          size="sm"
+   483→   483→          onClick={onStartOver}
+   484→   484→          className="text-xs h-8 gap-1.5 text-muted-foreground hover:text-foreground cursor-pointer"
+   485→   485→        >
+   486→   486→          <RotateCcw className="w-3 h-3" />
+   487→   487→          Start Over
+   488→   488→        </Button>
+   489→   489→      </div>
+   490→   490→    </motion.div>
+   491→   491→  );
+   492→   492→}
+   493→   493→
+   494→   494→// ── Main Chat View ─────────────────────────────────────────────────────────
+   495→   495→
+   496→   496→export function ChatView({
+   497→   497→  projectId,
+   498→   498→  initialProfile,
+   499→   499→  onGoBack,
+   500→   500→  onEnterReview,
+   501→   501→}: ChatViewProps) {
+   502→   502→  const [messages, setMessages] = useState<ChatMessage[]>([]);
+   503→   503→  const [loading, setLoading] = useState(false);
+   504→   504→  const [error, setError] = useState<string | null>(null);
+   505→   505→  const [interviewState, setInterviewState] = useState<InterviewState | null>(null);
+   506→   506→  const [profile, setProfile] = useState<ProjectProfile | null>(initialProfile ?? null);
+   507→   507→
+   508→   508→  const scrollRef = useRef<HTMLDivElement>(null);
+   509→   509→  const messagesEndRef = useRef<HTMLDivElement>(null);
+   510→   510→
+   511→   511→  // Auto-scroll to bottom when messages change
+   512→   512→  useEffect(() => {
+   513→   513→    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+   514→   514→  }, [messages, loading]);
+   515→   515→
+   516→   516→  // Send a message and handle the response
+   517→   517→  const handleSend = useCallback(
+   518→   518→    async (text: string) => {
+   519→   519→      setError(null);
+   520→   520→      setLoading(true);
+   521→   521→
+   522→   522→      // Add user message optimistically
+   523→   523→      const userMsg: ChatMessage = {
+   524→   524→        id: `local-${Date.now()}`,
+   525→   525→        role: "USER",
+   526→   526→        content: text,
+   527→   527→        timestamp: new Date().toISOString(),
+   528→   528→        phase: interviewState?.currentPhase ?? "APPLICANT_DISCOVERY",
+   529→   529→      };
+   530→   530→      setMessages((prev) => [...prev, userMsg]);
+   531→   531→
+   532→   532→      try {
+   533→   533→        const res = await sendChatMessage(projectId, text);
+   534→   534→
+   535→   535→        if (res.message) {
+   536→   536→          setMessages((prev) => [...prev, res.message!]);
+   537→   537→        }
+   538→   538→        if (res.profile) {
+   539→   539→          setProfile(res.profile);
+   540→   540→        }
+   541→   541→        if (res.state) {
+   542→   542→          setInterviewState(res.state);
+   543→   543→
+   544→   544→          // If we've reached the REVIEW phase, notify parent with the latest profile
+   545→   545→          if (res.state.currentPhase === "REVIEW" && !res.state.isComplete && res.profile) {
+   546→   546→            onEnterReview(res.profile);
+   547→   547→          }
+   548→   548→        }
+   549→   549→      } catch (err) {
+   550→   550→        const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+   551→   551→        setError(msg);
+   552→   552→        toast.error("Error", { description: msg });
+   553→   553→      } finally {
+   554→   554→        setLoading(false);
+   555→   555→      }
+   556→   556→    },
+   557→   557→    [projectId, interviewState, onEnterReview]
+   558→   558→  );
+   559→   559→
+   560→   560→  // Handle retry
+   561→   561→  const handleRetry = useCallback(() => {
+   562→   562→    // Remove last user message and clear error
+   563→   563→    setMessages((prev) => prev.slice(0, -1));
+   564→   564→    setError(null);
+   565→   565→  }, []);
+   566→   566→
+   567→   567→  // Handle start over
+   568→   568→  const handleStartOver = useCallback(() => {
+   569→   569→    setMessages([]);
+   570→   570→    setError(null);
+   571→   571→    setLoading(false);
+   572→   572→    setInterviewState(null);
+   573→   573→    setProfile(initialProfile ?? null);
+   574→   574→    toast.success("Conversation cleared", {
+   575→   575→      description: "Starting fresh with a new interview.",
+   576→   576→    });
+   577→   577→  }, [initialProfile]);
+   578→   578→
+   579→   579→  // Handle suggestion chip click
+   580→   580→  const handleSuggestionClick = useCallback(
+   581→   581→    (value: string) => {
+   582→   582→      handleSend(value);
+   583→   583→    },
+   584→   584→    [handleSend]
+   585→   585→  );
+   586→   586→
+   587→   587→  // Derive phase data
+   588→   588→  const currentPhase: InterviewPhase = interviewState?.currentPhase ?? profile?.completion?.currentPhase ?? "APPLICANT_DISCOVERY";
+   589→   589→  const phaseProgress = profile?.completion?.phaseProgress ?? makeDefaultPhaseProgress();
+   590→   590→  const completeness = profile?.validation?.completeness ?? 0;
+   591→   591→
+   592→   592→  return (
+   593→   593→    <div className="flex flex-col h-[calc(100vh-1px)] sm:h-screen bg-background">
+   594→   594→      {/* ── Chat Header ─────────────────────────────────────────── */}
+   595→   595→      <header className="border-b border-border/60 bg-card/90 backdrop-blur-xl shrink-0 shadow-[0_1px_2px_0_rgb(0_0_0/0.04)]">
+   596→   596→        <div className="max-w-4xl mx-auto px-3 py-3 sm:px-4 sm:py-3.5 flex items-center gap-3">
+   597→   597→          <Button
+   598→   598→            variant="ghost"
+   599→   599→            size="icon"
+   600→   600→            onClick={onGoBack}
+   601→   601→            aria-label="Back to dashboard"
+   602→   602→            className="shrink-0 hover:bg-muted/80"
+   603→   603→          >
+   604→   604→            <ArrowLeft className="w-4 h-4" />
+   605→   605→          </Button>
+   606→   606→
+   607→   607→          <div className="flex-1 min-w-0">
+   608→   608→            <div className="flex items-center gap-2">
+   609→   609→              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0">
+   610→   610→                <Bot className="w-3.5 h-3.5" />
+   611→   611→              </div>
+   612→   612→              <h1 className="text-sm sm:text-base font-semibold truncate">
+   613→   613→                {profile?.business?.name || profile?.business?.description || "New Project"}
+   614→   614→              </h1>
+   615→   615→            </div>
+   616→   616→            <PhaseIndicator
+   617→   617→              currentPhase={currentPhase}
+   618→   618→              phaseProgress={phaseProgress}
+   619→   619→              completeness={completeness}
+   620→   620→            />
+   621→   621→          </div>
+   622→   622→
+   623→   623→          {/* Desktop: profile summary side sheet */}
+   624→   624→          <Sheet>
+   625→   625→            <SheetTrigger asChild>
+   626→   626→              <Button
+   627→   627→                variant="outline"
+   628→   628→                size="sm"
+   629→   629→                className="hidden sm:inline-flex shrink-0 text-xs gap-1.5"
+   630→   630→              >
+   631→   631→                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+   632→   632→                Summary
+   633→   633→              </Button>
+   634→   634→            </SheetTrigger>
+   635→   635→            <SheetContent className="w-72">
+   636→   636→              <SheetTitle className="text-sm font-semibold mb-4">
+   637→   637→                Project Summary
+   638→   638→              </SheetTitle>
+   639→   639→              <Separator className="mb-4" />
+   640→   640→              <ProfileSummary profile={profile} />
+   641→   641→            </SheetContent>
+   642→   642→          </Sheet>
+   643→   643→        </div>
+   644→   644→      </header>
+   645→   645→
+   646→   646→      {/* ── Messages Area ───────────────────────────────────────── */}
+   647→   647→      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+   648→   648→        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 space-y-4">
+   649→   649→          {messages.length === 0 && !loading && (
+   650→   650→            <WelcomeScreen onSend={handleSend} />
+   651→   651→          )}
+   652→   652→
+   653→   653→          <AnimatePresence mode="popLayout">
+   654→   654→            {messages.map((msg, idx) => (
+   655→   655→              <ChatMessageBubble
+   656→   656→                key={msg.id}
+   657→   657→                message={msg}
+   658→   658→                index={idx}
+   659→   659→                previousMessage={idx > 0 ? messages[idx - 1] : undefined}
+   660→   660→                onSuggestionClick={handleSuggestionClick}
+   661→   661→              />
+   662→   662→            ))}
+   663→   663→          </AnimatePresence>
+   664→   664→
+   665→   665→          {loading && (
+   666→   666→            <ThinkingIndicator currentPhase={currentPhase} />
+   667→   667→          )}
+   668→   668→
+   669→   669→          {error && (
+   670→   670→            <ErrorDisplay
+   671→   671→              error={error}
+   672→   672→              onRetry={handleRetry}
+   673→   673→              onStartOver={handleStartOver}
+   674→   674→            />
+   675→   675→          )}
+   676→   676→
+   677→   677→          <div ref={messagesEndRef} />
+   678→   678→        </div>
+   679→   679→      </div>
+   680→   680→
+   681→   681→      {/* ── Input Area (sticky bottom) ──────────────────────────── */}
+   682→   682→      <ChatInput onSend={handleSend} disabled={loading} />
+   683→   683→    </div>
+   684→   684→  );
+   685→   685→}

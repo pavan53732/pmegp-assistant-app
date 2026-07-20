@@ -1,0 +1,329 @@
+    96→   145→   174→   174→   373→   373→2. **Dashboard redesign**: Gradient hero, 4 stat cards, project search/delete, 3 quick tools (subsidy calculator, eligibility checker, scheme info), enhanced footer
+    97→   146→   175→   175→   374→   374→3. **Interview UI overhaul**: Welcome screen with example prompts, gradient message bubbles, phase connectors, glassmorphism suggestion chips, input glow, mic placeholder, character count
+    98→   147→   176→   176→   375→   375→4. **Review view enhancement**: SVG completeness ring, icon-labeled sections, 2-column layout, attention indicators
+    99→   148→   177→   177→   376→   376→5. **Status view enhancement**: Animated success checkmark, vertical timeline, action cards, engine pipeline indicator
+   100→   149→   178→   178→   377→   377→6. **Dark mode**: next-themes ThemeProvider, floating toggle with rotation animation
+   101→   150→   179→   179→   378→   378→7. **Global polish**: Custom scrollbar, selection colors, focus rings, smooth scrolling
+   102→   151→   180→   180→   379→   379→
+   103→   152→   181→   181→   380→   380→### Known Issues & Risks
+   104→   153→   182→   182→   381→   381→- **response-parser ambiguity**: "ha"/"correct" parsing ambiguity in interview response-parser (LOW priority, documented in M4+M8)
+   105→   154→   183→   183→   382→   382→- **Test projects cleaned**: Database was wiped of all test projects during QA; fresh start for next session
+   106→   155→   184→   184→   383→   383→- **Projects API route**: src/app/api/projects/route.ts still uses @/lib/db directly instead of repository (Phase 1 tech debt, not blocking)
+   107→   156→   185→   185→   384→   384→- **No logo.svg**: The layout references /logo.svg but the file may be missing or placeholder
+   108→   157→   186→   186→   385→   385→
+   109→   158→   187→   187→   386→   386→### Priority Recommendations for Next Phase
+   110→   159→   188→   188→   387→   387→1. **HIGH**: End-to-end interview test — verify full 7-phase flow works with real AI responses
+   111→   160→   189→   189→   388→   388→2. **HIGH**: Fix projects API route to use repository (Rule #8 compliance)
+   112→   161→   190→   190→   389→   389→3. **MEDIUM**: Add project rename/edit functionality
+   113→   162→   191→   191→   390→   390→4. **MEDIUM**: Implement DPR download endpoint and wire "Download as PDF" button
+   114→   163→   192→   192→   391→   391→5. **MEDIUM**: Add offline/resilience features (Milestone 9 partial)
+   115→   164→   193→   193→   392→   392→6. **LOW**: Add more NIC code data or improve fuzzy matching
+   116→   165→   194→   194→   393→   393→7. **LOW**: Add unit tests for new dashboard components and API endpoints
+   117→   166→   195→   195→   394→   394→---
+   118→   167→   196→   196→   395→   395→Task ID: 4-c
+   119→   168→   197→   197→   396→   396→Agent: How It Works Agent
+   120→   169→   198→   198→   397→   397→Task: Create How It Works dashboard section component
+   121→   170→   199→   199→   398→   398→
+   122→   171→   200→   200→   399→   399→Work Log:
+   123→   172→   201→   201→   400→   400→- Created /home/z/my-project/src/components/dashboard/how-it-works.tsx
+   124→   173→   202→   202→   401→   401→- 4-step horizontal timeline (vertical on mobile)
+   125→   174→   203→   203→   402→   402→- Staggered framer-motion animations
+   126→   175→   204→   204→   403→   403→- Responsive design with emerald theme
+   127→   176→   205→   205→   404→   404→
+   128→   177→   206→   206→   405→   405→Stage Summary:
+   129→   178→   207→   207→   406→   406→- New How It Works section ready for dashboard integration
+   130→   179→   208→   208→   407→   407→- File: src/components/dashboard/how-it-works.tsx
+   131→   180→   209→   209→   408→   408→---
+   132→   181→   210→   210→   409→   409→Task ID: 4-b
+   133→   182→   211→   211→   410→   410→Agent: EMI Calculator Agent
+   134→   183→   212→   212→   411→   411→Task: Create EMI/Loan Calculator Quick Tool component
+   135→   184→   213→   213→   412→   412→
+   136→   185→   214→   214→   413→   413→Work Log:
+   137→   186→   215→   215→   414→   414→- Created /home/z/my-project/src/components/dashboard/emi-calculator.tsx
+   138→   187→   216→   216→   415→   415→- EMI calculation with standard formula: EMI = P × r × (1+r)^n / ((1+r)^n – 1)
+   139→   188→   217→   217→   416→   416→- Three inputs: Loan Amount (₹ prefix), Interest Rate (Slider 8-18%, step 0.5%), Loan Tenure (Select presets: 3/5/7/10 years)
+   140→   189→   218→   218→   417→   417→- Visual principal vs interest breakdown bar (emerald for principal, amber for interest)
+   141→   190→   219→   219→   418→   418→- Year 1 amortization summary showing interest paid, principal repaid, and remaining balance with mini bar
+   142→   191→   220→   220→   419→   419→- Indian currency formatting (₹10,00,000 format)
+   143→   192→   221→   221→   420→   420→- Info callout: "PMEGP loans are typically at bank's standard MSME lending rates"
+   144→   193→   222→   222→   421→   421→- useTransition for smooth number transitions
+   145→   194→   223→   223→   422→   422→- Responsive grid layout, stacks on mobile
+   146→   195→   224→   224→   423→   423→- Icons: Calculator, IndianRupee, Percent, CalendarDays, TrendingUp, Banknote, Info from lucide-react
+   147→   196→   225→   225→   424→   424→- Emerald-themed color scheme consistent with existing dashboard components
+   148→   197→   226→   226→   425→   425→- Lint clean (0 errors in emi-calculator.tsx; 1 pre-existing error in nic-code-search.tsx unrelated)
+   149→   198→   227→   227→   426→   426→
+   150→   199→   228→   228→   427→   427→Stage Summary:
+   151→   200→   229→   229→   428→   428→- New EMI Calculator tool ready for dashboard integration
+   152→   201→   230→   230→   429→   429→- File: src/components/dashboard/emi-calculator.tsx
+   153→   202→   231→   231→   430→   430→---
+   154→   203→   232→   232→   431→   431→Task ID: 4-a
+   155→   204→   233→   233→   432→   432→Agent: NIC Code Search Agent
+   156→   205→   234→   234→   433→   433→Task: Create NIC Code Search Quick Tool component
+   157→   206→   235→   235→   434→   434→
+   158→   207→   236→   236→   435→   435→Work Log:
+   159→   208→   237→   237→   436→   436→- Created /home/z/my-project/src/components/dashboard/nic-code-search.tsx
+   160→   209→   238→   238→   437→   437→- Live search with 300ms debounce
+   161→   210→   239→   239→   438→   438→- Copy-to-clipboard on click with toast notification
+   162→   211→   240→   240→   439→   439→- Manufacturing/Services badge color coding
+   163→   212→   241→   241→   440→   440→- framer-motion animations for results
+   164→   213→   242→   242→   441→   441→
+   165→   214→   243→   243→   442→   442→Stage Summary:
+   166→   215→   244→   244→   443→   443→- New NIC Code Search tool ready for dashboard integration
+   167→   216→   245→   245→   444→   444→- File: src/components/dashboard/nic-code-search.tsx
+   168→   217→   246→   246→   445→   445→
+   169→   218→   247→   247→   446→   446→---
+   170→   219→   248→   248→   447→   447→Task ID: 5
+   171→   220→   249→   249→   448→   448→Agent: Main + 3 Parallel Agents + QA
+   172→   221→   250→   250→   449→   449→Task: Dashboard enhancement — new Quick Tools, How It Works section, project rename, styling improvements
+   173→   222→   251→   251→   450→   450→
+   174→   223→   252→   252→   451→   451→Work Log:
+   175→   224→   253→   253→   452→   452→- Assessed project status: all 9 milestones complete, clean git tree
+   176→   225→   254→   254→   453→   453→- QA tested with agent-browser: dashboard, project creation, interview flow, dark mode toggle — all working
+   177→   226→   255→   255→   454→   454→- Discovered transient theme-toggle Module not found error (self-resolved on recompile)
+   178→   227→   256→   256→   455→   455→- Verified logo.svg exists at public/logo.svg
+   179→   228→   257→   257→   456→   456→
+   180→   229→   258→   258→   457→   457→- Deployed 3 agents in parallel to create new components:
+   181→   230→   259→   259→   458→   458→  - Agent 4-a: NIC Code Search (src/components/dashboard/nic-code-search.tsx)
+   182→   231→   260→   260→   459→   459→    - Live search with 300ms debounce using knowledge-package searchNicCodes
+   183→   232→   261→   261→   460→   460→    - Copy-to-clipboard on click with toast notification
+   184→   233→   262→   262→   461→   461→    - Manufacturing (emerald) / Services (blue) badge color coding
+   185→   234→   263→   263→   462→   462→    - AnimatePresence for smooth result entry/exit
+   186→   235→   264→   264→   463→   463→  - Agent 4-b: EMI Calculator (src/components/dashboard/emi-calculator.tsx)
+   187→   236→   265→   265→   464→   464→    - Standard EMI formula: P × r × (1+r)^n / ((1+r)^n – 1)
+   188→   237→   266→   266→   465→   465→    - Visual principal vs interest breakdown bar
+   189→   238→   267→   267→   466→   466→    - Year 1 amortization summary
+   190→   239→   268→   268→   467→   467→    - Interest rate slider (8%–18%), tenure presets (3/5/7/10 years)
+   191→   240→   269→   269→   468→   468→    - Indian currency formatting throughout
+   192→   241→   270→   270→   469→   469→  - Agent 4-c: How It Works (src/components/dashboard/how-it-works.tsx)
+   193→   242→   271→   271→   470→   470→    - 4-step horizontal timeline (vertical on mobile)
+   194→   243→   272→   272→   471→   471→    - Staggered framer-motion animations
+   195→   244→   273→   273→   472→   472→    - Emerald gradient step circles with connecting lines/arrows
+   196→   245→   274→   274→   473→   473→
+   197→   246→   275→   275→   474→   474→- Enhanced dashboard (src/app/page.tsx):
+   198→   247→   276→   276→   475→   475→  - Hero section: added motion.div wrapper, animated sparkle icon, decorative bottom line animation
+   199→   248→   277→   277→   476→   476→  - Stat cards: motion animations with staggered entrance, gradient hover overlay, animated number transitions, larger icon containers
+   200→   249→   278→   278→   477→   477→  - Added "How It Works" section between stats and project list
+   201→   250→   279→   279→   478→   478→  - Quick Tools: added NIC Code Search + EMI Calculator (now 5 tools), added "5 tools" count badge
+   202→   251→   280→   280→   479→   479→  - Project cards: extracted to separate ProjectCard component
+   203→   252→   281→   281→   480→   480→
+   204→   253→   282→   282→   481→   481→- Created ProjectCard component (src/components/dashboard/project-card.tsx):
+   205→   254→   283→   283→   482→   482→  - Inline rename with save/cancel buttons (Enter to save, Escape to cancel)
+   206→   255→   284→   284→   483→   483→  - Delete with AlertDialog confirmation
+   207→   256→   285→   285→   484→   484→  - Hover-reveal action buttons (rename pencil + delete trash)
+   208→   257→   286→   286→   485→   485→  - Status badge with color-coded left border
+   209→   258→   287→   287→   486→   486→
+   210→   259→   288→   288→   487→   487→- Created PATCH /api/projects/[id] endpoint for project rename
+   211→   260→   289→   289→   488→   488→  - Uses db.project.update directly (tech debt: bypasses frozen IProjectRepository interface)
+   212→   261→   290→   290→   489→   489→
+   213→   262→   291→   291→   490→   490→- All changes verified:
+   214→   263→   292→   292→   491→   491→  - bun run lint: 0 errors
+   215→   264→   293→   293→   492→   492→  - agent-browser QA: all features working (rename, EMI calc, NIC search, dark mode)
+   216→   265→   294→   294→   493→   493→  - Dev server: all 200s, no runtime errors
+   217→   266→   295→   295→   494→   494→
+   218→   267→   296→   296→   495→   495→Stage Summary:
+   219→   268→   297→   297→   496→   496→- 4 new files: nic-code-search.tsx, emi-calculator.tsx, how-it-works.tsx, project-card.tsx
+   220→   269→   298→   298→   497→   497→- 1 modified API route: projects/[id]/route.ts (added PATCH handler)
+   221→   270→   299→   299→   498→   498→- 1 significantly modified file: page.tsx (new tools, animations, project card extraction)
+   222→   271→   300→   300→   499→   499→- New features: NIC Code Search, EMI Calculator, How It Works, Project Rename
+   223→   272→   301→   301→   500→   500→- New files in src/components/dashboard/: 6 total (was 3)
+   224→   273→   302→   302→   501→   501→- Dashboard now has: animated hero, animated stat cards, How It Works timeline, project list with rename/delete, 5 Quick Tools
+   225→   274→   303→   303→   502→   502→
+   226→   275→   304→   304→   503→   503→---
+   227→   276→   305→   305→   504→   504→## HANDOVER DOCUMENT
+   228→   277→   306→   306→   505→   505→
+   229→   278→   307→   307→   506→   506→### Project Current Status
+   230→   279→   308→   308→   507→   507→- **Architecture**: PMEGP Assistant — AI-guided micro-enterprise subsidy application builder
+   231→   280→   309→   309→   508→   508→- **Milestones**: All 9 milestones COMPLETE + Post-Milestone Enhancement (this session)
+   232→   281→   310→   310→   509→   509→- **Codebase**: ~16,000+ lines, Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma (SQLite)
+   233→   282→   311→   311→   510→   510→- **Tests**: 161 tests, 462 assertions (from M4+M8, not re-run this session)
+   234→   283→   312→   312→   511→   511→- **Git**: 13 commits on main, clean working tree (3 new files uncommitted from this session)
+   235→   284→   313→   313→   512→   512→- **Dev Server**: Running, all routes 200, no compilation errors
+   236→   285→   314→   314→   513→   513→
+   237→   286→   315→   315→   514→   514→### Completed This Session
+   238→   287→   316→   316→   515→   515→1. **QA Testing**: Full agent-browser testing of dashboard, project creation, interview flow, dark mode — all working
+   239→   288→   317→   317→   516→   516→2. **NIC Code Search Tool**: Live search with 300ms debounce, 1700+ NIC codes, copy-to-clipboard, Manufacturing/Services color coding
+   240→   289→   318→   318→   517→   517→3. **EMI Calculator Tool**: Standard EMI formula, interest rate slider (8%–18%), tenure presets, visual principal/interest bar, Year 1 amortization summary
+   241→   290→   319→   319→   518→   518→4. **How It Works Section**: 4-step timeline (Create → Interview → Review → DPR), horizontal on desktop, vertical on mobile, staggered animations
+   242→   291→   320→   320→   519→   519→5. **Project Rename**: Inline rename with save/cancel (Enter/Escape), PATCH API endpoint, toast notification
+   243→   292→   321→   321→   520→   520→6. **Dashboard Styling Enhancements**:
+   244→   293→   322→   322→   521→   521→   - Animated hero section with motion wrapper, sparkle animation, bottom line reveal
+   245→   294→   323→   323→   522→   522→   - Stat cards with staggered entrance animation, gradient hover overlay, animated number counters
+   246→   295→   324→   324→   523→   523→   - "5 tools" count badge in Quick Tools header
+   247→   296→   325→   325→   524→   524→   - Extracted ProjectCard to separate component with hover-reveal action buttons
+   248→   297→   326→   326→   525→   525→7. **New API**: PATCH /api/projects/[id] — rename project
+   249→   298→   327→   327→   526→   526→
+   250→   299→   328→   328→   527→   527→### New Files Created
+   251→   300→   329→   329→   528→   528→- `src/components/dashboard/nic-code-search.tsx` — NIC Code Search Quick Tool
+   252→   301→   330→   330→   529→   529→- `src/components/dashboard/emi-calculator.tsx` — EMI/Loan Calculator Quick Tool
+   253→   302→   331→   331→   530→   530→- `src/components/dashboard/how-it-works.tsx` — How It Works timeline section
+   254→   303→   332→   332→   531→   531→- `src/components/dashboard/project-card.tsx` — Reusable project card with rename/delete
+   255→   304→   333→   333→   532→   532→
+   256→   305→   334→   334→   533→   533→### Known Issues & Risks
+   257→   306→   335→   335→   534→   534→- **PATCH route tech debt**: `src/app/api/projects/[id]/route.ts` uses `db.project.update` directly instead of repository (frozen IProjectRepository interface doesn't have a generic update/rename method). Low priority.
+   258→   307→   336→   336→   535→   535→- **response-parser ambiguity**: "ha"/"correct" parsing ambiguity in interview response-parser (LOW priority, documented in M4+M8)
+   259→   308→   337→   337→   536→   536→- **Test projects in DB**: 1 test project "My Papad Unit" exists in the database from QA testing
+   260→   309→   338→   338→   537→   537→- **Pre-existing test errors**: 14 TS errors in examples/ and skills/ directories (pre-existing, not in src/)
+   261→   310→   339→   339→   538→   538→
+   262→   311→   340→   340→   539→   539→### Priority Recommendations for Next Phase
+   263→   312→   341→   341→   540→   540→1. **HIGH**: End-to-end interview test — verify full 7-phase flow works with real AI responses
+   264→   313→   342→   342→   541→   541→2. **HIGH**: Add DPR download endpoint and wire "Download as PDF" button in Status View
+   265→   314→   343→   343→   542→   542→3. **HIGH**: Commit and push all new work to git
+   266→   315→   344→   344→   543→   543→4. **MEDIUM**: Add unit tests for new dashboard components and API endpoints
+   267→   316→   345→   345→   544→   544→5. **MEDIUM**: Implement DPR generation preview in the Status View (currently placeholder)
+   268→   317→   346→   346→   545→   545→6. **MEDIUM**: Add project duplicate/clone functionality
+   269→   318→   347→   347→   546→   546→7. **LOW**: Fix projects API route to use repository (Rule #8 compliance)
+   270→   319→   348→   348→   547→   547→8. **LOW**: Add more NIC code data or improve fuzzy matching in Knowledge Engine
+   271→   320→   349→   349→   548→   548→
+   272→   321→   350→   350→   549→   549→---
+   273→   322→   351→   351→   550→   550→Task ID: 6
+   274→   323→   352→   352→   551→   551→Agent: Project Templates Agent
+   275→   324→   353→   353→   552→   552→Task: Create Project Templates component for quick-start
+   276→   325→   354→   354→   553→   553→
+   277→   326→   355→   355→   554→   554→Work Log:
+   278→   327→   356→   356→   555→   555→- Created `/home/z/my-project/src/components/dashboard/project-templates.tsx`
+   279→   328→   357→   357→   556→   556→- Defined `ProjectTemplate` interface with fields: id, name, emoji, sector, nicCode, area, category, projectCost, projectCostLabel
+   280→   329→   358→   358→   557→   557→- Populated `PROJECT_TEMPLATES` array with 8 pre-built templates (Papad Making, Tailoring Shop, Agarbatti Manufacturing, Small Bakery, Bindi Making, Candle Making, Photocopy & DTP Center, Vermicompost Unit)
+   281→   330→   359→   359→   558→   558→- Built horizontal scrollable card container with CSS snap scrolling (`snap-x snap-mandatory`)
+   282→   331→   360→   360→   559→   559→- Implemented left/right scroll arrow buttons with smooth scrolling and disabled state tracking
+   283→   332→   361→   361→   560→   560→- Added gradient fade indicators on left/right edges when content is scrollable
+   284→   333→   362→   362→   561→   561→- Applied emerald-themed badge color maps for sector (Manufacturing/Service), area (Rural/Urban), and category (General/Women/SC/ST)
+   285→   334→   363→   363→   562→   562→- Used framer-motion `containerVariants`/`cardVariants` for staggered entrance animations
+   286→   335→   364→   364→   563→   563→- Added `whileHover` scale + lift effect on each card with spring physics
+   287→   336→   365→   365→   564→   564→- Each card (~220px wide) shows: emoji icon, business name, NIC code, 3 badges, estimated cost, and "Use Template" button
+   288→   337→   366→   366→   565→   565→- Component accepts `onSelectTemplate` callback — does NOT create projects directly
+   289→   338→   367→   367→   566→   566→- Verified: `eslint src/components/dashboard/project-templates.tsx` passes with zero errors/warnings
+   290→   339→   368→   368→   567→   567→
+   291→   340→   369→   369→   568→   568→Stage Summary:
+   292→   341→   370→   370→   569→   569→- New file: `src/components/dashboard/project-templates.tsx` with `ProjectTemplates` named export and `ProjectTemplate` type export
+   293→   342→   371→   371→   570→   570→- Horizontal scrollable template gallery with 8 PMEGP business templates
+   294→   343→   372→   372→   571→   571→- Emerald-themed, consistent with existing dashboard components
+   295→   344→   373→   373→   572→   572→- Pre-existing lint error in `document-checklist.tsx` is unrelated
+   296→   345→   374→   374→   573→   573→
+   297→   346→   375→   375→   574→   574→---
+   298→   347→   376→   376→   575→   575→Task ID: 9
+   299→   348→   377→   377→   576→   576→Agent: Break-Even Calculator Agent
+   300→   349→   378→   378→   577→   577→Task: Create Break-Even Analysis Quick Tool component
+   301→   350→   379→   379→   578→   578→
+   302→   351→   380→   380→   579→   579→Work Log:
+   303→   352→   381→   381→   580→   580→- Read worklog.md for project context (PMEGP Assistant — Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui, emerald theme)
+   304→   353→   382→   382→   581→   581→- Studied existing calculator components (subsidy-calculator.tsx, emi-calculator.tsx) for style conventions
+   305→   354→   383→   383→   582→   582→- Created /home/z/my-project/src/components/dashboard/breakeven-calculator.tsx
+   306→   355→   384→   384→   583→   583→- Implemented all required inputs: Fixed Costs (₹/month), Variable Cost per Unit (₹), Selling Price per Unit (₹), Expected Monthly Units Sold
+   307→   356→   385→   385→   584→   584→- Calculated all 5 metrics: BEP units, BEP revenue, monthly profit/loss, margin per unit, contribution margin ratio
+   308→   357→   386→   386→   585→   585→- Added visual cost breakdown bar at break-even (fixed / variable / profit segments)
+   309→   358→   387→   387→   586→   586→- Implemented color-coded profit (emerald) / loss (rose) indicators with safety margin display
+   310→   359→   388→   388→   587→   587→- Used Indian currency formatting (₹10,00,000 format) consistent with existing tools
+   311→   360→   389→   389→   588→   588→- Used shadcn/ui components (Input, Label, Button, Alert) and lucide-react icons
+   312→   361→   390→   390→   589→   589→- Added non-viable scenario handling when selling price ≤ variable cost
+   313→   362→   391→   391→   590→   590→- Used useTransition for smooth state updates, matching emi-calculator pattern
+   314→   363→   392→   392→   591→   591→- Ran lint — no errors in new file (pre-existing error in document-checklist.tsx is unrelated)
+   315→   364→   393→   393→   592→   592→- Appended work log to worklog.md
+   316→   365→   394→   394→   593→   593→
+   317→   366→   395→   395→   594→   594→Stage Summary:
+   318→   367→   396→   396→   595→   595→- Created compact, emerald-themed break-even analysis calculator as a named export
+   319→   368→   397→   397→   596→   596→- Zero lint errors in the new component
+   320→   369→   398→   398→   597→   597→- Visual bar shows cost composition at break-even (fixed, variable, profit = 0%)
+   321→   370→   399→   399→   598→   598→- Handles edge cases: non-viable pricing (loss per unit), missing expected volume, zero contribution margin
+   322→   371→   400→   400→   599→   599→- Fully consistent with existing calculator styling conventions
+   323→   372→   401→   401→   600→   600→
+   324→   373→   402→   402→   601→   601→---
+   325→   374→   403→   403→   602→   602→Task ID: 10
+   326→   375→   404→   404→   603→   603→Agent: Document Checklist Agent
+   327→   376→   405→   405→   604→   604→Task: Create Document Checklist Tracker Quick Tool component
+   328→   377→   406→   406→   605→   605→
+   329→   378→   407→   407→   606→   606→Work Log:
+   330→   379→   408→   408→   607→   607→- Read worklog.md for project context (PMEGP Assistant — Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui, emerald theme)
+   331→   380→   409→   409→   608→   608→- Studied existing dashboard components (eligibility-checker.tsx, emi-calculator.tsx) and UI primitives (checkbox, progress, collapsible) for style conventions
+   332→   381→   410→   410→   609→   609→- Created /home/z/my-project/src/components/dashboard/document-checklist.tsx
+   333→   382→   411→   411→   610→   610→- Defined 5 document categories with 21 total items:
+   334→   383→   412→   412→   611→   611→  - Identity & Category Proof (5 items): Aadhaar, PAN, Category Certificate, Ex-Serviceman Certificate, Disability Certificate
+   335→   384→   413→   413→   612→   612→  - Education & Experience (3 items): Educational Qualification, Training Certificate, Experience Certificate
+   336→   385→   414→   414→   613→   613→  - Business & Land (5 items): Business Plan/Project Report, Land Ownership/Lease, Landlord NOC, Site Plan, Location Photos
+   337→   386→   415→   415→   614→   614→  - Financial (4 items): Bank Statement, Machinery Quotations, Raw Material Quotations, Self Contribution Proof
+   338→   387→   416→   416→   615→   615→  - Other (4 items): GDP Registration, Udyam Registration, Municipal NOC, Pollution Control NOC
+   339→   388→   417→   417→   616→   616→- Each category is a Collapsible section with shadcn Checkbox components and emerald-themed styling
+   340→   389→   418→   418→   617→   617→- Progress bar shows "X of Y documents checked" with percentage
+   341→   390→   419→   419→   618→   618→- "Check All" and "Clear All" buttons with emerald accent on Check All
+   342→   391→   420→   420→   619→   619→- Category headers show per-category completion count (e.g., "3/5 completed")
+   343→   392→   421→   421→   620→   620→- Completed categories get an emerald checkmark icon overlay
+   344→   393→   422→   422→   621→   621→- Checked items show line-through muted text for visual feedback
+   345→   394→   423→   423→   622→   622→- Left emerald border on expanded category items for visual hierarchy
+   346→   395→   424→   424→   623→   623→- Used `useSyncExternalStore` for localStorage persistence (avoids React `setState-in-effect` lint error and handles SSR correctly with server snapshot)
+   347→   396→   425→   425→   624→   624→- Named export: `export function DocumentChecklist()`
+   348→   397→   426→   426→   625→   625→- Initial lint error (`react-hooks/set-state-in-effect`) fixed by replacing `useState` + `useEffect` hydration pattern with `useSyncExternalStore` external store pattern
+   349→   398→   427→   427→   626→   626→- Final lint: 0 errors, 0 warnings
+   350→   399→   428→   428→   627→   627→
+   351→   400→   429→   429→   628→   628→Stage Summary:
+   352→   401→   430→   430→   629→   629→- New file: `src/components/dashboard/document-checklist.tsx` with `DocumentChecklist` named export
+   353→   402→   431→   431→   630→   630→- 21 documents across 5 collapsible categories with progress tracking
+   354→   403→   432→   432→   631→   631→- localStorage persistence via `useSyncExternalStore` (SSR-safe, lint-clean)
+   355→   404→   433→   433→   632→   632→- Emerald color theme consistent with existing dashboard tools
+   356→   405→   434→   434→   633→   633→- Compact design fits inside a Collapsible card, no external dependencies beyond shadcn/ui and lucide-react
+   357→   406→   435→   435→   634→   634→
+   358→   407→   436→   436→   635→   635→---
+   359→   408→   437→   437→   636→   636→Task ID: Enhancement Round — Styling + Features
+   360→   409→   438→   438→   637→   637→Agent: Main
+   361→   410→   439→   439→   638→   638→Task: Comprehensive dashboard enhancement — new features, styling polish, QA
+   362→   411→   440→   440→   639→   639→
+   363→   412→   441→   441→   640→   640→Work Log:
+   364→   413→   442→   442→   641→   641→- **Assessed project status**: All 9 milestones complete, clean dev server, no critical bugs
+   365→   414→   443→   443→   642→   642→- **QA with agent-browser**: Dashboard, interview flow, all Quick Tools verified working
+   366→   415→   444→   444→   643→   643→- **VLM visual analysis**: Identified minor styling opportunities (button color, icon visibility)
+   367→   416→   445→   445→   644→   644→
+   368→   417→   446→   446→   645→   645→- **3 new components created by parallel agents**:
+   369→   418→   447→   447→   646→   646→  1. `src/components/dashboard/breakeven-calculator.tsx` — Break-Even Analysis with BEP units, revenue, profit/loss, safety margin, visual cost bar
+   370→   419→   448→   448→   647→   647→  2. `src/components/dashboard/document-checklist.tsx` — 21 documents across 5 categories, localStorage persistence, progress bar
+   371→   420→   449→   449→   648→   648→  3. `src/components/dashboard/project-templates.tsx` — 8 pre-built PMEGP business templates in horizontal scroll
+   372→   421→   450→   450→   649→   649→
+   373→   422→   451→   451→   650→   650→- **Dashboard enhancements (src/app/page.tsx)**:
+   374→   423→   452→   452→   651→   651→  - Added Project Templates section with "Use Template" creating projects with pre-set names
+   375→   424→   453→   453→   652→   652→  - Added sort controls (by: Last Updated, Created, Name, Status) with asc/desc toggle
+   376→   425→   454→   454→   653→   653→  - Added status filter dropdown (All, Empty, In Progress, Discovering, Complete, Review Pending, Validated, DPR Ready)
+   377→   426→   455→   455→   654→   654→  - Added 2 new Quick Tools: Break-Even Analysis, Document Checklist (now 7 tools total)
+   378→   427→   456→   456→   655→   655→  - Enhanced Quick Tools grid: xl:grid-cols-4, active ring highlight, icon color transition
+   379→   428→   457→   457→   656→   656→  - Enhanced empty state: gradient background, Zap icon, template reference tip
+   380→   429→   458→   458→   657→   657→  - Enhanced no-match state: shows active filter info
+   381→   430→   459→   459→   658→   658→  - Enhanced footer: 3-column layout (brand, quick links with external-link icons, PMEGP highlights)
+   382→   431→   460→   460→   659→   659→  - Added emerald badge for tool count
+   383→   432→   461→   461→   660→   660→
+   384→   433→   462→   462→   661→   661→- **Project Card enhancements (src/components/dashboard/project-card.tsx)**:
+   385→   434→   463→   463→   662→   662→  - Added status progress bar (0–100%) with color-coded segments (amber/blue/emerald)
+   386→   435→   464→   464→   663→   663→  - Added STATUS_PROGRESS and STATUS_STEPS mappings
+   387→   436→   465→   465→   664→   664→  - Simplified date display: only "Updated" shown (not Created)
+   388→   437→   466→   466→   665→   665→  - Added getProgressColor() helper
+   389→   438→   467→   467→   666→   666→
+   390→   439→   468→   468→   667→   667→- **Global CSS enhancements (src/app/globals.css)**:
+   391→   440→   469→   469→   668→   668→  - Custom select dropdown arrow SVG
+   392→   441→   470→   470→   669→   669→  - .scrollbar-none utility class
+   393→   442→   471→   471→   670→   670→
+   394→   443→   472→   472→   671→   671→- **Lint**: 0 errors across all modified/new files
+   395→   444→   473→   473→   672→   672→
+   396→   445→   474→   474→   673→   673→Stage Summary:
+   397→   446→   475→   475→   674→   674→- 3 new component files, 3 modified files
+   398→   447→   476→   476→   675→   675→- Dashboard now has: templates, sort/filter, 7 Quick Tools, progress bars, enhanced footer
+   399→   448→   477→   477→   676→   676→- All features verified via agent-browser QA
+   400→   449→   478→   478→   677→   677→- App stable, dev server clean
+   401→   450→   479→   479→   678→   678→
+   402→   451→   480→   480→   679→   679→## HANDOVER DOCUMENT
+   403→   452→   481→   481→   680→   680→
+   404→   453→   482→   482→   681→   681→### Project Current Status
+   405→   454→   483→   483→   682→   682→- **Architecture**: PMEGP Assistant — AI-guided micro-enterprise subsidy application builder
+   406→   455→   484→   484→   683→   683→- **Milestones**: All 9 milestones COMPLETE + 2 Enhancement Rounds
+   407→   456→   485→   485→   684→   684→- **Codebase**: ~19,000+ lines, Next.js 16 + TypeScript + Tailwind CSS 4 + shadcn/ui + Prisma (SQLite)
+   408→   457→   486→   486→   685→   685→- **Tests**: 161 tests, 462 assertions (from M4+M8, not re-run this session)
+   409→   458→   487→   487→   686→   686→- **Git**: HEAD `64ae682`, uncommitted modifications from this session
+   410→   459→   488→   488→   687→   687→- **Dev Server**: Running, all routes 200, no compilation errors
+   411→   460→   489→   489→   688→   688→
+   412→   461→   490→   490→   689→   689→### Completed This Session
+   413→   462→   491→   491→   690→   690→1. **QA Testing**: Full agent-browser testing of dashboard, interview, dark mode — all working
+   414→   463→   492→   492→   691→   691→2. **Break-Even Analysis Tool**: BEP units/revenue, profit/loss, safety margin, cost breakdown bar
+   415→   464→   493→   493→   692→   692→3. **Document Checklist Tool**: 21 documents, 5 categories, progress tracking, localStorage persistence
+   416→   465→   494→   494→   693→   693→4. **Quick-Start Templates**: 8 PMEGP business templates (Papad, Tailoring, Agarbatti, Bakery, Bindi, Candle, DTP, Vermicompost)
+   417→   466→   495→   495→   694→   694→5. **Project Sort/Filter**: Sort by 4 fields with direction toggle, filter by 7 statuses
+   418→   467→   496→   496→   695→   695→6. **Project Card Progress Bars**: Color-coded 0–100% status progress with segment colors
+   419→   468→   497→   497→   696→   696→7. **Enhanced Empty State**: Gradient background, template reference, Zap icon
+   420→   469→   498→   498→   697→   697→8. **Enhanced Footer**: 3-column layout with quick links (KVIC, MoMSME, Udyam) and PMEGP highlights
+   421→   470→   499→   499→   698→   698→9. **Enhanced Quick Tools Grid**: 7 tools (was 5), xl:grid-cols-4, active ring highlight
+   422→   471→   500→   500→   699→   699→10. **Global CSS**: Custom select arrows, scrollbar-none utility
+   423→   472→   501→
+   424→   473→   502→[showing lines 1-500 of 527; use offset=501 with limit to continue reading]

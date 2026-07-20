@@ -1,0 +1,868 @@
+     1→// ─── DPR Engine ─────────────────────────────────────────────────────────────
+     2→// Assembles the Detailed Project Report (DPR) from a validated ProjectProfile,
+     3→// FinancialResult, and EligibilityResult.
+     4→//
+     5→// Pure function — NO I/O, NO AI calls, NO side effects.
+     6→// "AI never calculates" — this engine never imports the AI layer.
+     7→// All rupee values formatted in Indian notation (₹25,00,000).
+     8→// ─────────────────────────────────────────────────────────────────────────────
+     9→
+    10→import type {
+    11→  ProjectProfile,
+    12→  Education,
+    13→  EntityType,
+    14→  Gender,
+    15→  ApplicantCategory,
+    16→  LandStatus,
+    17→  BuildingType,
+    18→} from "@/shared/types/project-profile";
+    19→import type { FinancialResult } from "@/engines/financial-engine";
+    20→import type { EligibilityResult } from "@/engines/eligibility-engine";
+    21→
+    22→// ── Public Types ────────────────────────────────────────────────────────────
+    23→
+    24→export interface DprSection {
+    25→  id: string;
+    26→  title: string;
+    27→  content: string; // Markdown
+    28→  tables?: DprTable[];
+    29→  order: number;
+    30→}
+    31→
+    32→export interface DprTable {
+    33→  caption: string;
+    34→  headers: string[];
+    35→  rows: string[][];
+    36→}
+    37→
+    38→export interface DprDocument {
+    39→  sections: DprSection[];
+    40→  financialResult: FinancialResult;
+    41→  eligibilityResult: EligibilityResult;
+    42→  generatedAt: string; // ISO timestamp
+    43→  wordCount: number;
+    44→}
+    45→
+    46→// ── Currency Helper ─────────────────────────────────────────────────────────
+    47→
+    48→/** Format a whole-rupee number in Indian notation (e.g. "₹25,00,000"). */
+    49→function formatIndianCurrency(amount: number): string {
+    50→  const str = Math.abs(amount).toString();
+    51→  if (str.length <= 3) return `₹${amount.toLocaleString("en-IN")}`;
+    52→  const lastThree = str.slice(-3);
+    53→  const rest = str.slice(0, -3);
+    54→  const formatted =
+    55→    rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
+    56→  return `₹${amount < 0 ? "-" : ""}${formatted}`;
+    57→}
+    58→
+    59→// ── Label Lookups ───────────────────────────────────────────────────────────
+    60→
+    61→const GENDER_LABEL: Record<Gender, string> = {
+    62→  MALE: "Male",
+    63→  FEMALE: "Female",
+    64→  OTHER: "Other",
+    65→};
+    66→
+    67→const CATEGORY_LABEL: Record<ApplicantCategory, string> = {
+    68→  GEN: "General",
+    69→  SC: "Scheduled Caste (SC)",
+    70→  ST: "Scheduled Tribe (ST)",
+    71→  OBC: "Other Backward Class (OBC)",
+    72→  MINORITY: "Minority",
+    73→  EX_SERVICEMEN: "Ex-Servicemen",
+    74→  PH: "Persons with Disability (PH)",
+    75→  NER: "North Eastern Region (NER)",
+    76→};
+    77→
+    78→const EDUCATION_LABEL: Record<Education, string> = {
+    79→  NONE: "None",
+    80→  BELOW_8TH: "Below 8th Standard",
+    81→  "8TH_PASS": "8th Pass",
+    82→  "10TH_PASS": "10th Pass",
+    83→  "12TH_PASS": "12th Pass",
+    84→  GRADUATE: "Graduate",
+    85→  POST_GRADUATE: "Post-Graduate",
+    86→  PROFESSIONAL: "Professional Degree/Diploma",
+    87→  OTHER: "Other",
+    88→};
+    89→
+    90→const ENTITY_TYPE_LABEL: Record<EntityType, string> = {
+    91→  INDIVIDUAL: "Individual",
+    92→  SHG: "Self-Help Group (SHG)",
+    93→  TRUST: "Trust",
+    94→  SOCIETY: "Society",
+    95→  COOP: "Co-operative Society",
+    96→  PARTNERSHIP: "Partnership Firm",
+    97→  LLP: "Limited Liability Partnership (LLP)",
+    98→  PRIVATE_LIMITED: "Private Limited Company",
+    99→};
+   100→
+   101→const LAND_STATUS_LABEL: Record<LandStatus, string> = {
+   102→  OWN: "Owned",
+   103→  RENTED: "Rented",
+   104→  LEASED: "Leased",
+   105→  NONE: "Not Applicable",
+   106→  FAMILY: "Family-owned",
+   107→};
+   108→
+   109→const BUILDING_TYPE_LABEL: Record<BuildingType, string> = {
+   110→  OWN: "Owned Building",
+   111→  RENTED: "Rented Building",
+   112→  CONSTRUCT: "To be Constructed",
+   113→};
+   114→
+   115→// ── Word-Count Helper ───────────────────────────────────────────────────────
+   116→
+   117→function countWords(text: string): number {
+   118→  const t = text.trim();
+   119→  return t.length === 0 ? 0 : t.split(/\s+/).length;
+   120→}
+   121→
+   122→function sectionWordCount(section: DprSection): number {
+   123→  let w = countWords(section.content);
+   124→  if (section.tables) {
+   125→    for (const tbl of section.tables) {
+   126→      w += countWords(tbl.caption);
+   127→      for (const h of tbl.headers) w += countWords(h);
+   128→      for (const row of tbl.rows) {
+   129→        for (const cell of row) w += countWords(cell);
+   130→      }
+   131→    }
+   132→  }
+   133→  return w;
+   134→}
+   135→
+   136→// ── Section 1: Executive Summary ───────────────────────────────────────────
+   137→
+   138→function buildExecutiveSummary(
+   139→  p: ProjectProfile,
+   140→  f: FinancialResult,
+   141→  e: EligibilityResult,
+   142→): DprSection {
+   143→  const eligible = e.eligible
+   144→    ? "**Eligible** under the PMEGP scheme"
+   145→    : `**Not eligible** \u2014 ${e.blockers.length} blocker(s) identified`;
+   146→
+   147→  const content =
+   148→    `This Detailed Project Report (DPR) presents the techno-economic feasibility of ` +
+   149→    `the proposed **${p.business.name}**, a ${p.business.activityType.toLowerCase()} unit ` +
+   150→    `engaged in **${p.business.description}** under NIC Code **${p.business.nicCode ?? "N/A"}** ` +
+   151→    `(${p.business.nicDescription ?? "Activity not yet classified"}).\n\n` +
+   152→    `The total project cost is estimated at **${formatIndianCurrency(f.totalProjectCost)}**, ` +
+   153→    `financed through own contribution of ${formatIndianCurrency(f.ownContribution)} ` +
+   154→    `(${f.ownContributionPercent}%), bank finance of ${formatIndianCurrency(f.bankFinance)}, ` +
+   155→    `and a PMEGP subsidy of ${formatIndianCurrency(f.subsidyAmount)} at ${f.subsidyRate}%.\n\n` +
+   156→    `The unit will be located at **${p.location.district}, ${p.location.state}** ` +
+   157→    `(${p.location.area === "RURAL" ? "Rural" : "Urban"} area) and is expected to generate ` +
+   158→    `direct employment for **${p.employees.totalEmployment} persons**.\n\n` +
+   159→    `The projected annual net profit is **${formatIndianCurrency(f.annualNetProfit)}** with ` +
+   160→    `a Debt Service Coverage Ratio (DSCR) of **${f.dscr.toFixed(2)}** and a break-even ` +
+   161→    `point at **${f.breakEvenPercent.toFixed(2)}%** of installed capacity.\n\n` +
+   162→    `Eligibility assessment: ${eligible}.`;
+   163→
+   164→  return {
+   165→    id: "executive-summary",
+   166→    title: "1. Executive Summary",
+   167→    content,
+   168→    order: 1,
+   169→  };
+   170→}
+   171→
+   172→// ── Section 2: About the Promoter ──────────────────────────────────────────
+   173→
+   174→function buildAboutPromoter(p: ProjectProfile): DprSection {
+   175→  const { applicant: a } = p;
+   176→
+   177→  const rows: string[][] = [
+   178→    ["Name of Applicant", a.name],
+   179→    ["Age", `${a.age} years`],
+   180→    ["Gender", GENDER_LABEL[a.gender]],
+   181→    ["Category", CATEGORY_LABEL[a.category]],
+   182→    [
+   183→      "Education",
+   184→      EDUCATION_LABEL[a.education] +
+   185→        (a.educationDetail ? ` (${a.educationDetail})` : ""),
+   186→    ],
+   187→    ["Entity Type", ENTITY_TYPE_LABEL[a.entityType]],
+   188→    [
+   189→      "Prior PMEGP/PMRY Subsidy",
+   190→      a.priorSubsidy
+   191→        ? "Yes" + (a.priorSubsidyDetail ? ` \u2014 ${a.priorSubsidyDetail}` : "")
+   192→        : "No",
+   193→    ],
+   194→    [
+   195→      "EDP Training Completed",
+   196→      a.edpCompleted
+   197→        ? "Yes" +
+   198→          (a.edpCertificateNo ? ` (Certificate: ${a.edpCertificateNo})` : "")
+   199→        : "No",
+   200→    ],
+   201→  ];
+   202→
+   203→  if (a.experienceYears !== undefined) {
+   204→    rows.push([
+   205→      "Relevant Experience",
+   206→      `${a.experienceYears} year(s)` +
+   207→        (a.experienceDetail ? ` \u2014 ${a.experienceDetail}` : ""),
+   208→    ]);
+   209→  }
+   210→
+   211→  const content =
+   212→    `The following table provides the details of the applicant/promoter of the ` +
+   213→    `proposed unit. The promoter belongs to the **${CATEGORY_LABEL[a.category]}** ` +
+   214→    `category and proposes to establish the business as a ` +
+   215→    `**${ENTITY_TYPE_LABEL[a.entityType]}**.`;
+   216→
+   217→  return {
+   218→    id: "about-promoter",
+   219→    title: "2. About the Promoter",
+   220→    content,
+   221→    tables: [
+   222→      {
+   223→        caption: "Table 2.1: Promoter Details",
+   224→        headers: ["Particulars", "Details"],
+   225→        rows,
+   226→      },
+   227→    ],
+   228→    order: 2,
+   229→  };
+   230→}
+   231→
+   232→// ── Section 3: Project Description ─────────────────────────────────────────
+   233→
+   234→function buildProjectDescription(p: ProjectProfile): DprSection {
+   235→  const { business: b } = p;
+   236→  const sectorText =
+   237→    b.sector === "MANUFACTURING" ? "Manufacturing" : "Service";
+   238→  const subCatText = b.subCategory.toLowerCase().replace("_", " ");
+   239→
+   240→  const rows: string[][] = [
+   241→    ["Name of Unit", b.name],
+   242→    ["Activity Description", b.description],
+   243→    ["Activity Type", b.activityType],
+   244→    ["NIC Code", b.nicCode ?? "N/A"],
+   245→    ["NIC Description", b.nicDescription ?? "N/A"],
+   246→    ["Sector", sectorText],
+   247→    ["Sub-Category", subCatText],
+   248→  ];
+   249→
+   250→  const content =
+   251→    `The proposed unit, **${b.name}**, will carry out ${b.activityType.toLowerCase()} ` +
+   252→    `activity described as: *${b.description}*. The activity falls under NIC Code ` +
+   253→    `**${b.nicCode ?? "N/A"}** (${b.nicDescription ?? "not yet classified"}) ` +
+   254→    `in the **${sectorText}** sector.`;
+   255→
+   256→  return {
+   257→    id: "project-description",
+   258→    title: "3. Project Description",
+   259→    content,
+   260→    tables: [
+   261→      {
+   262→        caption: "Table 3.1: Project Details",
+   263→        headers: ["Particulars", "Details"],
+   264→        rows,
+   265→      },
+   266→    ],
+   267→    order: 3,
+   268→  };
+   269→}
+   270→
+   271→// ── Section 4: Market Potential ────────────────────────────────────────────
+   272→
+   273→function buildMarketPotential(p: ProjectProfile): DprSection {
+   274→  const { market: m } = p;
+   275→
+   276→  const rows: string[][] = [
+   277→    ["Target Market", m.targetMarket],
+   278→    [
+   279→      "Market Demand",
+   280→      m.marketDemand ?? "Not specified",
+   281→    ],
+   282→    ["Competition", m.competition ?? "Not specified"],
+   283→    ["Marketing Strategy", m.marketingStrategy ?? "Not specified"],
+   284→    [
+   285→      "Selling Price",
+   286→      m.sellingPricePerUnit !== undefined
+   287→        ? `${formatIndianCurrency(m.sellingPricePerUnit)} per ${m.sellingPriceUnit ?? "unit"}`
+   288→        : "Not specified",
+   289→    ],
+   290→  ];
+   291→
+   292→  const content =
+   293→    `The unit will cater to the ${m.targetMarket}. ` +
+   294→    (m.marketDemand ? `The market demand is described as: *${m.marketDemand}*. ` : "") +
+   295→    (m.competition ? `The competitive landscape: *${m.competition}*. ` : "") +
+   296→    (m.marketingStrategy ? `The proposed marketing strategy: *${m.marketingStrategy}*.` : "") +
+   297→    (m.sellingPricePerUnit !== undefined
+   298→      ? ` The projected selling price is **${formatIndianCurrency(m.sellingPricePerUnit)}** per ${m.sellingPriceUnit ?? "unit"}.`
+   299→      : "");
+   300→
+   301→  return {
+   302→    id: "market-potential",
+   303→    title: "4. Market Potential",
+   304→    content,
+   305→    tables: [
+   306→      {
+   307→        caption: "Table 4.1: Market Analysis",
+   308→        headers: ["Particulars", "Details"],
+   309→        rows,
+   310→      },
+   311→    ],
+   312→    order: 4,
+   313→  };
+   314→}
+   315→
+   316→// ── Section 5: Technical Aspects — Machinery & Equipment ───────────────────
+   317→
+   318→function buildMachinery(p: ProjectProfile): DprSection {
+   319→  const { machinery: m } = p;
+   320→
+   321→  const headers = ["S.No.", "Name of Machine/Equipment", "Specification", "Qty", "Unit Cost (₹)", "Total Cost (₹)"];
+   322→  const rows: string[][] = m.items.map((item, i) => [
+   323→    `${i + 1}`,
+   324→    item.name,
+   325→    item.specification ?? "\u2014",
+   326→    `${item.quantity}`,
+   327→    formatIndianCurrency(item.unitCost),
+   328→    formatIndianCurrency(item.totalCost),
+   329→  ]);
+   330→
+   331→  // Grand-total row
+   332→  rows.push([
+   333→    "",
+   334→    "**Total**",
+   335→    "",
+   336→    "",
+   337→    "",
+   338→    `**${formatIndianCurrency(m.totalCost)}**`,
+   339→  ]);
+   340→
+   341→  const content =
+   342→    `The following machinery and equipment is required for the proposed unit. ` +
+   343→    `The total cost of machinery and equipment is **${formatIndianCurrency(m.totalCost)}**.`;
+   344→
+   345→  return {
+   346→    id: "technical-machinery",
+   347→    title: "5. Technical Aspects \u2014 Machinery & Equipment",
+   348→    content,
+   349→    tables: [
+   350→      {
+   351→        caption: "Table 5.1: Machinery & Equipment Details",
+   352→        headers,
+   353→        rows,
+   354→      },
+   355→    ],
+   356→    order: 5,
+   357→  };
+   358→}
+   359→
+   360→// ── Section 6: Technical Aspects — Raw Materials ───────────────────────────
+   361→
+   362→function buildRawMaterials(p: ProjectProfile): DprSection {
+   363→  const { rawMaterials: rm } = p;
+   364→
+   365→  const headers = [
+   366→    "S.No.",
+   367→    "Raw Material",
+   368→    "Specification",
+   369→    "Monthly Qty",
+   370→    "Unit",
+   371→    "Rate (₹)",
+   372→    "Monthly Cost (₹)",
+   373→  ];
+   374→  const rows: string[][] = rm.items.map((item, i) => [
+   375→    `${i + 1}`,
+   376→    item.name,
+   377→    item.specification ?? "\u2014",
+   378→    `${item.monthlyQuantity}`,
+   379→    item.unit,
+   380→    formatIndianCurrency(item.unitRate),
+   381→    formatIndianCurrency(item.totalMonthlyCost),
+   382→  ]);
+   383→
+   384→  rows.push([
+   385→    "",
+   386→    "**Total**",
+   387→    "",
+   388→    "",
+   389→    "",
+   390→    "",
+   391→    `**${formatIndianCurrency(rm.totalMonthlyCost)}**`,
+   392→  ]);
+   393→
+   394→  const content =
+   395→    `The following raw materials are required on a monthly basis for the production ` +
+   396→    `process. The total monthly raw material cost is **${formatIndianCurrency(rm.totalMonthlyCost)}**.`;
+   397→
+   398→  return {
+   399→    id: "technical-raw-materials",
+   400→    title: "6. Technical Aspects \u2014 Raw Materials",
+   401→    content,
+   402→    tables: [
+   403→      {
+   404→        caption: "Table 6.1: Raw Material Requirements",
+   405→        headers,
+   406→        rows,
+   407→      },
+   408→    ],
+   409→    order: 6,
+   410→  };
+   411→}
+   412→
+   413→// ── Section 7: Technical Aspects — Utilities & Overheads ───────────────────
+   414→
+   415→function buildUtilities(p: ProjectProfile): DprSection {
+   416→  const { utilities: u } = p;
+   417→
+   418→  const rows: string[][] = [
+   419→    ["Power & Electricity", formatIndianCurrency(u.monthlyPowerCost)],
+   420→    ["Water", formatIndianCurrency(u.monthlyWaterCost)],
+   421→    ["Rent", formatIndianCurrency(u.monthlyRentCost)],
+   422→    ["Maintenance & Repairs", formatIndianCurrency(u.monthlyMaintenanceCost)],
+   423→    ["Transport", formatIndianCurrency(u.monthlyTransportCost)],
+   424→    ["Communication (Telephone/Internet)", formatIndianCurrency(u.monthlyCommunicationCost)],
+   425→    ["Insurance", formatIndianCurrency(u.monthlyInsuranceCost)],
+   426→    ["Miscellaneous Expenses", formatIndianCurrency(u.monthlyMiscCost)],
+   427→    ["**Total Monthly Overheads**", `**${formatIndianCurrency(u.totalMonthlyOverheads)}**`],
+   428→  ];
+   429→
+   430→  const content =
+   431→    `The monthly utility and overhead costs for running the unit are detailed below. ` +
+   432→    `The total monthly overhead is **${formatIndianCurrency(u.totalMonthlyOverheads)}**.`;
+   433→
+   434→  return {
+   435→    id: "technical-utilities",
+   436→    title: "7. Technical Aspects \u2014 Utilities & Overheads",
+   437→    content,
+   438→    tables: [
+   439→      {
+   440→        caption: "Table 7.1: Monthly Utilities & Overheads",
+   441→        headers: ["Particulars", "Monthly Cost (₹)"],
+   442→        rows,
+   443→      },
+   444→    ],
+   445→    order: 7,
+   446→  };
+   447→}
+   448→
+   449→// ── Section 8: Production Capacity ─────────────────────────────────────────
+   450→
+   451→function buildProductionCapacity(p: ProjectProfile): DprSection {
+   452→  const { capacity: c } = p;
+   453→
+   454→  const rows: string[][] = [
+   455→    ["Installed Capacity", `${c.installedCapacity.value} ${c.installedCapacity.unit}`],
+   456→    ["Projected Capacity Utilisation", `${c.projectedCapacityUtil}%`],
+   457→    ["Working Days per Month", `${c.workingDaysPerMonth} days`],
+   458→    ["Working Hours per Day", `${c.workingHoursPerDay} hours`],
+   459→    ["Number of Shifts", `${c.shifts}`],
+   460→  ];
+   461→
+   462→  const effectiveOutput = Math.round(
+   463→    (c.installedCapacity.value * c.projectedCapacityUtil) / 100,
+   464→  );
+   465→
+   466→  const content =
+   467→    `The proposed unit has an installed capacity of **${c.installedCapacity.value} ` +
+   468→    `${c.installedCapacity.unit}**. At a projected capacity utilisation of ` +
+   469→    `**${c.projectedCapacityUtil}%**, the effective output would be approximately ` +
+   470→    `**${effectiveOutput} ${c.installedCapacity.unit}**. The unit will operate ` +
+   471→    `${c.shifts > 1 ? `${c.shifts} shifts` : "a single shift"} for ` +
+   472→    `${c.workingDaysPerMonth} days per month with ${c.workingHoursPerDay} working ` +
+   473→    `hours per day.`;
+   474→
+   475→  return {
+   476→    id: "production-capacity",
+   477→    title: "8. Production Capacity",
+   478→    content,
+   479→    tables: [
+   480→      {
+   481→        caption: "Table 8.1: Production Capacity Details",
+   482→        headers: ["Particulars", "Details"],
+   483→        rows,
+   484→      },
+   485→    ],
+   486→    order: 8,
+   487→  };
+   488→}
+   489→
+   490→// ── Section 9: Location & Land ─────────────────────────────────────────────
+   491→
+   492→function buildLocationAndLand(p: ProjectProfile): DprSection {
+   493→  const { location: loc, land: ln } = p;
+   494→
+   495→  const areaLabel = loc.area === "RURAL" ? "Rural" : "Urban";
+   496→
+   497→  const rows: string[][] = [
+   498→    ["State", loc.state],
+   499→    ["District", loc.district],
+   500→    ["Area Type", areaLabel],
+   501→    ["Hill & Border Area", loc.isHillBorderArea ? "Yes" : "No"],
+   502→    ["Aspirational District", loc.isAspirationalDistrict ? "Yes" : "No"],
+   503→    [
+   504→      "Full Address",
+   505→      loc.premisesAddress ?? "Not specified",
+   506→    ],
+   507→  ];
+   508→
+   509→  if (loc.industrialAreaName) {
+   510→    rows.push(["Industrial Area", loc.industrialAreaName]);
+   511→  }
+   512→
+   513→  rows.push(["Land Status", LAND_STATUS_LABEL[ln.status]]);
+   514→
+   515→  if (ln.areaSqFt !== undefined) {
+   516→    rows.push(["Land Area (Sq. Ft.)", `${ln.areaSqFt} sq. ft.`]);
+   517→  }
+   518→  if (ln.areaSqMt !== undefined) {
+   519→    rows.push(["Land Area (Sq. Mt.)", `${ln.areaSqMt} sq. mt.`]);
+   520→  }
+   521→
+   522→  if (ln.buildingType) {
+   523→    rows.push(["Building Type", BUILDING_TYPE_LABEL[ln.buildingType]]);
+   524→  }
+   525→  if (ln.buildingAreaSqFt !== undefined) {
+   526→    rows.push(["Building Area (Sq. Ft.)", `${ln.buildingAreaSqFt} sq. ft.`]);
+   527→  }
+   528→
+   529→  const content =
+   530→    `The proposed unit will be located at **${loc.district}, ${loc.state}** ` +
+   531→    `(${areaLabel} area). The land status is **${LAND_STATUS_LABEL[ln.status]}**. ` +
+   532→    (ln.buildingType
+   533→      ? `The building is ${BUILDING_TYPE_LABEL[ln.buildingType].toLowerCase()}. `
+   534→      : "") +
+   535→    (ln.monthlyRent !== undefined && ln.monthlyRent > 0
+   536→      ? `Monthly rent is ${formatIndianCurrency(ln.monthlyRent)}. `
+   537→      : "") +
+   538→    (loc.isHillBorderArea
+   539→      ? "The location is classified as a Hill & Border Area, which qualifies for enhanced subsidy benefits. "
+   540→      : "") +
+   541→    (loc.isAspirationalDistrict
+   542→      ? "The district is an Aspirational District under government development programmes. "
+   543→      : "");
+   544→
+   545→  return {
+   546→    id: "location-land",
+   547→    title: "9. Location & Land",
+   548→    content,
+   549→    tables: [
+   550→      {
+   551→        caption: "Table 9.1: Location & Land Details",
+   552→        headers: ["Particulars", "Details"],
+   553→        rows,
+   554→      },
+   555→    ],
+   556→    order: 9,
+   557→  };
+   558→}
+   559→
+   560→// ── Section 10: Means of Finance ───────────────────────────────────────────
+   561→
+   562→function buildMeansOfFinance(
+   563→  p: ProjectProfile,
+   564→  f: FinancialResult,
+   565→): DprSection {
+   566→  const rows: string[][] = [
+   567→    ["Total Project Cost", formatIndianCurrency(f.totalProjectCost)],
+   568→    [
+   569→      "Own Contribution",
+   570→      formatIndianCurrency(f.ownContribution),
+   571→      `${f.ownContributionPercent}%`,
+   572→    ],
+   573→    ["Bank Finance", formatIndianCurrency(f.bankFinance), ""],
+   574→    [
+   575→      "  \u2014 Term Loan",
+   576→      formatIndianCurrency(f.bankTermLoan),
+   577→      "",
+   578→    ],
+   579→    [
+   580→      "  \u2014 Working Capital Loan",
+   581→      formatIndianCurrency(f.bankWorkingCapital),
+   582→      "",
+   583→    ],
+   584→    [
+   585→      "PMEGP Subsidy",
+   586→      formatIndianCurrency(f.subsidyAmount),
+   587→      `${f.subsidyRate}%`,
+   588→    ],
+   589→  ];
+   590→
+   591→  const content =
+   592→    `The project is estimated to cost **${formatIndianCurrency(f.totalProjectCost)}** in total. ` +
+   593→    `The means of finance comprises the promoter's own contribution of ` +
+   594→    `${formatIndianCurrency(f.ownContribution)} (${f.ownContributionPercent}%), ` +
+   595→    `bank finance of ${formatIndianCurrency(f.bankFinance)} (term loan ` +
+   596→    `${formatIndianCurrency(f.bankTermLoan)} + working capital loan ` +
+   597→    `${formatIndianCurrency(f.bankWorkingCapital)}), and a PMEGP subsidy of ` +
+   598→    `${formatIndianCurrency(f.subsidyAmount)} at a rate of ${f.subsidyRate}%.`;
+   599→
+   600→  return {
+   601→    id: "means-of-finance",
+   602→    title: "10. Means of Finance",
+   603→    content,
+   604→    tables: [
+   605→      {
+   606→        caption: "Table 10.1: Means of Finance",
+   607→        headers: ["Source", "Amount (₹)", "Remarks"],
+   608→        rows,
+   609→      },
+   610→    ],
+   611→    order: 10,
+   612→  };
+   613→}
+   614→
+   615→// ── Section 11: Profitability & Financial Projections ──────────────────────
+   616→
+   617→function buildProfitability(f: FinancialResult): DprSection {
+   618→  const rows: string[][] = [
+   619→    [
+   620→      "Monthly Operating Costs",
+   621→      formatIndianCurrency(f.monthlyOperatingCosts),
+   622→      formatIndianCurrency(f.monthlyOperatingCosts * 12),
+   623→    ],
+   624→    [
+   625→      "Annual Revenue (Sales)",
+   626→      "",
+   627→      formatIndianCurrency(f.annualRevenue),
+   628→    ],
+   629→    [
+   630→      "Annual Depreciation",
+   631→      formatIndianCurrency(f.annualDepreciation),
+   632→      formatIndianCurrency(f.annualDepreciation),
+   633→    ],
+   634→    [
+   635→      "Annual Expenditure",
+   636→      "",
+   637→      formatIndianCurrency(f.annualExpenditure),
+   638→    ],
+   639→    [
+   640→      "**Annual Net Profit**",
+   641→      "",
+   642→      `**${formatIndianCurrency(f.annualNetProfit)}**`,
+   643→    ],
+   644→    [
+   645→      "Debt Service Coverage Ratio (DSCR)",
+   646→      "",
+   647→      `${f.dscr.toFixed(2)}`,
+   648→    ],
+   649→    [
+   650→      "Break-Even Point",
+   651→      "",
+   652→      `${f.breakEvenPercent.toFixed(2)}%`,
+   653→    ],
+   654→  ];
+   655→
+   656→  const content =
+   657→    `The profitability projections are based on the operating costs, revenue estimates, ` +
+   658→    `and financing structure detailed in the preceding sections. Annual depreciation of ` +
+   659→    `${formatIndianCurrency(f.annualDepreciation)} has been calculated on a straight-line ` +
+   660→    `basis over 10 years with zero salvage value.\n\n` +
+   661→    `The annual net profit of **${formatIndianCurrency(f.annualNetProfit)}** yields a ` +
+   662→    `DSCR of **${f.dscr.toFixed(2)}** and a break-even point at ` +
+   663→    `**${f.breakEvenPercent.toFixed(2)}%** of capacity utilisation. ` +
+   664→    `A DSCR above 1.5 indicates comfortable debt servicing capacity.`;
+   665→
+   666→  return {
+   667→    id: "profitability-projections",
+   668→    title: "11. Profitability & Financial Projections",
+   669→    content,
+   670→    tables: [
+   671→      {
+   672→        caption: "Table 11.1: Profitability Summary",
+   673→        headers: ["Particulars", "Monthly (₹)", "Annual (₹)"],
+   674→        rows,
+   675→      },
+   676→    ],
+   677→    order: 11,
+   678→  };
+   679→}
+   680→
+   681→// ── Section 12: Repayment Schedule ─────────────────────────────────────────
+   682→
+   683→function buildRepaymentSchedule(f: FinancialResult): DprSection {
+   684→  // Summary table
+   685→  const tenureYears = Math.ceil(f.loanTenureMonths / 12);
+   686→  const summaryRows: string[][] = [
+   687→    ["Monthly EMI", formatIndianCurrency(f.emi)],
+   688→    ["Loan Tenure", `${f.loanTenureMonths} months (${tenureYears} years)`],
+   689→    ["Moratorium Period", `${f.repaymentMoratoriumMonths} months`],
+   690→    ["Total Interest Payable", formatIndianCurrency(f.totalInterest)],
+   691→    ["Total Repayment (Principal + Interest)", formatIndianCurrency(f.totalRepayment)],
+   692→  ];
+   693→
+   694→  // First 12 months of schedule
+   695→  const scheduleHeaders = [
+   696→    "Month",
+   697→    "Opening Balance (₹)",
+   698→    "EMI (₹)",
+   699→    "Interest (₹)",
+   700→    "Principal (₹)",
+   701→    "Closing Balance (₹)",
+   702→  ];
+   703→
+   704→  const scheduleRows: string[][] = f.loanSchedule.slice(0, 12).map((entry) => [
+   705→    `${entry.month}`,
+   706→    formatIndianCurrency(entry.openingBalance),
+   707→    formatIndianCurrency(entry.emi),
+   708→    formatIndianCurrency(entry.interest),
+   709→    formatIndianCurrency(entry.principal),
+   710→    formatIndianCurrency(entry.closingBalance),
+   711→  ]);
+   712→
+   713→  const content =
+   714→    `The term loan of **${formatIndianCurrency(f.bankTermLoan)}** will be repaid ` +
+   715→    `over **${f.loanTenureMonths} months** with a moratorium period of ` +
+   716→    `**${f.repaymentMoratoriumMonths} months**. The equated monthly instalment (EMI) ` +
+   717→    `is **${formatIndianCurrency(f.emi)}**. Total interest payable over the loan ` +
+   718→    `tenure is ${formatIndianCurrency(f.totalInterest)}, bringing the total ` +
+   719→    `repayment to ${formatIndianCurrency(f.totalRepayment)}.\n\n` +
+   720→    `The table below shows the first 12 months of the repayment schedule. During the ` +
+   721→    `moratorium period, no repayments are made.`;
+   722→
+   723→  return {
+   724→    id: "repayment-schedule",
+   725→    title: "12. Repayment Schedule",
+   726→    content,
+   727→    tables: [
+   728→      {
+   729→        caption: "Table 12.1: Loan Repayment Summary",
+   730→        headers: ["Particulars", "Details"],
+   731→        rows: summaryRows,
+   732→      },
+   733→      {
+   734→        caption: "Table 12.2: Repayment Schedule \u2014 First 12 Months",
+   735→        headers: scheduleHeaders,
+   736→        rows: scheduleRows,
+   737→      },
+   738→    ],
+   739→    order: 12,
+   740→  };
+   741→}
+   742→
+   743→// ── Section 13: Employment Generation ──────────────────────────────────────
+   744→
+   745→function buildEmploymentGeneration(p: ProjectProfile): DprSection {
+   746→  const { employees: emp } = p;
+   747→
+   748→  const skilledTotal = emp.skilled.male + emp.skilled.female;
+   749→  const unskilledTotal = emp.unskilled.male + emp.unskilled.female;
+   750→  const skilledWages = skilledTotal * emp.skilled.monthlyWagePerPerson;
+   751→  const unskilledWages = unskilledTotal * emp.unskilled.monthlyWagePerPerson;
+   752→  const adminWages = emp.administrative.count * emp.administrative.monthlyWagePerPerson;
+   753→
+   754→  const rows: string[][] = [
+   755→    [
+   756→      "Skilled Workers",
+   757→      `${emp.skilled.male}`,
+   758→      `${emp.skilled.female}`,
+   759→      `${skilledTotal}`,
+   760→      formatIndianCurrency(emp.skilled.monthlyWagePerPerson),
+   761→      formatIndianCurrency(skilledWages),
+   762→    ],
+   763→    [
+   764→      "Unskilled Workers",
+   765→      `${emp.unskilled.male}`,
+   766→      `${emp.unskilled.female}`,
+   767→      `${unskilledTotal}`,
+   768→      formatIndianCurrency(emp.unskilled.monthlyWagePerPerson),
+   769→      formatIndianCurrency(unskilledWages),
+   770→    ],
+   771→    [
+   772→      "Administrative Staff",
+   773→      "\u2014",
+   774→      "\u2014",
+   775→      `${emp.administrative.count}`,
+   776→      formatIndianCurrency(emp.administrative.monthlyWagePerPerson),
+   777→      formatIndianCurrency(adminWages),
+   778→    ],
+   779→    [
+   780→      "**Total**",
+   781→      `**${emp.skilled.male + emp.unskilled.male}**`,
+   782→      `**${emp.skilled.female + emp.unskilled.female}**`,
+   783→      `**${emp.totalEmployment}**`,
+   784→      "",
+   785→      `**${formatIndianCurrency(emp.totalMonthlyWages)}**`,
+   786→    ],
+   787→  ];
+   788→
+   789→  const content =
+   790→    `The project will generate direct employment for **${emp.totalEmployment} persons**, ` +
+   791→    `comprising ${skilledTotal} skilled and ${unskilledTotal} unskilled workers, ` +
+   792→    `plus ${emp.administrative.count} administrative staff. The total monthly ` +
+   793→    `wage bill is **${formatIndianCurrency(emp.totalMonthlyWages)}**.`;
+   794→
+   795→  return {
+   796→    id: "employment-generation",
+   797→    title: "13. Employment Generation",
+   798→    content,
+   799→    tables: [
+   800→      {
+   801→        caption: "Table 13.1: Employment Details",
+   802→        headers: [
+   803→          "Category",
+   804→          "Male",
+   805→          "Female",
+   806→          "Total",
+   807→          "Wage/Person/Month (₹)",
+   808→          "Total Monthly Wages (₹)",
+   809→        ],
+   810→        rows,
+   811→      },
+   812→    ],
+   813→    order: 13,
+   814→  };
+   815→}
+   816→
+   817→// ── Main Entry Point ───────────────────────────────────────────────────────
+   818→
+   819→/**
+   820→ * Generate a complete Detailed Project Report (DPR) document from a validated
+   821→ * ProjectProfile, FinancialResult, and EligibilityResult.
+   822→ *
+   823→ * Pure function — same inputs always produce the same output.
+   824→ * NO I/O, NO AI calls, NO side effects.
+   825→ *
+   826→ * @param profile  - Validated project profile with all 13 segments
+   827→ * @param financial - Pre-computed financial result from the Financial Engine
+   828→ * @param eligibility - Pre-computed eligibility result from the Eligibility Engine
+   829→ * @returns Structured DPR document with 13 sections, engine results, and metadata
+   830→ */
+   831→export function generateDPR(
+   832→  profile: ProjectProfile,
+   833→  financial: FinancialResult,
+   834→  eligibility: EligibilityResult,
+   835→): DprDocument {
+   836→  const sections: DprSection[] = [
+   837→    buildExecutiveSummary(profile, financial, eligibility),
+   838→    buildAboutPromoter(profile),
+   839→    buildProjectDescription(profile),
+   840→    buildMarketPotential(profile),
+   841→    buildMachinery(profile),
+   842→    buildRawMaterials(profile),
+   843→    buildUtilities(profile),
+   844→    buildProductionCapacity(profile),
+   845→    buildLocationAndLand(profile),
+   846→    buildMeansOfFinance(profile, financial),
+   847→    buildProfitability(financial),
+   848→    buildRepaymentSchedule(financial),
+   849→    buildEmploymentGeneration(profile),
+   850→  ];
+   851→
+   852→  // Ensure sections are sorted by order
+   853→  sections.sort((a, b) => a.order - b.order);
+   854→
+   855→  // Compute total word count across all sections
+   856→  let wordCount = 0;
+   857→  for (const section of sections) {
+   858→    wordCount += sectionWordCount(section);
+   859→  }
+   860→
+   861→  return {
+   862→    sections,
+   863→    financialResult: financial,
+   864→    eligibilityResult: eligibility,
+   865→    generatedAt: new Date().toISOString(),
+   866→    wordCount,
+   867→  };
+   868→}

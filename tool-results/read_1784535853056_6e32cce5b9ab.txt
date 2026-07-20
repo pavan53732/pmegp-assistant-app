@@ -1,0 +1,722 @@
+     1→// ─── Review Handler ──────────────────────────────────────────────────────────
+     2→// Builds a structured review summary of the entire project profile
+     3→// for the REVIEW phase. Pure functions only — no I/O, no AI calls.
+     4→// ───────────────────────────────────────────────────────────────────────────────
+     5→
+     6→import type {
+     7→  ProjectProfile,
+     8→  Gender,
+     9→  ApplicantCategory,
+    10→  Education,
+    11→  EntityType,
+    12→  ActivityType,
+    13→  UrbanRural,
+    14→  LandStatus,
+    15→  BuildingType,
+    16→  WorkingCapitalMethod,
+    17→} from "@/shared/types/project-profile";
+    18→import type { InterviewPhase } from "@/shared/types/interview";
+    19→import type { FieldProvenance } from "@/shared/types/provenance";
+    20→import type {
+    21→  ReviewSummary,
+    22→  ReviewSection,
+    23→  ReviewFieldEntry,
+    24→} from "./types";
+    25→
+    26→// ── Enum Label Maps ─────────────────────────────────────────────────────────
+    27→
+    28→const GENDER_LABELS: Record<Gender, string> = {
+    29→  MALE: "Male",
+    30→  FEMALE: "Female",
+    31→  OTHER: "Other",
+    32→};
+    33→
+    34→const CATEGORY_LABELS: Record<ApplicantCategory, string> = {
+    35→  GEN: "General",
+    36→  SC: "Scheduled Caste",
+    37→  ST: "Scheduled Tribe",
+    38→  OBC: "Other Backward Class",
+    39→  MINORITY: "Minority",
+    40→  EX_SERVICEMEN: "Ex-Servicemen",
+    41→  PH: "Persons with Disability",
+    42→  NER: "North Eastern Region",
+    43→};
+    44→
+    45→const EDUCATION_LABELS: Record<Education, string> = {
+    46→  NONE: "No Formal Education",
+    47→  BELOW_8TH: "Below 8th Standard",
+    48→  "8TH_PASS": "8th Pass",
+    49→  "10TH_PASS": "10th Pass",
+    50→  "12TH_PASS": "12th Pass",
+    51→  GRADUATE: "Graduate",
+    52→  POST_GRADUATE: "Post-Graduate",
+    53→  PROFESSIONAL: "Professional Degree",
+    54→  OTHER: "Other",
+    55→};
+    56→
+    57→const ENTITY_TYPE_LABELS: Record<EntityType, string> = {
+    58→  INDIVIDUAL: "Individual",
+    59→  SHG: "Self Help Group",
+    60→  TRUST: "Trust",
+    61→  SOCIETY: "Society",
+    62→  COOP: "Cooperative",
+    63→  PARTNERSHIP: "Partnership",
+    64→  LLP: "LLP",
+    65→  PRIVATE_LIMITED: "Private Limited",
+    66→};
+    67→
+    68→const ACTIVITY_TYPE_LABELS: Record<ActivityType, string> = {
+    69→  MANUFACTURING: "Manufacturing",
+    70→  SERVICE: "Service",
+    71→};
+    72→
+    73→const SECTOR_LABELS: Record<string, string> = {
+    74→  MANUFACTURING: "Manufacturing",
+    75→  SERVICE: "Service",
+    76→};
+    77→
+    78→const SUB_CATEGORY_LABELS: Record<string, string> = {
+    79→  MANUFACTURING: "Manufacturing",
+    80→  SERVICE: "Service",
+    81→  TRADING: "Trading",
+    82→  TRANSPORT: "Transport",
+    83→};
+    84→
+    85→const URBAN_RURAL_LABELS: Record<UrbanRural, string> = {
+    86→  URBAN: "Urban",
+    87→  RURAL: "Rural",
+    88→};
+    89→
+    90→const LAND_STATUS_LABELS: Record<LandStatus, string> = {
+    91→  OWN: "Own",
+    92→  RENTED: "Rented",
+    93→  LEASED: "Leased",
+    94→  NONE: "No Land Required",
+    95→  FAMILY: "Family Land",
+    96→};
+    97→
+    98→const BUILDING_TYPE_LABELS: Record<BuildingType, string> = {
+    99→  OWN: "Own Building",
+   100→  RENTED: "Rented Building",
+   101→  CONSTRUCT: "New Construction",
+   102→};
+   103→
+   104→const WC_METHOD_LABELS: Record<WorkingCapitalMethod, string> = {
+   105→  USER_PROVIDED: "User Provided",
+   106→  DAYS_BASED: "Days-Based Calculation",
+   107→  PERCENTAGE_OF_PROJECT_COST: "% of Project Cost",
+   108→};
+   109→
+   110→// ── PII Fields (masked in all summaries) ─────────────────────────────────────
+   111→
+   112→const PII_PATHS = new Set(["applicant.aadhaarNo", "applicant.panNo"]);
+   113→
+   114→// ── Field Definitions ────────────────────────────────────────────────────────
+   115→
+   116→type FieldType = "TEXT" | "NUMBER" | "CURRENCY" | "PERCENTAGE" | "BOOLEAN" | "ENUM" | "DATE";
+   117→
+   118→interface FieldDef {
+   119→  dotPath: string;
+   120→  label: string;
+   121→  type: FieldType;
+   122→  required?: boolean;
+   123→  enumMap?: Record<string, string>;
+   124→  pii?: boolean;
+   125→}
+   126→
+   127→interface PhaseSectionDef {
+   128→  phase: InterviewPhase;
+   129→  label: string;
+   130→  fields: FieldDef[];
+   131→}
+   132→
+   133→/**
+   134→ * Ordered field definitions per interview phase.
+   135→ * REVIEW and VALIDATION_COMPLETION are excluded — they don't collect data.
+   136→ */
+   137→const PHASE_FIELD_DEFS: PhaseSectionDef[] = [
+   138→  {
+   139→    phase: "APPLICANT_DISCOVERY",
+   140→    label: "Applicant Information",
+   141→    fields: [
+   142→      { dotPath: "applicant.name", label: "Name", type: "TEXT", required: true },
+   143→      { dotPath: "applicant.age", label: "Age", type: "TEXT" },
+   144→      { dotPath: "applicant.gender", label: "Gender", type: "ENUM", enumMap: GENDER_LABELS },
+   145→      { dotPath: "applicant.category", label: "Category", type: "ENUM", enumMap: CATEGORY_LABELS },
+   146→      { dotPath: "applicant.isWomen", label: "Women Applicant", type: "BOOLEAN" },
+   147→      { dotPath: "applicant.education", label: "Education", type: "ENUM", enumMap: EDUCATION_LABELS, required: true },
+   148→      { dotPath: "applicant.educationDetail", label: "Education Details", type: "TEXT" },
+   149→      { dotPath: "applicant.entityType", label: "Entity Type", type: "ENUM", enumMap: ENTITY_TYPE_LABELS, required: true },
+   150→      { dotPath: "applicant.entityRegistrationNo", label: "Registration No.", type: "TEXT" },
+   151→      { dotPath: "applicant.phone", label: "Phone", type: "TEXT" },
+   152→      { dotPath: "applicant.email", label: "Email", type: "TEXT" },
+   153→      { dotPath: "applicant.aadhaarNo", label: "Aadhaar No.", type: "TEXT", pii: true },
+   154→      { dotPath: "applicant.panNo", label: "PAN No.", type: "TEXT", pii: true },
+   155→      { dotPath: "applicant.priorSubsidy", label: "Prior Subsidy Availed", type: "BOOLEAN" },
+   156→      { dotPath: "applicant.priorSubsidyDetail", label: "Prior Subsidy Details", type: "TEXT" },
+   157→      { dotPath: "applicant.edpCompleted", label: "EDP Training Completed", type: "BOOLEAN" },
+   158→      { dotPath: "applicant.edpCertificateNo", label: "EDP Certificate No.", type: "TEXT" },
+   159→      { dotPath: "applicant.experienceYears", label: "Experience (years)", type: "NUMBER" },
+   160→      { dotPath: "applicant.experienceDetail", label: "Experience Details", type: "TEXT" },
+   161→    ],
+   162→  },
+   163→  {
+   164→    phase: "BUSINESS_DISCOVERY",
+   165→    label: "Business Details",
+   166→    fields: [
+   167→      { dotPath: "business.name", label: "Unit Name", type: "TEXT", required: true },
+   168→      { dotPath: "business.description", label: "Description", type: "TEXT", required: true },
+   169→    ],
+   170→  },
+   171→  {
+   172→    phase: "ACTIVITY_RESOLUTION",
+   173→    label: "Activity & Classification",
+   174→    fields: [
+   175→      { dotPath: "business.activityType", label: "Activity Type", type: "ENUM", enumMap: ACTIVITY_TYPE_LABELS, required: true },
+   176→      { dotPath: "business.nicCode", label: "NIC Code", type: "TEXT", required: true },
+   177→      { dotPath: "business.nicDescription", label: "NIC Description", type: "TEXT", required: true },
+   178→      { dotPath: "business.sector", label: "Sector", type: "ENUM", enumMap: SECTOR_LABELS },
+   179→      { dotPath: "business.subCategory", label: "Sub-Category", type: "ENUM", enumMap: SUB_CATEGORY_LABELS },
+   180→    ],
+   181→  },
+   182→  {
+   183→    phase: "PROJECT_SIZING",
+   184→    label: "Location",
+   185→    fields: [
+   186→      { dotPath: "location.state", label: "State", type: "TEXT", required: true },
+   187→      { dotPath: "location.district", label: "District", type: "TEXT", required: true },
+   188→      { dotPath: "location.mandal", label: "Mandal/Taluka", type: "TEXT" },
+   189→      { dotPath: "location.village", label: "Village/Area", type: "TEXT" },
+   190→      { dotPath: "location.pinCode", label: "PIN Code", type: "TEXT" },
+   191→      { dotPath: "location.area", label: "Area", type: "ENUM", enumMap: URBAN_RURAL_LABELS, required: true },
+   192→      { dotPath: "location.premisesAddress", label: "Premises Address", type: "TEXT" },
+   193→      { dotPath: "location.isHillBorderArea", label: "Hill/Border Area", type: "BOOLEAN" },
+   194→      { dotPath: "location.isAspirationalDistrict", label: "Aspirational District", type: "BOOLEAN" },
+   195→      { dotPath: "location.industrialAreaName", label: "Industrial Area", type: "TEXT" },
+   196→      { dotPath: "location.industrialAreaType", label: "Industrial Area Type", type: "TEXT" },
+   197→    ],
+   198→  },
+   199→  {
+   200→    phase: "PROJECT_SIZING",
+   201→    label: "Land & Building",
+   202→    fields: [
+   203→      { dotPath: "land.status", label: "Land Status", type: "ENUM", enumMap: LAND_STATUS_LABELS },
+   204→      { dotPath: "land.areaSqFt", label: "Land Area (sq ft)", type: "NUMBER" },
+   205→      { dotPath: "land.areaSqMt", label: "Land Area (sq mt)", type: "NUMBER" },
+   206→      { dotPath: "land.ownedLandValue", label: "Land Value", type: "CURRENCY" },
+   207→      { dotPath: "land.monthlyRent", label: "Monthly Rent", type: "CURRENCY" },
+   208→      { dotPath: "land.leaseAmount", label: "Lease Amount", type: "CURRENCY" },
+   209→      { dotPath: "land.leaseYears", label: "Lease Period (years)", type: "NUMBER" },
+   210→      { dotPath: "land.buildingType", label: "Building Type", type: "ENUM", enumMap: BUILDING_TYPE_LABELS },
+   211→      { dotPath: "land.buildingAreaSqFt", label: "Building Area (sq ft)", type: "NUMBER" },
+   212→      { dotPath: "land.constructionCost", label: "Construction Cost", type: "CURRENCY" },
+   213→    ],
+   214→  },
+   215→  {
+   216→    phase: "PROJECT_SIZING",
+   217→    label: "Capacity & Production",
+   218→    fields: [
+   219→      { dotPath: "capacity.installedCapacity.value", label: "Installed Capacity", type: "NUMBER" },
+   220→      { dotPath: "capacity.installedCapacity.unit", label: "Capacity Unit", type: "TEXT" },
+   221→      { dotPath: "capacity.projectedCapacityUtil", label: "Capacity Utilisation", type: "PERCENTAGE" },
+   222→      { dotPath: "capacity.workingDaysPerMonth", label: "Working Days/Month", type: "NUMBER" },
+   223→      { dotPath: "capacity.workingHoursPerDay", label: "Working Hours/Day", type: "NUMBER" },
+   224→      { dotPath: "capacity.shifts", label: "Shifts", type: "NUMBER" },
+   225→    ],
+   226→  },
+   227→  {
+   228→    phase: "PROJECT_SIZING",
+   229→    label: "Machinery & Equipment",
+   230→    fields: [
+   231→      { dotPath: "machinery.totalCost", label: "Total Machinery Cost", type: "CURRENCY" },
+   232→    ],
+   233→  },
+   234→  {
+   235→    phase: "PROJECT_SIZING",
+   236→    label: "Raw Materials",
+   237→    fields: [
+   238→      { dotPath: "rawMaterials.totalMonthlyCost", label: "Total Monthly Raw Material Cost", type: "CURRENCY" },
+   239→    ],
+   240→  },
+   241→  {
+   242→    phase: "PROJECT_SIZING",
+   243→    label: "Employees",
+   244→    fields: [
+   245→      { dotPath: "employees.skilled.male", label: "Skilled (Male)", type: "NUMBER" },
+   246→      { dotPath: "employees.skilled.female", label: "Skilled (Female)", type: "NUMBER" },
+   247→      { dotPath: "employees.skilled.monthlyWagePerPerson", label: "Skilled Wage/Person/Month", type: "CURRENCY" },
+   248→      { dotPath: "employees.unskilled.male", label: "Unskilled (Male)", type: "NUMBER" },
+   249→      { dotPath: "employees.unskilled.female", label: "Unskilled (Female)", type: "NUMBER" },
+   250→      { dotPath: "employees.unskilled.monthlyWagePerPerson", label: "Unskilled Wage/Person/Month", type: "CURRENCY" },
+   251→      { dotPath: "employees.administrative.count", label: "Administrative Staff", type: "NUMBER" },
+   252→      { dotPath: "employees.administrative.monthlyWagePerPerson", label: "Admin Wage/Person/Month", type: "CURRENCY" },
+   253→      { dotPath: "employees.totalEmployment", label: "Total Employment", type: "NUMBER" },
+   254→      { dotPath: "employees.totalMonthlyWages", label: "Total Monthly Wages", type: "CURRENCY" },
+   255→    ],
+   256→  },
+   257→  {
+   258→    phase: "PROJECT_SIZING",
+   259→    label: "Utilities & Overheads",
+   260→    fields: [
+   261→      { dotPath: "utilities.monthlyPowerCost", label: "Power Cost/Month", type: "CURRENCY" },
+   262→      { dotPath: "utilities.monthlyWaterCost", label: "Water Cost/Month", type: "CURRENCY" },
+   263→      { dotPath: "utilities.monthlyRentCost", label: "Rent Cost/Month", type: "CURRENCY" },
+   264→      { dotPath: "utilities.monthlyMaintenanceCost", label: "Maintenance/Month", type: "CURRENCY" },
+   265→      { dotPath: "utilities.monthlyTransportCost", label: "Transport/Month", type: "CURRENCY" },
+   266→      { dotPath: "utilities.monthlyCommunicationCost", label: "Communication/Month", type: "CURRENCY" },
+   267→      { dotPath: "utilities.monthlyInsuranceCost", label: "Insurance/Month", type: "CURRENCY" },
+   268→      { dotPath: "utilities.monthlyMiscCost", label: "Miscellaneous/Month", type: "CURRENCY" },
+   269→      { dotPath: "utilities.totalMonthlyOverheads", label: "Total Monthly Overheads", type: "CURRENCY" },
+   270→    ],
+   271→  },
+   272→  {
+   273→    phase: "FINANCIAL_PLANNING",
+   274→    label: "Financial Assumptions",
+   275→    fields: [
+   276→      { dotPath: "financials.machineryAndEquipment", label: "Machinery & Equipment", type: "CURRENCY" },
+   277→      { dotPath: "financials.otherFixedAssets", label: "Other Fixed Assets", type: "CURRENCY" },
+   278→      { dotPath: "financials.preOperativeExpenses", label: "Pre-Operative Expenses", type: "CURRENCY" },
+   279→      { dotPath: "financials.buildingAndCivilWorks", label: "Building & Civil Works", type: "CURRENCY" },
+   280→      { dotPath: "financials.totalFixedCapital", label: "Total Fixed Capital", type: "CURRENCY" },
+   281→      { dotPath: "financials.workingCapital", label: "Working Capital", type: "CURRENCY" },
+   282→      { dotPath: "financials.totalProjectCost", label: "Total Project Cost", type: "CURRENCY", required: true },
+   283→      { dotPath: "financials.interestRate", label: "Interest Rate", type: "PERCENTAGE" },
+   284→      { dotPath: "financials.loanTenureYears", label: "Loan Tenure", type: "TEXT" },
+   285→      { dotPath: "financials.repaymentMoratoriumMonths", label: "Moratorium Period", type: "TEXT" },
+   286→      { dotPath: "financials.collateralOffered", label: "Collateral", type: "TEXT" },
+   287→      { dotPath: "financials.projectedMonthlySales", label: "Projected Monthly Sales", type: "CURRENCY" },
+   288→    ],
+   289→  },
+   290→  {
+   291→    phase: "FINANCIAL_PLANNING",
+   292→    label: "Working Capital Breakdown",
+   293→    fields: [
+   294→      { dotPath: "workingCapitalDetail.rawMaterialDays", label: "Raw Material (days)", type: "NUMBER" },
+   295→      { dotPath: "workingCapitalDetail.workInProgressDays", label: "Work-in-Progress (days)", type: "NUMBER" },
+   296→      { dotPath: "workingCapitalDetail.finishedGoodsDays", label: "Finished Goods (days)", type: "NUMBER" },
+   297→      { dotPath: "workingCapitalDetail.creditorsDays", label: "Creditors (days)", type: "NUMBER" },
+   298→      { dotPath: "workingCapitalDetail.computedWorkingCapital", label: "Computed Working Capital", type: "CURRENCY" },
+   299→      { dotPath: "workingCapitalDetail.method", label: "Calculation Method", type: "ENUM", enumMap: WC_METHOD_LABELS },
+   300→    ],
+   301→  },
+   302→  {
+   303→    phase: "FINANCIAL_PLANNING",
+   304→    label: "Market",
+   305→    fields: [
+   306→      { dotPath: "market.targetMarket", label: "Target Market", type: "TEXT" },
+   307→      { dotPath: "market.marketDemand", label: "Market Demand", type: "TEXT" },
+   308→      { dotPath: "market.competition", label: "Competition", type: "TEXT" },
+   309→      { dotPath: "market.marketingStrategy", label: "Marketing Strategy", type: "TEXT" },
+   310→      { dotPath: "market.sellingPricePerUnit", label: "Selling Price/Unit", type: "CURRENCY" },
+   311→      { dotPath: "market.sellingPriceUnit", label: "Selling Price Unit", type: "TEXT" },
+   312→    ],
+   313→  },
+   314→];
+   315→
+   316→// ── Internal Helpers ─────────────────────────────────────────────────────────
+   317→
+   318→/**
+   319→ * Navigate into a nested object using a dot-path.
+   320→ * Returns undefined if any segment is missing.
+   321→ */
+   322→function getNestedValue(obj: unknown, path: string): unknown {
+   323→  const segments = path.split(".");
+   324→  let current: unknown = obj;
+   325→  for (const seg of segments) {
+   326→    if (current === null || current === undefined) return undefined;
+   327→    current = (current as Record<string, unknown>)[seg];
+   328→  }
+   329→  return current;
+   330→}
+   331→
+   332→/**
+   333→ * Format a number in Indian currency notation: ₹25,00,000.
+   334→ * Groups as 3, then 2, then 2, ...
+   335→ */
+   336→function formatIndianCurrency(amount: number): string {
+   337→  if (amount === 0) return "₹0";
+   338→  const isNegative = amount < 0;
+   339→  const abs = Math.round(Math.abs(amount));
+   340→  const str = abs.toString();
+   341→
+   342→  // Last 3 digits
+   343→  const lastThree = str.slice(-3);
+   344→  const rest = str.slice(0, -3);
+   345→
+   346→  let result = lastThree;
+   347→  // Remaining digits in groups of 2, right to left
+   348→  let remaining = rest;
+   349→  while (remaining.length > 2) {
+   350→    result = remaining.slice(-2) + "," + result;
+   351→    remaining = remaining.slice(0, -2);
+   352→  }
+   353→  if (remaining.length > 0) {
+   354→    result = remaining + "," + result;
+   355→  }
+   356→
+   357→  return (isNegative ? "-₹" : "₹") + result;
+   358→}
+   359→
+   360→/**
+   361→ * Mask PII values — show only last 4 characters, rest as asterisks.
+   362→ */
+   363→function maskPII(value: string): string {
+   364→  if (value.length <= 4) return "****";
+   365→  return "*".repeat(value.length - 4) + value.slice(-4);
+   366→}
+   367→
+   368→/**
+   369→ * Check whether a value is considered "empty" (missing / not filled).
+   370→ */
+   371→function isEmpty(value: unknown): boolean {
+   372→  if (value === null || value === undefined) return true;
+   373→  if (typeof value === "string") return value.trim().length === 0;
+   374→  if (typeof value === "number") return false; // 0 is valid
+   375→  if (Array.isArray(value)) return value.length === 0;
+   376→  return false;
+   377→}
+   378→
+   379→/**
+   380→ * Get the provenance record for a field, or a default MISSING provenance.
+   381→ */
+   382→function getFieldProvenance(
+   383→  profile: ProjectProfile,
+   384→  dotPath: string,
+   385→): FieldProvenance {
+   386→  return profile.provenance?.perField?.[dotPath] ?? {
+   387→    source: null,
+   388→    verification: "UNVERIFIED",
+   389→  };
+   390→}
+   391→
+   392→/**
+   393→ * Format a date string (ISO) for display.
+   394→ */
+   395→function formatDate(value: string): string {
+   396→  try {
+   397→    const d = new Date(value);
+   398→    if (isNaN(d.getTime())) return value;
+   399→    return d.toLocaleDateString("en-IN", {
+   400→      day: "2-digit",
+   401→      month: "short",
+   402→      year: "numeric",
+   403→    });
+   404→  } catch {
+   405→    return value;
+   406→  }
+   407→}
+   408→
+   409→// ── Exported Functions ───────────────────────────────────────────────────────
+   410→
+   411→/**
+   412→ * Format a field value for display in the review.
+   413→ * Currency: "₹25,00,000"
+   414→ * Percentage: "35%"
+   415→ * Boolean: "Yes" / "No"
+   416→ * Enum: human-readable label
+   417→ * Date: formatted
+   418→ */
+   419→export function formatFieldValue(
+   420→  value: unknown,
+   421→  fieldPath: string,
+   422→): string {
+   423→  if (value === null || value === undefined) return "—";
+   424→
+   425→  // Mask PII fields
+   426→  if (PII_PATHS.has(fieldPath) && typeof value === "string") {
+   427→    return maskPII(value);
+   428→  }
+   429→
+   430→  if (typeof value === "boolean") {
+   431→    return value ? "Yes" : "No";
+   432→  }
+   433→
+   434→  if (typeof value === "number") {
+   435→    // Detect if this is a currency field by path or by type hint context
+   436→    const currencyPaths = [
+   437→      "cost", "Cost", "value", "Value", "rent", "Rent",
+   438→      "wage", "Wage", "price", "Price", "capital", "Capital",
+   439→      "loan", "Loan", "expense", "Expense", "sales", "Sales",
+   440→      "amount", "Amount", "landValue",
+   441→    ];
+   442→    const isCurrencyField = currencyPaths.some(
+   443→      (seg) => fieldPath.toLowerCase().includes(seg.toLowerCase()),
+   444→    );
+   445→
+   446→    if (isCurrencyField && value >= 100) {
+   447→      return formatIndianCurrency(value);
+   448→    }
+   449→
+   450→    // Percentage fields
+   451→    if (
+   452→      fieldPath.toLowerCase().includes("util") ||
+   453→      fieldPath.toLowerCase().includes("rate") ||
+   454→      fieldPath.toLowerCase().includes("percentage")
+   455→    ) {
+   456→      return `${value}%`;
+   457→    }
+   458→
+   459→    return value.toLocaleString("en-IN");
+   460→  }
+   461→
+   462→  if (typeof value === "string") {
+   463→    // Try to detect ISO date strings
+   464→    if (
+   465→      /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?/.test(value) &&
+   466→      fieldPath.toLowerCase().includes("date")
+   467→    ) {
+   468→      return formatDate(value);
+   469→    }
+   470→    return value;
+   471→  }
+   472→
+   473→  return String(value);
+   474→}
+   475→
+   476→/**
+   477→ * Generate a complete review summary of the project profile.
+   478→ * Groups fields by interview phase for easy scanning.
+   479→ */
+   480→export function generateReviewSummary(profile: ProjectProfile): ReviewSummary {
+   481→  const sections: ReviewSection[] = [];
+   482→  const errors: string[] = [];
+   483→  const warnings: string[] = [];
+   484→
+   485→  // Collect validation errors
+   486→  for (const err of profile.validation?.errors ?? []) {
+   487→    errors.push(`${err.fieldPath}: ${err.message}`);
+   488→  }
+   489→
+   490→  // Collect missing required fields
+   491→  const missingFields = new Set(profile.validation?.missingFields ?? []);
+   492→
+   493→  for (const sectionDef of PHASE_FIELD_DEFS) {
+   494→    const fieldEntries: ReviewFieldEntry[] = [];
+   495→    let hasAttention = false;
+   496→
+   497→    for (const fieldDef of sectionDef.fields) {
+   498→      const rawValue = getNestedValue(profile, fieldDef.dotPath);
+   499→      const prov = getFieldProvenance(profile, fieldDef.dotPath);
+   500→      const isFilled = !isEmpty(rawValue);
+   501→
+   502→      // Determine attention reasons
+   503→      let needsAttention = false;
+   504→      let reason: string | undefined;
+   505→
+   506→      if (!isFilled && fieldDef.required) {
+   507→        // Missing required field
+   508→        needsAttention = true;
+   509→        reason = "Required field is missing";
+   510→        if (!missingFields.has(fieldDef.dotPath)) {
+   511→          missingFields.add(fieldDef.dotPath);
+   512→        }
+   513→      } else if (isFilled && prov.source === "KNOWLEDGE") {
+   514→        needsAttention = true;
+   515→        reason = "Suggested by system — needs your confirmation";
+   516→        hasAttention = true;
+   517→      } else if (
+   518→        isFilled &&
+   519→        (prov.source === "AI" || prov.source === "OCR") &&
+   520→        prov.verification === "UNVERIFIED"
+   521→      ) {
+   522→        needsAttention = true;
+   523→        reason = `Extracted by ${prov.source} — please confirm`;
+   524→        hasAttention = true;
+   525→      }
+   526→
+   527→      // Check for validation errors on this field
+   528→      const fieldErrors = (profile.validation?.errors ?? []).filter(
+   529→        (e) => e.fieldPath === fieldDef.dotPath,
+   530→      );
+   531→      if (fieldErrors.length > 0) {
+   532→        needsAttention = true;
+   533→        reason = fieldErrors.map((e) => e.message).join("; ");
+   534→        hasAttention = true;
+   535→      }
+   536→
+   537→      const displayValue = isFilled
+   538→        ? formatFieldValue(rawValue, fieldDef.dotPath)
+   539→        : "—";
+   540→
+   541→      // Determine source label
+   542→      let sourceLabel = "—";
+   543→      if (isFilled && prov.source) {
+   544→        sourceLabel = prov.source;
+   545→      }
+   546→
+   547→      // Determine verification label
+   548→      let verificationLabel = "—";
+   549→      if (isFilled) {
+   550→        verificationLabel = prov.verification;
+   551→      }
+   552→
+   553→      fieldEntries.push({
+   554→        dotPath: fieldDef.dotPath,
+   555→        label: fieldDef.label,
+   556→        value: displayValue,
+   557→        source: sourceLabel,
+   558→        verification: verificationLabel,
+   559→        needsAttention,
+   560→        reason,
+   561→      });
+   562→    }
+   563→
+   564→    // Only add sections that have at least one filled field or attention item
+   565→    const hasFilledFields = fieldEntries.some(
+   566→      (f) => f.value !== "—" && !f.needsAttention,
+   567→    );
+   568→    const hasAttentionFields = fieldEntries.some((f) => f.needsAttention);
+   569→
+   570→    if (hasFilledFields || hasAttentionFields) {
+   571→      // Merge sections with the same phase into one section with sub-groups
+   572→      // by finding an existing section for this phase
+   573→      const existingSection = sections.find(
+   574→        (s) => s.phase === sectionDef.phase,
+   575→      );
+   576→
+   577→      if (existingSection) {
+   578→        existingSection.fields.push(...fieldEntries);
+   579→      } else {
+   580→        sections.push({
+   581→          phase: sectionDef.phase,
+   582→          label: sectionDef.label,
+   583→          fields: fieldEntries,
+   584→        });
+   585→      }
+   586→    }
+   587→  }
+   588→
+   589→  // Build warnings
+   590→  const attentionEntries = getAttentionFields(profile);
+   591→  const unverifiedCount = attentionEntries.filter(
+   592→    (e) =>
+   593→      e.reason?.includes("confirm") ||
+   594→      e.reason?.includes("Suggested") ||
+   595→      e.reason?.includes("Extracted"),
+   596→  ).length;
+   597→  const missingCount = attentionEntries.filter(
+   598→    (e) => e.reason?.includes("missing"),
+   599→  ).length;
+   600→
+   601→  if (unverifiedCount > 0) {
+   602→    warnings.push(
+   603→      `${unverifiedCount} field${unverifiedCount > 1 ? "s" : ""} need your confirmation (shown with ⚡)`,
+   604→    );
+   605→  }
+   606→  if (missingCount > 0) {
+   607→    warnings.push(
+   608→      `${missingCount} required field${missingCount > 1 ? "s" : ""} are missing`,
+   609→    );
+   610→  }
+   611→
+   612→  const canConfirm =
+   613→    errors.length === 0 &&
+   614→    missingFields.size === 0 &&
+   615→    unverifiedCount === 0;
+   616→
+   617→  return {
+   618→    sections,
+   619→    completeness: profile.validation?.completeness ?? 0,
+   620→    errors,
+   621→    warnings,
+   622→    canConfirm,
+   623→  };
+   624→}
+   625→
+   626→/**
+   627→ * Get a list of fields that need user attention before confirmation.
+   628→ */
+   629→export function getAttentionFields(profile: ProjectProfile): ReviewFieldEntry[] {
+   630→  const summary = generateReviewSummary(profile);
+   631→  const attentionFields: ReviewFieldEntry[] = [];
+   632→
+   633→  for (const section of summary.sections) {
+   634→    for (const field of section.fields) {
+   635→      if (field.needsAttention) {
+   636→        attentionFields.push(field);
+   637→      }
+   638→    }
+   639→  }
+   640→
+   641→  return attentionFields;
+   642→}
+   643→
+   644→/**
+   645→ * Generate a text summary of the project for display in the review chat.
+   646→ * This is what the AI will show the user in the REVIEW phase.
+   647→ */
+   648→export function generateReviewText(profile: ProjectProfile): string {
+   649→  const lines: string[] = [];
+   650→  const summary = generateReviewSummary(profile);
+   651→
+   652→  lines.push("📋 Project Review Summary");
+   653→  lines.push("");
+   654→
+   655→  for (const section of summary.sections) {
+   656→    const filledFields = section.fields.filter(
+   657→      (f) => f.value !== "—" || f.needsAttention,
+   658→    );
+   659→    if (filledFields.length === 0) continue;
+   660→
+   661→    lines.push(`**${section.label}**`);
+   662→
+   663→    for (const field of filledFields) {
+   664→      const attention = field.needsAttention ? " ⚡" : "";
+   665→      const marker = field.value === "—" ? "" : `- ${field.label}: ${field.value}${attention}`;
+   666→      if (marker) {
+   667→        lines.push(marker);
+   668→      }
+   669→    }
+   670→
+   671→    lines.push("");
+   672→  }
+   673→
+   674→  // Append machinery items if present
+   675→  const machineItems = profile.machinery?.items ?? [];
+   676→  if (machineItems.length > 0) {
+   677→    lines.push("**Machinery Items**");
+   678→    for (const item of machineItems) {
+   679→      const costStr = formatIndianCurrency(item.totalCost);
+   680→      lines.push(
+   681→        `- ${item.name}${item.specification ? ` (${item.specification})` : ""}: ${item.quantity} × ${formatIndianCurrency(item.unitCost)} = ${costStr}`,
+   682→      );
+   683→    }
+   684→    lines.push("");
+   685→  }
+   686→
+   687→  // Append raw material items if present
+   688→  const rawItems = profile.rawMaterials?.items ?? [];
+   689→  if (rawItems.length > 0) {
+   690→    lines.push("**Raw Materials**");
+   691→    for (const item of rawItems) {
+   692→      const costStr = formatIndianCurrency(item.totalMonthlyCost);
+   693→      lines.push(
+   694→        `- ${item.name}: ${item.monthlyQuantity} ${item.unit} × ${formatIndianCurrency(item.unitRate)} = ${costStr}/month`,
+   695→      );
+   696→    }
+   697→    lines.push("");
+   698→  }
+   699→
+   700→  // Attention items
+   701→  const attentionCount = summary.warnings.length;
+   702→  if (attentionCount > 0) {
+   703→    lines.push("⚠️ Items needing attention:");
+   704→    for (const warning of summary.warnings) {
+   705→      lines.push(`- ${warning}`);
+   706→    }
+   707→    lines.push("");
+   708→  }
+   709→
+   710→  // Footer
+   711→  if (summary.canConfirm) {
+   712→    lines.push("✅ All fields look good! Type \"confirm\" to proceed.");
+   713→  } else if (summary.errors.length > 0) {
+   714→    lines.push("❌ There are errors that must be fixed before confirming.");
+   715→  } else {
+   716→    lines.push(
+   717→      "🔄 Please review the highlighted items, then type \"confirm\" or ask to change any value.",
+   718→    );
+   719→  }
+   720→
+   721→  return lines.join("\n");
+   722→}

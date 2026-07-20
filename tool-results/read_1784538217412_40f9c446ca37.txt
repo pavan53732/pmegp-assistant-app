@@ -1,0 +1,758 @@
+   201→   201→   201→              { label: "Cooperative Society", value: "COOP" },
+   202→   202→   202→              { label: "Partnership Firm", value: "PARTNERSHIP" },
+   203→   203→   203→              { label: "LLP (Limited Liability Partnership)", value: "LLP" },
+   204→   204→   204→              { label: "Private Limited Company", value: "PRIVATE_LIMITED" },
+   205→   205→   205→            ],
+   206→   206→   206→          },
+   207→   207→   207→        ],
+   208→   208→   208→      },
+   209→   209→   209→      {
+   210→   210→   210→        label: "Background",
+   211→   211→   211→        fields: [
+   212→   212→   212→          {
+   213→   213→   213→            dotPath: "applicant.priorSubsidy",
+   214→   214→   214→            label:
+   215→   215→   215→              "Have you previously received any government subsidy for self-employment — like PMEGP, PMRY, REGP, or any other scheme?",
+   216→   216→   216→            type: "BOOLEAN",
+   217→   217→   217→            required: true,
+   218→   218→   218→            hint: "If you have already availed a government subsidy, you may not be eligible to apply again under PMEGP.",
+   219→   219→   219→          },
+   220→   220→   220→          {
+   221→   221→   221→            dotPath: "applicant.edpCompleted",
+   222→   222→   222→            label:
+   223→   223→   223→              "Have you completed EDP (Entrepreneurship Development Programme) training?",
+   224→   224→   224→            type: "BOOLEAN",
+   225→   225→   225→            required: true,
+   226→   226→   226→            hint: "EDP training is conducted by KVIC / KVIB and is required before the loan is disbursed. If you haven't done it yet, you can complete it later — don't worry.",
+   227→   227→   227→          },
+   228→   228→   228→          {
+   229→   229→   229→            dotPath: "applicant.experienceYears",
+   230→   230→   230→            label:
+   231→   231→   231→              "How many years of experience do you have in this type of work or business?",
+   232→   232→   232→            type: "NUMBER",
+   233→   233→   233→            required: false,
+   234→   234→   234→            hint: "This is optional but having experience strengthens your application. If you're starting fresh, that's perfectly fine too!",
+   235→   235→   235→            min: 0,
+   236→   236→   236→            max: 50,
+   237→   237→   237→          },
+   238→   238→   238→        ],
+   239→   239→   239→      },
+   240→   240→   240→    ],
+   241→   241→   241→    systemPromptAddendum:
+   242→   242→   242→      "You are in the APPLICANT_DISCOVERY phase. Collect the applicant's personal details ONE AT A TIME. " +
+   243→   243→   243→      "Be warm, respectful, and encouraging. Use simple language — many applicants may not be highly educated. " +
+   244→   244→   244→      "Always explain WHY you are asking each question (e.g. 'PMEGP subsidy depends on your category...'). " +
+   245→   245→   245→      "For ENUM fields, present the options clearly. Never ask more than one question per message.",
+   246→   246→   246→    canSkip: false,
+   247→   247→   247→  },
+   248→   248→   248→
+   249→   249→   249→  // ── Phase 2: Business Discovery ─────────────────────────────────────────
+   250→   250→   250→  BUSINESS_DISCOVERY: {
+   251→   251→   251→    phase: "BUSINESS_DISCOVERY",
+   252→   252→   252→    label: "Business Idea",
+   253→   253→   253→    description:
+   254→   254→   254→      "Understand what business the applicant wants to start under PMEGP.",
+   255→   255→   255→    fieldGroups: [
+   256→   256→   256→      {
+   257→   257→   257→        label: "Business Idea",
+   258→   258→   258→        fields: [
+   259→   259→   259→          {
+   260→   260→   260→            dotPath: "business.name",
+   261→   261→   261→            label: "What would you like to name your project or unit?",
+   262→   262→   262→            type: "TEXT",
+   263→   263→   263→            required: true,
+   264→   264→   264→            hint: "This is the name under which your unit will be registered. For example: 'Sri Lakshmi Paper Cups Unit' or 'Ramesh Tailoring Shop'.",
+   265→   265→   265→          },
+   266→   266→   266→          {
+   267→   267→   267→            dotPath: "business.description",
+   268→   268→   268→            label:
+   269→   269→   269→              "Please describe the business you want to start. Tell me in your own words — what will you make or what service will you provide?",
+   270→   270→   270→            type: "TEXT",
+   271→   271→   271→            required: true,
+   272→   272→   272→            hint:
+   273→   273→   273→              "Don't worry about technical terms. Just tell me what you want to do. " +
+   274→   274→   274→              "For example: 'I want to make paper cups and plates' or 'I want to start a tailoring and garment making unit' or 'I want to provide computer typing and DTP services'.",
+   275→   275→   275→          },
+   276→   276→   276→        ],
+   277→   277→   277→      },
+   278→   278→   278→      {
+   279→   279→   279→        label: "Activity Classification",
+   280→   280→   280→        fields: [
+   281→   281→   281→          {
+   282→   282→   282→            dotPath: "business.activityType",
+   283→   283→   283→            label:
+   284→   284→   284→              "Based on what you've told me, would this be a manufacturing unit (making/producing goods) or a service business?",
+   285→   285→   285→            type: "ENUM",
+   286→   286→   286→            required: true,
+   287→   287→   287→            hint: "Manufacturing means you will produce or make goods. Service means you will provide a service to customers. This affects your subsidy rate and the maximum project cost allowed under PMEGP.",
+   288→   288→   288→            enumOptions: [
+   289→   289→   289→              {
+   290→   290→   290→                label: "Manufacturing (making or producing goods)",
+   291→   291→   291→                value: "MANUFACTURING",
+   292→   292→   292→              },
+   293→   293→   293→              { label: "Service (providing a service)", value: "SERVICE" },
+   294→   294→   294→            ],
+   295→   295→   295→          },
+   296→   296→   296→          {
+   297→   297→   297→            dotPath: "business.sector",
+   298→   298→   298→            label: "Which sector does your business fall under?",
+   299→   299→   299→            type: "ENUM",
+   300→   300→   300→            required: true,
+   301→   301→   301→            hint: "This is usually the same as your activity type. PMEGP has different project cost limits for manufacturing (up to ₹25 lakh) and service (up to ₹10 lakh) sectors.",
+   302→   302→   302→            enumOptions: [
+   303→   303→   303→              { label: "Manufacturing Sector", value: "MANUFACTURING" },
+   304→   304→   304→              { label: "Service Sector", value: "SERVICE" },
+   305→   305→   305→            ],
+   306→   306→   306→          },
+   307→   307→   307→          {
+   308→   308→   308→            dotPath: "business.subCategory",
+   309→   309→   309→            label: "What type of business activity is this exactly?",
+   310→   310→   310→            type: "ENUM",
+   311→   311→   311→            required: true,
+   312→   312→   312→            hint: "This helps classify your business precisely for the PMEGP application form.",
+   313→   313→   313→            enumOptions: [
+   314→   314→   314→              { label: "Manufacturing", value: "MANUFACTURING" },
+   315→   315→   315→              { label: "Service", value: "SERVICE" },
+   316→   316→   316→              { label: "Trading", value: "TRADING" },
+   317→   317→   317→              { label: "Transport", value: "TRANSPORT" },
+   318→   318→   318→            ],
+   319→   319→   319→          },
+   320→   320→   320→        ],
+   321→   321→   321→      },
+   322→   322→   322→    ],
+   323→   323→   323→    systemPromptAddendum:
+   324→   324→   324→      "You are in the BUSINESS_DISCOVERY phase. Understand what business the applicant wants to start. " +
+   325→   325→   325→      "Let them describe it in their OWN WORDS first — don't use technical language. " +
+   326→   326→   326→      "Then help classify it into the correct activity type, sector, and sub-category. " +
+   327→   327→   327→      "Be encouraging — this is their dream business! Explain each classification option in simple terms.",
+   328→   328→   328→    canSkip: false,
+   329→   329→   329→  },
+   330→   330→   330→
+   331→   331→   331→  // ── Phase 3: Activity Resolution ────────────────────────────────────────
+   332→   332→   332→  ACTIVITY_RESOLUTION: {
+   333→   333→   333→    phase: "ACTIVITY_RESOLUTION",
+   334→   334→   334→    label: "Activity Classification",
+   335→   335→   335→    description:
+   336→   336→   336→      "Match the business to the correct NIC code for government classification.",
+   337→   337→   337→    fieldGroups: [
+   338→   338→   338→      {
+   339→   339→   339→        label: "NIC Code",
+   340→   340→   340→        fields: [
+   341→   341→   341→          {
+   342→   342→   342→            dotPath: "business.nicCode",
+   343→   343→   343→            label:
+   344→   344→   344→              "Let me find the correct NIC (National Industrial Classification) code for your business. Based on your description, here is what I found:",
+   345→   345→   345→            type: "TEXT",
+   346→   346→   346→            required: true,
+   347→   347→   347→            hint:
+   348→   348→   348→              "The NIC code is a government code that classifies your business type. " +
+   349→   349→   349→              "It is mandatory for the PMEGP application. This is determined based on your business description.",
+   350→   350→   350→            validationHint: "Must be a valid 5 or 6 digit NIC code.",
+   351→   351→   351→          },
+   352→   352→   352→          {
+   353→   353→   353→            dotPath: "business.nicDescription",
+   354→   354→   354→            label: "Here is the official description for this NIC code — does this match your business?",
+   355→   355→   355→            type: "TEXT",
+   356→   356→   356→            required: true,
+   357→   357→   357→            hint: "This is the government's official description of your business activity. Please confirm if it matches what you plan to do.",
+   358→   358→   358→          },
+   359→   359→   359→        ],
+   360→   360→   360→      },
+   361→   361→   361→    ],
+   362→   362→   362→    systemPromptAddendum:
+   363→   363→   363→      "You are in the ACTIVITY_RESOLUTION phase. The business activity needs to be matched with a NIC code. " +
+   364→   364→   364→      "Use the Knowledge Engine's resolveActivity function to find the best NIC code match. " +
+   365→   365→   365→      "Present the NIC code and its description to the user for confirmation. " +
+   366→   366→   366→      "If the match seems wrong, ask the user for more details and try again. " +
+   367→   367→   367→      "Explain what a NIC code is in simple terms — many applicants don't know about it.",
+   368→   368→   368→    canSkip: false,
+   369→   369→   369→  },
+   370→   370→   370→
+   371→   371→   371→  // ── Phase 4: Project Sizing ─────────────────────────────────────────────
+   372→   372→   372→  PROJECT_SIZING: {
+   373→   373→   373→    phase: "PROJECT_SIZING",
+   374→   374→   374→    label: "Project Details",
+   375→   375→   375→    description:
+   376→   376→   376→      "Collect details about land, building, machinery, raw materials, employees, utilities, and production capacity.",
+   377→   377→   377→    fieldGroups: [
+   378→   378→   378→      {
+   379→   379→   379→        label: "Land & Building",
+   380→   380→   380→        fields: [
+   381→   381→   381→          {
+   382→   382→   382→            dotPath: "land.status",
+   383→   383→   383→            label: "What is the status of the land or premises where you will set up the unit?",
+   384→   384→   384→            type: "ENUM",
+   385→   385→   385→            required: true,
+   386→   386→   386→            hint: "If you own or have family land, its value can be counted as your share of the project cost. This reduces the loan amount you need.",
+   387→   387→   387→            enumOptions: [
+   388→   388→   388→              { label: "Own land", value: "OWN" },
+   389→   389→   389→              { label: "Family land (parents/family member)", value: "FAMILY" },
+   390→   390→   390→              { label: "Rented premises", value: "RENTED" },
+   391→   391→   391→              { label: "Leased premises", value: "LEASED" },
+   392→   392→   392→              { label: "Don't have land yet", value: "NONE" },
+   393→   393→   393→            ],
+   394→   394→   394→          },
+   395→   395→   395→          {
+   396→   396→   396→            dotPath: "land.areaSqFt",
+   397→   397→   397→            label: "What is the total area of the land or premises in square feet?",
+   398→   398→   398→            type: "NUMBER",
+   399→   399→   399→            required: false,
+   400→   400→   400→            hint: "Approximate area is fine. For example, 500 sq ft for a small tailoring unit or 2000 sq ft for a small manufacturing unit.",
+   401→   401→   401→            min: 0,
+   402→   402→   402→          },
+   403→   403→   403→          {
+   404→   404→   404→            dotPath: "land.buildingType",
+   405→   405→   405→            label: "What type of building will you use for the unit?",
+   406→   406→   406→            type: "ENUM",
+   407→   407→   407→            required: false,
+   408→   408→   408→            hint: "This helps estimate construction or rent costs for your project report.",
+   409→   409→   409→            enumOptions: [
+   410→   410→   410→              { label: "Own building", value: "OWN" },
+   411→   411→   411→              { label: "Rented building", value: "RENTED" },
+   412→   412→   412→              { label: "Will construct a new building / shed", value: "CONSTRUCT" },
+   413→   413→   413→            ],
+   414→   414→   414→          },
+   415→   415→   415→          {
+   416→   416→   416→            dotPath: "land.buildingAreaSqFt",
+   417→   417→   417→            label: "What is the covered area (built-up area under roof) in square feet?",
+   418→   418→   418→            type: "NUMBER",
+   419→   419→   419→            required: false,
+   420→   420→   420→            hint: "The area where machinery and work will be set up — the actual working space.",
+   421→   421→   421→            min: 0,
+   422→   422→   422→          },
+   423→   423→   423→          {
+   424→   424→   424→            dotPath: "land.constructionCost",
+   425→   425→   425→            label: "What is the estimated construction cost for the building or shed?",
+   426→   426→   426→            type: "CURRENCY",
+   427→   427→   427→            required: false,
+   428→   428→   428→            hint: "Total construction cost in rupees. If you already have a building or are renting, this can be skipped.",
+   429→   429→   429→            min: 0,
+   430→   430→   430→          },
+   431→   431→   431→          {
+   432→   432→   432→            dotPath: "land.monthlyRent",
+   433→   433→   433→            label: "What is the monthly rent for the premises?",
+   434→   434→   434→            type: "CURRENCY",
+   435→   435→   435→            required: false,
+   436→   436→   436→            hint: "Monthly rent amount in rupees. Skip this if you own the premises or have your own land.",
+   437→   437→   437→            min: 0,
+   438→   438→   438→          },
+   439→   439→   439→        ],
+   440→   440→   440→      },
+   441→   441→   441→      {
+   442→   442→   442→        label: "Production Capacity",
+   443→   443→   443→        fields: [
+   444→   444→   444→          {
+   445→   445→   445→            dotPath: "capacity.installedCapacity.unit",
+   446→   446→   446→            label:
+   447→   447→   447→              "In what unit will you measure your production? (for example: kg per month, litres per day, pieces per month)",
+   448→   448→   448→            type: "TEXT",
+   449→   449→   449→            required: true,
+   450→   450→   450→            hint: "How will you measure your output? Common examples: kg/month, litres/day, units/month, pieces/day, meters/month, pairs/month.",
+   451→   451→   451→          },
+   452→   452→   452→          {
+   453→   453→   453→            dotPath: "capacity.installedCapacity.value",
+   454→   454→   454→            label: "What is the maximum production capacity per that unit of time?",
+   455→   455→   455→            type: "NUMBER",
+   456→   456→   456→            required: true,
+   457→   457→   457→            hint: "The maximum your unit can produce. For example, if your unit is 'kg/month' and capacity is 500, it means 500 kg per month at full capacity.",
+   458→   458→   458→            min: 1,
+   459→   459→   459→          },
+   460→   460→   460→          {
+   461→   461→   461→            dotPath: "capacity.projectedCapacityUtil",
+   462→   462→   462→            label: "In the beginning, what percentage of your full capacity do you expect to use?",
+   463→   463→   463→            type: "NUMBER",
+   464→   464→   464→            required: false,
+   465→   465→   465→            hint: "Most new units start at 60-70% of capacity. It is normal to not run at full capacity initially — the number grows as your business establishes.",
+   466→   466→   466→            min: 10,
+   467→   467→   467→            max: 100,
+   468→   468→   468→          },
+   469→   469→   469→          {
+   470→   470→   470→            dotPath: "capacity.workingDaysPerMonth",
+   471→   471→   471→            label: "How many days per month will your unit operate?",
+   472→   472→   472→            type: "NUMBER",
+   473→   473→   473→            required: false,
+   474→   474→   474→            hint: "Typically 25 or 26 working days per month (excluding Sundays and holidays).",
+   475→   475→   475→            min: 1,
+   476→   476→   476→            max: 31,
+   477→   477→   477→          },
+   478→   478→   478→          {
+   479→   479→   479→            dotPath: "capacity.shifts",
+   480→   480→   480→            label: "How many shifts will the unit run per day?",
+   481→   481→   481→            type: "NUMBER",
+   482→   482→   482→            required: false,
+   483→   483→   483→            hint: "1 shift means working during the day only. 2 shifts means day and evening. Most small PMEGP units run 1 shift.",
+   484→   484→   484→            min: 1,
+   485→   485→   485→            max: 3,
+   486→   486→   486→          },
+   487→   487→   487→        ],
+   488→   488→   488→      },
+   489→   489→   489→      {
+   490→   490→   490→        label: "Machinery & Equipment",
+   491→   491→   491→        fields: [
+   492→   492→   492→          {
+   493→   493→   493→            dotPath: "machinery.items",
+   494→   494→   494→            label:
+   495→   495→   495→              "What machinery and equipment will you need for your unit? Please list them with quantities.",
+   496→   496→   496→            type: "TEXT",
+   497→   497→   497→            required: true,
+   498→   498→   498→            hint:
+   499→   499→   499→              "Tell me each machine name and how many you need. For example: " +
+   500→   500→   500→              "'1 Sewing machine, 1 Overlock machine, 1 Button hole machine, 1 Iron press' " +
+   501→   501→   501→              "or '1 Paper cup making machine, 1 Die set, 1 Auto counting machine'. " +
+   502→   502→   502→              "I will help you estimate the costs based on current market rates.",
+   503→   503→   503→          },
+   504→   504→   504→        ],
+   505→   505→   505→      },
+   506→   506→   506→      {
+   507→   507→   507→        label: "Raw Materials",
+   508→   508→   508→        fields: [
+   509→   509→   509→          {
+   510→   510→   510→            dotPath: "rawMaterials.items",
+   511→   511→   511→            label:
+   512→   512→   512→              "What raw materials will you need every month? Please list them with quantities.",
+   513→   513→   513→            type: "TEXT",
+   514→   514→   514→            required: true,
+   515→   515→   515→            hint:
+   516→   516→   516→              "List the main raw materials and approximately how much you'll use per month. " +
+   517→   517→   517→              "For example: 'Fabric cloth - 200 meters per month, Thread - 50 rolls per month, Buttons - 5000 pieces per month'. " +
+   518→   518→   518→              "This helps calculate your monthly working capital requirement.",
+   519→   519→   519→          },
+   520→   520→   520→        ],
+   521→   521→   521→      },
+   522→   522→   522→      {
+   523→   523→   523→        label: "Employees",
+   524→   524→   524→        fields: [
+   525→   525→   525→          {
+   526→   526→   526→            dotPath: "employees.skilled.male",
+   527→   527→   527→            label: "How many skilled male workers will you employ?",
+   528→   528→   528→            type: "NUMBER",
+   529→   529→   529→            required: false,
+   530→   530→   530→            hint: "Skilled workers have specific training or experience — like a machine operator, tailor, welder, or electrician.",
+   531→   531→   531→            min: 0,
+   532→   532→   532→          },
+   533→   533→   533→          {
+   534→   534→   534→            dotPath: "employees.skilled.female",
+   535→   535→   535→            label: "How many skilled female workers will you employ?",
+   536→   536→   536→            type: "NUMBER",
+   537→   537→   537→            required: false,
+   538→   538→   538→            hint: "PMEGP encourages women's employment — having female workers strengthens your application!",
+   539→   539→   539→            min: 0,
+   540→   540→   540→          },
+   541→   541→   541→          {
+   542→   542→   542→            dotPath: "employees.skilled.monthlyWagePerPerson",
+   543→   543→   543→            label: "What monthly salary will you pay to each skilled worker?",
+   544→   544→   544→            type: "CURRENCY",
+   545→   545→   545→            required: false,
+   546→   546→   546→            hint: "Monthly wage per skilled worker in rupees. This should be as per local market rates.",
+   547→   547→   547→            min: 0,
+   548→   548→   548→          },
+   549→   549→   549→          {
+   550→   550→   550→            dotPath: "employees.unskilled.male",
+   551→   551→   551→            label: "How many unskilled male helpers will you employ?",
+   552→   552→   552→            type: "NUMBER",
+   553→   553→   553→            required: false,
+   554→   554→   554→            hint: "Unskilled helpers do general work like loading, cleaning, packing, or assisting skilled workers.",
+   555→   555→   555→            min: 0,
+   556→   556→   556→          },
+   557→   557→   557→          {
+   558→   558→   558→            dotPath: "employees.unskilled.female",
+   559→   559→   559→            label: "How many unskilled female helpers will you employ?",
+   560→   560→   560→            type: "NUMBER",
+   561→   561→   561→            required: false,
+   562→   562→   562→            hint: "PMEGP encourages women's employment at all skill levels.",
+   563→   563→   563→            min: 0,
+   564→   564→   564→          },
+   565→   565→   565→          {
+   566→   566→   566→            dotPath: "employees.unskilled.monthlyWagePerPerson",
+   567→   567→   567→            label: "What monthly salary will you pay to each unskilled helper?",
+   568→   568→   568→            type: "CURRENCY",
+   569→   569→   569→            required: false,
+   570→   570→   570→            hint: "Monthly wage per helper in rupees.",
+   571→   571→   571→            min: 0,
+   572→   572→   572→          },
+   573→   573→   573→          {
+   574→   574→   574→            dotPath: "employees.administrative.count",
+   575→   575→   575→            label:
+   576→   576→   576→              "How many administrative staff will you need — like an accountant, supervisor, or manager?",
+   577→   577→   577→            type: "NUMBER",
+   578→   578→   578→            required: false,
+   579→   579→   579→            hint: "Small units often start with just 1 supervisor, or the owner manages everything directly. You can enter 0 if you will manage it yourself.",
+   580→   580→   580→            min: 0,
+   581→   581→   581→          },
+   582→   582→   582→          {
+   583→   583→   583→            dotPath: "employees.administrative.monthlyWagePerPerson",
+   584→   584→   584→            label: "What monthly salary will you pay to each administrative staff member?",
+   585→   585→   585→            type: "CURRENCY",
+   586→   586→   586→            required: false,
+   587→   587→   587→            hint: "Monthly salary in rupees for supervisor, accountant, or manager.",
+   588→   588→   588→            min: 0,
+   589→   589→   589→          },
+   590→   590→   590→        ],
+   591→   591→   591→      },
+   592→   592→   592→      {
+   593→   593→   593→        label: "Utilities & Monthly Overheads",
+   594→   594→   594→        fields: [
+   595→   595→   595→          {
+   596→   596→   596→            dotPath: "utilities.monthlyPowerCost",
+   597→   597→   597→            label: "What will be the monthly electricity bill for your unit?",
+   598→   598→   598→            type: "CURRENCY",
+   599→   599→   599→            required: false,
+   600→   600→   600→            hint: "Estimated monthly electricity cost in rupees. If you're not sure, I can help estimate based on your machinery.",
+   601→   601→   601→            min: 0,
+   602→   602→   602→          },
+   603→   603→   603→          {
+   604→   604→   604→            dotPath: "utilities.monthlyWaterCost",
+   605→   605→   605→            label: "What will be the monthly water expense?",
+   606→   606→   606→            type: "CURRENCY",
+   607→   607→   607→            required: false,
+   608→   608→   608→            hint: "Monthly water bill in rupees. If using a borewell, enter 0.",
+   609→   609→   609→            min: 0,
+   610→   610→   610→          },
+   611→   611→   611→          {
+   612→   612→   612→            dotPath: "utilities.monthlyRentCost",
+   613→   613→   613→            label:
+   614→   614→   614→              "What will be the monthly rent for the premises? (if different from what you told earlier)",
+   615→   615→   615→            type: "CURRENCY",
+   616→   616→   616→            required: false,
+   617→   617→   617→            hint: "If you already shared the rent amount earlier, you can say 'same as before' and I'll use that.",
+   618→   618→   618→            min: 0,
+   619→   619→   619→          },
+   620→   620→   620→          {
+   621→   621→   621→            dotPath: "utilities.monthlyMaintenanceCost",
+   622→   622→   622→            label: "What will be the monthly maintenance cost — for machinery, building, etc.?",
+   623→   623→   623→            type: "CURRENCY",
+   624→   624→   624→            required: false,
+   625→   625→   625→            hint: "Regular upkeep of machinery and premises in rupees per month.",
+   626→   626→   626→            min: 0,
+   627→   627→   627→          },
+   628→   628→   628→          {
+   629→   629→   629→            dotPath: "utilities.monthlyTransportCost",
+   630→   630→   630→            label:
+   631→   631→   631→              "What will be the monthly transport cost — for bringing raw materials and delivering finished goods?",
+   632→   632→   632→            type: "CURRENCY",
+   633→   633→   633→            required: false,
+   634→   634→   634→            hint: "Include costs for auto/rickshaw, tempo, or any vehicle used for business. In rupees per month.",
+   635→   635→   635→            min: 0,
+   636→   636→   636→          },
+   637→   637→   637→          {
+   638→   638→   638→            dotPath: "utilities.monthlyCommunicationCost",
+   639→   639→   639→            label: "What will be the monthly communication cost — phone, internet, etc.?",
+   640→   640→   640→            type: "CURRENCY",
+   641→   641→   641→            required: false,
+   642→   642→   642→            hint: "Mobile recharge, internet connection, etc. in rupees per month.",
+   643→   643→   643→            min: 0,
+   644→   644→   644→          },
+   645→   645→   645→          {
+   646→   646→   646→            dotPath: "utilities.monthlyInsuranceCost",
+   647→   647→   647→            label: "What will be the monthly insurance cost?",
+   648→   648→   648→            type: "CURRENCY",
+   649→   649→   649→            required: false,
+   650→   650→   650→            hint: "Insurance for machinery, fire, accident, etc. in rupees per month.",
+   651→   651→   651→            min: 0,
+   652→   652→   652→          },
+   653→   653→   653→          {
+   654→   654→   654→            dotPath: "utilities.monthlyMiscCost",
+   655→   655→   655→            label:
+   656→   656→   656→              "Any other monthly expenses — like stationery, tea/coffee for workers, cleaning supplies, etc.?",
+   657→   657→   657→            type: "CURRENCY",
+   658→   658→   658→            required: false,
+   659→   659→   659→            hint: "Small miscellaneous overheads in rupees per month.",
+   660→   660→   660→            min: 0,
+   661→   661→   661→          },
+   662→   662→   662→        ],
+   663→   663→   663→      },
+   664→   664→   664→    ],
+   665→   665→   665→    systemPromptAddendum:
+   666→   666→   666→      "You are in the PROJECT_SIZING phase. Collect detailed information about the project's physical setup — " +
+   667→   667→   667→      "land, building, machinery, raw materials, employees, and utilities. " +
+   668→   668→   668→      "Ask about ONE GROUP AT A TIME (e.g. all land questions together, then all machinery questions). " +
+   669→   669→   669→      "For machinery and raw materials, encourage the user to list what they know and offer to fill in estimated costs from the Knowledge Package. " +
+   670→   670→   670→      "For employees and utilities, if the user doesn't know exact numbers, offer reasonable defaults. " +
+   671→   671→   671→      "Use simple language and explain why each detail is needed for the project report.",
+   672→   672→   672→    canSkip: false,
+   673→   673→   673→  },
+   674→   674→   674→
+   675→   675→   675→  // ── Phase 5: Financial Planning ─────────────────────────────────────────
+   676→   676→   676→  FINANCIAL_PLANNING: {
+   677→   677→   677→    phase: "FINANCIAL_PLANNING",
+   678→   678→   678→    label: "Financial Planning",
+   679→   679→   679→    description:
+   680→   680→   680→      "Collect financial assumptions — loan terms, revenue projections, and capital costs.",
+   681→   681→   681→    fieldGroups: [
+   682→   682→   682→      {
+   683→   683→   683→        label: "Loan Details",
+   684→   684→   684→        fields: [
+   685→   685→   685→          {
+   686→   686→   686→            dotPath: "financials.interestRate",
+   687→   687→   687→            label: "What interest rate has the bank quoted for your loan?",
+   688→   688→   688→            type: "NUMBER",
+   689→   689→   689→            required: true,
+   690→   690→   690→            hint: "PMEGP bank loans are typically at 11-14% per annum. If you don't know the exact rate, I can use the standard rate for your bank type.",
+   691→   691→   691→            min: 1,
+   692→   692→   692→            max: 30,
+   693→   693→   693→          },
+   694→   694→   694→          {
+   695→   695→   695→            dotPath: "financials.loanTenureYears",
+   696→   696→   696→            label: "How many years will the loan repayment period be?",
+   697→   697→   697→            type: "NUMBER",
+   698→   698→   698→            required: true,
+   699→   699→   699→            hint: "PMEGP loans are usually for 5 to 7 years. There is also a moratorium period (usually 6 months) where you only pay interest, not principal.",
+   700→   700→   700→            min: 3,
+   701→   701→   701→            max: 10,
+   702→   702→   702→          },
+   703→   703→   703→        ],
+   704→   704→   704→      },
+   705→   705→   705→      {
+   706→   706→   706→        label: "Revenue & Capital",
+   707→   707→   707→        fields: [
+   708→   708→   708→          {
+   709→   709→   709→            dotPath: "financials.projectedMonthlySales",
+   710→   710→   710→            label: "How much do you expect to sell per month? Please tell me the amount in rupees.",
+   711→   711→   711→            type: "CURRENCY",
+   712→   712→   712→            required: true,
+   713→   713→   713→            hint:
+   714→   714→   714→              "This is your estimated monthly income from sales. Be realistic — it's better to be slightly conservative. " +
+   715→   715→   715→              "For example: if you make 500 paper cups per day and sell each at ₹1.50, working 25 days, " +
+   716→   716→   716→              "your monthly sales would be 500 × 1.50 × 25 = ₹18,750 per month.",
+   717→   717→   717→            min: 0,
+   718→   718→   718→          },
+   719→   719→   719→          {
+   720→   720→   720→            dotPath: "financials.workingCapital",
+   721→   721→   721→            label: "How much working capital do you need? Please tell me the amount in rupees.",
+   722→   722→   722→            type: "CURRENCY",
+   723→   723→   723→            required: true,
+   724→   724→   724→            hint:
+   725→   725→   725→              "Working capital is the money needed for day-to-day running — buying raw materials, paying wages, rent, electricity, etc. " +
+   726→   726→   726→              "It is usually about 20-25% of the total project cost. If you're not sure, I can calculate it for you based on your raw materials and expenses.",
+   727→   727→   727→            min: 0,
+   728→   728→   728→          },
+   729→   729→   729→          {
+   730→   730→   730→            dotPath: "financials.otherFixedAssets",
+   731→   731→   731→            label:
+   732→   732→   732→              "Are there any other fixed assets you need — furniture, computer, printer, vehicle, etc.? Please give the total cost in rupees.",
+   733→   733→   733→            type: "CURRENCY",
+   734→   734→   734→            required: true,
+   735→   735→   735→            hint:
+   736→   736→   736→              "Any equipment or assets NOT already listed under machinery. " +
+   737→   737→   737→              "For example: office table-chair (₹5,000), computer with printer (₹25,000), delivery vehicle (₹1,00,000). " +
+   738→   738→   738→              "Give the total of all such items in rupees. If there are none, say 0.",
+   739→   739→   739→            min: 0,
+   740→   740→   740→          },
+   741→   741→   741→          {
+   742→   742→   742→            dotPath: "financials.preOperativeExpenses",
+   743→   743→   743→            label:
+   744→   744→   744→              "What are your one-time pre-operative expenses? These are costs before the unit actually starts running. Total in rupees.",
+   745→   745→   745→            type: "CURRENCY",
+   746→   746→   746→            required: true,
+   747→   747→   747→            hint:
+   748→   748→   748→              "These are one-time expenses before starting production — like MSME registration, GST registration, " +
+   749→   749→   749→              "trade license, electricity connection, machinery installation and trial run, " +
+   750→   750→   750→              "initial raw material purchase, etc. Give the total in rupees.",
+   751→   751→   751→            min: 0,
+   752→   752→   752→          },
+   753→   753→   753→          {
+   754→   754→   754→            dotPath: "financials.buildingAndCivilWorks",
+   755→   755→   755→            label: "What is the total cost of building, shed, or civil construction work? Total in rupees.",
+   756→   756→   756→            type: "CURRENCY",
+   757→   757→   757→            required: true,
+   758→   758→   758→            hint:
+   759→   759→   759→              "If you are constructing a new shed or building, put the total construction cost here. " +
+   760→   760→   760→              "If you already have a building, or are renting, this can be 0.",
+   761→   761→   761→            min: 0,
+   762→   762→   762→          },
+   763→   763→   763→        ],
+   764→   764→   764→      },
+   765→   765→   765→    ],
+   766→   766→   766→    systemPromptAddendum:
+   767→   767→   767→      "You are in the FINANCIAL_PLANNING phase. Collect financial details needed for the project report and bank loan application. " +
+   768→   768→   768→      "This is the most number-heavy section. Explain each field in SIMPLE TERMS — many applicants are not familiar with financial jargon. " +
+   769→   769→   769→      "Always mention amounts 'in rupees'. Help the user think through realistic numbers. " +
+   770→   770→   770→      "If they seem unsure about working capital or other calculations, offer to compute it for them. " +
+   771→   771→   771→      "Remember: total project cost = machinery + other fixed assets + pre-operative expenses + building/civil works + working capital.",
+   772→   772→   772→    canSkip: false,
+   773→   773→   773→  },
+   774→   774→   774→
+   775→   775→   775→  // ── Phase 6: Review ─────────────────────────────────────────────────────
+   776→   776→   776→  REVIEW: {
+   777→   777→   777→    phase: "REVIEW",
+   778→   778→   778→    label: "Review & Confirmation",
+   779→   779→   779→    description:
+   780→   780→   780→      "Present a summary of all collected information for user review and confirmation.",
+   781→   781→   781→    fieldGroups: [],
+   782→   782→   782→    systemPromptAddendum:
+   783→   783→   783→      "You are in the REVIEW phase. Present a CLEAR, SECTION-WISE summary of all the information collected so far. " +
+   784→   784→   784→      "Organize it into: Applicant Details, Business Details, Project Details, and Financial Details. " +
+   785→   785→   785→      "Use a simple table-like format that is easy to read. " +
+   786→   786→   786→      "After presenting the summary, ask the user to review carefully and confirm. " +
+   787→   787→   787→      "If the user wants to change anything, note the corrections and update. " +
+   788→   788→   788→      "Be patient — this is an important step and the user should not feel rushed.",
+   789→   789→   789→    canSkip: true,
+   790→   790→   790→  },
+   791→   791→   791→
+   792→   792→   792→  // ── Phase 7: Validation Completion ──────────────────────────────────────
+   793→   793→   793→  VALIDATION_COMPLETION: {
+   794→   794→   794→    phase: "VALIDATION_COMPLETION",
+   795→   795→   795→    label: "Final Validation",
+   796→   796→   796→    description: "Run final validation checks and complete the interview.",
+   797→   797→   797→    fieldGroups: [],
+   798→   798→   798→    systemPromptAddendum:
+   799→   799→   799→      "You are in the VALIDATION_COMPLETION phase. Run a final validation on the complete project profile. " +
+   800→   800→   800→      "Check for: missing mandatory fields, value inconsistencies (e.g. project cost exceeds PMEGP limits), " +
+   801→   801→   801→      "subsidy eligibility, and any other validation rules. " +
+   802→   802→   802→      "If everything is valid, congratulate the user and inform them that their project profile is complete and ready for DPR (Detailed Project Report) generation. " +
+   803→   803→   803→      "If there are issues, list them clearly and guide the user to fix each one.",
+   804→   804→   804→    canSkip: true,
+   805→   805→   805→  },
+   806→   806→   806→};
+   807→   807→   807→
+   808→   808→   808→// ── 1. Question Planner ───────────────────────────────────────────────────
+   809→   809→   809→
+   810→   810→   810→/**
+   811→   811→   811→ * Determines the next question to ask the user based on the current
+   812→   812→   812→ * interview phase and the profile state.
+   813→   813→   813→ *
+   814→   814→   814→ * Logic:
+   815→   815→   815→ *  1. Look at the current phase's field configuration.
+   816→   816→   816→ *  2. Check which fields are already filled (non-null in profile + provenance).
+   817→   817→   817→ *  3. Find the first unfilled REQUIRED field.
+   818→   818→   818→ *  4. Generate a natural language question for that field.
+   819→   819→   819→ *  5. Include suggestions for ENUM-type fields.
+   820→   820→   820→ *  6. Set completesPhase / isPhaseStart flags appropriately.
+   821→   821→   821→ */
+   822→   822→   822→export function planNextQuestion(
+   823→   823→   823→  profile: ProjectProfile,
+   824→   824→   824→  phase: InterviewPhase,
+   825→   825→   825→  conversationHistory: ChatMessage[]
+   826→   826→   826→): QuestionPlan {
+   827→   827→   827→  const config = PHASE_CONFIGS[phase];
+   828→   828→   828→  const allFields = getAllFields(config);
+   829→   829→   829→
+   830→   830→   830→  // ── Special handling for phases with no fields (REVIEW, VALIDATION_COMPLETION)
+   831→   831→   831→  if (allFields.length === 0) {
+   832→   832→   832→    return {
+   833→   833→   833→      question: PHASE_ENTRY_MESSAGES[phase],
+   834→   834→   834→      targetFields: [],
+   835→   835→   835→      phase,
+   836→   836→   836→      isPhaseStart: true,
+   837→   837→   837→      completesPhase: false,
+   838→   838→   838→    };
+   839→   839→   839→  }
+   840→   840→   840→
+   841→   841→   841→  // ── Find the first required field that is not yet filled
+   842→   842→   842→  const firstUnfilledIndex = allFields.findIndex(
+   843→   843→   843→    (f) => f.required && !isFieldFilled(profile, f)
+   844→   844→   844→  );
+   845→   845→   845→
+   846→   846→   846→  // ── If all required fields are filled, look for optional unfilled fields
+   847→   847→   847→  if (firstUnfilledIndex === -1) {
+   848→   848→   848→    const firstOptionalUnfilled = allFields.find(
+   849→   849→   849→      (f) => !f.required && !isFieldFilled(profile, f)
+   850→   850→   850→    );
+   851→   851→   851→
+   852→   852→   852→    if (firstOptionalUnfilled) {
+   853→   853→   853→      const suggestions: QuestionSuggestion[] | undefined =
+   854→   854→   854→        firstOptionalUnfilled.enumOptions?.map((opt) => ({
+   855→   855→   855→          label: opt.label,
+   856→   856→   856→          value: opt.value,
+   857→   857→   857→        }));
+   858→   858→   858→
+   859→   859→   859→      return {
+   860→   860→   860→        question: firstOptionalUnfilled.label,
+   861→   861→   861→        targetFields: [firstOptionalUnfilled.dotPath],
+   862→   862→   862→        phase,
+   863→   863→   863→        hint: firstOptionalUnfilled.hint,
+   864→   864→   864→        suggestions,
+   865→   865→   865→        isPhaseStart: false,
+   866→   866→   866→        completesPhase: true,
+   867→   867→   867→      };
+   868→   868→   868→    }
+   869→   869→   869→
+   870→   870→   870→    // Phase is fully complete — all fields (required + optional) are filled
+   871→   871→   871→    return {
+   872→   872→   872→      question: `All details for ${config.label} have been collected. Let's move to the next step!`,
+   873→   873→   873→      targetFields: [],
+   874→   874→   874→      phase,
+   875→   875→   875→      isPhaseStart: false,
+   876→   876→   876→      completesPhase: true,
+   877→   877→   877→    };
+   878→   878→   878→  }
+   879→   879→   879→
+   880→   880→   880→  // ── Build the question plan for the first unfilled required field
+   881→   881→   881→  const field = allFields[firstUnfilledIndex];
+   882→   882→   882→
+   883→   883→   883→  // isPhaseStart: true if no required field in this phase has been filled yet
+   884→   884→   884→  const hasAnyRequiredFilled = allFields.some(
+   885→   885→   885→    (f) => f.required && isFieldFilled(profile, f)
+   886→   886→   886→  );
+   887→   887→   887→  const isPhaseStart = !hasAnyRequiredFilled;
+   888→   888→   888→
+   889→   889→   889→  // completesPhase: true if no required fields remain unfilled after this one
+   890→   890→   890→  const remainingRequiredUnfilled = allFields
+   891→   891→   891→    .slice(firstUnfilledIndex + 1)
+   892→   892→   892→    .filter((f) => f.required && !isFieldFilled(profile, f));
+   893→   893→   893→  const completesPhase = remainingRequiredUnfilled.length === 0;
+   894→   894→   894→
+   895→   895→   895→  // Build suggestions for ENUM fields
+   896→   896→   896→  const suggestions: QuestionSuggestion[] | undefined =
+   897→   897→   897→    field.enumOptions?.map((opt) => ({
+   898→   898→   898→      label: opt.label,
+   899→   899→   899→      value: opt.value,
+   900→   900→   900→    }));
+   901→   901→   901→
+   902→   902→   902→  return {
+   903→   903→   903→    question: field.label,
+   904→   904→   904→    targetFields: [field.dotPath],
+   905→   905→   905→    phase,
+   906→   906→   906→    hint: field.hint,
+   907→   907→   907→    suggestions,
+   908→   908→   908→    isPhaseStart,
+   909→   909→   909→    completesPhase,
+   910→   910→   910→  };
+   911→   911→   911→
+   912→   912→   912→  // conversationHistory is accepted for future context-aware enhancements
+   913→   913→   913→  // (e.g., avoiding re-asking questions the user already answered in free text)
+   914→   914→   914→  void conversationHistory;
+   915→   915→   915→}
+   916→   916→   916→
+   917→   917→   917→// ── 2. Phase Transition ───────────────────────────────────────────────────
+   918→   918→   918→
+   919→   919→   919→/**
+   920→   920→   920→ * Returns the next interview phase after the current one is complete,
+   921→   921→   921→ * or null if we're at the final phase (VALIDATION_COMPLETION).
+   922→   922→   922→ */
+   923→   923→   923→export function getNextPhase(
+   924→   924→   924→  currentPhase: InterviewPhase,
+   925→   925→   925→  profile: ProjectProfile
+   926→   926→   926→): InterviewPhase | null {
+   927→   927→   927→  const currentIndex = PHASE_ORDER.indexOf(currentPhase);
+   928→   928→   928→  if (currentIndex === -1 || currentIndex === PHASE_ORDER.length - 1) {
+   929→   929→   929→    return null;
+   930→   930→   930→  }
+   931→   931→   931→  // profile is accepted for potential conditional transitions in future
+   932→   932→   932→  void profile;
+   933→   933→   933→  return PHASE_ORDER[currentIndex + 1];
+   934→   934→   934→}
+   935→   935→   935→
+   936→   936→   936→// ── 3. Phase Entry Message ────────────────────────────────────────────────
+   937→   937→   937→
+   938→   938→   938→/**
+   939→   939→   939→ * Returns a brief intro message to display when entering a new phase.
+   940→   940→   940→ */
+   941→   941→   941→export function getPhaseEntryMessage(phase: InterviewPhase): string {
+   942→   942→   942→  return PHASE_ENTRY_MESSAGES[phase];
+   943→   943→   943→}
+   944→   944→   944→
+   945→   945→   945→// ── 4. Missing Fields Helper ──────────────────────────────────────────────
+   946→   946→   946→
+   947→   947→   947→/**
+   948→   948→   948→ * Returns which REQUIRED fields in the given phase are still missing
+   949→   949→   949→ * (unfilled) in the profile.
+   950→   950→   950→ */
+   951→   951→   951→export function getMissingFieldsForPhase(
+   952→   952→   952→  profile: ProjectProfile,
+   953→   953→   953→  phase: InterviewPhase
+   954→   954→   954→): FieldConfig[] {
+   955→   955→   955→  const config = PHASE_CONFIGS[phase];
+   956→   956→   956→  const allFields = getAllFields(config);
+   957→   957→   957→  return allFields.filter((f) => f.required && !isFieldFilled(profile, f));
+   958→   958→   958→}

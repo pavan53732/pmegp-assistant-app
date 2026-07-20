@@ -1,0 +1,1507 @@
+     1→"use client";
+     2→
+     3→import { useCallback, useEffect, useState } from "react";
+     4→import { AnimatePresence, motion } from "framer-motion";
+     5→import { toast } from "sonner";
+     6→import {
+     7→  Card,
+     8→  CardContent,
+     9→  CardDescription,
+    10→  CardHeader,
+    11→  CardTitle,
+    12→} from "@/components/ui/card";
+    13→import { Button } from "@/components/ui/button";
+    14→import { Badge } from "@/components/ui/badge";
+    15→import { Skeleton } from "@/components/ui/skeleton";
+    16→import {
+    17→  Dialog,
+    18→  DialogContent,
+    19→  DialogDescription,
+    20→  DialogFooter,
+    21→  DialogHeader,
+    22→  DialogTitle,
+    23→  DialogTrigger,
+    24→} from "@/components/ui/dialog";
+    25→import {
+    26→  AlertDialog,
+    27→  AlertDialogAction,
+    28→  AlertDialogCancel,
+    29→  AlertDialogContent,
+    30→  AlertDialogDescription,
+    31→  AlertDialogFooter,
+    32→  AlertDialogHeader,
+    33→  AlertDialogTitle,
+    34→  AlertDialogTrigger,
+    35→} from "@/components/ui/alert-dialog";
+    36→import { Input } from "@/components/ui/input";
+    37→import { Label } from "@/components/ui/label";
+    38→import { Progress } from "@/components/ui/progress";
+    39→import { Separator } from "@/components/ui/separator";
+    40→import {
+    41→  Collapsible,
+    42→  CollapsibleContent,
+    43→  CollapsibleTrigger,
+    44→} from "@/components/ui/collapsible";
+    45→import {
+    46→  Plus,
+    47→  FolderOpen,
+    48→  FileText,
+    49→  IndianRupee,
+    50→  ShieldCheck,
+    51→  Loader2,
+    52→  CheckCircle2,
+    53→  ArrowLeft,
+    54→  Search,
+    55→  Trash2,
+    56→  Calculator,
+    57→  ClipboardCheck,
+    58→  Info,
+    59→  ChevronDown,
+    60→  Clock,
+    61→  TrendingUp,
+    62→  BarChart3,
+    63→  Briefcase,
+    64→  Sparkles,
+    65→  X,
+    66→  Eye,
+    67→  Download,
+    68→  Building2,
+    69→  MapPin,
+    70→  Users,
+    71→  Pencil,
+    72→  CreditCard,
+    73→  SearchCode,
+    74→  Target,
+    75→  FileCheck2,
+    76→  ArrowUpDown,
+    77→  LayoutGrid,
+    78→  List,
+    79→  Zap,
+    80→  BookOpen,
+    81→} from "lucide-react";
+    82→
+    83→import { ChatView } from "@/components/interview/chat-view";
+    84→import { ReviewView } from "@/components/interview/review-view";
+    85→import { SubsidyCalculator } from "@/components/dashboard/subsidy-calculator";
+    86→import { EligibilityChecker } from "@/components/dashboard/eligibility-checker";
+    87→import { SchemeInfo } from "@/components/dashboard/scheme-info";
+    88→import { NicCodeSearch } from "@/components/dashboard/nic-code-search";
+    89→import { EmiCalculator } from "@/components/dashboard/emi-calculator";
+    90→import { BreakevenCalculator } from "@/components/dashboard/breakeven-calculator";
+    91→import { DocumentChecklist } from "@/components/dashboard/document-checklist";
+    92→import { ProjectCard } from "@/components/dashboard/project-card";
+    93→import { ProjectTemplates, type ProjectTemplate } from "@/components/dashboard/project-templates";
+    94→import HowItWorks from "@/components/dashboard/how-it-works";
+    95→import { ActivityFeed } from "@/components/dashboard/activity-feed";
+    96→import { ProjectAnalytics } from "@/components/dashboard/project-analytics";
+    97→import {
+    98→  createProject,
+    99→  fetchProjects,
+   100→  sendChatMessage,
+   101→  formatIndianCurrency,
+   102→  formatIndianDate,
+   103→} from "@/lib/interview-api";
+   104→import type { ProjectProfile } from "@/shared/types/project-profile";
+   105→
+   106→// ── View type ──────────────────────────────────────────────────────────────
+   107→
+   108→type ViewType = "dashboard" | "interview" | "review" | "status";
+   109→
+   110→// ── Types ──────────────────────────────────────────────────────────────────
+   111→
+   112→interface ProjectSummary {
+   113→  id: string;
+   114→  name: string;
+   115→  status: string;
+   116→  createdAt: string;
+   117→  updatedAt: string;
+   118→}
+   119→
+   120→// ── Status badge config ────────────────────────────────────────────────────
+   121→
+   122→const STATUS_VARIANT: Record<string, "default" | "secondary" | "outline"> = {
+   123→  EMPTY: "outline",
+   124→  PARTIAL: "secondary",
+   125→  DISCOVERING: "secondary",
+   126→  COMPLETE: "default",
+   127→  REVIEW_PENDING: "default",
+   128→  VALIDATED: "default",
+   129→  ELIGIBILITY_READY: "default",
+   130→  FINANCIAL_READY: "default",
+   131→  DPR_READY: "default",
+   132→};
+   133→
+   134→const STATUS_LABEL: Record<string, string> = {
+   135→  EMPTY: "Empty",
+   136→  PARTIAL: "In Progress",
+   137→  DISCOVERING: "Discovering",
+   138→  COMPLETE: "Complete",
+   139→  REVIEW_PENDING: "Review Pending",
+   140→  VALIDATED: "Validated",
+   141→  ELIGIBILITY_READY: "Eligibility Checked",
+   142→  FINANCIAL_READY: "Financials Ready",
+   143→  DPR_READY: "DPR Ready",
+   144→};
+   145→
+   146→const STATUS_BADGE_CLASS: Record<string, string> = {
+   147→  EMPTY: "bg-muted text-muted-foreground hover:bg-muted",
+   148→  PARTIAL: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/30",
+   149→  DISCOVERING: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30",
+   150→  COMPLETE: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   151→  REVIEW_PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/30",
+   152→  VALIDATED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   153→  ELIGIBILITY_READY: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   154→  FINANCIAL_READY: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   155→  DPR_READY: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/30",
+   156→};
+   157→
+   158→// ── Main Page Component ────────────────────────────────────────────────────
+   159→
+   160→export default function Home() {
+   161→  // View state
+   162→  const [view, setView] = useState<ViewType>("dashboard");
+   163→
+   164→  // Dashboard state
+   165→  const [projects, setProjects] = useState<ProjectSummary[]>([]);
+   166→  const [projectsLoading, setProjectsLoading] = useState(true);
+   167→
+   168→  // New project dialog
+   169→  const [dialogOpen, setDialogOpen] = useState(false);
+   170→  const [newProjectName, setNewProjectName] = useState("");
+   171→  const [creating, setCreating] = useState(false);
+   172→
+   173→  // Interview state
+   174→  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+   175→  const [interviewProfile, setInterviewProfile] = useState<ProjectProfile | null>(null);
+   176→
+   177→  // Review state
+   178→  const [reviewProfile, setReviewProfile] = useState<ProjectProfile | null>(null);
+   179→  const [confirming, setConfirming] = useState(false);
+   180→
+   181→  // Status view state
+   182→  const [statusProfile, setStatusProfile] = useState<ProjectProfile | null>(null);
+   183→
+   184→  // ── Load projects ──────────────────────────────────────────────
+   185→
+   186→  const reloadProjects = useCallback(async () => {
+   187→    setProjectsLoading(true);
+   188→    try {
+   189→      const list = await fetchProjects();
+   190→      setProjects(list);
+   191→    } catch {
+   192→      toast.error("Failed to load projects");
+   193→    } finally {
+   194→      setProjectsLoading(false);
+   195→    }
+   196→  }, []);
+   197→
+   198→  useEffect(() => {
+   199→    reloadProjects();
+   200→  }, [reloadProjects]);
+   201→
+   202→  // ── Global keyboard shortcut: new project ────────────────────
+   203→  useEffect(() => {
+   204→    function onNewProject() {
+   205→      if (view === "dashboard") {
+   206→        setDialogOpen(true);
+   207→      }
+   208→    }
+   209→    window.addEventListener("pmegp:new-project", onNewProject);
+   210→    return () => window.removeEventListener("pmegp:new-project", onNewProject);
+   211→  }, [view]);
+   212→
+   213→  // ── Create new project ─────────────────────────────────────────
+   214→
+   215→  const handleCreateProject = useCallback(async () => {
+   216→    const name = newProjectName.trim() || `Project ${projects.length + 1}`;
+   217→    setCreating(true);
+   218→    try {
+   219→      const projectId = await createProject(name);
+   220→      setDialogOpen(false);
+   221→      setNewProjectName("");
+   222→      toast.success("Project created!", { description: name });
+   223→      setActiveProjectId(projectId);
+   224→      setInterviewProfile(null);
+   225→      setView("interview");
+   226→    } catch (err) {
+   227→      const msg = err instanceof Error ? err.message : "Failed to create project";
+   228→      toast.error("Error", { description: msg });
+   229→    } finally {
+   230→      setCreating(false);
+   231→    }
+   232→  }, [newProjectName, projects.length]);
+   233→
+   234→  // ── Create from template ──────────────────────────────────────
+   235→
+   236→  const handleSelectTemplate = useCallback(async (template: ProjectTemplate) => {
+   237→    setCreating(true);
+   238→    try {
+   239→      const projectId = await createProject(template.name);
+   240→      toast.success("Project created from template!", { description: `${template.name} — ${template.projectCostLabel}` });
+   241→      setActiveProjectId(projectId);
+   242→      setInterviewProfile(null);
+   243→      setView("interview");
+   244→    } catch (err) {
+   245→      const msg = err instanceof Error ? err.message : "Failed to create project";
+   246→      toast.error("Error", { description: msg });
+   247→    } finally {
+   248→      setCreating(false);
+   249→    }
+   250→  }, []);
+   251→
+   252→  // ── Open existing project ──────────────────────────────────────
+   253→
+   254→  const handleOpenProject = useCallback(
+   255→    async (project: ProjectSummary) => {
+   256→      if (project.status === "DPR_READY" || project.status === "VALIDATED") {
+   257→        toast.info("This project has been confirmed.");
+   258→        setView("status");
+   259→        return;
+   260→      }
+   261→      setActiveProjectId(project.id);
+   262→      setInterviewProfile(null);
+   263→      setView("interview");
+   264→    },
+   265→    []
+   266→  );
+   267→
+   268→  // ── Delete project ─────────────────────────────────────────────
+   269→
+   270→  const handleDeleteProject = useCallback(async (projectId: string, projectName: string, e?: React.MouseEvent) => {
+   271→    if (e) e.stopPropagation();
+   272→    try {
+   273→      const res = await fetch(`/api/projects/${encodeURIComponent(projectId)}`, {
+   274→        method: "DELETE",
+   275→      });
+   276→      const data = await res.json();
+   277→      if (data.success) {
+   278→        toast.success("Project deleted", { description: projectName });
+   279→        setProjects((prev) => prev.filter((p) => p.id !== projectId));
+   280→      } else {
+   281→        toast.error("Failed to delete", { description: data.error?.message ?? "Unknown error" });
+   282→      }
+   283→    } catch {
+   284→      toast.error("Failed to delete project");
+   285→    }
+   286→  }, []);
+   287→
+   288→  // ── Rename project ─────────────────────────────────────────────
+   289→
+   290→  const handleRenameProject = useCallback(async (projectId: string, newName: string) => {
+   291→    if (!newName.trim()) return;
+   292→    try {
+   293→      const res = await fetch(`/api/projects/${encodeURIComponent(projectId)}`, {
+   294→        method: "PATCH",
+   295→        headers: { "Content-Type": "application/json" },
+   296→        body: JSON.stringify({ name: newName.trim() }),
+   297→      });
+   298→      const data = await res.json();
+   299→      if (data.success) {
+   300→        toast.success("Project renamed", { description: newName.trim() });
+   301→        setProjects((prev) =>
+   302→          prev.map((p) => (p.id === projectId ? { ...p, name: newName.trim() } : p))
+   303→        );
+   304→      } else {
+   305→        toast.error("Failed to rename", { description: data.error?.message ?? "Unknown error" });
+   306→      }
+   307→    } catch {
+   308→      toast.error("Failed to rename project");
+   309→    }
+   310→  }, []);
+   311→
+   312→  // ── Interview callbacks ────────────────────────────────────────
+   313→
+   314→  const handleGoBack = useCallback(() => {
+   315→    setActiveProjectId(null);
+   316→    setInterviewProfile(null);
+   317→    setReviewProfile(null);
+   318→    setStatusProfile(null);
+   319→    setView("dashboard");
+   320→    reloadProjects();
+   321→  }, [reloadProjects]);
+   322→
+   323→  const handleEnterReview = useCallback((profile: ProjectProfile) => {
+   324→    setReviewProfile(profile);
+   325→    setView("review");
+   326→  }, []);
+   327→
+   328→  // ── Review callbacks ───────────────────────────────────────────
+   329→
+   330→  const handleConfirmReview = useCallback(async () => {
+   331→    if (!activeProjectId) return;
+   332→    setConfirming(true);
+   333→    try {
+   334→      const res = await sendChatMessage(activeProjectId, "confirm");
+   335→      if (res.profile) {
+   336→        setStatusProfile(res.profile);
+   337→        setReviewProfile(res.profile);
+   338→      }
+   339→      setView("status");
+   340→      toast.success("Project confirmed!");
+   341→    } catch (err) {
+   342→      const msg = err instanceof Error ? err.message : "Failed to confirm";
+   343→      toast.error("Error", { description: msg });
+   344→    } finally {
+   345→      setConfirming(false);
+   346→    }
+   347→  }, [activeProjectId]);
+   348→
+   349→  const handleReviewGoBack = useCallback(() => {
+   350→    setView("interview");
+   351→  }, []);
+   352→
+   353→  // ── Render ─────────────────────────────────────────────────────
+   354→
+   355→  return (
+   356→    <AnimatePresence mode="wait">
+   357→      {view === "dashboard" && (
+   358→        <motion.div
+   359→          key="dashboard"
+   360→          initial={{ opacity: 0 }}
+   361→          animate={{ opacity: 1 }}
+   362→          exit={{ opacity: 0 }}
+   363→          transition={{ duration: 0.2 }}
+   364→        >
+   365→          <DashboardView
+   366→            projects={projects}
+   367→            loading={projectsLoading}
+   368→            onCreateClick={() => setDialogOpen(true)}
+   369→            onProjectClick={handleOpenProject}
+   370→            onDeleteProject={handleDeleteProject}
+   371→            onRenameProject={handleRenameProject}
+   372→            onSelectTemplate={handleSelectTemplate}
+   373→            dialogOpen={dialogOpen}
+   374→            setDialogOpen={setDialogOpen}
+   375→            newProjectName={newProjectName}
+   376→            setNewProjectName={setNewProjectName}
+   377→            creating={creating}
+   378→            onCreateProject={handleCreateProject}
+   379→          />
+   380→        </motion.div>
+   381→      )}
+   382→
+   383→      {view === "interview" && activeProjectId && (
+   384→        <motion.div
+   385→          key="interview"
+   386→          initial={{ opacity: 0, x: 20 }}
+   387→          animate={{ opacity: 1, x: 0 }}
+   388→          exit={{ opacity: 0, x: -20 }}
+   389→          transition={{ duration: 0.2 }}
+   390→        >
+   391→          <ChatView
+   392→            projectId={activeProjectId}
+   393→            initialProfile={interviewProfile ?? undefined}
+   394→            onGoBack={handleGoBack}
+   395→            onEnterReview={handleEnterReview}
+   396→          />
+   397→        </motion.div>
+   398→      )}
+   399→
+   400→      {view === "review" && reviewProfile && (
+   401→        <motion.div
+   402→          key="review"
+   403→          initial={{ opacity: 0, x: 20 }}
+   404→          animate={{ opacity: 1, x: 0 }}
+   405→          exit={{ opacity: 0, x: -20 }}
+   406→          transition={{ duration: 0.2 }}
+   407→        >
+   408→          <ReviewView
+   409→            profile={reviewProfile}
+   410→            projectId={activeProjectId ?? ""}
+   411→            onConfirm={handleConfirmReview}
+   412→            onGoBack={handleReviewGoBack}
+   413→            loading={confirming}
+   414→          />
+   415→        </motion.div>
+   416→      )}
+   417→
+   418→      {view === "status" && (
+   419→        <motion.div
+   420→          key="status"
+   421→          initial={{ opacity: 0 }}
+   422→          animate={{ opacity: 1 }}
+   423→          exit={{ opacity: 0 }}
+   424→          transition={{ duration: 0.2 }}
+   425→        >
+   426→          <StatusView
+   427→            profile={statusProfile}
+   428→            onGoBack={handleGoBack}
+   429→          />
+   430→        </motion.div>
+   431→      )}
+   432→    </AnimatePresence>
+   433→  );
+   434→}
+   435→
+   436→// ── Dashboard View ─────────────────────────────────────────────────────────
+   437→
+   438→interface DashboardViewProps {
+   439→  projects: ProjectSummary[];
+   440→  loading: boolean;
+   441→  onCreateClick: () => void;
+   442→  onProjectClick: (p: ProjectSummary) => void;
+   443→  onDeleteProject: (id: string, name: string, e?: React.MouseEvent) => void;
+   444→  onRenameProject: (id: string, newName: string) => void;
+   445→  onSelectTemplate: (template: ProjectTemplate) => void;
+   446→  dialogOpen: boolean;
+   447→  setDialogOpen: (open: boolean) => void;
+   448→  newProjectName: string;
+   449→  setNewProjectName: (name: string) => void;
+   450→  creating: boolean;
+   451→  onCreateProject: () => void;
+   452→}
+   453→
+   454→type SortKey = "updatedAt" | "createdAt" | "name" | "status";
+   455→type SortDir = "asc" | "desc";
+   456→
+   457→function DashboardView({
+   458→  projects,
+   459→  loading,
+   460→  onCreateClick,
+   461→  onProjectClick,
+   462→  onDeleteProject,
+   463→  onRenameProject,
+   464→  onSelectTemplate,
+   465→  dialogOpen,
+   466→  setDialogOpen,
+   467→  newProjectName,
+   468→  setNewProjectName,
+   469→  creating,
+   470→  onCreateProject,
+   471→}: DashboardViewProps) {
+   472→  const [searchQuery, setSearchQuery] = useState("");
+   473→  const [openTool, setOpenTool] = useState<string | null>(null);
+   474→  const [sortBy, setSortBy] = useState<SortKey>("updatedAt");
+   475→  const [sortDir, setSortDir] = useState<SortDir>("desc");
+   476→  const [filterStatus, setFilterStatus] = useState<string>("all");
+   477→
+   478→  const filteredProjects = projects
+   479→    .filter((p) => {
+   480→      const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+   481→      const matchesFilter = filterStatus === "all" || p.status === filterStatus;
+   482→      return matchesSearch && matchesFilter;
+   483→    })
+   484→    .sort((a, b) => {
+   485→      let cmp = 0;
+   486→      switch (sortBy) {
+   487→        case "name":
+   488→          cmp = a.name.localeCompare(b.name);
+   489→          break;
+   490→        case "status":
+   491→          cmp = a.status.localeCompare(b.status);
+   492→          break;
+   493→        case "createdAt":
+   494→          cmp = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+   495→          break;
+   496→        case "updatedAt":
+   497→        default:
+   498→          cmp = new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+   499→          break;
+   500→      }
+   501→      return sortDir === "asc" ? cmp : -cmp;
+   502→    });
+   503→
+   504→  const stats = {
+   505→    total: projects.length,
+   506→    inProgress: projects.filter(
+   507→      (p) => p.status === "PARTIAL" || p.status === "DISCOVERING" || p.status === "EMPTY"
+   508→    ).length,
+   509→    completed: projects.filter(
+   510→      (p) => p.status === "VALIDATED" || p.status === "DPR_READY"
+   511→    ).length,
+   512→    dprReady: projects.filter((p) => p.status === "DPR_READY").length,
+   513→  };
+   514→
+   515→  const statCards = [
+   516→    {
+   517→      label: "Total Projects",
+   518→      value: stats.total,
+   519→      icon: Briefcase,
+   520→      color: "text-emerald-600 dark:text-emerald-400",
+   521→      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+   522→    },
+   523→    {
+   524→      label: "In Progress",
+   525→      value: stats.inProgress,
+   526→      icon: TrendingUp,
+   527→      color: "text-amber-600 dark:text-amber-400",
+   528→      bg: "bg-amber-100 dark:bg-amber-900/30",
+   529→    },
+   530→    {
+   531→      label: "Completed",
+   532→      value: stats.completed,
+   533→      icon: CheckCircle2,
+   534→      color: "text-emerald-600 dark:text-emerald-400",
+   535→      bg: "bg-emerald-100 dark:bg-emerald-900/30",
+   536→    },
+   537→    {
+   538→      label: "DPR Ready",
+   539→      value: stats.dprReady,
+   540→      icon: BarChart3,
+   541→      color: "text-teal-600 dark:text-teal-400",
+   542→      bg: "bg-teal-100 dark:bg-teal-900/30",
+   543→    },
+   544→  ];
+   545→
+   546→  const quickTools = [
+   547→    {
+   548→      id: "calculator",
+   549→      title: "Subsidy Calculator",
+   550→      description: "Estimate your PMEGP subsidy based on project cost, category, and area.",
+   551→      icon: Calculator,
+   552→      content: <SubsidyCalculator />,
+   553→    },
+   554→    {
+   555→      id: "emi",
+   556→      title: "EMI Calculator",
+   557→      description: "Calculate monthly loan EMI, interest breakdown, and amortization.",
+   558→      icon: CreditCard,
+   559→      content: <EmiCalculator />,
+   560→    },
+   561→    {
+   562→      id: "breakeven",
+   563→      title: "Break-Even Analysis",
+   564→      description: "Find your break-even point, safety margin, and profit/loss projection.",
+   565→      icon: Target,
+   566→      content: <BreakevenCalculator />,
+   567→    },
+   568→    {
+   569→      id: "nic",
+   570→      title: "NIC Code Search",
+   571→      description: "Find the right NIC code for your business activity.",
+   572→      icon: SearchCode,
+   573→      content: <NicCodeSearch />,
+   574→    },
+   575→    {
+   576→      id: "checker",
+   577→      title: "Eligibility Checker",
+   578→      description: "Check if you meet PMEGP eligibility criteria.",
+   579→      icon: ClipboardCheck,
+   580→      content: <EligibilityChecker />,
+   581→    },
+   582→    {
+   583→      id: "docs",
+   584→      title: "Document Checklist",
+   585→      description: "Track all required documents for your PMEGP application.",
+   586→      icon: FileCheck2,
+   587→      content: <DocumentChecklist />,
+   588→    },
+   589→    {
+   590→      id: "scheme",
+   591→      title: "Scheme Info",
+   592→      description: "Key facts about the PMEGP scheme — limits, rates, and more.",
+   593→      icon: BookOpen,
+   594→      content: <SchemeInfo />,
+   595→    },
+   596→  ];
+   597→
+   598→  return (
+   599→    <div className="min-h-screen flex flex-col bg-background">
+   600→      {/* ── Header ──────────────────────────────────────────── */}
+   601→      <header className="border-b border-border/60 bg-card/90 backdrop-blur-xl sticky top-0 z-30 shadow-[0_1px_3px_0_rgb(0_0_0/0.04)]">
+   602→        <div className="max-w-6xl mx-auto px-4 py-3.5 sm:px-6">
+   603→          <div className="flex items-center justify-between">
+   604→            <div className="flex items-center gap-3">
+   605→              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-600/25 ring-1 ring-white/10">
+   606→                <IndianRupee className="w-5 h-5" />
+   607→              </div>
+   608→              <div>
+   609→                <h1 className="text-lg sm:text-xl font-bold tracking-tight">
+   610→                  PMEGP Assistant
+   611→                </h1>
+   612→                <p className="text-[11px] text-muted-foreground hidden sm:block leading-tight">
+   613→                  Prime Minister&apos;s Employment Generation Programme
+   614→                </p>
+   615→              </div>
+   616→            </div>
+   617→            <div className="flex items-center gap-2.5">
+   618→              <span className="text-[10px] text-muted-foreground/60 hidden sm:flex items-center gap-1.5 bg-muted/60 px-2.5 py-1 rounded-lg border border-border/50">
+   619→                <kbd className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono bg-background border border-border/80 rounded-md shadow-[0_1px_0_0_rgb(0_0_0/0.05)]">
+   620→                  ⌘K
+   621→                </kbd>
+   622→                <span>shortcuts</span>
+   623→              </span>
+   624→            </div>
+   625→          </div>
+   626→        </div>
+   627→      </header>
+   628→
+   629→      {/* ── Main ────────────────────────────────────────────── */}
+   630→      <main className="flex-1 max-w-6xl mx-auto w-full px-4 py-8 sm:px-6 sm:py-10">
+   631→        {/* ── Hero Section ───────────────────────────────── */}
+   632→        <motion.div
+   633→          initial={{ opacity: 0, y: -8 }}
+   634→          animate={{ opacity: 1, y: 0 }}
+   635→          transition={{ duration: 0.5 }}
+   636→          className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-900 p-6 sm:p-10 mb-8 shadow-xl shadow-emerald-900/25"
+   637→        >
+   638→          {/* Decorative elements */}
+   639→          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/20 rounded-full -translate-y-1/2 translate-x-1/3 blur-3xl pointer-events-none" />
+   640→          <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-400/10 rounded-full translate-y-1/2 -translate-x-1/4 blur-2xl pointer-events-none" />
+   641→          <div className="absolute top-4 right-4 sm:top-6 sm:right-8 grid grid-cols-3 gap-1.5 opacity-20 pointer-events-none">
+   642→            {Array.from({ length: 9 }).map((_, i) => (
+   643→              <div key={i} className="w-2 h-2 rounded-full bg-white" />
+   644→            ))}
+   645→          </div>
+   646→          {/* Animated decorative line */}
+   647→          <motion.div
+   648→            className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-transparent via-emerald-300/40 to-transparent"
+   649→            initial={{ width: "0%" }}
+   650→            animate={{ width: "100%" }}
+   651→            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
+   652→          />
+   653→
+   654→          <div className="relative z-10">
+   655→            <div className="flex items-center gap-2 mb-3">
+   656→              <motion.div
+   657→                animate={{ rotate: [0, 15, -15, 0] }}
+   658→                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+   659→              >
+   660→                <Sparkles className="w-5 h-5 text-emerald-300" />
+   661→              </motion.div>
+   662→              <span className="text-emerald-200 text-xs font-medium uppercase tracking-wider">
+   663→                AI-Powered Application Builder
+   664→              </span>
+   665→            </div>
+   666→            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
+   667→              Build Your PMEGP
+   668→              <br />
+   669→              <span className="bg-gradient-to-r from-emerald-200 to-emerald-100 bg-clip-text text-transparent">
+   670→                Project Application
+   671→              </span>
+   672→            </h2>
+   673→            <p className="text-emerald-100/80 text-sm sm:text-base max-w-xl mb-6 leading-relaxed">
+   674→              Create a complete PMEGP application with AI-guided interviews. From applicant
+   675→              details to financial projections and DPR generation — everything in one place.
+   676→            </p>
+   677→
+   678→            {/* New Project Dialog — BUG FIXED: removed forceMount and modal=false */}
+   679→            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+   680→              <DialogTrigger asChild>
+   681→                <Button
+   682→                  className="bg-white text-emerald-700 hover:bg-emerald-50 font-semibold shadow-lg shadow-black/10 hover:shadow-xl hover:shadow-emerald-900/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+   683→                  onClick={onCreateClick}
+   684→                >
+   685→                  <Plus className="w-4 h-4 mr-2" />
+   686→                  New Project
+   687→                </Button>
+   688→              </DialogTrigger>
+   689→              <DialogContent className="sm:max-w-md">
+   690→                <DialogHeader>
+   691→                  <DialogTitle>Create New Project</DialogTitle>
+   692→                  <DialogDescription>
+   693→                    Give your PMEGP application a name. You can change it later.
+   694→                  </DialogDescription>
+   695→                </DialogHeader>
+   696→                <div className="space-y-4 py-4">
+   697→                  <div className="space-y-2">
+   698→                    <Label htmlFor="project-name">Project Name</Label>
+   699→                    <Input
+   700→                      id="project-name"
+   701→                      placeholder="e.g. Paper Plate Manufacturing"
+   702→                      value={newProjectName}
+   703→                      onChange={(e) => setNewProjectName(e.target.value)}
+   704→                      onKeyDown={(e) => {
+   705→                        if (e.key === "Enter") onCreateProject();
+   706→                      }}
+   707→                      disabled={creating}
+   708→                    />
+   709→                  </div>
+   710→                </div>
+   711→                <DialogFooter>
+   712→                  <Button
+   713→                    variant="outline"
+   714→                    onClick={() => setDialogOpen(false)}
+   715→                    disabled={creating}
+   716→                  >
+   717→                    Cancel
+   718→                  </Button>
+   719→                  <Button
+   720→                    onClick={onCreateProject}
+   721→                    disabled={creating}
+   722→                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   723→                  >
+   724→                    {creating ? (
+   725→                      <>
+   726→                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+   727→                        Creating…
+   728→                      </>
+   729→                    ) : (
+   730→                      "Create & Start Interview"
+   731→                    )}
+   732→                  </Button>
+   733→                </DialogFooter>
+   734→              </DialogContent>
+   735→            </Dialog>
+   736→          </div>
+   737→        </motion.div>
+   738→
+   739→        {/* ── Statistics Grid ─────────────────────────────── */}
+   740→        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+   741→          {statCards.map((stat, idx) => (
+   742→            <motion.div
+   743→              key={stat.label}
+   744→              initial={{ opacity: 0, y: 16 }}
+   745→              animate={{ opacity: 1, y: 0 }}
+   746→              transition={{ duration: 0.4, delay: 0.1 + idx * 0.08 }}
+   747→              className="group relative flex items-center gap-3.5 rounded-xl border border-border/60 bg-card p-4 sm:p-5 shadow-[0_1px_3px_0_rgb(0_0_0/0.04),0_1px_2px_-1px_rgb(0_0_0/0.04)] hover:shadow-lg hover:shadow-emerald-500/5 hover:border-emerald-200 dark:hover:border-emerald-800/60 transition-all duration-300 cursor-default overflow-hidden"
+   748→            >
+   749→              {/* Subtle gradient overlay on hover */}
+   750→              <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/0 to-teal-50/0 group-hover:from-emerald-50/60 group-hover:to-teal-50/30 dark:group-hover:from-emerald-950/20 dark:group-hover:to-teal-950/10 transition-all duration-300" />
+   751→              <div className={`relative flex items-center justify-center w-12 h-12 rounded-xl ${stat.bg} ${stat.color} shrink-0 shadow-sm ring-1 ring-black/[0.04] dark:ring-white/[0.04]`}>
+   752→                <stat.icon className="w-5.5 h-5.5" />
+   753→              </div>
+   754→              <div className="relative min-w-0">
+   755→                <motion.p
+   756→                  className="text-2xl sm:text-3xl font-extrabold leading-none tabular-nums tracking-tight"
+   757→                  key={stat.value}
+   758→                  initial={{ scale: 1.15, opacity: 0 }}
+   759→                  animate={{ scale: 1, opacity: 1 }}
+   760→                  transition={{ duration: 0.3 }}
+   761→                >
+   762→                  {stat.value}
+   763→                </motion.p>
+   764→                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1.5 font-medium">{stat.label}</p>
+   765→              </div>
+   766→            </motion.div>
+   767→          ))}
+   768→        </div>
+   769→
+   770→        {/* ── How It Works Section ────────────────────────── */}
+   771→        <div className="mb-8">
+   772→          <HowItWorks />
+   773→        </div>
+   774→
+   775→        {/* ── Quick-Start Templates ────────────────────────── */}
+   776→        <motion.div
+   777→          initial={{ opacity: 0, y: 16 }}
+   778→          animate={{ opacity: 1, y: 0 }}
+   779→          transition={{ duration: 0.5, delay: 0.2 }}
+   780→          className="mb-8"
+   781→        >
+   782→          <ProjectTemplates onSelectTemplate={onSelectTemplate} />
+   783→        </motion.div>
+   784→
+   785→        {/* ── Project List Section ────────────────────────── */}
+   786→        <section aria-labelledby="projects-heading" className="mb-10">
+   787→          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+   788→            <div className="flex items-center gap-2">
+   789→              <FolderOpen className="w-5 h-5 text-emerald-600" />
+   790→              <h2 id="projects-heading" className="text-lg font-semibold">
+   791→                Projects
+   792→              </h2>
+   793→              {projects.length > 0 && (
+   794→                <Badge variant="secondary" className="ml-1 text-xs">
+   795→                  {projects.length}
+   796→                </Badge>
+   797→              )}
+   798→            </div>
+   799→            <div className="flex items-center gap-2 sm:ml-auto">
+   800→              {projects.length > 0 && (
+   801→                <>
+   802→                  <div className="relative sm:max-w-[180px] flex-1 sm:flex-none">
+   803→                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+   804→                    <Input
+   805→                      placeholder="Search projects…"
+   806→                      value={searchQuery}
+   807→                      onChange={(e) => setSearchQuery(e.target.value)}
+   808→                      className="pl-8 h-8 text-sm"
+   809→                    />
+   810→                    {searchQuery && (
+   811→                      <button
+   812→                        onClick={() => setSearchQuery("")}
+   813→                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   814→                        aria-label="Clear search"
+   815→                      >
+   816→                        <X className="h-3.5 w-3.5" />
+   817→                      </button>
+   818→                    )}
+   819→                  </div>
+   820→                  <button
+   821→                    onClick={() => { setSortDir((d) => d === "asc" ? "desc" : "asc"); }}
+   822→                    className="flex items-center gap-1 h-8 px-2.5 rounded-md border text-xs text-muted-foreground hover:bg-accent/50 transition-colors shrink-0"
+   823→                    aria-label="Toggle sort direction"
+   824→                    title={`Sort ${sortDir === "asc" ? "ascending" : "descending"}`}
+   825→                  >
+   826→                    <ArrowUpDown className="h-3.5 w-3.5" />
+   827→                    <span className="hidden sm:inline">{sortDir === "asc" ? "↑" : "↓"}</span>
+   828→                  </button>
+   829→                  <select
+   830→                    value={sortBy}
+   831→                    onChange={(e) => setSortBy(e.target.value as SortKey)}
+   832→                    className="h-8 px-2 rounded-md border text-xs bg-background text-muted-foreground hover:bg-accent/50 transition-colors cursor-pointer appearance-none pr-7"
+   833→                    aria-label="Sort by"
+   834→                  >
+   835→                    <option value="updatedAt">Last Updated</option>
+   836→                    <option value="createdAt">Created</option>
+   837→                    <option value="name">Name</option>
+   838→                    <option value="status">Status</option>
+   839→                  </select>
+   840→                  <select
+   841→                    value={filterStatus}
+   842→                    onChange={(e) => setFilterStatus(e.target.value)}
+   843→                    className="h-8 px-2 rounded-md border text-xs bg-background text-muted-foreground hover:bg-accent/50 transition-colors cursor-pointer appearance-none pr-7"
+   844→                    aria-label="Filter by status"
+   845→                  >
+   846→                    <option value="all">All Status</option>
+   847→                    <option value="EMPTY">Empty</option>
+   848→                    <option value="PARTIAL">In Progress</option>
+   849→                    <option value="DISCOVERING">Discovering</option>
+   850→                    <option value="COMPLETE">Complete</option>
+   851→                    <option value="REVIEW_PENDING">Review Pending</option>
+   852→                    <option value="VALIDATED">Validated</option>
+   853→                    <option value="DPR_READY">DPR Ready</option>
+   854→                  </select>
+   855→                </>
+   856→              )}
+   857→            </div>
+   858→          </div>
+   859→
+   860→          {loading ? (
+   861→            <div className="space-y-3">
+   862→              <Skeleton className="h-28 w-full rounded-xl" />
+   863→              <Skeleton className="h-28 w-full rounded-xl" />
+   864→              <Skeleton className="h-28 w-full rounded-xl" />
+   865→            </div>
+   866→          ) : projects.length === 0 ? (
+   867→            <motion.div
+   868→              initial={{ opacity: 0, y: 12 }}
+   869→              animate={{ opacity: 1, y: 0 }}
+   870→              className="rounded-xl border border-dashed border-emerald-300 dark:border-emerald-700 bg-gradient-to-b from-emerald-50/50 to-transparent dark:from-emerald-950/20 dark:to-transparent p-10 sm:p-14 text-center"
+   871→            >
+   872→              <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900/40 dark:to-emerald-800/30 flex items-center justify-center mb-4 shadow-sm">
+   873→                <Zap className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+   874→              </div>
+   875→              <h3 className="text-base font-semibold mb-1.5">No projects yet</h3>
+   876→              <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-2">
+   877→                Create your first PMEGP application or pick a template above.
+   878→                The AI interview will guide you through every section.
+   879→              </p>
+   880→              <p className="text-xs text-muted-foreground/70 mb-5">
+   881→                Tip: Use the <strong>Quick-Start Templates</strong> to get started in seconds
+   882→              </p>
+   883→              <div className="flex items-center justify-center gap-3">
+   884→                <Button
+   885→                  className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   886→                  onClick={onCreateClick}
+   887→                >
+   888→                  <Plus className="w-4 h-4 mr-2" />
+   889→                  Create New Project
+   890→                </Button>
+   891→              </div>
+   892→            </motion.div>
+   893→          ) : filteredProjects.length === 0 ? (
+   894→            <div className="rounded-xl border bg-card p-8 text-center">
+   895→              <Search className="w-8 h-8 mx-auto mb-3 text-muted-foreground/50" />
+   896→              <p className="text-sm text-muted-foreground mb-1">
+   897→                No projects match &ldquo;{searchQuery}&rdquo;
+   898→              </p>
+   899→              {filterStatus !== "all" && (
+   900→                <p className="text-xs text-muted-foreground/70">
+   901→                  Also filtering by: {STATUS_LABEL[filterStatus] ?? filterStatus}
+   902→                </p>
+   903→              )}
+   904→            </div>
+   905→          ) : (
+   906→            <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1 custom-scrollbar">
+   907→              {filteredProjects.map((project) => (
+   908→                <ProjectCard
+   909→                  key={project.id}
+   910→                  id={project.id}
+   911→                  name={project.name}
+   912→                  status={project.status}
+   913→                  createdAt={project.createdAt}
+   914→                  updatedAt={project.updatedAt}
+   915→                  onOpen={() => onProjectClick(project)}
+   916→                  onDelete={() => onDeleteProject(project.id, project.name)}
+   917→                  onRename={(newName) => onRenameProject(project.id, newName)}
+   918→                  formatDate={formatIndianDate}
+   919→                />
+   920→              ))}
+   921→            </div>
+   922→          )}
+   923→        </section>
+   924→
+   925→        {/* ── Analytics + Activity ────────────────────────── */}
+   926→        <div className="grid lg:grid-cols-3 gap-6 mb-10">
+   927→          <div className="lg:col-span-2">
+   928→            <ProjectAnalytics projects={projects} />
+   929→          </div>
+   930→          <div>
+   931→            <ActivityFeed />
+   932→          </div>
+   933→        </div>
+   934→
+   935→        {/* ── Quick Tools Section ─────────────────────────── */}
+   936→        <section aria-labelledby="tools-heading" className="mb-10">
+   937→          <div className="flex items-center gap-2 mb-4">
+   938→            <Sparkles className="w-5 h-5 text-emerald-600" />
+   939→            <h2 id="tools-heading" className="text-lg font-semibold">
+   940→              Quick Tools
+   941→            </h2>
+   942→            <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full ml-1">
+   943→              {quickTools.length} tools
+   944→            </span>
+   945→          </div>
+   946→          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+   947→            {quickTools.map((tool) => {
+   948→              const isOpen = openTool === tool.id;
+   949→              return (
+   950→                <Collapsible
+   951→                  key={tool.id}
+   952→                  open={isOpen}
+   953→                  onOpenChange={(open) => setOpenTool(open ? tool.id : null)}
+   954→                >
+   955→                  <Card
+   956→                    className={`group hover:shadow-md transition-all duration-200 cursor-pointer border border-border/50 shadow-[0_1px_2px_0_rgb(0_0_0/0.04)] ${isOpen ? "ring-2 ring-emerald-400/30 dark:ring-emerald-600/30 shadow-emerald-500/5 border-emerald-200 dark:border-emerald-800/50" : "hover:border-emerald-200/70 dark:hover:border-emerald-800/40"}`}
+   957→                    onClick={() => setOpenTool(isOpen ? null : tool.id)}
+   958→                  >
+   959→                    <CollapsibleTrigger asChild>
+   960→                      <CardHeader className="pb-3">
+   961→                        <div className="flex items-center justify-between">
+   962→                          <div className="flex items-center gap-3">
+   963→                            <div className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 shadow-sm ${isOpen ? "bg-emerald-200 dark:bg-emerald-800/50 text-emerald-800 dark:text-emerald-300 shadow-emerald-500/10" : "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"}`}>
+   964→                              <tool.icon className="w-[18px] h-[18px]" />
+   965→                            </div>
+   966→                            <div className="text-left min-w-0">
+   967→                              <CardTitle className="text-[13px] font-semibold leading-tight">{tool.title}</CardTitle>
+   968→                              <CardDescription className="text-[11px] mt-0.5 leading-relaxed">
+   969→                                {tool.description}
+   970→                              </CardDescription>
+   971→                            </div>
+   972→                          </div>
+   973→                          <ChevronDown
+   974→                            className={`h-4 w-4 text-muted-foreground/60 transition-transform duration-200 shrink-0 ${isOpen ? "rotate-180 text-emerald-600" : ""}`}
+   975→                          />
+   976→                        </div>
+   977→                      </CardHeader>
+   978→                    </CollapsibleTrigger>
+   979→                    <CollapsibleContent>
+   980→                      <CardContent className="pt-0">
+   981→                        <Separator className="mb-4" />
+   982→                        {tool.content}
+   983→                      </CardContent>
+   984→                    </CollapsibleContent>
+   985→                  </Card>
+   986→                </Collapsible>
+   987→              );
+   988→            })}
+   989→          </div>
+   990→        </section>
+   991→      </main>
+   992→
+   993→      {/* ── Footer ──────────────────────────────────────────── */}
+   994→      <footer className="border-t border-border/50 bg-gradient-to-b from-muted/30 to-muted/50 mt-auto">
+   995→        <div className="max-w-6xl mx-auto px-4 py-8 sm:px-6">
+   996→          <div className="grid sm:grid-cols-3 gap-8 mb-6">
+   997→            <div>
+   998→              <div className="flex items-center gap-2.5 mb-3">
+   999→                <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-sm">
+  1000→                  <IndianRupee className="w-3.5 h-3.5" />
+  1001→                </div>
+  1002→                <span className="text-sm font-bold tracking-tight">PMEGP Assistant</span>
+  1003→              </div>
+  1004→              <p className="text-xs text-muted-foreground leading-relaxed">
+  1005→                AI-powered project application builder for the Prime Minister&apos;s
+  1006→                Employment Generation Programme. Build complete DPRs in minutes.
+  1007→              </p>
+  1008→            </div>
+  1009→            <div>
+  1010→              <p className="text-[11px] font-semibold uppercase tracking-wider text-foreground mb-3">Quick Links</p>
+  1011→              <div className="space-y-2">
+  1012→                {[
+  1013→                  { label: "KVIC PMEGP Portal", href: "https://www.kvic.org.in/pmegp" },
+  1014→                  { label: "MoMSME", href: "https://msme.gov.in" },
+  1015→                  { label: "Udyam Registration", href: "https://www.udyamregistration.gov.in" },
+  1016→                ].map((link) => (
+  1017→                  <a
+  1018→                    key={link.href}
+  1019→                    href={link.href}
+  1020→                    target="_blank"
+  1021→                    rel="noopener noreferrer"
+  1022→                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors group"
+  1023→                  >
+  1024→                    {link.label}
+  1025→                    <svg className="w-3 h-3 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" /></svg>
+  1026→                  </a>
+  1027→                ))}
+  1028→              </div>
+  1029→            </div>
+  1030→            <div>
+  1031→              <p className="text-[11px] font-semibold uppercase tracking-wider text-foreground mb-3">PMEGP Highlights</p>
+  1032→              <div className="space-y-2.5">
+  1033→                {[
+  1034→                  { label: "Max Project Cost", value: "₹25,00,000" },
+  1035→                  { label: "Subsidy Range", value: "15% – 35%" },
+  1036→                  { label: "Age Eligibility", value: "Above 18 years" },
+  1037→                  { label: "Implementing Agencies", value: "KVIC / KVIB / DRDA" },
+  1038→                ].map((item) => (
+  1039→                  <div key={item.label} className="flex justify-between items-baseline gap-3">
+  1040→                    <span className="text-xs text-muted-foreground">{item.label}</span>
+  1041→                    <span className="text-xs font-semibold text-foreground tabular-nums">{item.value}</span>
+  1042→                  </div>
+  1043→                ))}
+  1044→              </div>
+  1045→            </div>
+  1046→          </div>
+  1047→          <Separator className="my-5 bg-border/50" />
+  1048→          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+  1049→            <p className="text-[11px] text-muted-foreground/60">
+  1050→              All calculations are indicative. Verify against latest KVIC/MoMSME guidelines before submission.
+  1051→            </p>
+  1052→            <p className="text-[11px] text-muted-foreground/40">
+  1053→              Built with AI · Next.js 16 · TypeScript
+  1054→            </p>
+  1055→          </div>
+  1056→        </div>
+  1057→      </footer>
+  1058→    </div>
+  1059→  );
+  1060→}
+  1061→
+  1062→// ── Status View ────────────────────────────────────────────────────────────
+  1063→
+  1064→// ── Success Checkmark Animation ─────────────────────────────────────────────
+  1065→
+  1066→function SuccessCheckAnimation() {
+  1067→  const radius = 36;
+  1068→  const circumference = 2 * Math.PI * radius;
+  1069→  const checkPathLength = 40;
+  1070→
+  1071→  return (
+  1072→    <div className="relative flex items-center justify-center w-24 h-24 mx-auto">
+  1073→      <motion.svg
+  1074→        width="96"
+  1075→        height="96"
+  1076→        viewBox="0 0 96 96"
+  1077→        className="-rotate-90"
+  1078→      >
+  1079→        {/* Background circle */}
+  1080→        <circle
+  1081→          cx="48"
+  1082→          cy="48"
+  1083→          r={radius}
+  1084→          fill="none"
+  1085→          stroke="currentColor"
+  1086→          strokeWidth="4"
+  1087→          className="text-emerald-200 dark:text-emerald-900/60"
+  1088→        />
+  1089→        {/* Animated ring */}
+  1090→        <motion.circle
+  1091→          cx="48"
+  1092→          cy="48"
+  1093→          r={radius}
+  1094→          fill="none"
+  1095→          stroke="currentColor"
+  1096→          strokeWidth="4"
+  1097→          strokeLinecap="round"
+  1098→          className="text-emerald-500"
+  1099→          strokeDasharray={circumference}
+  1100→          initial={{ strokeDashoffset: circumference }}
+  1101→          animate={{ strokeDashoffset: 0 }}
+  1102→          transition={{ duration: 0.8, ease: "easeInOut" }}
+  1103→        />
+  1104→        {/* Checkmark */}
+  1105→        <motion.path
+  1106→          d="M30 50 L43 63 L66 37"
+  1107→          fill="none"
+  1108→          stroke="currentColor"
+  1109→          strokeWidth="4"
+  1110→          strokeLinecap="round"
+  1111→          strokeLinejoin="round"
+  1112→          className="text-emerald-600 dark:text-emerald-400"
+  1113→          strokeDasharray={checkPathLength}
+  1114→          strokeDashoffset={checkPathLength}
+  1115→          initial={{ strokeDashoffset: checkPathLength }}
+  1116→          animate={{ strokeDashoffset: 0 }}
+  1117→          transition={{ duration: 0.5, ease: "easeOut", delay: 0.7 }}
+  1118→          style={{ transform: "rotate(0deg)", transformOrigin: "center" }}
+  1119→        />
+  1120→      </motion.svg>
+  1121→      {/* Glow pulse behind */}
+  1122→      <motion.div
+  1123→        className="absolute inset-0 rounded-full bg-emerald-400/20 blur-xl"
+  1124→        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+  1125→        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+  1126→      />
+  1127→    </div>
+  1128→  );
+  1129→}
+  1130→
+  1131→// ── Timeline Step ───────────────────────────────────────────────────────────
+  1132→
+  1133→function TimelineStep({
+  1134→  step,
+  1135→  title,
+  1136→  description,
+  1137→  isActive,
+  1138→  isCompleted,
+  1139→  delay,
+  1140→}: {
+  1141→  step: number;
+  1142→  title: string;
+  1143→  description: string;
+  1144→  isActive: boolean;
+  1145→  isCompleted: boolean;
+  1146→  delay: number;
+  1147→}) {
+  1148→  return (
+  1149→    <motion.div
+  1150→      initial={{ opacity: 0, x: -16 }}
+  1151→      animate={{ opacity: 1, x: 0 }}
+  1152→      transition={{ duration: 0.35, delay }}
+  1153→      className="relative flex gap-4"
+  1154→    >
+  1155→      {/* Vertical line + circle */}
+  1156→      <div className="flex flex-col items-center">
+  1157→        <motion.div
+  1158→          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 z-10 ${
+  1159→            isCompleted
+  1160→              ? "bg-emerald-500 text-white"
+  1161→              : isActive
+  1162→                ? "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-400 ring-offset-2 ring-offset-background dark:ring-offset-background"
+  1163→                : "bg-muted text-muted-foreground"
+  1164→          }`}
+  1165→          animate={isActive && !isCompleted ? { scale: [1, 1.1, 1] } : {}}
+  1166→          transition={isActive && !isCompleted ? { duration: 1.5, repeat: Infinity, ease: "easeInOut" } : {}}
+  1167→        >
+  1168→          {isCompleted ? (
+  1169→            <CheckCircle2 className="w-4 h-4" />
+  1170→          ) : (
+  1171→            step
+  1172→          )}
+  1173→        </motion.div>
+  1174→        {/* Connecting line */}
+  1175→        <div className="w-0.5 flex-1 min-h-[24px] bg-border" />
+  1176→      </div>
+  1177→
+  1178→      {/* Content */}
+  1179→      <div className="pb-6 -mt-1">
+  1180→        <p className={`text-sm font-medium ${isCompleted ? "text-emerald-700 dark:text-emerald-300" : isActive ? "text-foreground" : "text-muted-foreground"}`}>
+  1181→          {title}
+  1182→        </p>
+  1183→        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+  1184→          {description}
+  1185→        </p>
+  1186→      </div>
+  1187→    </motion.div>
+  1188→  );
+  1189→}
+  1190→
+  1191→// ── Engine Stage Indicator ──────────────────────────────────────────────────
+  1192→
+  1193→function EngineStages({ currentStep }: { currentStep: number }) {
+  1194→  const stages = [
+  1195→    { label: "Interview", icon: <Briefcase className="w-3.5 h-3.5" /> },
+  1196→    { label: "Validation", icon: <ShieldCheck className="w-3.5 h-3.5" /> },
+  1197→    { label: "Eligibility", icon: <ClipboardCheck className="w-3.5 h-3.5" /> },
+  1198→    { label: "Financial", icon: <Calculator className="w-3.5 h-3.5" /> },
+  1199→    { label: "DPR Gen", icon: <FileText className="w-3.5 h-3.5" /> },
+  1200→  ];
+  1201→
+  1202→  return (
+  1203→    <div className="flex items-center gap-1">
+  1204→      {stages.map((stage, i) => {
+  1205→        const done = i <= currentStep;
+  1206→        return (
+  1207→          <div key={stage.label} className="flex items-center gap-1">
+  1208→            <motion.div
+  1209→              initial={{ scale: 0.8, opacity: 0 }}
+  1210→              animate={{ scale: 1, opacity: 1 }}
+  1211→              transition={{ delay: i * 0.1 + 0.5, duration: 0.3 }}
+  1212→              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[10px] font-medium whitespace-nowrap transition-colors ${
+  1213→                done
+  1214→                  ? "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300"
+  1215→                  : "bg-muted text-muted-foreground"
+  1216→              }`}
+  1217→            >
+  1218→              {stage.icon}
+  1219→              {stage.label}
+  1220→            </motion.div>
+  1221→            {i < stages.length - 1 && (
+  1222→              <div className={`w-4 h-0.5 ${i < currentStep ? "bg-emerald-400" : "bg-border"}`} />
+  1223→            )}
+  1224→          </div>
+  1225→        );
+  1226→      })}
+  1227→    </div>
+  1228→  );
+  1229→}
+  1230→
+  1231→// ── Status View ─────────────────────────────────────────────────────────────
+  1232→
+  1233→function StatusView({
+  1234→  profile,
+  1235→  onGoBack,
+  1236→}: {
+  1237→  profile: ProjectProfile | null;
+  1238→  onGoBack: () => void;
+  1239→}) {
+  1240→  return (
+  1241→    <div className="min-h-screen flex flex-col bg-background">
+  1242→      <header className="border-b bg-card shrink-0">
+  1243→        <div className="max-w-4xl mx-auto px-4 py-4 sm:px-6 flex items-center gap-3">
+  1244→          <Button variant="ghost" size="icon" onClick={onGoBack} aria-label="Back to dashboard">
+  1245→            <ArrowLeft className="w-4 h-4" />
+  1246→          </Button>
+  1247→          <div className="flex-1">
+  1248→            <h1 className="text-lg font-semibold">Project Status</h1>
+  1249→            <p className="text-xs text-muted-foreground">Your application is being processed</p>
+  1250→          </div>
+  1251→          <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+  1252→        </div>
+  1253→      </header>
+  1254→
+  1255→      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8 sm:px-6">
+  1256→        {profile ? (
+  1257→          <div className="space-y-6">
+  1258→            {/* Success animation */}
+  1259→            <motion.div
+  1260→              initial={{ opacity: 0, y: -10 }}
+  1261→              animate={{ opacity: 1, y: 0 }}
+  1262→              transition={{ duration: 0.4 }}
+  1263→              className="text-center pt-2 pb-4"
+  1264→            >
+  1265→              <SuccessCheckAnimation />
+  1266→              <motion.h2
+  1267→                initial={{ opacity: 0, y: 8 }}
+  1268→                animate={{ opacity: 1, y: 0 }}
+  1269→                transition={{ delay: 1.0, duration: 0.4 }}
+  1270→                className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mt-4"
+  1271→              >
+  1272→                Application Confirmed!
+  1273→              </motion.h2>
+  1274→              <motion.p
+  1275→                initial={{ opacity: 0 }}
+  1276→                animate={{ opacity: 1 }}
+  1277→                transition={{ delay: 1.2, duration: 0.4 }}
+  1278→                className="text-sm text-muted-foreground mt-1 max-w-md mx-auto"
+  1279→              >
+  1280→                Your project profile has been submitted and will go through
+  1281→                validation, eligibility checks, and financial analysis.
+  1282→              </motion.p>
+  1283→            </motion.div>
+  1284→
+  1285→            {/* Engine stage progress indicator */}
+  1286→            <motion.div
+  1287→              initial={{ opacity: 0, y: 12 }}
+  1288→              animate={{ opacity: 1, y: 0 }}
+  1289→              transition={{ delay: 1.3, duration: 0.4 }}
+  1290→              className="p-4 rounded-xl border bg-card overflow-x-auto"
+  1291→            >
+  1292→              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium mb-3">Engine Pipeline</p>
+  1293→              <EngineStages currentStep={0} />
+  1294→            </motion.div>
+  1295→
+  1296→            {/* Project Summary with icons */}
+  1297→            <motion.div
+  1298→              initial={{ opacity: 0, y: 12 }}
+  1299→              animate={{ opacity: 1, y: 0 }}
+  1300→              transition={{ delay: 1.4, duration: 0.4 }}
+  1301→            >
+  1302→              <Card>
+  1303→                <CardHeader className="pb-3">
+  1304→                  <CardTitle className="text-sm">Project Summary</CardTitle>
+  1305→                </CardHeader>
+  1306→                <CardContent>
+  1307→                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  1308→                    <SummaryItem
+  1309→                      icon={<Building2 className="w-4 h-4" />}
+  1310→                      iconBg="bg-violet-100 dark:bg-violet-900/40"
+  1311→                      iconColor="text-violet-600 dark:text-violet-400"
+  1312→                      label="Business"
+  1313→                      value={profile.business?.name || profile.business?.description || "—"}
+  1314→                    />
+  1315→                    <SummaryItem
+  1316→                      icon={<MapPin className="w-4 h-4" />}
+  1317→                      iconBg="bg-rose-100 dark:bg-rose-900/40"
+  1318→                      iconColor="text-rose-600 dark:text-rose-400"
+  1319→                      label="Location"
+  1320→                      value={profile.location?.district && profile.location?.state ? `${profile.location.district}, ${profile.location.state}` : "—"}
+  1321→                    />
+  1322→                    <SummaryItem
+  1323→                      icon={<IndianRupee className="w-4 h-4" />}
+  1324→                      iconBg="bg-emerald-100 dark:bg-emerald-900/40"
+  1325→                      iconColor="text-emerald-600 dark:text-emerald-400"
+  1326→                      label="Project Cost"
+  1327→                      value={formatIndianCurrency(profile.financials?.totalProjectCost ?? 0)}
+  1328→                    />
+  1329→                    <SummaryItem
+  1330→                      icon={<Users className="w-4 h-4" />}
+  1331→                      iconBg="bg-orange-100 dark:bg-orange-900/40"
+  1332→                      iconColor="text-orange-600 dark:text-orange-400"
+  1333→                      label="Total Employment"
+  1334→                      value={String(profile.employees?.totalEmployment ?? 0)}
+  1335→                    />
+  1336→                  </div>
+  1337→                  <Separator className="my-3" />
+  1338→                  <div className="grid grid-cols-2 gap-3">
+  1339→                    <Row label="NIC Code" value={profile.business?.nicCode ? `${profile.business.nicCode} — ${profile.business.nicDescription}` : "—"} />
+  1340→                    <Row label="Sector" value={profile.business?.sector ?? "—"} />
+  1341→                    <Row label="Area Type" value={profile.location?.area ?? "—"} />
+  1342→                    <Row label="Completeness" value={`${profile.validation?.completeness ?? 0}%`} />
+  1343→                  </div>
+  1344→                </CardContent>
+  1345→              </Card>
+  1346→            </motion.div>
+  1347→
+  1348→            {/* Next Steps — Vertical Timeline */}
+  1349→            <motion.div
+  1350→              initial={{ opacity: 0, y: 12 }}
+  1351→              animate={{ opacity: 1, y: 0 }}
+  1352→              transition={{ delay: 1.5, duration: 0.4 }}
+  1353→            >
+  1354→              <Card>
+  1355→                <CardHeader className="pb-3">
+  1356→                  <CardTitle className="text-sm">Next Steps</CardTitle>
+  1357→                </CardHeader>
+  1358→                <CardContent>
+  1359→                  <TimelineStep
+  1360→                    step={1}
+  1361→                    title="Validation Engine"
+  1362→                    description="Check all fields for consistency and completeness"
+  1363→                    isCompleted={true}
+  1364→                    isActive={false}
+  1365→                    delay={1.6}
+  1366→                  />
+  1367→                  <TimelineStep
+  1368→                    step={2}
+  1369→                    title="Eligibility Engine"
+  1370→                    description="Verify PMEGP scheme eligibility based on category, area, and project parameters"
+  1371→                    isCompleted={false}
+  1372→                    isActive={true}
+  1373→                    delay={1.75}
+  1374→                  />
+  1375→                  <TimelineStep
+  1376→                    step={3}
+  1377→                    title="Financial Engine"
+  1378→                    description="Generate detailed financial projections, subsidy calculations, and repayment schedules"
+  1379→                    isCompleted={false}
+  1380→                    isActive={false}
+  1381→                    delay={1.9}
+  1382→                  />
+  1383→                  <TimelineStep
+  1384→                    step={4}
+  1385→                    title="DPR Generation"
+  1386→                    description="Detailed Project Report will be generated for download and submission"
+  1387→                    isCompleted={false}
+  1388→                    isActive={false}
+  1389→                    delay={2.05}
+  1390→                  />
+  1391→                </CardContent>
+  1392→              </Card>
+  1393→            </motion.div>
+  1394→
+  1395→            {/* What You Can Do — Action Cards */}
+  1396→            <motion.div
+  1397→              initial={{ opacity: 0, y: 12 }}
+  1398→              animate={{ opacity: 1, y: 0 }}
+  1399→              transition={{ delay: 1.7, duration: 0.4 }}
+  1400→            >
+  1401→              <h3 className="text-sm font-semibold mb-3">What You Can Do</h3>
+  1402→              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+  1403→                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+  1404→                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+  1405→                    <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+  1406→                      <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+  1407→                        <Eye className="w-5 h-5" />
+  1408→                      </div>
+  1409→                      <span className="text-sm font-medium">View Application</span>
+  1410→                      <span className="text-[10px] text-muted-foreground">Review submitted details</span>
+  1411→                    </CardContent>
+  1412→                  </Card>
+  1413→                </motion.div>
+  1414→                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
+  1415→                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+  1416→                    <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+  1417→                      <div className="w-10 h-10 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 flex items-center justify-center">
+  1418→                        <Download className="w-5 h-5" />
+  1419→                      </div>
+  1420→                      <span className="text-sm font-medium">Download DPR</span>
+  1421→                      <span className="text-[10px] text-muted-foreground">Get your project report</span>
+  1422→                    </CardContent>
+  1423→                  </Card>
+  1424→                </motion.div>
+  1425→                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={onGoBack}>
+  1426→                  <Card className="cursor-pointer hover:shadow-md transition-shadow">
+  1427→                    <CardContent className="p-4 flex flex-col items-center text-center gap-2">
+  1428→                      <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+  1429→                        <Plus className="w-5 h-5" />
+  1430→                      </div>
+  1431→                      <span className="text-sm font-medium">Start New Project</span>
+  1432→                      <span className="text-[10px] text-muted-foreground">Begin another application</span>
+  1433→                    </CardContent>
+  1434→                  </Card>
+  1435→                </motion.div>
+  1436→              </div>
+  1437→            </motion.div>
+  1438→          </div>
+  1439→        ) : (
+  1440→          <div className="flex flex-col items-center justify-center py-16 text-center">
+  1441→            <SuccessCheckAnimation />
+  1442→            <h2 className="text-lg font-semibold mb-1">Confirmed!</h2>
+  1443→            <p className="text-sm text-muted-foreground max-w-sm">
+  1444→              Your project has been confirmed. Go back to the dashboard to see
+  1445→              your projects.
+  1446→            </p>
+  1447→          </div>
+  1448→        )}
+  1449→
+  1450→        <div className="mt-8 mb-8">
+  1451→          <Button variant="outline" onClick={onGoBack} className="w-full sm:w-auto">
+  1452→            <ArrowLeft className="w-4 h-4 mr-2" />
+  1453→            Back to Dashboard
+  1454→          </Button>
+  1455→        </div>
+  1456→      </main>
+  1457→
+  1458→      <footer className="border-t border-border/50 bg-gradient-to-b from-muted/30 to-muted/50 mt-auto">
+  1459→        <div className="max-w-4xl mx-auto px-4 py-5 sm:px-6">
+  1460→          <p className="text-[11px] text-muted-foreground/50 text-center">
+  1461→            PMEGP Assistant — Processing complete. Further engines will run
+  1462→            automatically.
+  1463→          </p>
+  1464→        </div>
+  1465→      </footer>
+  1466→    </div>
+  1467→  );
+  1468→}
+  1469→
+  1470→// ── Summary Item with Icon ──────────────────────────────────────────────────
+  1471→
+  1472→function SummaryItem({
+  1473→  icon,
+  1474→  iconBg,
+  1475→  iconColor,
+  1476→  label,
+  1477→  value,
+  1478→}: {
+  1479→  icon: React.ReactNode;
+  1480→  iconBg: string;
+  1481→  iconColor: string;
+  1482→  label: string;
+  1483→  value: string;
+  1484→}) {
+  1485→  return (
+  1486→    <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
+  1487→      <div className={`w-8 h-8 rounded-lg ${iconBg} ${iconColor} flex items-center justify-center shrink-0`}>
+  1488→        {icon}
+  1489→      </div>
+  1490→      <div className="min-w-0">
+  1491→        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</p>
+  1492→        <p className="text-sm font-medium truncate">{value}</p>
+  1493→      </div>
+  1494→    </div>
+  1495→  );
+  1496→}
+  1497→
+  1498→// ── Tiny helper ────────────────────────────────────────────────────────────
+  1499→
+  1500→function Row({ label, value }: { label: string; value: string }) {
+  1501→  return (
+  1502→    <div className="flex justify-between gap-4">
+  1503→      <span className="text-muted-foreground text-xs shrink-0">{label}</span>
+  1504→      <span className="font-medium text-xs text-right truncate">{value}</span>
+  1505→    </div>
+  1506→  );
+  1507→}
