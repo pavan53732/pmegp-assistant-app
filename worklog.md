@@ -65,3 +65,34 @@ Stage Summary:
   • Update src/features/ai/interview-store/interview-store.ts to `await getProjectRepository()` once and cache the resolved instance.
   • App startup (src/main.tsx or src/App.tsx) should call `await initDB()` before rendering routes that touch the repo.
   • Once @capacitor-community/sqlite + secure-storage are installed, run a native smoke test (create/list/update/appendChatMessages) — the exact plugin API quirks (setDatabaseSubstitution signature, createConnection arg form, open() availability) may need a one-line tweak in createNativeAdapter().
+
+---
+Task ID: 1 (Wave 1)
+Agent: orchestrator (main)
+Task: Architectural correction — Vite + Capacitor scaffold, DB migration, engine preservation, verify build.
+
+Work Log:
+- Wrote corrected package.json: Capacitor 8 (not 7 — sqlite plugin has no v7), @capacitor-community/sqlite ^8.1.0, capacitor-secure-storage-plugin ^0.13.0 (the official @capacitor/secure-storage does not exist), pdf-lib, @noble/ed25519, tesseract.js; removed next/prisma/pdfkit/z-ai-web-dev-sdk/next-auth/next-intl.
+- Wrote vite.config.ts (port 3000 for Caddy gateway, @/ alias, vitest config), tsconfig.json (strict, vite-style, excludes _legacy + tests), index.html, src/main.tsx (BrowserRouter + QueryClient), src/App.tsx (scaffold home + /engines routes).
+- Wrote capacitor.config.ts: SQLite mode 'secret' (corrected from the self-contradictory 'no-encryption'), SplashScreen/StatusBar green theme.
+- Deleted: src/app/api/*, src/app/layout.tsx, src/app/page.tsx, src/lib/{db,pipeline-api,interview-api}.ts, src/services/*, next.config.ts, components.json, prisma/, db/, node_modules, .next.
+- Dispatched sub-agent 1-DB: built src/database/sqlite/{types,schema,migrations,connection,repositories,index}.ts + rewrote project-repository.ts as a re-export shim. DbAdapter interface (execute/run/query/executeTransaction); native branch uses @capacitor-community/sqlite + capacitor-secure-storage-plugin (SQLCipher passphrase from Keystore); web branch uses in-memory mock for dev.
+- Refactored repositories.ts: getProjectRepository() back to SYNC (captures getDB() promise; methods lazy-await) to avoid rippling async through InterviewStore.
+- Fixed database/interfaces.ts boundary violation: removed @/features/ai import; defined ChatMessageRecord locally.
+- Rewrote providers/index.ts: removed z-ai-web-dev-sdk path; getAIResponse(messages, connectionConfig, config?) — raw fetch to user's OpenAI-compatible endpoint only.
+- Fixed orchestrator.ts call sites (arg order swap) with providerConfig! guard.
+- Stubbed pdf-engine with pdf-lib (Wave 2 will do full 18-section layout).
+- Rewrote eslint.config.mjs (flat config, Vite/TS, import-boundary rule: engines/ cannot import features/ or providers/).
+- Moved legacy Next.js components (dashboard, interview, theme-toggle, etc.) to src/_legacy (excluded from tsc + eslint).
+- Fixed postcss.config.mjs (object-form plugins for Vite), vite.config.ts (vitest/config for test field).
+- bun install: 544 packages clean. typecheck: exit 0. lint: 0 errors / 13 warnings (unused-vars only).
+- Verified dev server: GET / returns Vite HTML shell + HMR; /src/main.tsx + /src/App.tsx serve as compiled modules (HTTP 200); zero runtime errors in dev.log.
+- Committed + pushed to main: bbf25d5.
+
+Stage Summary:
+- Wave 1 complete: Next.js → Vite + React 19 + Capacitor 8 scaffold builds, lints, and serves.
+- 5 core engines preserved (validation, financial, eligibility, knowledge, dpr). PDF engine stubbed (Wave 2). OCR engine unchanged (Wave 2). 3 new engines pending (Wave 2).
+- DB layer: Prisma removed; Capacitor SQLite (SQLCipher) + web dev mock in place; IProjectRepository implemented.
+- 8 blockers from the Stage B prompt documented + corrected (see main response).
+- Note: background dev server is reaped by the tool across commands (environment constraint); server proven working via in-command curl. Environment/preview panel restarts `bun run dev`.
+- Next: Wave 2 — 3 new engines (Import/Export, Update, Project) + PDF full rewrite + OCR Tesseract rewrite, in parallel sub-agents.
