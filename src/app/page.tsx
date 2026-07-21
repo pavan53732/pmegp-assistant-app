@@ -45,6 +45,7 @@ import {
   sendChatMessage,
 } from "@/lib/interview-api";
 import type { ProjectProfile } from "@/shared/types/project-profile";
+import type { ProjectStatus } from "@/shared/types/state-machine";
 
 // ── View type ──────────────────────────────────────────────────────────────
 
@@ -65,6 +66,8 @@ export default function Home() {
   const [reviewProfile, setReviewProfile] = useState<ProjectProfile | null>(null);
   const [confirming, setConfirming] = useState(false);
   const [statusProfile, setStatusProfile] = useState<ProjectProfile | null>(null);
+  const [statusProjectId, setStatusProjectId] = useState<string | null>(null);
+  const [statusProjectStatus, setStatusProjectStatus] = useState<ProjectStatus>("VALIDATED");
 
   // ── Load projects ──────────────────────────────────────────────
 
@@ -133,8 +136,12 @@ export default function Home() {
   // ── Open existing project ──────────────────────────────────────
 
   const handleOpenProject = useCallback(async (project: ProjectSummary) => {
-    if (project.status === "DPR_READY" || project.status === "VALIDATED") {
-      toast.info("This project has been confirmed.");
+    if (project.status === "DPR_READY" || project.status === "VALIDATED" || project.status === "ELIGIBILITY_READY" || project.status === "FINANCIAL_READY") {
+      // For confirmed/pipeline projects, navigate to status view
+      toast.info("Opening project pipeline.");
+      setStatusProjectId(project.id);
+      setStatusProfile(null);
+      setStatusProjectStatus(project.status as ProjectStatus);
       setView("status");
       return;
     }
@@ -198,6 +205,7 @@ export default function Home() {
     setInterviewProfile(null);
     setReviewProfile(null);
     setStatusProfile(null);
+    setStatusProjectId(null);
     setView("dashboard");
     reloadProjects();
   }, [reloadProjects]);
@@ -216,6 +224,8 @@ export default function Home() {
         setStatusProfile(res.profile);
         setReviewProfile(res.profile);
       }
+      setStatusProjectId(activeProjectId);
+      setStatusProjectStatus("VALIDATED");
       setView("status");
       toast.success("Project confirmed!");
     } catch (err) {
@@ -269,7 +279,12 @@ export default function Home() {
 
       {view === "status" && (
         <motion.div key="status" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
-          <StatusView profile={statusProfile} onGoBack={handleGoBack} />
+          <StatusView
+            profile={statusProfile}
+            projectId={statusProjectId}
+            projectStatus={statusProjectStatus}
+            onGoBack={handleGoBack}
+          />
         </motion.div>
       )}
     </AnimatePresence>
