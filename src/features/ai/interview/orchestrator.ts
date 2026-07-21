@@ -377,7 +377,7 @@ export class InterviewController {
         );
         this.messageHistory.push({ role: "user", content: extractionPrompt });
         try {
-          const aiResp = await getAIResponse(this.messageHistory, {}, this.providerConfig);
+          const aiResp = await getAIResponse(this.messageHistory, this.providerConfig!, {});
           if (aiResp.success && aiResp.content) {
             const parsed = parseAIExtractionResponse(aiResp.content, fieldsNeedingAI);
             aiExtractions.push(...parsed);
@@ -736,7 +736,7 @@ PMEGP is a government scheme for micro-enterprises with loans up to ₹25 lakh (
     }
 
     try {
-      const response = await getAIResponse(this.messageHistory, {}, this.providerConfig);
+      const response = await getAIResponse(this.messageHistory, this.providerConfig!, {});
 
       if (response.success && response.content) {
         return this.createAssistantMessage(response.content, phase);

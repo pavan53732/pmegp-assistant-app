@@ -1,6 +1,21 @@
 import type { ProjectProfile } from "@/shared/types/project-profile";
 import type { ProjectStatus } from "@/shared/types/state-machine";
-import type { ChatMessage } from "@/features/ai/interview/types";
+
+/**
+ * Opaque chat-message record persisted by the repository.
+ *
+ * The database layer must NOT import from `features/` (architecture boundary,
+ * doc 02). Chat history is stored as a JSON array; the repository treats each
+ * message as an opaque record. The features layer casts to its richer
+ * `ChatMessage` type when reading.
+ */
+export interface ChatMessageRecord {
+  id: string;
+  role: string;
+  content: string;
+  timestamp: string;
+  [key: string]: unknown;
+}
 
 /** Lightweight project summary for list views. */
 export interface ProjectSummary {
@@ -28,7 +43,7 @@ export interface IProjectRepository {
   updateStatus(id: string, status: ProjectStatus): Promise<void>;
   delete(id: string): Promise<void>;
   /** Fetch the chat message history for a project. */
-  getChatHistory(id: string): Promise<ChatMessage[]>;
+  getChatHistory(id: string): Promise<ChatMessageRecord[]>;
   /** Append messages to the chat history for a project. */
-  appendChatMessages(id: string, messages: ChatMessage[]): Promise<void>;
+  appendChatMessages(id: string, messages: ChatMessageRecord[]): Promise<void>;
 }
