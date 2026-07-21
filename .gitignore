@@ -52,3 +52,11 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# Tool artifacts (agent read results, screenshots, etc.)
+/tool-results/
+/download/
+
+# Runtime state
+.zscripts/dev.pid
+db/*.db

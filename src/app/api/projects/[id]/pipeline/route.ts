@@ -129,7 +129,7 @@ export async function POST(
       profile,
       currentStatus,
       step,
-      engineOutputs
+      engineOutputs as unknown as Record<string, unknown>
     );
 
     // ── Save results to the database ──

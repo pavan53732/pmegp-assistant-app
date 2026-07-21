@@ -1177,3 +1177,21 @@ Stage Summary:
 - Zero runtime errors confirmed via agent-browser QA
 - Dark mode support verified across all new components
 - Mobile responsiveness maintained throughout
+---
+Task ID: fix-pdfkit-fs-build-error
+Agent: main
+Task: Fix "Module not found: Can't resolve 'fs'" build error caused by pdfkit being imported in client component
+
+Work Log:
+- Identified import chain: pdfkit → pdf-engine → pipeline-service → status-view (client) → page.tsx
+- Created `/src/services/pipeline-constants.ts` — client-safe file with types, constants, and utility functions (no Node.js deps)
+- Refactored `/src/services/pipeline-service.ts` — now server-only, imports pdfkit engines, re-exports from constants
+- Updated `/src/components/dashboard/status-view.tsx` — imports `getPipelineStepIndex` from `pipeline-constants` instead of `pipeline-service`
+- Updated `/src/app/api/projects/[id]/pipeline/route.ts` — cast EngineOutputs for compatibility
+- Fixed TypeScript errors: missing default in switch, re-export scoping issues
+- Verified: `curl` returns HTTP 200, no pdfkit/fs errors in dev log
+
+Stage Summary:
+- Build error fully resolved — page compiles and renders in 5.8s
+- Architecture improvement: client/server boundary is now explicit for pipeline code
+- No regressions: lint passes, only pre-existing test file TS errors remain (unrelated)

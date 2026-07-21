@@ -41,7 +41,7 @@ import {
   downloadPdf,
   PIPELINE_STEPS_INFO,
 } from "@/lib/pipeline-api";
-import { getPipelineStepIndex } from "@/services/pipeline-service";
+import { getPipelineStepIndex } from "@/services/pipeline-constants";
 import type { ProjectProfile } from "@/shared/types/project-profile";
 import type { ProjectStatus } from "@/shared/types/state-machine";
 import type { PipelineStepResponse } from "@/lib/pipeline-api";

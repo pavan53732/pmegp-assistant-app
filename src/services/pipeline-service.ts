@@ -1,8 +1,7 @@
 // ─── Pipeline Service ──────────────────────────────────────────────────────
 // Pure orchestration service that executes engine pipeline steps.
-// No UI, no I/O except through injected data.
-// Each step validates the current status, runs the appropriate engine,
-// and returns results with the next status transition.
+// SERVER-ONLY — imports Node.js engines (including pdfkit).
+// Client-safe constants and types are in ./pipeline-constants.ts.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { ProjectProfile } from "@/shared/types/project-profile";
@@ -12,27 +11,16 @@ import { computeFinancials, type FinancialResult } from "@/engines/financial-eng
 import { generateDPR, type DprDocument } from "@/engines/dpr-engine";
 import { generatePdf } from "@/engines/pdf-engine";
 
-// ── Public Types ───────────────────────────────────────────────────────────
+// Import client-safe types and constants (also re-export for API route convenience).
+import type { PipelineStepResult } from "./pipeline-constants";
+import { PIPELINE_STEPS, VALID_STEPS } from "./pipeline-constants";
+export type { PipelineStepResult, PipelineStep, EngineOutputs } from "./pipeline-constants";
+export { PIPELINE_STEPS, VALID_STEPS, getPipelineStepIndex, getNextPipelineStep } from "./pipeline-constants";
 
-/** Result returned by a single pipeline step execution. */
-export interface PipelineStepResult {
-  /** Whether the step completed successfully. */
-  success: boolean;
-  /** The new project status after this step. */
-  status: ProjectStatus;
-  /** Step-specific output data. */
-  data: Record<string, unknown>;
-  /** Error messages (empty on success). */
-  errors: string[];
-  /** Warning messages (non-blocking issues). */
-  warnings: string[];
-}
-
-/** Valid pipeline step identifiers. */
-export type PipelineStep = "eligibility" | "financial" | "dpr" | "pdf";
+// ── Internal Constants ─────────────────────────────────────────────────────
 
 /** Required status before each pipeline step can execute. */
-const REQUIRED_STATUS: Record<PipelineStep, ProjectStatus> = {
+const REQUIRED_STATUS: Record<string, ProjectStatus> = {
   eligibility: "VALIDATED",
   financial: "ELIGIBILITY_READY",
   dpr: "FINANCIAL_READY",
@@ -40,36 +28,17 @@ const REQUIRED_STATUS: Record<PipelineStep, ProjectStatus> = {
 };
 
 /** Status transition after a successful step execution. */
-const NEXT_STATUS: Record<PipelineStep, ProjectStatus> = {
+const NEXT_STATUS: Record<string, ProjectStatus> = {
   eligibility: "ELIGIBILITY_READY",
   financial: "FINANCIAL_READY",
   dpr: "DPR_READY",
   pdf: "DPR_READY",
 };
 
-/** Ordered list of all pipeline steps. */
-export const PIPELINE_STEPS: PipelineStep[] = [
-  "eligibility",
-  "financial",
-  "dpr",
-  "pdf",
-];
+// ── Internal engine result storage interface (with engine-typed fields) ──
 
-/** Map from status to the step index (0-based) for determining progress. */
-export const STATUS_TO_STEP_INDEX: Record<string, number> = {
-  VALIDATED: 0,
-  ELIGIBILITY_READY: 1,
-  FINANCIAL_READY: 2,
-  DPR_READY: 3,
-};
-
-/** Valid step parameter values. */
-export const VALID_STEPS = new Set<string>(PIPELINE_STEPS);
-
-// ── Internal engine result storage interface ───────────────────────────────
-
-/** Stored engine outputs inside the profile's validation section (transient). */
-export interface EngineOutputs {
+/** Internal engine outputs with strongly-typed engine results. */
+interface InternalEngineOutputs {
   eligibilityResult?: EligibilityResult;
   financialResult?: FinancialResult;
   dprDocument?: DprDocument;
@@ -171,7 +140,7 @@ function runFinancialStep(profile: ProjectProfile): {
  */
 function runDprStep(
   profile: ProjectProfile,
-  engineOutputs: EngineOutputs
+  engineOutputs: InternalEngineOutputs
 ): {
   data: Record<string, unknown>;
   errors: string[];
@@ -216,7 +185,7 @@ function runDprStep(
  * Run the PDF engine to generate the printable document.
  * Requires the DPR document from the prior step.
  */
-function runPdfStep(engineOutputs: EngineOutputs): {
+function runPdfStep(engineOutputs: InternalEngineOutputs): {
   data: Record<string, unknown>;
   errors: string[];
   warnings: string[];
@@ -268,8 +237,8 @@ function runPdfStep(engineOutputs: EngineOutputs): {
 export function executePipelineStep(
   profile: ProjectProfile,
   currentStatus: ProjectStatus,
-  step: PipelineStep,
-  engineOutputs: EngineOutputs = {}
+  step: string,
+  engineOutputs: Record<string, unknown> = {}
 ): PipelineStepResult {
   // ── Validate step is recognized ──
   if (!VALID_STEPS.has(step)) {
@@ -284,13 +253,13 @@ export function executePipelineStep(
 
   // ── Validate current status matches the step's prerequisite ──
   const required = REQUIRED_STATUS[step];
-  if (currentStatus !== required) {
+  if (!required || currentStatus !== required) {
     return {
       success: false,
       status: currentStatus,
       data: {},
       errors: [
-        `Invalid status for step "${step}". Expected "${required}", got "${currentStatus}".`,
+        `Invalid status for step "${step}". Expected "${required ?? 'unknown'}", got "${currentStatus}".`,
       ],
       warnings: [],
     };
@@ -307,43 +276,27 @@ export function executePipelineStep(
       result = runFinancialStep(profile);
       break;
     case "dpr":
-      result = runDprStep(profile, engineOutputs);
+      result = runDprStep(profile, engineOutputs as InternalEngineOutputs);
       break;
     case "pdf":
-      result = runPdfStep(engineOutputs);
+      result = runPdfStep(engineOutputs as InternalEngineOutputs);
+      break;
+    default:
+      result = { data: {}, errors: [`Unhandled step: ${step}`], warnings: [] };
       break;
   }
 
   // ── Build response ──
   const hasErrors = result.errors.length > 0;
+  const nextStatus = NEXT_STATUS[step];
 
   return {
     success: !hasErrors,
-    status: hasErrors ? currentStatus : NEXT_STATUS[step],
+    status: (hasErrors ? currentStatus : nextStatus) as ProjectStatus,
     data: result.data,
     errors: result.errors,
     warnings: result.warnings,
   };
 }
 
-/**
- * Determine the current pipeline step index from a project status.
- * Returns 0 if the project is at VALIDATED (ready for eligibility step),
- * 1 for ELIGIBILITY_READY, 2 for FINANCIAL_READY, 3 for DPR_READY.
- * Returns -1 for statuses outside the pipeline.
- */
-export function getPipelineStepIndex(status: string): number {
-  return STATUS_TO_STEP_INDEX[status] ?? -1;
-}
 
-/**
- * Get the pipeline step that should run next for a given status.
- * Returns null if all steps are complete or status is not in the pipeline.
- */
-export function getNextPipelineStep(status: string): PipelineStep | null {
-  const idx = getPipelineStepIndex(status);
-  if (idx < 0 || idx >= PIPELINE_STEPS.length) {
-    return null;
-  }
-  return PIPELINE_STEPS[idx];
-}
