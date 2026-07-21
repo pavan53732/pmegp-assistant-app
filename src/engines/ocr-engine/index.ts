@@ -1,11 +1,28 @@
-// ─── OCR Engine (Mock Implementation) ─────────────────────────────────────
-// Provides the contract for document processing. Since this runs in a
-// sandboxed environment without actual OCR libraries, this implements a
-// mock/demonstration pipeline that simulates extraction from common
-// document types (text-based: txt, csv, json).
+// ─── OCR Engine (On-Device Tesseract.js) ──────────────────────────────────
+// On-device OCR via Tesseract.js (WASM, runs in the WebView, truly offline —
+// no cloud calls, no PII leaves the device). Replaces the previous text-only
+// mock. Image acquisition is handled inside this module:
 //
-// Contract: AGENT_CONTRACTS.md §13
-// Rules:   IMPLEMENTATION_RULES.md #16 (Privacy), #2 (Pure Functions)
+//   • Native (Android): @capacitor/camera's Camera.getPhoto() — quality 90,
+//     JPEG, base64. Source = CAMERA or PHOTOS depending on the `source` arg.
+//   • Web (dev): an <input type="file" accept="image/*"> prompt, with the
+//     `capture="environment"` hint when source === "camera" so mobile
+//     browsers open the rear camera.
+//   • Test bypass: setTestImage(b64) injects a base64 image so unit tests
+//     and web dev can exercise the pipeline without the camera prompt.
+//
+// Contract: AGENT_CONTRACTS.md §13 (signature change: extractFromDocument now
+//   takes a capture source ("camera" | "gallery") + documentType instead of
+//   an in-memory ArrayBuffer — the buffer is acquired inside the function
+//   via the device camera or web file picker). mapOcrToProfile and the
+//   OcrResult shape are unchanged.
+// Rules:   IMPLEMENTATION_RULES.md #16 (Privacy / PII masking), #2 (Pure
+//   Functions — mapOcrToProfile is pure; extractFromDocument is I/O by
+//   necessity).
+//
+// Boundary: this file imports only platform SDKs (@capacitor/core,
+//   @capacitor/camera, tesseract.js) and @/shared/types — never
+//   @/features/* or @/providers/*.
 // ───────────────────────────────────────────────────────────────────────────
 
 import type {
@@ -18,7 +35,16 @@ import type {
 } from "@/shared/types";
 import type { FieldProvenance, ProvenanceMetadata } from "@/shared/types";
 
+// `@capacitor/core` is platform-agnostic (the web shim is identical to the
+// native one at the JS level — it just returns "web" from getPlatform()).
+// Safe to import statically; only used here for isNativePlatform().
+import { Capacitor } from "@capacitor/core";
+
 // ── Public Types ──────────────────────────────────────────────────────────
+// Shape preserved EXACTLY from the previous mock implementation so callers
+// of mapOcrToProfile keep working unchanged. extractFromDocument's parameter
+// list changed (was (fileBuffer, fileType); now (source, documentType)) —
+// no in-repo callers exist (verified via grep).
 
 export interface OcrResult {
   success: boolean;
@@ -27,13 +53,116 @@ export interface OcrResult {
   rawText: string;
 }
 
-// ── Internal Constants ────────────────────────────────────────────────────
+// ── Test Image Injection (dev/test only) ──────────────────────────────────
+// Lets unit tests or web dev bypass the camera/file-picker prompt by
+// pre-supplying a base64 image. Accepts either a raw base64 string or a
+// "data:image/...;base64,..." data URL. Pass an empty string to clear.
 
-/** Maximum file size for mock processing (1 MB). */
-const MAX_FILE_SIZE = 1_048_576;
+let testImage: string | null = null;
 
-/** File types supported by the mock OCR pipeline. */
-const SUPPORTED_FILE_TYPES = ["txt", "csv", "json"] as const;
+export function setTestImage(b64: string): void {
+  testImage = b64 && b64.length > 0 ? b64 : null;
+}
+
+// ── PII Masking (Rule #16) ────────────────────────────────────────────────
+// Two layers:
+//   1. Targeted masks (maskAadhaar / maskPan / maskPhone / maskEmail) are
+//      applied as `postProcess` on the matching EXTRACTION_PATTERNS entries
+//      so the extracted field values are masked at extraction time.
+//   2. maskPii(rawText) scans the full OCR buffer for any Aadhaar / PAN /
+//      phone / email patterns and masks them before rawText is returned —
+//      this catches PII that the field-extraction patterns missed (e.g.
+//      an Aadhaar number printed on a quotation that doesn't match the
+//      "Aadhaar No:" labelled pattern).
+
+/**
+ * Mask Aadhaar: keep the first 4 and last 4 digits, mask the middle 4.
+ * Input:  "2345 6789 0123" or "234567890123"
+ * Output: "2345 XXXX 0123"
+ */
+function maskAadhaar(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length < 8) {
+    // Too short to safely mask — pad-stretch to keep first 4 / last 4 shape.
+    const padded = digits.padEnd(8, "X");
+    return `${padded.slice(0, 4)} XXXX ${padded.slice(-4)}`;
+  }
+  const first4 = digits.slice(0, 4);
+  const last4 = digits.slice(-4);
+  return `${first4} XXXX ${last4}`;
+}
+
+/**
+ * Mask PAN: keep first 2 and last 2 chars, mask the middle 6 (always "XXXX"
+ * — 4 X's regardless of how many chars are between, matching the prior mock).
+ * Input:  "ABCDE1234F"
+ * Output: "ABXXXX34F"
+ */
+function maskPan(value: string): string {
+  const cleaned = value.replace(/\s/g, "").toUpperCase();
+  if (cleaned.length < 5) return cleaned;
+  return cleaned.slice(0, 2) + "XXXX" + cleaned.slice(-2);
+}
+
+/**
+ * Mask phone: keep the first 4 and last 4 digits, mask everything between
+ * (typically the middle 2-4 digits of a 10-digit Indian mobile number).
+ * Input:  "+91 98765 43210" or "9876543210"
+ * Output: "+91 9XXX43210"  /  "9876XXXX210"
+ */
+function maskPhone(value: string): string {
+  const trimmed = value.trim();
+  const plus = trimmed.startsWith("+") ? "+" : "";
+  const digits = trimmed.replace(/\D/g, "");
+  if (digits.length < 8) return trimmed;
+  const first4 = digits.slice(0, 4);
+  const last4 = digits.slice(-4);
+  const middleLen = Math.max(digits.length - 8, 4);
+  const middle = "X".repeat(middleLen);
+  return `${plus}${first4}${middle}${last4}`;
+}
+
+/**
+ * Mask email: keep the first 2 chars of the local part, mask the rest.
+ * Domain is left untouched (not PII for our purposes — needed for
+ * downstream validation).
+ * Input:  "john.doe@example.com"
+ * Output: "jo*****@example.com"
+ */
+function maskEmail(value: string): string {
+  const trimmed = value.trim();
+  const at = trimmed.indexOf("@");
+  if (at < 2) return trimmed; // too short to mask safely
+  const local = trimmed.slice(0, at);
+  const domain = trimmed.slice(at);
+  const keep = local.slice(0, 2);
+  const masked = "*".repeat(Math.max(local.length - 2, 3));
+  return `${keep}${masked}${domain}`;
+}
+
+// PII scan patterns — used by maskPii on the full rawText buffer. Aadhaar
+// runs first so phone doesn't double-match 12-digit Aadhaar sequences.
+const AADHAAR_PATTERN = /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}\b|\b\d{12}\b/g;
+const PAN_PATTERN = /\b[A-Za-z]{5}\d{4}[A-Za-z]\b/g;
+const PHONE_PATTERN = /\+?\d[\d\s-]{8,14}\d/g;
+const EMAIL_PATTERN = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+
+/**
+ * Mask all PII (Aadhaar, PAN, phone, email) found in free text. Applied to
+ * rawText before it leaves extractFromDocument so the unmasked OCR buffer
+ * is never persisted or displayed (Rule #16).
+ */
+export function maskPii(text: string): string {
+  if (!text) return text;
+  let out = text;
+  out = out.replace(AADHAAR_PATTERN, (m) => maskAadhaar(m));
+  out = out.replace(PAN_PATTERN, (m) => maskPan(m));
+  out = out.replace(PHONE_PATTERN, (m) => maskPhone(m));
+  out = out.replace(EMAIL_PATTERN, (m) => maskEmail(m));
+  return out;
+}
+
+// ── Extraction Patterns (preserved from mock) ─────────────────────────────
 
 /** Regex patterns for extracting key-value pairs from document text. */
 const EXTRACTION_PATTERNS: ReadonlyArray<{
@@ -64,14 +193,14 @@ const EXTRACTION_PATTERNS: ReadonlyArray<{
   },
   {
     patterns: [
-      /Aadhaar\s*(?:No|Number)?\s*[:\-]\s*(\S+)/i,
-      /Aadhaar\s*[:\-]\s*(\S+)/i,
+      /Aadhaar\s*(?:No|Number)?\s*[:\-]\s*([\d\s]{12,})/i,
+      /Aadhaar\s*[:\-]\s*([\d\s]{12,})/i,
     ],
     fieldKey: "applicant.aadhaarNo",
     postProcess: maskAadhaar,
   },
   {
-    patterns: [/PAN\s*(?:No|Number)?\s*[:\-]\s*(\S+)/i, /PAN\s*[:\-]\s*(\S+)/i],
+    patterns: [/PAN\s*(?:No|Number)?\s*[:\-]\s*([A-Za-z0-9]+)/i, /PAN\s*[:\-]\s*([A-Za-z0-9]+)/i],
     fieldKey: "applicant.panNo",
     postProcess: maskPan,
   },
@@ -111,31 +240,6 @@ const EXTRACTION_PATTERNS: ReadonlyArray<{
 const MACHINERY_LINE_PATTERN =
   /(?:^|\n)\s*(\d+)?\s*[.)]\s*(.+?)\s+(?:Qty\s*[:\-]?\s*(\d+)|(\d+))\s*(?:x\s*)?(?:Rs\.?|INR|₹)?\s*([\d,]+(?:\.\d{1,2})?)/gi;
 
-// ── PII Masking Helpers (Rule #16) ────────────────────────────────────────
-
-/**
- * Mask Aadhaar number — store only the last 4 digits.
- * Input:  "2345 6789 0123" or "234567890123"
- * Output: "XXXX XXXX 0123"
- */
-function maskAadhaar(value: string): string {
-  const digits = value.replace(/\s/g, "");
-  if (digits.length < 4) return "XXXX XXXX " + digits.padStart(4, "X");
-  const last4 = digits.slice(-4);
-  return `XXXX XXXX ${last4}`;
-}
-
-/**
- * Mask PAN number — show first 2 and last 2, mask the middle.
- * Input:  "ABCDE1234F"
- * Output: "ABXXXX34F"
- */
-function maskPan(value: string): string {
-  const cleaned = value.replace(/\s/g, "").toUpperCase();
-  if (cleaned.length < 5) return cleaned;
-  return cleaned.slice(0, 2) + "XXXX" + cleaned.slice(-2);
-}
-
 // ── Normalization Helpers ─────────────────────────────────────────────────
 
 function normalizeGender(value: string): string {
@@ -174,89 +278,255 @@ function parseCurrency(value: string): number {
   return Math.round(parseFloat(value.replace(/,/g, "")) || 0);
 }
 
+// ── Image Acquisition ─────────────────────────────────────────────────────
+
+/**
+ * Acquire an image as a "data:image/...;base64,..." data URL from the camera
+ * or gallery. Branches on:
+ *   1. testImage set via setTestImage() — used by tests / web dev.
+ *   2. Native platform — @capacitor/camera (dynamically imported so the web
+ *      dev server never tries to resolve the native plugin at module-eval).
+ *   3. Web — <input type="file" accept="image/*"> with a `capture` hint for
+ *      the camera source.
+ */
+async function acquireImage(source: "camera" | "gallery"): Promise<string> {
+  if (testImage) {
+    return normalizeDataUrl(testImage);
+  }
+  if (Capacitor.isNativePlatform()) {
+    return captureNative(source);
+  }
+  return pickWebImage(source);
+}
+
+function normalizeDataUrl(b64: string): string {
+  if (b64.startsWith("data:")) return b64;
+  return `data:image/jpeg;base64,${b64}`;
+}
+
+/**
+ * Native capture via @capacitor/camera. The plugin module is imported
+ * dynamically (inside the function body) so that on the web dev server the
+ * native plugin code is never evaluated.
+ */
+async function captureNative(source: "camera" | "gallery"): Promise<string> {
+  const cameraMod = await import("@capacitor/camera");
+  const { Camera, CameraResultType, CameraSource } = cameraMod;
+  const photo = await Camera.getPhoto({
+    quality: 90,
+    resultType: CameraResultType.Base64,
+    source: source === "camera" ? CameraSource.Camera : CameraSource.Photos,
+    correctOrientation: true,
+  });
+  const base64 = photo.base64String;
+  if (!base64) {
+    throw new Error("Camera.getPhoto returned no base64 data");
+  }
+  return `data:image/jpeg;base64,${base64}`;
+}
+
+/**
+ * Web fallback: synthetic file input. Injects an <input type="file"
+ * accept="image/*"> into the DOM, clicks it, and resolves with the chosen
+ * file as a data URL. When source === "camera" the `capture="environment"`
+ * attribute hints mobile browsers to open the rear camera directly.
+ *
+ * Handles cancel best-effort: many browsers fire a window `focus` event
+ * (without ever firing `change`) when the user dismisses the picker. We
+ * listen for that and reject after a short grace period.
+ */
+function pickWebImage(source: "camera" | "gallery"): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    if (source === "camera") {
+      // Hint mobile browsers to use the rear camera; desktop ignores.
+      input.setAttribute("capture", "environment");
+    }
+    input.style.position = "fixed";
+    input.style.left = "-9999px";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+
+    let settled = false;
+    const cleanup = () => {
+      if (input.parentNode) input.parentNode.removeChild(input);
+    };
+
+    const onFilePicked = (file: File) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        const result = reader.result;
+        if (typeof result === "string") resolve(result);
+        else reject(new Error("FileReader returned non-string result"));
+      };
+      reader.onerror = () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(reader.error || new Error("FileReader error"));
+      };
+      reader.readAsDataURL(file);
+    };
+
+    input.addEventListener("change", () => {
+      if (settled) return;
+      const file = input.files && input.files[0];
+      if (!file) {
+        settled = true;
+        cleanup();
+        reject(new Error("No file selected"));
+        return;
+      }
+      onFilePicked(file);
+    });
+
+    // Cancel detection — most browsers fire window `focus` when the picker
+    // dialog is dismissed without a selection. Wait a short grace period so
+    // a legitimate `change` event has time to land first.
+    const cancelTimer = window.setTimeout(() => {
+      if (settled) return;
+      const onCancel = () => {
+        window.removeEventListener("focus", onCancel);
+        window.setTimeout(() => {
+          if (!settled && (!input.files || input.files.length === 0)) {
+            settled = true;
+            cleanup();
+            reject(new Error("User cancelled image selection"));
+          }
+        }, 500);
+      };
+      window.addEventListener("focus", onCancel);
+    }, 300);
+
+    input.click();
+    // Best-effort: clear the cancel timer if a file is chosen normally.
+    input.addEventListener("change", () => window.clearTimeout(cancelTimer), { once: true });
+  });
+}
+
+// ── OCR ───────────────────────────────────────────────────────────────────
+
+interface TesseractResult {
+  text: string;
+  confidence: number; // 0-100 (Tesseract scale)
+}
+
+/**
+ * Run Tesseract.js OCR on a data-URL image. The tesseract.js module is
+ * dynamically imported so its (large) WASM core is only loaded when OCR is
+ * actually invoked, not at module-eval time of this engine.
+ *
+ * Note: tesseract.js v5 ships as a CommonJS module (`export = Tesseract`).
+ * With esModuleInterop the dynamic import exposes the namespace either as
+ * the default export or as named exports — we handle both shapes.
+ */
+async function runOcr(imageData: string): Promise<TesseractResult> {
+  const mod: any = await import("tesseract.js");
+  const tess = mod.default ?? mod;
+  const result = await tess.recognize(imageData, "eng");
+  const data = result?.data ?? {};
+  return {
+    text: typeof data.text === "string" ? data.text : "",
+    confidence: typeof data.confidence === "number" ? data.confidence : 0,
+  };
+}
+
 // ── Core Functions ────────────────────────────────────────────────────────
 
 /**
- * Extract structured fields from a document buffer.
+ * Capture a document image (camera or gallery) and extract structured
+ * fields via on-device Tesseract.js OCR. PII (Aadhaar, PAN, phone, email)
+ * is masked before the result leaves this function — both in the extracted
+ * field values (per-field postProcess) and in rawText (via maskPii).
  *
- * Mock implementation: decodes as UTF-8 text and applies regex-based
- * key-value extraction. Returns failure for non-text or undecodable files.
+ * Returns a failed OcrResult on any capture / OCR error (matches the prior
+ * mock's `{ success: false }` contract) — callers should branch on
+ * `result.success` and surface a user-facing message, never throw.
  */
 export async function extractFromDocument(
-  fileBuffer: ArrayBuffer,
-  fileType: string
+  source: "camera" | "gallery",
+  documentType: AttachmentType,
 ): Promise<OcrResult> {
-  const typeCheck = canProcessFile(fileType, fileBuffer.byteLength);
-  if (!typeCheck.canProcess) {
-    return {
-      success: false,
-      extractedFields: {},
-      confidence: 0,
-      rawText: "",
-    };
-  }
-
-  // Attempt UTF-8 decode
-  let rawText: string;
   try {
-    const decoder = new TextDecoder("utf-8", { fatal: true });
-    rawText = decoder.decode(fileBuffer);
-  } catch {
-    return {
-      success: false,
-      extractedFields: {},
-      confidence: 0,
-      rawText: "",
-    };
-  }
+    const imageData = await acquireImage(source);
+    const ocr = await runOcr(imageData);
+    const rawText = ocr.text;
 
-  if (!rawText.trim()) {
-    return {
-      success: false,
-      extractedFields: {},
-      confidence: 0,
-      rawText: "",
-    };
-  }
+    if (!rawText.trim()) {
+      return {
+        success: false,
+        extractedFields: {},
+        confidence: 0,
+        rawText: "",
+      };
+    }
 
-  // Extract key-value fields
-  const extractedFields: Record<string, string> = {};
-  let matchCount = 0;
+    // Extract key-value fields (reuses the same regex patterns as the
+    // previous mock — Aadhaar / PAN postProcess masks them in place).
+    const extractedFields: Record<string, string> = {};
+    let matchCount = 0;
 
-  for (const { patterns, fieldKey, postProcess } of EXTRACTION_PATTERNS) {
-    for (const pattern of patterns) {
-      const match = pattern.exec(rawText);
-      if (match?.[1]) {
-        let value = match[1].trim();
-        if (postProcess) {
-          value = postProcess(value);
+    for (const { patterns, fieldKey, postProcess } of EXTRACTION_PATTERNS) {
+      for (const pattern of patterns) {
+        const match = pattern.exec(rawText);
+        if (match?.[1]) {
+          let value = match[1].trim();
+          if (postProcess) {
+            value = postProcess(value);
+          }
+          extractedFields[fieldKey] = value;
+          matchCount++;
+          break; // first matching pattern wins per field
         }
-        extractedFields[fieldKey] = value;
-        matchCount++;
-        break; // first matching pattern wins per field
       }
     }
-  }
 
-  // For quotation documents, also try to extract line items as JSON
-  const hasQuotationNo = "quotationNo" in extractedFields;
-  if (hasQuotationNo) {
-    const lineItems = extractMachineryLines(rawText);
-    if (lineItems.length > 0) {
-      extractedFields["machinery.items"] = JSON.stringify(lineItems);
+    // For quotation documents, also try to extract line items as JSON.
+    // documentType biases this: a document the user labelled QUOTATION gets
+    // machinery extraction even if the "Quotation No" labelled pattern
+    // didn't match (OCR is lossy — label may be missing).
+    const isQuotation =
+      documentType === "QUOTATION" || "quotationNo" in extractedFields;
+    if (isQuotation) {
+      const lineItems = extractMachineryLines(rawText);
+      if (lineItems.length > 0) {
+        extractedFields["machinery.items"] = JSON.stringify(lineItems);
+      }
     }
+
+    // Confidence: blend Tesseract's per-page OCR confidence (0-1) with the
+    // field-coverage heuristic so a confident OCR of an empty form doesn't
+    // report 0.9 just because Tesseract was sure the page was blank.
+    const maxExpectedFields = isQuotation ? 8 : 6;
+    const fieldConfidence = Math.min(matchCount / maxExpectedFields, 1);
+    const ocrConfidence = ocr.confidence / 100;
+    const confidence =
+      Math.round(((ocrConfidence + fieldConfidence) / 2) * 100) / 100;
+
+    // PII masking BEFORE return — rawText must not contain unmasked PII.
+    const maskedText = maskPii(rawText);
+
+    return {
+      success: true,
+      extractedFields,
+      confidence,
+      rawText: maskedText,
+    };
+  } catch {
+    // Capture failures, OCR crashes, user-cancel — surface as a failed
+    // result (matches the existing { success: false } contract).
+    return {
+      success: false,
+      extractedFields: {},
+      confidence: 0,
+      rawText: "",
+    };
   }
-
-  // Confidence: ratio of expected fields found (mock heuristic)
-  const maxExpectedFields = hasQuotationNo ? 8 : 6;
-  const confidence = Math.min(matchCount / maxExpectedFields, 1);
-
-  return {
-    success: true,
-    extractedFields,
-    confidence: Math.round(confidence * 100) / 100,
-    rawText,
-  };
 }
 
 /**
@@ -596,6 +866,8 @@ function extractMachineryLines(text: string): Array<{
 
 /**
  * Create a FieldProvenance entry for an OCR-extracted field.
+ * source: "OCR", verification: "UNVERIFIED" — fields extracted via OCR are
+ * never auto-confirmed; the user must explicitly verify them in the UI.
  */
 function makeProvenance(confidence: number): FieldProvenance {
   return {
@@ -627,56 +899,4 @@ function mergeProvenance(
       : 0;
 
   return { perField, aggregate };
-}
-
-// ── Utility Exports ───────────────────────────────────────────────────────
-
-/**
- * Get the list of file types supported by the mock OCR pipeline.
- */
-export function getSupportedFileTypes(): string[] {
-  return [...SUPPORTED_FILE_TYPES];
-}
-
-/**
- * Validate whether a file can be processed by the OCR engine.
- *
- * Checks file type against supported list and enforces size limits.
- */
-export function canProcessFile(
-  fileType: string,
-  fileSize: number
-): { canProcess: boolean; reason?: string } {
-  const normalizedType = fileType.toLowerCase().replace(/^\./, "");
-
-  if (!SUPPORTED_FILE_TYPES.includes(normalizedType as (typeof SUPPORTED_FILE_TYPES)[number])) {
-    return {
-      canProcess: false,
-      reason: `Unsupported file type "${fileType}". Supported types: ${SUPPORTED_FILE_TYPES.join(", ")}`,
-    };
-  }
-
-  if (fileSize <= 0) {
-    return {
-      canProcess: false,
-      reason: "File is empty (0 bytes).",
-    };
-  }
-
-  if (fileSize > MAX_FILE_SIZE) {
-    return {
-      canProcess: false,
-      reason: `File size (${formatBytes(fileSize)}) exceeds the maximum allowed size (${formatBytes(MAX_FILE_SIZE)}).`,
-    };
-  }
-
-  return { canProcess: true };
-}
-
-// ── Internal Utilities ────────────────────────────────────────────────────
-
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1_048_576) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / 1_048_576).toFixed(1)} MB`;
 }
