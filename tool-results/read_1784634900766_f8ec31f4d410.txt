@@ -1,0 +1,840 @@
+     1→"use client";
+     2→
+     3→import { useState, useCallback, useEffect } from "react";
+     4→import { useTheme } from "next-themes";
+     5→import { motion, AnimatePresence } from "framer-motion";
+     6→import { toast } from "sonner";
+     7→import {
+     8→  Settings,
+     9→  Plus,
+    10→  Pencil,
+    11→  Trash2,
+    12→  Loader2,
+    13→  Eye,
+    14→  EyeOff,
+    15→  Check,
+    16→  Globe,
+    17→  Monitor,
+    18→  Sun,
+    19→  Moon,
+    20→  Zap,
+    21→  ExternalLink,
+    22→  Shield,
+    23→  Database,
+    24→  Code2,
+    25→  Sparkles,
+    26→  Server,
+    27→  Info,
+    28→} from "lucide-react";
+    29→
+    30→import {
+    31→  Dialog,
+    32→  DialogContent,
+    33→  DialogHeader,
+    34→  DialogTitle,
+    35→  DialogDescription,
+    36→} from "@/components/ui/dialog";
+    37→import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    38→import { Button } from "@/components/ui/button";
+    39→import { Input } from "@/components/ui/input";
+    40→import { Badge } from "@/components/ui/badge";
+    41→import { Switch } from "@/components/ui/switch";
+    42→import { Label } from "@/components/ui/label";
+    43→import { Separator } from "@/components/ui/separator";
+    44→import {
+    45→  Card,
+    46→  CardContent,
+    47→} from "@/components/ui/card";
+    48→import {
+    49→  AlertDialog,
+    50→  AlertDialogAction,
+    51→  AlertDialogCancel,
+    52→  AlertDialogContent,
+    53→  AlertDialogDescription,
+    54→  AlertDialogFooter,
+    55→  AlertDialogHeader,
+    56→  AlertDialogTitle,
+    57→} from "@/components/ui/alert-dialog";
+    58→
+    59→// ─── Types ─────────────────────────────────────────────────────────────────
+    60→interface AiProvider {
+    61→  id: string;
+    62→  baseUrl: string;
+    63→  modelName: string;
+    64→  isActive: boolean;
+    65→  createdAt: string;
+    66→  apiKeyMasked: string;
+    67→}
+    68→
+    69→interface ProviderFormData {
+    70→  baseUrl: string;
+    71→  modelName: string;
+    72→  apiKey: string;
+    73→  isActive: boolean;
+    74→}
+    75→
+    76→const EMPTY_FORM: ProviderFormData = {
+    77→  baseUrl: "",
+    78→  modelName: "",
+    79→  apiKey: "",
+    80→  isActive: false,
+    81→};
+    82→
+    83→// ─── Provider Form Sub-Dialog ──────────────────────────────────────────────
+    84→function ProviderFormDialog({
+    85→  open,
+    86→  onOpenChange,
+    87→  initial,
+    88→  existingActiveCount,
+    89→  onSubmit,
+    90→}: {
+    91→  open: boolean;
+    92→  onOpenChange: (v: boolean) => void;
+    93→  initial?: AiProvider;
+    94→  existingActiveCount: number;
+    95→  onSubmit: (data: ProviderFormData) => Promise<void>;
+    96→}) {
+    97→  const isEditing = !!initial;
+    98→  const [form, setForm] = useState<ProviderFormData>(EMPTY_FORM);
+    99→  const [showKey, setShowKey] = useState(false);
+   100→  const [saving, setSaving] = useState(false);
+   101→
+   102→  useEffect(() => {
+   103→    if (open) {
+   104→      if (initial) {
+   105→        setForm({
+   106→          baseUrl: initial.baseUrl,
+   107→          modelName: initial.modelName,
+   108→          apiKey: "", // never prefill the key
+   109→          isActive: initial.isActive,
+   110→        });
+   111→      } else {
+   112→        setForm({ ...EMPTY_FORM, isActive: existingActiveCount === 0 });
+   113→      }
+   114→      setShowKey(false);
+   115→      setSaving(false);
+   116→    }
+   117→  }, [open, initial, existingActiveCount]);
+   118→
+   119→  const canSetActive =
+   120→    isEditing
+   121→      ? form.isActive
+   122→      : form.isActive && existingActiveCount === 0;
+   123→
+   124→  const handleSubmit = async () => {
+   125→    if (!form.baseUrl.trim() || !form.modelName.trim() || (!isEditing && !form.apiKey.trim())) {
+   126→      toast.error("Please fill in all required fields");
+   127→      return;
+   128→    }
+   129→    setSaving(true);
+   130→    try {
+   131→      await onSubmit(form);
+   132→      onOpenChange(false);
+   133→    } catch {
+   134→      // toast already shown by caller
+   135→    } finally {
+   136→      setSaving(false);
+   137→    }
+   138→  };
+   139→
+   140→  return (
+   141→    <Dialog open={open} onOpenChange={onOpenChange}>
+   142→      <DialogContent className="sm:max-w-md">
+   143→        <DialogHeader>
+   144→          <DialogTitle className="flex items-center gap-2">
+   145→            <Server className="w-4 h-4 text-emerald-500" />
+   146→            {isEditing ? "Edit Provider" : "Add Provider"}
+   147→          </DialogTitle>
+   148→          <DialogDescription>
+   149→            {isEditing
+   150→              ? "Update the AI provider configuration."
+   151→              : "Configure a new AI provider for project assistance."}
+   152→          </DialogDescription>
+   153→        </DialogHeader>
+   154→
+   155→        <div className="space-y-4 pt-2">
+   156→          {/* Base URL */}
+   157→          <div className="space-y-2">
+   158→            <Label htmlFor="provider-url">Base URL</Label>
+   159→            <Input
+   160→              id="provider-url"
+   161→              placeholder="https://api.openai.com/v1"
+   162→              value={form.baseUrl}
+   163→              onChange={(e) => setForm((f) => ({ ...f, baseUrl: e.target.value }))}
+   164→            />
+   165→          </div>
+   166→
+   167→          {/* Model Name */}
+   168→          <div className="space-y-2">
+   169→            <Label htmlFor="provider-model">Model Name</Label>
+   170→            <Input
+   171→              id="provider-model"
+   172→              placeholder="gpt-4o-mini"
+   173→              value={form.modelName}
+   174→              onChange={(e) => setForm((f) => ({ ...f, modelName: e.target.value }))}
+   175→            />
+   176→          </div>
+   177→
+   178→          {/* API Key */}
+   179→          <div className="space-y-2">
+   180→            <Label htmlFor="provider-key">
+   181→              API Key {isEditing && <span className="text-muted-foreground font-normal">(leave blank to keep current)</span>}
+   182→            </Label>
+   183→            <div className="relative">
+   184→              <Input
+   185→                id="provider-key"
+   186→                type={showKey ? "text" : "password"}
+   187→                placeholder={isEditing ? "••••••••" : "sk-..."}
+   188→                value={form.apiKey}
+   189→                onChange={(e) => setForm((f) => ({ ...f, apiKey: e.target.value }))}
+   190→                className="pr-10"
+   191→              />
+   192→              <Button
+   193→                type="button"
+   194→                variant="ghost"
+   195→                size="icon"
+   196→                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground hover:text-foreground"
+   197→                onClick={() => setShowKey(!showKey)}
+   198→                tabIndex={-1}
+   199→              >
+   200→                {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+   201→              </Button>
+   202→            </div>
+   203→          </div>
+   204→
+   205→          {/* Active toggle */}
+   206→          <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
+   207→            <div className="space-y-0.5">
+   208→              <Label htmlFor="provider-active" className="text-sm">
+   209→                Set as Active
+   210→              </Label>
+   211→              <p className="text-[11px] text-muted-foreground">
+   212→                {isEditing
+   213→                  ? "Deactivate all other providers and use this one."
+   214→                  : existingActiveCount > 0
+   215→                    ? "Deactivate the current active provider first."
+   216→                    : "This will be the default AI provider."}
+   217→              </p>
+   218→            </div>
+   219→            <Switch
+   220→              id="provider-active"
+   221→              checked={canSetActive}
+   222→              disabled={isEditing ? false : existingActiveCount > 0}
+   223→              onCheckedChange={(checked) => setForm((f) => ({ ...f, isActive: checked }))}
+   224→            />
+   225→          </div>
+   226→        </div>
+   227→
+   228→        <div className="flex justify-end gap-2 pt-2">
+   229→          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
+   230→            Cancel
+   231→          </Button>
+   232→          <Button
+   233→            onClick={handleSubmit}
+   234→            disabled={saving}
+   235→            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   236→          >
+   237→            {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+   238→            {isEditing ? "Update" : "Add Provider"}
+   239→          </Button>
+   240→        </div>
+   241→      </DialogContent>
+   242→    </Dialog>
+   243→  );
+   244→}
+   245→
+   246→// ─── AI Configuration Tab ──────────────────────────────────────────────────
+   247→function AiConfigTab() {
+   248→  const [providers, setProviders] = useState<AiProvider[]>([]);
+   249→  const [loading, setLoading] = useState(true);
+   250→  const [formOpen, setFormOpen] = useState(false);
+   251→  const [editingProvider, setEditingProvider] = useState<AiProvider | undefined>();
+   252→  const [deleteTarget, setDeleteTarget] = useState<AiProvider | null>(null);
+   253→  const [togglingId, setTogglingId] = useState<string | null>(null);
+   254→
+   255→  const fetchProviders = useCallback(async () => {
+   256→    try {
+   257→      const res = await fetch("/api/ai-provider");
+   258→      const json = await res.json();
+   259→      if (json.success) {
+   260→        setProviders(json.data);
+   261→      } else {
+   262→        toast.error(json.error?.message || "Failed to load providers");
+   263→      }
+   264→    } catch {
+   265→      toast.error("Failed to load providers");
+   266→    } finally {
+   267→      setLoading(false);
+   268→    }
+   269→  }, []);
+   270→
+   271→  useEffect(() => {
+   272→    fetchProviders();
+   273→  }, [fetchProviders]);
+   274→
+   275→  const activeCount = providers.filter((p) => p.isActive).length;
+   276→
+   277→  const handleCreate = async (data: ProviderFormData) => {
+   278→    const res = await fetch("/api/ai-provider", {
+   279→      method: "POST",
+   280→      headers: { "Content-Type": "application/json" },
+   281→      body: JSON.stringify(data),
+   282→    });
+   283→    const json = await res.json();
+   284→    if (json.success) {
+   285→      toast.success("Provider added successfully");
+   286→      fetchProviders();
+   287→    } else {
+   288→      toast.error(json.error?.message || "Failed to add provider");
+   289→      throw new Error("Failed");
+   290→    }
+   291→  };
+   292→
+   293→  const handleEdit = async (data: ProviderFormData) => {
+   294→    if (!editingProvider) return;
+   295→    const res = await fetch("/api/ai-provider", {
+   296→      method: "PATCH",
+   297→      headers: { "Content-Type": "application/json" },
+   298→      body: JSON.stringify({ id: editingProvider.id, ...data }),
+   299→    });
+   300→    const json = await res.json();
+   301→    if (json.success) {
+   302→      toast.success("Provider updated successfully");
+   303→      fetchProviders();
+   304→    } else {
+   305→      toast.error(json.error?.message || "Failed to update provider");
+   306→      throw new Error("Failed");
+   307→    }
+   308→  };
+   309→
+   310→  const handleDelete = async () => {
+   311→    if (!deleteTarget) return;
+   312→    try {
+   313→      const res = await fetch(`/api/ai-provider/${deleteTarget.id}`, {
+   314→        method: "DELETE",
+   315→      });
+   316→      const json = await res.json();
+   317→      if (json.success) {
+   318→        toast.success("Provider deleted");
+   319→        setProviders((prev) => prev.filter((p) => p.id !== deleteTarget.id));
+   320→      } else {
+   321→        toast.error(json.error?.message || "Failed to delete provider");
+   322→      }
+   323→    } catch {
+   324→      toast.error("Failed to delete provider");
+   325→    } finally {
+   326→      setDeleteTarget(null);
+   327→    }
+   328→  };
+   329→
+   330→  const handleToggleActive = async (provider: AiProvider) => {
+   331→    const newActive = !provider.isActive;
+   332→    setTogglingId(provider.id);
+   333→    try {
+   334→      const res = await fetch("/api/ai-provider", {
+   335→        method: "PATCH",
+   336→        headers: { "Content-Type": "application/json" },
+   337→        body: JSON.stringify({ id: provider.id, isActive: newActive }),
+   338→      });
+   339→      const json = await res.json();
+   340→      if (json.success) {
+   341→        toast.success(
+   342→          newActive ? `${provider.modelName} set as active` : `${provider.modelName} deactivated`
+   343→        );
+   344→        fetchProviders();
+   345→      } else {
+   346→        toast.error(json.error?.message || "Failed to toggle provider");
+   347→      }
+   348→    } catch {
+   349→      toast.error("Failed to toggle provider");
+   350→    } finally {
+   351→      setTogglingId(null);
+   352→    }
+   353→  };
+   354→
+   355→  const openEdit = (provider: AiProvider) => {
+   356→    setEditingProvider(provider);
+   357→    setFormOpen(true);
+   358→  };
+   359→
+   360→  const openCreate = () => {
+   361→    setEditingProvider(undefined);
+   362→    setFormOpen(true);
+   363→  };
+   364→
+   365→  const formatDate = (dateStr: string) => {
+   366→    const d = new Date(dateStr);
+   367→    return d.toLocaleDateString("en-IN", {
+   368→      day: "numeric",
+   369→      month: "short",
+   370→      year: "numeric",
+   371→    });
+   372→  };
+   373→
+   374→  const truncateUrl = (url: string, max = 40) => {
+   375→    if (url.length <= max) return url;
+   376→    return url.slice(0, max) + "…";
+   377→  };
+   378→
+   379→  return (
+   380→    <div className="space-y-4">
+   381→      <div className="flex items-center justify-between">
+   382→        <p className="text-sm text-muted-foreground">
+   383→          Configure AI providers to power project assistance features.
+   384→        </p>
+   385→        <Button
+   386→          size="sm"
+   387→          onClick={openCreate}
+   388→          className="bg-emerald-600 hover:bg-emerald-700 text-white h-8 gap-1.5"
+   389→        >
+   390→          <Plus className="w-3.5 h-3.5" />
+   391→          Add Provider
+   392→        </Button>
+   393→      </div>
+   394→
+   395→      {loading ? (
+   396→        <div className="space-y-3">
+   397→          {[1, 2].map((i) => (
+   398→            <div
+   399→              key={i}
+   400→              className="h-24 rounded-xl bg-muted/50 animate-pulse"
+   401→            />
+   402→          ))}
+   403→        </div>
+   404→      ) : providers.length === 0 ? (
+   405→        <motion.div
+   406→          initial={{ opacity: 0, y: 8 }}
+   407→          animate={{ opacity: 1, y: 0 }}
+   408→          className="flex flex-col items-center justify-center py-12 text-center"
+   409→        >
+   410→          <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-3">
+   411→            <Sparkles className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+   412→          </div>
+   413→          <p className="text-sm font-medium">No AI providers configured</p>
+   414→          <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+   415→            Add an AI provider to enable intelligent project assistance features
+   416→            like eligibility checks and financial projections.
+   417→          </p>
+   418→          <Button
+   419→            size="sm"
+   420→            variant="outline"
+   421→            onClick={openCreate}
+   422→            className="mt-4 h-8 gap-1.5 border-emerald-300 text-emerald-700 dark:border-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+   423→          >
+   424→            <Plus className="w-3.5 h-3.5" />
+   425→            Add Your First Provider
+   426→          </Button>
+   427→        </motion.div>
+   428→      ) : (
+   429→        <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+   430→          <AnimatePresence mode="popLayout">
+   431→            {providers.map((provider) => (
+   432→              <motion.div
+   433→                key={provider.id}
+   434→                layout
+   435→                initial={{ opacity: 0, y: 8 }}
+   436→                animate={{ opacity: 1, y: 0 }}
+   437→                exit={{ opacity: 0, y: -8, scale: 0.95 }}
+   438→                transition={{ duration: 0.2 }}
+   439→              >
+   440→                <Card className="border-border/60 hover:border-emerald-300/60 dark:hover:border-emerald-700/60 transition-colors">
+   441→                  <CardContent className="p-4">
+   442→                    <div className="flex items-start justify-between gap-3">
+   443→                      <div className="min-w-0 flex-1 space-y-1.5">
+   444→                        <div className="flex items-center gap-2 flex-wrap">
+   445→                          <span className="font-semibold text-sm truncate">
+   446→                            {provider.modelName}
+   447→                          </span>
+   448→                          {provider.isActive ? (
+   449→                            <Badge
+   450→                              variant="default"
+   451→                              className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 text-[10px] px-2 py-0 h-5"
+   452→                            >
+   453→                              <Check className="w-3 h-3 mr-0.5" />
+   454→                              Active
+   455→                            </Badge>
+   456→                          ) : (
+   457→                            <Badge
+   458→                              variant="secondary"
+   459→                              className="text-[10px] px-2 py-0 h-5"
+   460→                            >
+   461→                              Inactive
+   462→                            </Badge>
+   463→                          )}
+   464→                        </div>
+   465→                        <p className="text-xs text-muted-foreground font-mono truncate">
+   466→                          {truncateUrl(provider.baseUrl)}
+   467→                        </p>
+   468→                        <p className="text-[11px] text-muted-foreground">
+   469→                          Key: {provider.apiKeyMasked} · Added {formatDate(provider.createdAt)}
+   470→                        </p>
+   471→                      </div>
+   472→
+   473→                      <div className="flex items-center gap-1 shrink-0">
+   474→                        <Button
+   475→                          variant="ghost"
+   476→                          size="icon"
+   477→                          className="h-8 w-8 text-muted-foreground hover:text-emerald-600"
+   478→                          onClick={() => handleToggleActive(provider)}
+   479→                          disabled={togglingId === provider.id}
+   480→                          title={provider.isActive ? "Deactivate" : "Set Active"}
+   481→                        >
+   482→                          {togglingId === provider.id ? (
+   483→                            <Loader2 className="w-4 h-4 animate-spin" />
+   484→                          ) : provider.isActive ? (
+   485→                            <Shield className="w-4 h-4 text-emerald-600" />
+   486→                          ) : (
+   487→                            <Zap className="w-4 h-4" />
+   488→                          )}
+   489→                        </Button>
+   490→                        <Button
+   491→                          variant="ghost"
+   492→                          size="icon"
+   493→                          className="h-8 w-8 text-muted-foreground hover:text-foreground"
+   494→                          onClick={() => openEdit(provider)}
+   495→                          title="Edit"
+   496→                        >
+   497→                          <Pencil className="w-4 h-4" />
+   498→                        </Button>
+   499→                        <Button
+   500→                          variant="ghost"
+   501→                          size="icon"
+   502→                          className="h-8 w-8 text-muted-foreground hover:text-red-500"
+   503→                          onClick={() => setDeleteTarget(provider)}
+   504→                          title="Delete"
+   505→                        >
+   506→                          <Trash2 className="w-4 h-4" />
+   507→                        </Button>
+   508→                      </div>
+   509→                    </div>
+   510→                  </CardContent>
+   511→                </Card>
+   512→              </motion.div>
+   513→            ))}
+   514→          </AnimatePresence>
+   515→        </div>
+   516→      )}
+   517→
+   518→      {/* Provider Form Sub-Dialog */}
+   519→      <ProviderFormDialog
+   520→        open={formOpen}
+   521→        onOpenChange={(v) => {
+   522→          setFormOpen(v);
+   523→          if (!v) setEditingProvider(undefined);
+   524→        }}
+   525→        initial={editingProvider}
+   526→        existingActiveCount={activeCount}
+   527→        onSubmit={editingProvider ? handleEdit : handleCreate}
+   528→      />
+   529→
+   530→      {/* Delete Confirmation */}
+   531→      <AlertDialog
+   532→        open={!!deleteTarget}
+   533→        onOpenChange={(v) => !v && setDeleteTarget(null)}
+   534→      >
+   535→        <AlertDialogContent>
+   536→          <AlertDialogHeader>
+   537→            <AlertDialogTitle>Delete Provider</AlertDialogTitle>
+   538→            <AlertDialogDescription>
+   539→              Are you sure you want to delete{" "}
+   540→              <span className="font-semibold">{deleteTarget?.modelName}</span>?
+   541→              This action cannot be undone.
+   542→            </AlertDialogDescription>
+   543→          </AlertDialogHeader>
+   544→          <AlertDialogFooter>
+   545→            <AlertDialogCancel>Cancel</AlertDialogCancel>
+   546→            <AlertDialogAction
+   547→              onClick={handleDelete}
+   548→              className="bg-red-600 hover:bg-red-700 text-white"
+   549→            >
+   550→              Delete
+   551→            </AlertDialogAction>
+   552→          </AlertDialogFooter>
+   553→        </AlertDialogContent>
+   554→      </AlertDialog>
+   555→    </div>
+   556→  );
+   557→}
+   558→
+   559→// ─── Preferences Tab ───────────────────────────────────────────────────────
+   560→function PreferencesTab() {
+   561→  const { theme, setTheme, resolvedTheme } = useTheme();
+   562→
+   563→  // next-themes returns undefined for resolvedTheme on the server / before hydration
+   564→  const mounted = resolvedTheme !== undefined;
+   565→
+   566→  const themeOptions = [
+   567→    { value: "system", label: "System", icon: Monitor },
+   568→    { value: "light", label: "Light", icon: Sun },
+   569→    { value: "dark", label: "Dark", icon: Moon },
+   570→  ] as const;
+   571→
+   572→  return (
+   573→    <div className="space-y-6">
+   574→      {/* Theme Preference */}
+   575→      <div className="space-y-3">
+   576→        <Label className="text-sm font-medium">Theme</Label>
+   577→        <div className="grid grid-cols-3 gap-2">
+   578→          {themeOptions.map(({ value, label, icon: Icon }) => {
+   579→            const isSelected = mounted && theme === value;
+   580→            return (
+   581→              <button
+   582→                key={value}
+   583→                onClick={() => setTheme(value)}
+   584→                className={`
+   585→                  relative flex flex-col items-center gap-2 rounded-xl border-2 p-4 transition-all duration-200
+   586→                  ${
+   587→                    isSelected
+   588→                      ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 shadow-sm"
+   589→                      : "border-border/60 hover:border-emerald-300/60 dark:hover:border-emerald-700/60"
+   590→                  }
+   591→                `}
+   592→              >
+   593→                <Icon
+   594→                  className={`w-5 h-5 ${
+   595→                    isSelected
+   596→                      ? "text-emerald-600 dark:text-emerald-400"
+   597→                      : "text-muted-foreground"
+   598→                  }`}
+   599→                />
+   600→                <span
+   601→                  className={`text-xs font-medium ${
+   602→                    isSelected
+   603→                      ? "text-emerald-700 dark:text-emerald-300"
+   604→                      : "text-muted-foreground"
+   605→                  }`}
+   606→                >
+   607→                  {label}
+   608→                </span>
+   609→                {isSelected && (
+   610→                  <motion.div
+   611→                    layoutId="theme-indicator"
+   612→                    className="absolute top-2 right-2"
+   613→                    initial={{ scale: 0 }}
+   614→                    animate={{ scale: 1 }}
+   615→                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+   616→                  >
+   617→                    <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+   618→                  </motion.div>
+   619→                )}
+   620→              </button>
+   621→            );
+   622→          })}
+   623→        </div>
+   624→      </div>
+   625→
+   626→      <Separator />
+   627→
+   628→      {/* Language (read-only) */}
+   629→      <div className="space-y-3">
+   630→        <Label className="text-sm font-medium">Language</Label>
+   631→        <div className="flex items-center gap-2 rounded-lg border border-border/60 p-3">
+   632→          <Globe className="w-4 h-4 text-muted-foreground" />
+   633→          <span className="text-sm">English</span>
+   634→          <Badge variant="secondary" className="text-[10px] ml-auto">
+   635→            Default
+   636→          </Badge>
+   637→        </div>
+   638→      </div>
+   639→
+   640→      <Separator />
+   641→
+   642→      {/* Version */}
+   643→      <div className="space-y-3">
+   644→        <Label className="text-sm font-medium">Version</Label>
+   645→        <div className="flex items-center gap-2 rounded-lg border border-border/60 p-3">
+   646→          <Code2 className="w-4 h-4 text-muted-foreground" />
+   647→          <span className="text-sm">PMEGP Assistant v0.2.0</span>
+   648→        </div>
+   649→      </div>
+   650→    </div>
+   651→  );
+   652→}
+   653→
+   654→// ─── About Tab ─────────────────────────────────────────────────────────────
+   655→function AboutTab() {
+   656→  const techStack = [
+   657→    { name: "Next.js 16", color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300" },
+   658→    { name: "TypeScript", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
+   659→    { name: "Tailwind CSS 4", color: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400" },
+   660→    { name: "Prisma", color: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400" },
+   661→    { name: "shadcn/ui", color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
+   662→    { name: "Framer Motion", color: "bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400" },
+   663→  ];
+   664→
+   665→  return (
+   666→    <div className="space-y-6">
+   667→      {/* App Info */}
+   668→      <motion.div
+   669→        initial={{ opacity: 0, y: 8 }}
+   670→        animate={{ opacity: 1, y: 0 }}
+   671→        className="text-center space-y-2 py-2"
+   672→      >
+   673→        <div className="mx-auto w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white flex items-center justify-center shadow-lg shadow-emerald-600/25">
+   674→          <Settings className="w-7 h-7" />
+   675→        </div>
+   676→        <div>
+   677→          <h3 className="text-lg font-bold">PMEGP Assistant</h3>
+   678→          <p className="text-sm text-muted-foreground">v0.2.0</p>
+   679→        </div>
+   680→        <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
+   681→          AI-assisted PMEGP subsidy application builder — micro-enterprise project
+   682→          discovery, eligibility checks, financial projections, and DPR generation.
+   683→        </p>
+   684→      </motion.div>
+   685→
+   686→      <Separator />
+   687→
+   688→      {/* Tech Stack */}
+   689→      <div className="space-y-3">
+   690→        <Label className="text-sm font-medium">Built With</Label>
+   691→        <div className="flex flex-wrap gap-2 justify-center">
+   692→          {techStack.map((tech) => (
+   693→            <Badge
+   694→              key={tech.name}
+   695→              variant="secondary"
+   696→              className={`${tech.color} text-[11px] px-2.5 py-1 border-0 font-medium`}
+   697→            >
+   698→              {tech.name}
+   699→            </Badge>
+   700→          ))}
+   701→        </div>
+   702→      </div>
+   703→
+   704→      <Separator />
+   705→
+   706→      {/* Links */}
+   707→      <div className="space-y-3">
+   708→        <Label className="text-sm font-medium">Official Resources</Label>
+   709→        <div className="space-y-2">
+   710→          <a
+   711→            href="https://www.kvic.org.in/pmegp.htm"
+   712→            target="_blank"
+   713→            rel="noopener noreferrer"
+   714→            className="flex items-center gap-3 rounded-lg border border-border/60 p-3 hover:bg-muted/50 transition-colors group"
+   715→          >
+   716→            <div className="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center shrink-0">
+   717→              <Globe className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+   718→            </div>
+   719→            <div className="min-w-0 flex-1">
+   720→              <p className="text-sm font-medium">KVIC PMEGP Portal</p>
+   721→              <p className="text-[11px] text-muted-foreground truncate">
+   722→                kvic.org.in/pmegp.htm
+   723→              </p>
+   724→            </div>
+   725→            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-emerald-600 transition-colors shrink-0" />
+   726→          </a>
+   727→          <a
+   728→            href="https://msme.gov.in"
+   729→            target="_blank"
+   730→            rel="noopener noreferrer"
+   731→            className="flex items-center gap-3 rounded-lg border border-border/60 p-3 hover:bg-muted/50 transition-colors group"
+   732→          >
+   733→            <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center shrink-0">
+   734→              <Database className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+   735→            </div>
+   736→            <div className="min-w-0 flex-1">
+   737→              <p className="text-sm font-medium">MoMSME</p>
+   738→              <p className="text-[11px] text-muted-foreground truncate">
+   739→                Ministry of Micro, Small & Medium Enterprises
+   740→              </p>
+   741→            </div>
+   742→            <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-emerald-600 transition-colors shrink-0" />
+   743→          </a>
+   744→        </div>
+   745→      </div>
+   746→    </div>
+   747→  );
+   748→}
+   749→
+   750→// ─── Main Settings Dialog ──────────────────────────────────────────────────
+   751→export function SettingsDialog() {
+   752→  const [open, setOpen] = useState(false);
+   753→
+   754→  return (
+   755→    <>
+   756→      <Button
+   757→        variant="ghost"
+   758→        size="icon"
+   759→        className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/80 rounded-lg transition-colors"
+   760→        onClick={() => setOpen(true)}
+   761→        aria-label="Open settings"
+   762→      >
+   763→        <Settings className="w-4.5 h-4.5" />
+   764→      </Button>
+   765→
+   766→      <Dialog open={open} onOpenChange={setOpen}>
+   767→        <DialogContent className="sm:max-w-lg p-0 gap-0 overflow-hidden">
+   768→          <DialogHeader className="px-6 pt-6 pb-0">
+   769→            <DialogTitle className="flex items-center gap-2">
+   770→              <Settings className="w-4.5 h-4.5 text-emerald-600" />
+   771→              Settings
+   772→            </DialogTitle>
+   773→            <DialogDescription className="text-xs">
+   774→              Manage AI providers, preferences, and app configuration.
+   775→            </DialogDescription>
+   776→          </DialogHeader>
+   777→
+   778→          <Tabs defaultValue="ai" className="px-6 pb-6 pt-4">
+   779→            <TabsList className="w-full grid grid-cols-3 mb-4">
+   780→              <TabsTrigger value="ai" className="text-xs gap-1.5 data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-900/30 dark:data-[state=active]:text-emerald-400">
+   781→                <Sparkles className="w-3.5 h-3.5" />
+   782→                AI Config
+   783→              </TabsTrigger>
+   784→              <TabsTrigger value="preferences" className="text-xs gap-1.5 data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-900/30 dark:data-[state=active]:text-emerald-400">
+   785→                <Monitor className="w-3.5 h-3.5" />
+   786→                Preferences
+   787→              </TabsTrigger>
+   788→              <TabsTrigger value="about" className="text-xs gap-1.5 data-[state=active]:bg-emerald-100 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-900/30 dark:data-[state=active]:text-emerald-400">
+   789→                <Info className="w-3.5 h-3.5" />
+   790→                About
+   791→              </TabsTrigger>
+   792→            </TabsList>
+   793→
+   794→            <AnimatePresence mode="wait">
+   795→              <motion.div
+   796→                key="ai"
+   797→                initial={{ opacity: 0, x: -8 }}
+   798→                animate={{ opacity: 1, x: 0 }}
+   799→                exit={{ opacity: 0, x: 8 }}
+   800→                transition={{ duration: 0.15 }}
+   801→              >
+   802→                <TabsContent value="ai" className="mt-0">
+   803→                  <AiConfigTab />
+   804→                </TabsContent>
+   805→              </motion.div>
+   806→            </AnimatePresence>
+   807→
+   808→            <AnimatePresence mode="wait">
+   809→              <motion.div
+   810→                key="preferences"
+   811→                initial={{ opacity: 0, x: -8 }}
+   812→                animate={{ opacity: 1, x: 0 }}
+   813→                exit={{ opacity: 0, x: 8 }}
+   814→                transition={{ duration: 0.15 }}
+   815→              >
+   816→                <TabsContent value="preferences" className="mt-0">
+   817→                  <PreferencesTab />
+   818→                </TabsContent>
+   819→              </motion.div>
+   820→            </AnimatePresence>
+   821→
+   822→            <AnimatePresence mode="wait">
+   823→              <motion.div
+   824→                key="about"
+   825→                initial={{ opacity: 0, x: -8 }}
+   826→                animate={{ opacity: 1, x: 0 }}
+   827→                exit={{ opacity: 0, x: 8 }}
+   828→                transition={{ duration: 0.15 }}
+   829→              >
+   830→                <TabsContent value="about" className="mt-0">
+   831→                  <AboutTab />
+   832→                </TabsContent>
+   833→              </motion.div>
+   834→            </AnimatePresence>
+   835→          </Tabs>
+   836→        </DialogContent>
+   837→      </Dialog>
+   838→    </>
+   839→  );
+   840→}

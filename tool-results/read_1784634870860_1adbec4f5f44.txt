@@ -1,0 +1,849 @@
+     1→     1→// ─── Interview Orchestrator ──────────────────────────────────────────────────
+     2→     2→// The brain of the AI interview. Coordinates all sub-modules:
+     3→     3→//   Question Planner, Response Parser, Field Extractor,
+     4→     4→//   Review Handler, Resume Handler.
+     5→     5→//
+     6→     6→// RULE #5: AI is the interviewer and writer, NEVER the calculator.
+     7→     7→// RULE #4: All suggestions come from Knowledge Engine — never from AI.
+     8→     8→// RULE #12: Interview state lives in the Interview Store.
+     9→     9→// RULE #15: Subsystems communicate via typed events.
+    10→    10→// RULE #16: PII masked before logging.
+    11→    11→//
+    12→    12→// See AGENT_CONTRACTS.md §12, IMPLEMENTATION_RULES.md.
+    13→    13→// ───────────────────────────────────────────────────────────────────────────────
+    14→    14→
+    15→    15→import type { InterviewPhase } from "@/shared/types/interview";
+    16→    16→import type { ProjectProfile } from "@/shared/types/project-profile";
+    17→    17→import type {
+    18→    18→  AiMessageEvent,
+    19→    19→  InterviewPhaseChangedEvent,
+    20→    20→  SuggestionPresentedEvent,
+    21→    21→} from "@/shared/events/event-types";
+    22→    22→
+    23→    23→import { getEventBus } from "@/shared/events/event-bus";
+    24→    24→import { InterviewStore } from "@/features/ai/interview-store/interview-store";
+    25→    25→import { getAIResponse, type ProviderMessage } from "@/providers";
+    26→    26→import {
+    27→    27→  resolveActivity,
+    28→    28→  suggestMachinery,
+    29→    29→  suggestRawMaterials,
+    30→    30→  isOnNegativeList,
+    31→    31→  matchesNegativeKeyword,
+    32→    32→} from "@/engines/knowledge-engine";
+    33→    33→
+    34→    34→import type {
+    35→    35→  ChatMessage,
+    36→    36→  InterviewState,
+    37→    37→  ParsedUserIntent,
+    38→    38→  FieldExtraction,
+    39→    39→  QuestionPlan,
+    40→    40→} from "./types";
+    41→    41→import {
+    42→    42→  planNextQuestion,
+    43→    43→  getNextPhase,
+    44→    44→  getPhaseEntryMessage,
+    45→    45→  PHASE_CONFIGS,
+    46→    46→} from "./question-planner";
+    47→    47→import { parseUserIntent, isGreeting } from "./response-parser";
+    48→    48→import {
+    49→    49→  extractFieldsFromMessage,
+    50→    50→  buildExtractionPrompt,
+    51→    51→  parseAIExtractionResponse,
+    52→    52→} from "./field-extractor";
+    53→    53→import { generateReviewText } from "./review-handler";
+    54→    54→import {
+    55→    55→  buildResumeContext,
+    56→    56→  generateResumeMessage,
+    57→    57→  generateProfileSummary,
+    58→    58→} from "./resume-handler";
+    59→    59→
+    60→    60→// ── Helpers ────────────────────────────────────────────────────────────────
+    61→    61→
+    62→    62→function generateId(): string {
+    63→    63→  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    64→    64→}
+    65→    65→
+    66→    66→/** Mask PII for logging per RULE #16. */
+    67→    67→function maskPII(text: string): string {
+    68→    68→  // Mask Aadhaar-like patterns (12+ digits)
+    69→    69→  let masked = text.replace(/\b\d{4}\d{4,8}\b/g, "XXXX-XXXX$&".slice(-4));
+    70→    70→  // Mask PAN-like patterns (5 letters + 4 digits + 1 letter)
+    71→    71→  masked = masked.replace(/\b[A-Z]{5}\d{4}[A-Z]\b/g, "XXXXX$&".slice(-5));
+    72→    72→  return masked;
+    73→    73→}
+    74→    74→
+    75→    75→/**
+    76→    76→ * Convert dot-path strings to the field descriptor format expected
+    77→    77→ * by extractFieldsFromMessage / buildExtractionPrompt.
+    78→    78→ *
+    79→    79→ * Looks up the actual field type, label, and enum options from PHASE_CONFIGS
+    80→    80→ * so that local extraction can handle ENUM, NUMBER, CURRENCY, and BOOLEAN
+    81→    81→ * fields correctly instead of falling through to the AI path for every field.
+    82→    82→ */
+    83→    83→function toFieldDescriptors(
+    84→    84→  dotPaths: string[]
+    85→    85→): Array<{
+    86→    86→  dotPath: string;
+    87→    87→  label: string;
+    88→    88→  type: "TEXT" | "NUMBER" | "ENUM" | "BOOLEAN" | "CURRENCY" | "DATE";
+    89→    89→  enumOptions?: string[];
+    90→    90→}> {
+    91→    91→  return dotPaths.map((dp) => {
+    92→    92→    /** Look up the actual FieldConfig from PHASE_CONFIGS by dot-path. */
+    93→    93→    let foundType: "TEXT" | "NUMBER" | "ENUM" | "BOOLEAN" | "CURRENCY" | "DATE" = "TEXT";
+    94→    94→    let foundLabel = dp.split(".").pop() ?? dp;
+    95→    95→    let foundEnumOptions: string[] | undefined;
+    96→    96→
+    97→    97→    for (const config of Object.values(PHASE_CONFIGS)) {
+    98→    98→      for (const group of config.fieldGroups) {
+    99→    99→        for (const field of group.fields) {
+   100→   100→          if (field.dotPath === dp) {
+   101→   101→            foundType = field.type;
+   102→   102→            foundLabel = field.label;
+   103→   103→            if (field.enumOptions) {
+   104→   104→              foundEnumOptions = field.enumOptions.map((o) => o.value);
+   105→   105→            }
+   106→   106→          }
+   107→   107→        }
+   108→   108→      }
+   109→   109→    }
+   110→   110→
+   111→   111→    return {
+   112→   112→      dotPath: dp,
+   113→   113→      label: foundLabel,
+   114→   114→      type: foundType,
+   115→   115→      enumOptions: foundEnumOptions,
+   116→   116→    };
+   117→   117→  });
+   118→   118→}
+   119→   119→
+   120→   120→// ── InterviewController ────────────────────────────────────────────────────
+   121→   121→
+   122→   122→export class InterviewController {
+   123→   123→  private state: InterviewState;
+   124→   124→  private store: InterviewStore;
+   125→   125→  private messageHistory: ProviderMessage[];
+   126→   126→  private readonly projectId: string;
+   127→   127→
+   128→   128→  constructor(projectId: string) {
+   129→   129→    this.projectId = projectId;
+   130→   130→    this.store = new InterviewStore();
+   131→   131→    this.messageHistory = [];
+   132→   132→    this.state = {
+   133→   133→      projectId,
+   134→   134→      messages: [],
+   135→   135→      currentPhase: "APPLICANT_DISCOVERY",
+   136→   136→      isPaused: false,
+   137→   137→      isComplete: false,
+   138→   138→      error: null,
+   139→   139→      startedAt: new Date().toISOString(),
+   140→   140→      lastActivityAt: new Date().toISOString(),
+   141→   141→      interactionCount: 0,
+   142→   142→    };
+   143→   143→  }
+   144→   144→
+   145→   145→  // ── Public API ────────────────────────────────────────────────────────────
+   146→   146→
+   147→   147→  /** Start or resume the interview. Returns the first AI message. */
+   148→   148→  async startNewInterview(): Promise<ChatMessage> {
+   149→   149→    // Load the project profile into the store
+   150→   150→    await this.store.loadProject(this.projectId);
+   151→   151→
+   152→   152→    const profile = this.store.getProfile();
+   153→   153→    const phase = profile?.completion.currentPhase ?? "APPLICANT_DISCOVERY";
+   154→   154→
+   155→   155→    this.state.currentPhase = phase;
+   156→   156→    this.state.startedAt = new Date().toISOString();
+   157→   157→    this.state.lastActivityAt = new Date().toISOString();
+   158→   158→
+   159→   159→    // Determine if this is a fresh start or a resume
+   160→   160→    const isFresh =
+   161→   161→      !profile ||
+   162→   162→      profile.completion.interactionCount === 0;
+   163→   163→
+   164→   164→    let aiMessage: ChatMessage;
+   165→   165→
+   166→   166→    if (isFresh) {
+   167→   167→      // Fresh interview — get the entry message for the first phase
+   168→   168→      const entryMsg = getPhaseEntryMessage(phase);
+   169→   169→      aiMessage = this.createAssistantMessage(entryMsg, phase);
+   170→   170→    } else {
+   171→   171→      // Resume — use resume handler (2 args: profile, conversationHistory)
+   172→   172→      const resumeCtx = buildResumeContext(profile!, this.state.messages);
+   173→   173→      const resumeText = generateResumeMessage(resumeCtx);
+   174→   174→      aiMessage = this.createAssistantMessage(resumeText, phase);
+   175→   175→    }
+   176→   176→
+   177→   177→    // Initialize the AI provider message history with a system prompt
+   178→   178→    this.messageHistory = [
+   179→   179→      {
+   180→   180→        role: "system",
+   181→   181→        content: this.buildSystemPrompt(phase),
+   182→   182→      },
+   183→   183→    ];
+   184→   184→
+   185→   185→    this.state.messages.push(aiMessage);
+   186→   186→    this.emitAIMessage(aiMessage);
+   187→   187→    return aiMessage;
+   188→   188→  }
+   189→   189→
+   190→   190→  /** Process a user message and return the AI response. */
+   191→   191→  async processUserMessage(message: string): Promise<ChatMessage> {
+   192→   192→    // 1. Add user message to state
+   193→   193→    const userMsg = this.createUserMessage(message);
+   194→   194→    this.state.messages.push(userMsg);
+   195→   195→    this.state.interactionCount++;
+   196→   196→    this.state.lastActivityAt = new Date().toISOString();
+   197→   197→
+   198→   198→    // Push the user's actual message to the AI provider history so the AI
+   199→   199→    // can see what the user really said (not just the question context).
+   200→   200→    this.messageHistory.push({ role: "user", content: message });
+   201→   201→
+   202→   202→    // 2. Parse user intent
+   203→   203→    let intent: ParsedUserIntent;
+   204→   204→    if (isGreeting(message)) {
+   205→   205→      intent = {
+   206→   206→        type: "GREETING",
+   207→   207→        rawText: message,
+   208→   208→        confidence: 0.95,
+   209→   209→      };
+   210→   210→    } else {
+   211→   211→      intent = parseUserIntent(
+   212→   212→        message,
+   213→   213→        this.state.currentPhase,
+   214→   214→        this.state.messages.map((m) => ({
+   215→   215→          content: m.content,
+   216→   216→          role: m.role,
+   217→   217→        }))
+   218→   218→      );
+   219→   219→    }
+   220→   220→
+   221→   221→    // 3. Route based on intent type
+   222→   222→    let aiMessage: ChatMessage;
+   223→   223→
+   224→   224→    switch (intent.type) {
+   225→   225→      case "ANSWER":
+   226→   226→        aiMessage = await this.handleAnswer(message, intent);
+   227→   227→        break;
+   228→   228→      case "CORRECTION":
+   229→   229→        aiMessage = await this.handleCorrection(message, intent);
+   230→   230→        break;
+   231→   231→      case "CLARIFICATION":
+   232→   232→        aiMessage = await this.handleClarification(message);
+   233→   233→        break;
+   234→   234→      case "SKIP":
+   235→   235→        aiMessage = await this.handleSkip();
+   236→   236→        break;
+   237→   237→      case "GO_BACK":
+   238→   238→        aiMessage = await this.handleGoBack(intent);
+   239→   239→        break;
+   240→   240→      case "REVIEW_REQUEST":
+   241→   241→        aiMessage = await this.handleReviewRequest();
+   242→   242→        break;
+   243→   243→      case "CONFIRM":
+   244→   244→        aiMessage = await this.handleConfirm();
+   245→   245→        break;
+   246→   246→      case "HELP":
+   247→   247→        aiMessage = await this.handleHelp();
+   248→   248→        break;
+   249→   249→      case "GREETING":
+   250→   250→        aiMessage = await this.handleGreeting();
+   251→   251→        break;
+   252→   252→      case "OUT_OF_SCOPE":
+   253→   253→      default:
+   254→   254→        aiMessage = await this.handleOutOfScope(message);
+   255→   255→        break;
+   256→   256→    }
+   257→   257→
+   258→   258→    // 4. Add AI message to state and history
+   259→   259→    this.state.messages.push(aiMessage);
+   260→   260→    this.messageHistory.push({
+   261→   261→      role: "assistant",
+   262→   262→      content: aiMessage.content,
+   263→   263→    });
+   264→   264→
+   265→   265→    this.emitAIMessage(aiMessage);
+   266→   266→    return aiMessage;
+   267→   267→  }
+   268→   268→
+   269→   269→  /** Get all chat messages. */
+   270→   270→  getCurrentMessages(): ChatMessage[] {
+   271→   271→    return [...this.state.messages];
+   272→   272→  }
+   273→   273→
+   274→   274→  /** Get the current interview state. */
+   275→   275→  getState(): InterviewState {
+   276→   276→    return { ...this.state };
+   277→   277→  }
+   278→   278→
+   279→   279→  /** Get the active phase. */
+   280→   280→  getActivePhase(): InterviewPhase {
+   281→   281→    return this.state.currentPhase;
+   282→   282→  }
+   283→   283→
+   284→   284→  /** Pause the interview. */
+   285→   285→  pause(): void {
+   286→   286→    this.state.isPaused = true;
+   287→   287→    this.state.lastActivityAt = new Date().toISOString();
+   288→   288→  }
+   289→   289→
+   290→   290→  /** Resume the interview. */
+   291→   291→  async resume(): Promise<ChatMessage> {
+   292→   292→    if (!this.state.isPaused) {
+   293→   293→      return this.createAssistantMessage(
+   294→   294→        "The interview is already running. How can I help you?",
+   295→   295→        this.state.currentPhase
+   296→   296→      );
+   297→   297→    }
+   298→   298→    this.state.isPaused = false;
+   299→   299→    this.state.lastActivityAt = new Date().toISOString();
+   300→   300→
+   301→   301→    // Re-generate the current question
+   302→   302→    const plan = planNextQuestion(
+   303→   303→      this.store.getProfile()!,
+   304→   304→      this.state.currentPhase,
+   305→   305→      this.state.messages
+   306→   306→    );
+   307→   307→
+   308→   308→    const aiMessage = await this.generateAIResponse(plan.question);
+   309→   309→    return aiMessage;
+   310→   310→  }
+   311→   311→
+   312→   312→  /** End the interview (user confirms). */
+   313→   313→  endInterview(): void {
+   314→   314→    this.state.isComplete = true;
+   315→   315→    this.state.lastActivityAt = new Date().toISOString();
+   316→   316→  }
+   317→   317→
+   318→   318→  /** Get the store's current profile snapshot. */
+   319→   319→  getProfile(): ProjectProfile | null {
+   320→   320→    return this.store.getProfile();
+   321→   321→  }
+   322→   322→
+   323→   323→  // ── Intent Handlers ──────────────────────────────────────────────────────
+   324→   324→
+   325→   325→  private async handleAnswer(
+   326→   326→    message: string,
+   327→   327→    _intent: ParsedUserIntent
+   328→   328→  ): Promise<ChatMessage> {
+   329→   329→    const profile = this.store.getProfile();
+   330→   330→    if (!profile) {
+   331→   331→      return this.createAssistantMessage(
+   332→   332→        "Sorry, I couldn't load the project. Please try again.",
+   333→   333→        this.state.currentPhase
+   334→   334→      );
+   335→   335→    }
+   336→   336→
+   337→   337→    const phase = this.state.currentPhase;
+   338→   338→
+   339→   339→    // a. Get current question plan to know which fields we're collecting
+   340→   340→    const currentPlan = planNextQuestion(profile, phase, this.state.messages);
+   341→   341→    const targetFieldPaths = currentPlan.targetFields;
+   342→   342→
+   343→   343→    // b. Convert to field descriptors and extract locally
+   344→   344→    const fieldDescriptors = toFieldDescriptors(targetFieldPaths);
+   345→   345→    const localResult = extractFieldsFromMessage(
+   346→   346→      message,
+   347→   347→      fieldDescriptors,
+   348→   348→      "USER"
+   349→   349→    );
+   350→   350→
+   351→   351→    // c. Build extraction prompt and use AI for any remaining fields
+   352→   352→    const aiExtractions: FieldExtraction[] = [];
+   353→   353→    const fieldsNeedingAI = localResult.needsAI;
+   354→   354→
+   355→   355→    if (fieldsNeedingAI.length > 0) {
+   356→   356→      /**
+   357→   357→       * Use try/finally to guarantee the extraction prompt is always removed
+   358→   358→       * from messageHistory, even if getAIResponse or parseAIExtractionResponse
+   359→   359→       * throws an unexpected error. Without this, the extraction prompt would
+   360→   360→       * leak into the conversation history permanently.
+   361→   361→       */
+   362→   362→      try {
+   363→   363→        const aiFieldDescriptors = toFieldDescriptors(fieldsNeedingAI);
+   364→   364→        const extractionPrompt = buildExtractionPrompt(
+   365→   365→          message,
+   366→   366→          aiFieldDescriptors,
+   367→   367→          phase
+   368→   368→        );
+   369→   369→        this.messageHistory.push({ role: "user", content: extractionPrompt });
+   370→   370→        try {
+   371→   371→          const aiResp = await getAIResponse(this.messageHistory);
+   372→   372→          if (aiResp.success && aiResp.content) {
+   373→   373→            const parsed = parseAIExtractionResponse(aiResp.content, fieldsNeedingAI);
+   374→   374→            aiExtractions.push(...parsed);
+   375→   375→          }
+   376→   376→        } finally {
+   377→   377→          // Remove the extraction prompt from history (it was internal)
+   378→   378→          this.messageHistory.pop();
+   379→   379→        }
+   380→   380→      } catch (err) {
+   381→   381→        console.error("[InterviewController] AI extraction failed:", err);
+   382→   382→      }
+   383→   383→    }
+   384→   384→
+   385→   385→    // d. Merge all extractions
+   386→   386→    const allExtractions = [...localResult.extracted, ...aiExtractions];
+   387→   387→
+   388→   388→    // e. Update store for each extracted field
+   389→   389→    for (const extraction of allExtractions) {
+   390→   390→      this.store.updateField(
+   391→   391→        extraction.fieldPath,
+   392→   392→        extraction.value,
+   393→   393→        extraction.source
+   394→   394→      );
+   395→   395→    }
+   396→   396→
+   397→   397→    // f. After ACTIVITY_RESOLUTION phase: resolve NIC code via Knowledge Engine
+   398→   398→    if (phase === "ACTIVITY_RESOLUTION") {
+   399→   399→      await this.handleActivityResolution(profile, message);
+   400→   400→    }
+   401→   401→
+   402→   402→    // g. After activity is resolved, present Knowledge Engine suggestions
+   403→   403→    if (
+   404→   404→      phase === "PROJECT_SIZING" &&
+   405→   405→      profile.business.nicCode
+   406→   406→    ) {
+   407→   407→      await this.presentKnowledgeSuggestions(profile);
+   408→   408→    }
+   409→   409→
+   410→   410→    // h. Plan next question
+   411→   411→    const updatedProfile = this.store.getProfile()!;
+   412→   412→    const nextPlan = planNextQuestion(updatedProfile, phase, this.state.messages);
+   413→   413→
+   414→   414→    // i. Check if phase is complete, transition
+   415→   415→    if (nextPlan.completesPhase || nextPlan.isPhaseStart) {
+   416→   416→      const nextPhase = getNextPhase(phase, updatedProfile);
+   417→   417→      if (nextPhase && nextPhase !== phase) {
+   418→   418→        await this.transitionPhase(nextPhase);
+   419→   419→        // Get the entry message for the new phase
+   420→   420→        const entryMsg = getPhaseEntryMessage(nextPhase);
+   421→   421→        return this.createAssistantMessage(entryMsg, nextPhase);
+   422→   422→      }
+   423→   423→    }
+   424→   424→
+   425→   425→    // Generate the AI response for the next question
+   426→   426→    return this.generateAIResponse(nextPlan.question);
+   427→   427→  }
+   428→   428→
+   429→   429→  private async handleCorrection(
+   430→   430→    message: string,
+   431→   431→    intent: ParsedUserIntent
+   432→   432→  ): Promise<ChatMessage> {
+   433→   433→    const profile = this.store.getProfile();
+   434→   434→    if (!profile) {
+   435→   435→      return this.createAssistantMessage(
+   436→   436→        "No project loaded. Please try again.",
+   437→   437→        this.state.currentPhase
+   438→   438→      );
+   439→   439→    }
+   440→   440→
+   441→   441→    // The correction handler identifies fields from the message
+   442→   442→    const fields = intent.correctionFields ?? [];
+   443→   443→    if (fields.length === 0 && !intent.subject) {
+   444→   444→      return this.createAssistantMessage(
+   445→   445→        "I understand you want to correct something. Could you tell me which specific detail you'd like to change?",
+   446→   446→        this.state.currentPhase
+   447→   447→      );
+   448→   448→    }
+   449→   449→
+   450→   450→    // Extract fields and update
+   451→   451→    const extractionTargets = fields.length > 0 ? fields : [intent.subject ?? ""];
+   452→   452→    const fieldDescriptors = toFieldDescriptors(extractionTargets);
+   453→   453→    const result = extractFieldsFromMessage(message, fieldDescriptors, "USER");
+   454→   454→
+   455→   455→    for (const extraction of result.extracted) {
+   456→   456→      this.store.updateField(extraction.fieldPath, extraction.value, "USER");
+   457→   457→    }
+   458→   458→
+   459→   459→    if (result.extracted.length > 0) {
+   460→   460→      const fieldLabels = result.extracted.map((e) => e.label).join(", ");
+   461→   461→      const plan = planNextQuestion(this.store.getProfile()!, this.state.currentPhase, this.state.messages);
+   462→   462→      return this.generateAIResponse(
+   463→   463→        `Got it, I've updated ${fieldLabels}. ${plan.question}`
+   464→   464→      );
+   465→   465→    }
+   466→   466→
+   467→   467→    return this.createAssistantMessage(
+   468→   468→      "I couldn't identify what to correct. Could you be more specific? For example, 'Change my name to Rajesh Kumar'.",
+   469→   469→      this.state.currentPhase
+   470→   470→    );
+   471→   471→  }
+   472→   472→
+   473→   473→  private async handleClarification(message: string): Promise<ChatMessage> {
+   474→   474→    // Generate a helpful explanation about the current question
+   475→   475→    const plan = planNextQuestion(this.store.getProfile()!, this.state.currentPhase, this.state.messages);
+   476→   476→    const clarificationText = await this.generateAIResponse(
+   477→   477→      `The user asked for clarification about: "${message}". Explain clearly and simply what information is needed for: ${plan.question}. Keep it brief and in simple language.`
+   478→   478→    );
+   479→   479→    return clarificationText;
+   480→   480→  }
+   481→   481→
+   482→   482→  private async handleSkip(): Promise<ChatMessage> {
+   483→   483→    const updatedProfile = this.store.getProfile();
+   484→   484→    if (!updatedProfile) {
+   485→   485→      return this.createAssistantMessage(
+   486→   486→        "No project loaded.",
+   487→   487→        this.state.currentPhase
+   488→   488→      );
+   489→   489→    }
+   490→   490→
+   491→   491→    // Plan next question (which will skip the current field)
+   492→   492→    const nextPlan = planNextQuestion(updatedProfile, this.state.currentPhase, this.state.messages);
+   493→   493→
+   494→   494→    if (nextPlan.completesPhase || nextPlan.isPhaseStart) {
+   495→   495→      const nextPhase = getNextPhase(this.state.currentPhase, updatedProfile);
+   496→   496→      if (nextPhase && nextPhase !== this.state.currentPhase) {
+   497→   497→        await this.transitionPhase(nextPhase);
+   498→   498→        const entryMsg = getPhaseEntryMessage(nextPhase);
+   499→   499→        return this.createAssistantMessage(entryMsg, nextPhase);
+   500→   500→      }
+   501→   501→    }
+   502→   502→
+   503→   503→    return this.generateAIResponse(
+   504→   504→      `No problem, we'll skip that. ${nextPlan.question}`
+   505→   505→    );
+   506→   506→  }
+   507→   507→
+   508→   508→  private async handleGoBack(intent: ParsedUserIntent): Promise<ChatMessage> {
+   509→   509→    const targetPhase = intent.targetPhase;
+   510→   510→    if (!targetPhase) {
+   511→   511→      return this.createAssistantMessage(
+   512→   512→        "Which section would you like to go back to? For example: applicant details, business details, or activity.",
+   513→   513→        this.state.currentPhase
+   514→   514→      );
+   515→   515→    }
+   516→   516→
+   517→   517→    await this.transitionPhase(targetPhase);
+   518→   518→    const plan = planNextQuestion(this.store.getProfile()!, targetPhase, this.state.messages);
+   519→   519→    return this.generateAIResponse(
+   520→   520→      `Sure, let's go back to ${PHASE_CONFIGS[targetPhase]?.label ?? targetPhase}. ${plan.question}`
+   521→   521→    );
+   522→   522→  }
+   523→   523→
+   524→   524→  private async handleReviewRequest(): Promise<ChatMessage> {
+   525→   525→    const profile = this.store.getProfile();
+   526→   526→    if (!profile) {
+   527→   527→      return this.createAssistantMessage(
+   528→   528→        "No project loaded to review.",
+   529→   529→        this.state.currentPhase
+   530→   530→      );
+   531→   531→    }
+   532→   532→
+   533→   533→    const reviewText = generateReviewText(profile);
+   534→   534→
+   535→   535→    // Transition to REVIEW phase
+   536→   536→    await this.transitionPhase("REVIEW");
+   537→   537→
+   538→   538→    return this.createAssistantMessage(reviewText, "REVIEW");
+   539→   539→  }
+   540→   540→
+   541→   541→  private async handleConfirm(): Promise<ChatMessage> {
+   542→   542→    // Only valid in REVIEW phase
+   543→   543→    if (this.state.currentPhase !== "REVIEW") {
+   544→   544→      const plan = planNextQuestion(this.store.getProfile()!, this.state.currentPhase, this.state.messages);
+   545→   545→      return this.generateAIResponse(
+   546→   546→        `We're not at the review stage yet. ${plan.question}`
+   547→   547→      );
+   548→   548→    }
+   549→   549→
+   550→   550→    // Call store.confirmProject() which stamps all provenance CONFIRMED
+   551→   551→    this.store.confirmProject();
+   552→   552→
+   553→   553→    // Transition to VALIDATION_COMPLETION
+   554→   554→    await this.transitionPhase("VALIDATION_COMPLETION");
+   555→   555→
+   556→   556→    return this.createAssistantMessage(
+   557→   557→      "Your project has been confirmed! All details are now locked in. The system will now run validation and eligibility checks. You'll be notified once everything is ready for DPR generation.",
+   558→   558→      "VALIDATION_COMPLETION"
+   559→   559→    );
+   560→   560→  }
+   561→   561→
+   562→   562→  private async handleHelp(): Promise<ChatMessage> {
+   563→   563→    const helpText = `Here's how this PMEGP application assistant works:
+   564→   564→
+   565→   565→• I'll ask you questions one at a time about your business idea.
+   566→   566→• You can answer in Hindi, English, or Hinglish — whatever is comfortable.
+   567→   567→• If you don't know an answer, just say "skip" and we'll move on.
+   568→   568→• You can say "go back" to change earlier answers.
+   569→   569→• At the end, you can review everything before confirming.
+   570→   570→• Say "help" anytime to see this message again.
+   571→   571→
+   572→   572→PMEGP is a government scheme for micro-enterprises with loans up to ₹25 lakh (₹50 lakh for manufacturing). The subsidy rate depends on your category and location.`;
+   573→   573→
+   574→   574→    return this.createAssistantMessage(helpText, this.state.currentPhase);
+   575→   575→  }
+   576→   576→
+   577→   577→  private async handleGreeting(): Promise<ChatMessage> {
+   578→   578→    const profile = this.store.getProfile();
+   579→   579→    const plan = planNextQuestion(
+   580→   580→      profile!,
+   581→   581→      this.state.currentPhase,
+   582→   582→      this.state.messages
+   583→   583→    );
+   584→   584→
+   585→   585→    // Warm greeting, then repeat the last question
+   586→   586→    return this.generateAIResponse(
+   587→   587→      `Hello! Welcome back. ${plan.question}`
+   588→   588→    );
+   589→   589→  }
+   590→   590→
+   591→   591→  private async handleOutOfScope(message: string): Promise<ChatMessage> {
+   592→   592→    // Log the out-of-scope message (PII masked per RULE #16)
+   593→   593→    console.log(
+   594→   594→      `[InterviewController] Out-of-scope message: ${maskPII(message)}`
+   595→   595→    );
+   596→   596→
+   597→   597→    const plan = planNextQuestion(
+   598→   598→      this.store.getProfile()!,
+   599→   599→      this.state.currentPhase,
+   600→   600→      this.state.messages
+   601→   601→    );
+   602→   602→
+   603→   603→    return this.generateAIResponse(
+   604→   604→      `I appreciate the question, but I'm here specifically to help with your PMEGP micro-enterprise application. Let's focus on that. ${plan.question}`
+   605→   605→    );
+   606→   606→  }
+   607→   607→
+   608→   608→  // ── Knowledge Engine Integration ──────────────────────────────────────────
+   609→   609→
+   610→   610→  private async handleActivityResolution(
+   611→   611→    _profile: ProjectProfile,
+   612→   612→    description: string
+   613→   613→  ): Promise<void> {
+   614→   614→    // Use Knowledge Engine to resolve activity — NEVER AI (RULE #4)
+   615→   615→    const suggestions = resolveActivity(description);
+   616→   616→
+   617→   617→    if (suggestions.length > 0) {
+   618→   618→      const bestMatch = suggestions[0];
+   619→   619→
+   620→   620→      // Check negative list
+   621→   621→      const negEntry = isOnNegativeList(bestMatch.nicCode);
+   622→   622→      const negKeyword = matchesNegativeKeyword(description);
+   623→   623→
+   624→   624→      if (negEntry || negKeyword) {
+   625→   625→        const reason = negEntry
+   626→   626→          ? `The activity "${bestMatch.description}" (NIC: ${negEntry.nicCode}) is on the PMEGP negative list: ${negEntry.reason}.`
+   627→   627→          : `Your activity description matches an excluded keyword: "${negKeyword}".`;
+   628→   628→
+   629→   629→        console.log(
+   630→   630→          `[InterviewController] Negative list match: ${maskPII(reason)}`
+   631→   631→        );
+   632→   632→        // The AI will communicate this to the user in the response
+   633→   633→      }
+   634→   634→
+   635→   635→      // Update the store with NIC code data (source: KNOWLEDGE per RULE #4)
+   636→   636→      this.store.updateField("business.nicCode", bestMatch.nicCode, "KNOWLEDGE");
+   637→   637→      this.store.updateField("business.nicDescription", bestMatch.description, "KNOWLEDGE");
+   638→   638→      this.store.updateField("business.sector", bestMatch.sector, "KNOWLEDGE");
+   639→   639→      this.store.updateField("business.subCategory", bestMatch.subCategory, "KNOWLEDGE");
+   640→   640→
+   641→   641→      // Emit suggestion event
+   642→   642→      this.emitSuggestion(
+   643→   643→        "business.nicCode",
+   644→   644→        bestMatch.nicCode,
+   645→   645→        `Resolved from activity description: ${bestMatch.matchReason}`
+   646→   646→      );
+   647→   647→    }
+   648→   648→  }
+   649→   649→
+   650→   650→  private async presentKnowledgeSuggestions(
+   651→   651→    profile: ProjectProfile
+   652→   652→  ): Promise<void> {
+   653→   653→    const nicCode = profile.business.nicCode;
+   654→   654→    if (!nicCode) return;
+   655→   655→
+   656→   656→    // Get machinery suggestions
+   657→   657→    const machinery = suggestMachinery(nicCode);
+   658→   658→    if (machinery.length > 0) {
+   659→   659→      this.emitSuggestion(
+   660→   660→        "machinery.items",
+   661→   661→        machinery,
+   662→   662→        `Knowledge Engine suggested ${machinery.length} machinery items for NIC ${nicCode}`
+   663→   663→      );
+   664→   664→    }
+   665→   665→
+   666→   666→    // Get raw material suggestions
+   667→   667→    const rawMaterials = suggestRawMaterials(nicCode);
+   668→   668→    if (rawMaterials.length > 0) {
+   669→   669→      this.emitSuggestion(
+   670→   670→        "rawMaterials.items",
+   671→   671→        rawMaterials,
+   672→   672→        `Knowledge Engine suggested ${rawMaterials.length} raw materials for NIC ${nicCode}`
+   673→   673→      );
+   674→   674→    }
+   675→   675→  }
+   676→   676→
+   677→   677→  // ── Phase Management ──────────────────────────────────────────────────────
+   678→   678→
+   679→   679→  private async transitionPhase(newPhase: InterviewPhase): Promise<void> {
+   680→   680→    const previousPhase = this.state.currentPhase;
+   681→   681→    this.state.currentPhase = newPhase;
+   682→   682→
+   683→   683→    // Update the store's phase
+   684→   684→    this.store.setPhase(newPhase);
+   685→   685→
+   686→   686→    // Update the system prompt for the new phase
+   687→   687→    this.messageHistory = [
+   688→   688→      {
+   689→   689→        role: "system",
+   690→   690→        content: this.buildSystemPrompt(newPhase),
+   691→   691→      },
+   692→   692→    ];
+   693→   693→
+   694→   694→    // Emit phase changed event (RULE #15)
+   695→   695→    const bus = getEventBus();
+   696→   696→    const event: InterviewPhaseChangedEvent = {
+   697→   697→      type: "INTERVIEW_PHASE_CHANGED",
+   698→   698→      projectId: this.projectId,
+   699→   699→      timestamp: new Date().toISOString(),
+   700→   700→      payload: { previousPhase, newPhase },
+   701→   701→    };
+   702→   702→    bus.emit(event);
+   703→   703→  }
+   704→   704→
+   705→   705→  // ── AI Response Generation ────────────────────────────────────────────────
+   706→   706→
+   707→   707→  private async generateAIResponse(
+   708→   708→    context: string,
+   709→   709→  ): Promise<ChatMessage> {
+   710→   710→    const phase = this.state.currentPhase;
+   711→   711→
+   712→   712→    // Add user context to message history
+   713→   713→    this.messageHistory.push({ role: "user", content: context });
+   714→   714→
+   715→   715→    // Ensure system prompt is present and up-to-date
+   716→   716→    if (this.messageHistory.length === 0 || this.messageHistory[0].role !== "system") {
+   717→   717→      this.messageHistory.unshift({
+   718→   718→        role: "system",
+   719→   719→        content: this.buildSystemPrompt(phase),
+   720→   720→      });
+   721→   721→    } else {
+   722→   722→      // Refresh system prompt with latest profile data
+   723→   723→      this.messageHistory[0] = {
+   724→   724→        role: "system",
+   725→   725→        content: this.buildSystemPrompt(phase),
+   726→   726→      };
+   727→   727→    }
+   728→   728→
+   729→   729→    try {
+   730→   730→      const response = await getAIResponse(this.messageHistory);
+   731→   731→
+   732→   732→      if (response.success && response.content) {
+   733→   733→        return this.createAssistantMessage(response.content, phase);
+   734→   734→      }
+   735→   735→
+   736→   736→      // AI failed — return a friendly fallback
+   737→   737→      console.error(
+   738→   738→        "[InterviewController] AI response failed:",
+   739→   739→        response.error
+   740→   740→      );
+   741→   741→      return this.createAssistantMessage(
+   742→   742→        "I'm having trouble connecting right now. Could you please repeat that?",
+   743→   743→        phase
+   744→   744→      );
+   745→   745→    } catch (err) {
+   746→   746→      console.error("[InterviewController] AI error:", err);
+   747→   747→      return this.createAssistantMessage(
+   748→   748→        "Something went wrong on my end. Please try again.",
+   749→   749→        phase
+   750→   750→      );
+   751→   751→    }
+   752→   752→  }
+   753→   753→
+   754→   754→  private buildSystemPrompt(phase: InterviewPhase): string {
+   755→   755→    const profile = this.store.getProfile();
+   756→   756→    const phaseConfig = PHASE_CONFIGS[phase];
+   757→   757→    const profileSummary = profile
+   758→   758→      ? generateProfileSummary(profile)
+   759→   759→      : "No profile data yet.";
+   760→   760→
+   761→   761→    return `You are a PMEGP (Prime Minister's Employment Generation Programme) application assistant. You are helping an Indian entrepreneur fill out a micro-enterprise loan application.
+   762→   762→
+   763→   763→## Current Phase: ${phaseConfig?.label ?? phase}
+   764→   764→${phaseConfig?.systemPromptAddendum ?? ""}
+   765→   765→
+   766→   766→## Profile Summary:
+   767→   767→${profileSummary}
+   768→   768→
+   769→   769→## Rules:
+   770→   770→- Ask ONE question at a time. Be brief and warm.
+   771→   771→- Use simple English. Understand Hindi-English (Hinglish) mix.
+   772→   772→- NEVER invent NIC codes, financial figures, or machinery lists.
+   773→   773→- All suggestions come from the Knowledge Engine — never make up values.
+   774→   774→- Money values must be whole rupees (integers), never decimals.
+   775→   775→- If the user gives multiple pieces of information, acknowledge all of them.
+   776→   776→- Guide the user naturally through the PMEGP application process.
+   777→   777→- Be encouraging and respectful. Many users are first-time entrepreneurs.
+   778→   778→- PII (Aadhaar, PAN) must never be logged or displayed in full.
+   779→   779→- If unsure about the user's answer, ask a clarifying question rather than guessing.
+   780→   780→
+   781→   781→## Scheme Context:
+   782→   782→- PMEGP provides subsidies for micro-enterprises in India.
+   783→   783→- Maximum project cost: ₹25 lakh (₹50 lakh for manufacturing).
+   784→   784→- Subsidy rates: 15-35% depending on category and area.
+   785→   785→- Bank finance covers 60-95% of project cost.`;
+   786→   786→  }
+   787→   787→
+   788→   788→  // ── Message Factories ─────────────────────────────────────────────────────
+   789→   789→
+   790→   790→  private createAssistantMessage(
+   791→   791→    content: string,
+   792→   792→    phase: InterviewPhase
+   793→   793→  ): ChatMessage {
+   794→   794→    return {
+   795→   795→      id: generateId(),
+   796→   796→      role: "ASSISTANT",
+   797→   797→      content,
+   798→   798→      timestamp: new Date().toISOString(),
+   799→   799→      phase,
+   800→   800→    };
+   801→   801→  }
+   802→   802→
+   803→   803→  private createUserMessage(content: string): ChatMessage {
+   804→   804→    return {
+   805→   805→      id: generateId(),
+   806→   806→      role: "USER",
+   807→   807→      content,
+   808→   808→      timestamp: new Date().toISOString(),
+   809→   809→      phase: this.state.currentPhase,
+   810→   810→    };
+   811→   811→  }
+   812→   812→
+   813→   813→  // ── Event Emission (RULE #15) ─────────────────────────────────────────────
+   814→   814→
+   815→   815→  private emitAIMessage(message: ChatMessage): void {
+   816→   816→    const bus = getEventBus();
+   817→   817→    const event: AiMessageEvent = {
+   818→   818→      type: "AI_MESSAGE",
+   819→   819→      projectId: this.projectId,
+   820→   820→      timestamp: new Date().toISOString(),
+   821→   821→      payload: {
+   822→   822→        message: maskPII(message.content),
+   823→   823→        phase: message.phase,
+   824→   824→        targetField: message.targetField,
+   825→   825→      },
+   826→   826→    };
+   827→   827→    bus.emit(event);
+   828→   828→  }
+   829→   829→
+   830→   830→  private emitSuggestion(
+   831→   831→    fieldPath: string,
+   832→   832→    suggestedValue: unknown,
+   833→   833→    reasoning: string
+   834→   834→  ): void {
+   835→   835→    const bus = getEventBus();
+   836→   836→    const event: SuggestionPresentedEvent = {
+   837→   837→      type: "SUGGESTION_PRESENTED",
+   838→   838→      projectId: this.projectId,
+   839→   839→      timestamp: new Date().toISOString(),
+   840→   840→      payload: {
+   841→   841→        fieldPath,
+   842→   842→        suggestedValue,
+   843→   843→        source: "KNOWLEDGE",
+   844→   844→        reasoning,
+   845→   845→      },
+   846→   846→    };
+   847→   847→    bus.emit(event);
+   848→   848→  }
+   849→   849→}
