@@ -3,7 +3,8 @@
 // Each test only overrides what it's testing via Partial<ProjectProfile>.
 // ───────────────────────────────────────────────────────────────────────────
 
-import type { ProjectProfile, InterviewPhase, PhaseProgress } from "@/shared/types/project-profile";
+import type { ProjectProfile } from "@/shared/types/project-profile";
+import type { InterviewPhase, PhaseProgress } from "@/shared/types/interview";
 import type { ProvenanceMetadata, FieldProvenance } from "@/shared/types/provenance";
 
 /** All 7 interview phases for the completion section. */
@@ -69,20 +70,23 @@ export const MANDATORY_FIELDS = [
 ] as const;
 
 /** Simple deep merge — merges overrides into base recursively. */
-function deepMerge<T extends Record<string, unknown>>(base: T, overrides: Partial<T>): T {
+function deepMerge<T extends object>(base: T, overrides: Partial<T>): T {
   const result = { ...base };
-  for (const key of Object.keys(overrides) as (keyof T)[]) {
-    const val = overrides[key];
-    if (val !== null && typeof val === "object" && !Array.isArray(val) && typeof base[key] === "object" && base[key] !== null && !Array.isArray(base[key])) {
-      (result as Record<string, unknown>)[key] = deepMerge(
-        base[key] as Record<string, unknown>,
-        val as Record<string, unknown>,
+  const rec = result as Record<string, unknown>;
+  const baseRec = base as Record<string, unknown>;
+  const overRec = overrides as Record<string, unknown>;
+  for (const key of Object.keys(overRec)) {
+    const val = overRec[key];
+    if (val !== null && typeof val === "object" && !Array.isArray(val) && typeof baseRec[key] === "object" && baseRec[key] !== null && !Array.isArray(baseRec[key])) {
+      rec[key] = deepMerge(
+        baseRec[key] as object,
+        val as object,
       );
     } else {
-      (result as Record<string, unknown>)[key] = val as unknown;
+      rec[key] = val;
     }
   }
-  return result;
+  return result as T;
 }
 
 /** Return a fully valid, complete ProjectProfile. */
@@ -239,6 +243,8 @@ export function createEmptyProfile(): ProjectProfile {
       isWomen: null as unknown as boolean,
       education: "" as unknown as "GRADUATE",
       entityType: "" as unknown as "INDIVIDUAL",
+      priorSubsidy: null as unknown as boolean,
+      edpCompleted: null as unknown as boolean,
     },
     business: {
       name: "",

@@ -64,7 +64,7 @@ export function stampAllValidated(map: Record<string, FieldProvenance>): Record<
 
 /** Safely sum an array of numeric values, treating null/undefined items as 0. */
 function safeSum(values: (number | undefined | null)[]): number {
-  return Math.round(values.reduce((acc, v) => acc + (v ?? 0), 0));
+  return Math.round(values.reduce<number>((acc, v) => acc + (v ?? 0), 0));
 }
 
 /**

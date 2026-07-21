@@ -19,6 +19,7 @@ export interface ProjectSummary {
   id: string;
   name: string;
   status: string;
+  totalProjectCost: number;
   createdAt: string;
   updatedAt: string;
 }

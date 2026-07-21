@@ -63,7 +63,7 @@ const stepVariants = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut",
+      ease: "easeOut" as const,
     },
   },
 };
@@ -102,7 +102,7 @@ function DesktopGradientConnection({ index }: { index: number }) {
         transition={{
           duration: 0.6,
           delay: 0.3 + index * 0.15,
-          ease: "easeOut",
+          ease: "easeOut" as const,
         }}
         style={{ transformOrigin: "left" }}
       />

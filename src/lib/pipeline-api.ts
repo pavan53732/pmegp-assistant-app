@@ -94,11 +94,11 @@ export async function runPipelineStep(
  * Fetches the project data and triggers a browser download of the PDF text file.
  *
  * @param projectId - The project's unique identifier.
- * @param fileName  - Optional custom filename (defaults to "dpr-report.txt").
+ * @param fileName  - Optional custom filename (defaults to "dpr-report.pdf").
  */
 export async function downloadPdf(
   projectId: string,
-  fileName = "dpr-report.txt"
+  fileName = "dpr-report.pdf"
 ): Promise<void> {
   const res = await fetch(
     `/api/projects/${encodeURIComponent(projectId)}`
@@ -125,8 +125,8 @@ export async function downloadPdf(
     bytes[i] = binaryString.charCodeAt(i);
   }
 
-  // Trigger download
-  const blob = new Blob([bytes], { type: "text/plain;charset=utf-8" });
+  // Trigger download as a real PDF
+  const blob = new Blob([bytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;

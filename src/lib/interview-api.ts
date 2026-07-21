@@ -204,7 +204,7 @@ export async function streamChatMessage(
     async function read() {
       try {
         while (true) {
-          const { done, value } = await reader.read();
+          const { done, value } = await reader!.read();
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
@@ -245,7 +245,7 @@ export async function streamChatMessage(
 }
 
 export async function fetchProjects(): Promise<
-  { id: string; name: string; status: string; createdAt: string; updatedAt: string }[]
+  { id: string; name: string; status: string; totalProjectCost: number; createdAt: string; updatedAt: string }[]
 > {
   const res = await fetch("/api/projects");
   const data = await res.json();

@@ -398,7 +398,7 @@ export function BreakevenCalculator() {
               </div>
 
               {/* Monthly Profit/Loss at Expected Volume */}
-              {result.expectedUnits > 0 && (
+              {result.expectedUnits > 0 && result.profitLoss != null && (
                 <div
                   className={`rounded-md p-3 space-y-1 border ${
                     result.profitLoss >= 0
