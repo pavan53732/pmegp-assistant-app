@@ -25,6 +25,7 @@ import {
   FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { notificationCenter } from "@/components/notification-center";
 import {
   Sheet,
   SheetContent,
@@ -695,6 +696,7 @@ export function ChatView({
           const msg = fallbackErr instanceof Error ? fallbackErr.message : "Something went wrong. Please try again.";
           setError(msg);
           toast.error("Error", { description: msg });
+          notificationCenter.add("Interview Error", msg, "error");
         }
       } finally {
         setLoading(false);

@@ -11,6 +11,8 @@
 //   event: done      data: {}
 //
 // Uses InterviewController (one instance per request) to process messages.
+// The active AI provider configuration is loaded from the database and
+// passed to the controller so the interview uses the user's configured LLM.
 // ───────────────────────────────────────────────────────────────────────────────
 
 import { NextRequest } from "next/server";
@@ -18,6 +20,26 @@ import { InterviewController } from "@/features/ai/interview/orchestrator";
 import { getProjectRepository } from "@/database/project-repository";
 import { apiError, apiSuccess } from "@/app/api/error-handler";
 import type { ChatMessage } from "@/features/ai/interview/types";
+import { db } from "@/lib/db";
+import type { ProviderConnectionConfig } from "@/providers";
+
+/**
+ * Load the active AI provider configuration from the database.
+ * Returns `null` when no provider has been configured yet.
+ */
+async function loadActiveProviderConfig(): Promise<ProviderConnectionConfig | null> {
+  const provider = await db.aiProviderConfig.findFirst({
+    where: { isActive: true },
+  });
+
+  if (!provider) return null;
+
+  return {
+    baseUrl: provider.baseUrl,
+    apiKey: provider.apiKey,
+    modelName: provider.modelName,
+  };
+}
 
 export async function POST(request: NextRequest) {
   const url = request.nextUrl;
@@ -42,8 +64,18 @@ export async function POST(request: NextRequest) {
       return apiError("Project not found.", 404);
     }
 
-    // Create a controller per request (server-side, stateless)
-    const controller = new InterviewController(projectId);
+    // ── Load the user's configured AI provider ──────────────────────────
+    const providerConfig = await loadActiveProviderConfig();
+    if (!providerConfig) {
+      return apiError(
+        "Please configure an AI provider in Settings before starting an interview.",
+        422
+      );
+    }
+
+    // Create a controller per request (server-side, stateless),
+    // passing the provider config so the interview uses the user's LLM.
+    const controller = new InterviewController(projectId, providerConfig);
 
     // Start the interview if this is the first interaction
     if (project.profile.completion.interactionCount === 0) {

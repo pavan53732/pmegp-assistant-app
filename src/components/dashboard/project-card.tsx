@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { duplicateProject, exportProject } from "@/lib/interview-api";
+import { notificationCenter } from "@/components/notification-center";
 
 const STATUS_VARIANT: Record<string, "default" | "secondary" | "outline"> = {
   EMPTY: "outline",
@@ -174,6 +175,7 @@ export function ProjectCard({
     try {
       const result = await duplicateProject(id);
       toast.success("Project duplicated!", { description: result.name });
+      notificationCenter.add("Project Duplicated", `Created a copy of "${name}"`, "success");
       onDuplicate?.(result.id, result.name);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to duplicate project";

@@ -22,7 +22,7 @@ import type {
 
 import { getEventBus } from "@/shared/events/event-bus";
 import { InterviewStore } from "@/features/ai/interview-store/interview-store";
-import { getAIResponse, type ProviderMessage } from "@/providers";
+import { getAIResponse, type ProviderConnectionConfig, type ProviderMessage } from "@/providers";
 import {
   resolveActivity,
   suggestMachinery,
@@ -124,9 +124,18 @@ export class InterviewController {
   private store: InterviewStore;
   private messageHistory: ProviderMessage[];
   private readonly projectId: string;
+  /** User-configured AI provider connection, loaded from DB. */
+  private readonly providerConfig?: ProviderConnectionConfig;
 
-  constructor(projectId: string) {
+  /**
+   * @param projectId       - The project this interview belongs to.
+   * @param providerConfig  - Optional AI provider connection config from the database.
+   *                          When provided, the interview will use this custom provider
+   *                          instead of the built-in SDK.
+   */
+  constructor(projectId: string, providerConfig?: ProviderConnectionConfig) {
     this.projectId = projectId;
+    this.providerConfig = providerConfig;
     this.store = new InterviewStore();
     this.messageHistory = [];
     this.state = {
@@ -368,7 +377,7 @@ export class InterviewController {
         );
         this.messageHistory.push({ role: "user", content: extractionPrompt });
         try {
-          const aiResp = await getAIResponse(this.messageHistory);
+          const aiResp = await getAIResponse(this.messageHistory, {}, this.providerConfig);
           if (aiResp.success && aiResp.content) {
             const parsed = parseAIExtractionResponse(aiResp.content, fieldsNeedingAI);
             aiExtractions.push(...parsed);
@@ -727,7 +736,7 @@ PMEGP is a government scheme for micro-enterprises with loans up to ₹25 lakh (
     }
 
     try {
-      const response = await getAIResponse(this.messageHistory);
+      const response = await getAIResponse(this.messageHistory, {}, this.providerConfig);
 
       if (response.success && response.content) {
         return this.createAssistantMessage(response.content, phase);

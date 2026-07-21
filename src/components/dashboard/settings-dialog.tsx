@@ -55,6 +55,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { notificationCenter } from "@/components/notification-center";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 interface AiProvider {
@@ -283,6 +284,7 @@ function AiConfigTab() {
     const json = await res.json();
     if (json.success) {
       toast.success("Provider added successfully");
+      notificationCenter.add("Settings Saved", "AI provider configuration updated", "success");
       fetchProviders();
     } else {
       toast.error(json.error?.message || "Failed to add provider");
@@ -300,6 +302,7 @@ function AiConfigTab() {
     const json = await res.json();
     if (json.success) {
       toast.success("Provider updated successfully");
+      notificationCenter.add("Settings Saved", "AI provider configuration updated", "success");
       fetchProviders();
     } else {
       toast.error(json.error?.message || "Failed to update provider");
