@@ -43,6 +43,7 @@ import {
   Check,
   X,
   ArrowLeft,
+  ClipboardList,
 } from "lucide-react";
 
 import { getProjectRepository } from "@/database/project-repository";
@@ -421,6 +422,11 @@ export function ProjectProfileScreen() {
 
       {/* Stage shortcuts */}
       <div className="flex flex-wrap gap-2">
+        <Button asChild size="sm" variant="default" className="min-h-9">
+          <Link to={`/project/${data.id}/guided`}>
+            <ClipboardList className="size-3.5" /> Guided form wizard
+          </Link>
+        </Button>
         <Button asChild size="sm" variant="outline" className="min-h-9">
           <Link to={`/project/${data.id}/financial`}>
             <IndianRupee className="size-3.5" /> Financial review

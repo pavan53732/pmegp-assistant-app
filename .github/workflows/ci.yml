@@ -15,6 +15,13 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --frozen-lockfile
+      - name: Download Tesseract.js offline assets
+        run: |
+          mkdir -p public/tesseract
+          curl -sL "https://unpkg.com/tesseract.js@5.1.1/dist/worker.min.js" -o public/tesseract/worker.min.js
+          curl -sL "https://unpkg.com/tesseract.js-core@5.1.1/tesseract-core-simd.wasm.js" -o public/tesseract/tesseract-core-simd.wasm.js
+          curl -sL "https://unpkg.com/tesseract.js-core@5.1.1/tesseract-core-simd.wasm" -o public/tesseract/tesseract-core-simd.wasm
+          curl -sL "https://tessdata.projectnaptha.com/4.0.0/eng.traineddata.gz" -o public/tesseract/eng.traineddata.gz
       - name: Typecheck
         run: bun run typecheck
       - name: Lint

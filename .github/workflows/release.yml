@@ -1,8 +1,9 @@
-name: Release Android APK
+name: Release Android APK (unsigned)
 
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 jobs:
   build-android:
@@ -14,6 +15,13 @@ jobs:
           bun-version: latest
 
       - run: bun install --frozen-lockfile
+      - name: Download Tesseract.js offline assets
+        run: |
+          mkdir -p public/tesseract
+          curl -sL "https://unpkg.com/tesseract.js@5.1.1/dist/worker.min.js" -o public/tesseract/worker.min.js
+          curl -sL "https://unpkg.com/tesseract.js-core@5.1.1/tesseract-core-simd.wasm.js" -o public/tesseract/tesseract-core-simd.wasm.js
+          curl -sL "https://unpkg.com/tesseract.js-core@5.1.1/tesseract-core-simd.wasm" -o public/tesseract/tesseract-core-simd.wasm
+          curl -sL "https://tessdata.projectnaptha.com/4.0.0/eng.traineddata.gz" -o public/tesseract/eng.traineddata.gz
       - name: Build web bundle
         run: bun run build
 
@@ -36,35 +44,34 @@ jobs:
           fi
           bunx cap sync android
 
-      - name: Build release APK
+      - name: Build debug APK (unsigned, no signing required)
         working-directory: android
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleDebug
 
-      - name: Sign APK
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
+      - name: Rename unsigned APK
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
-          cp android/app/build/outputs/apk/release/app-release-unsigned.apk app-release.apk || \
-          cp android/app/build/outputs/apk/release/app-release.apk app-release.apk
-          $ANDROID_SDK_ROOT/build-tools/34.0.0/apksigner sign \
-            --ks release.keystore \
-            --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
-            --ks-key-alias ${{ secrets.KEY_ALIAS }} \
-            --key-pass pass:${{ secrets.KEY_PASSWORD }} \
-            --out app-release-signed.apk \
-            app-release.apk
+          mkdir -p release
+          cp android/app/build/outputs/apk/debug/app-debug.apk \
+            release/pmegp-assistant-unsigned.apk
 
-      - name: Upload APK artifact
+      - name: Upload unsigned APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pmegp-assistant-apk
-          path: |
-            app-release-signed.apk
-            android/app/build/outputs/apk/release/*.apk
+          name: pmegp-assistant-unsigned-apk
+          path: release/pmegp-assistant-unsigned.apk
           retention-days: 30
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: app-release-signed.apk
+          files: release/pmegp-assistant-unsigned.apk
           generate_release_notes: true
+          body: |
+            ## PMEGP Assistant — Unsigned Debug APK
+
+            This is an **unsigned debug build** suitable for testing.
+            To install on a device, enable "Install from unknown sources"
+            and sideload the APK.
+
+            **Build:** ${{ github.sha }}
+            **Tag:** ${{ github.ref_name }}

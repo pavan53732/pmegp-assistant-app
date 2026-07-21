@@ -6,6 +6,7 @@
 // Routes:
 //   /                              Dashboard
 //   /project/:id                   Project Profile (read + JSON edit)
+//   /project/:id/guided            Guided Forms wizard (AI-interview fallback)
 //   /project/:id/financial         Financial Review (computeFinancials + charts)
 //   /project/:id/eligibility       Eligibility (checkEligibility + checklist)
 //   /project/:id/dpr               DPR Preview (generateDPR + PDF download)
@@ -23,7 +24,7 @@
 //     everywhere (min-h-11 buttons).
 // ───────────────────────────────────────────────────────────────────────────
 
-import { NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { NavLink, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -42,6 +43,11 @@ import { DprScreen } from "@/features/dpr/DprScreen";
 import { KnowledgeScreen } from "@/features/knowledge/KnowledgeScreen";
 import { OcrScreen } from "@/features/ocr/OcrScreen";
 import { SettingsScreen } from "@/features/settings/SettingsScreen";
+import { GuidedFormsWizard } from "@/features/guided-forms";
+// Wave 6: biometric unlock gate. Wraps <Routes> below so the entire app
+// content is gated on native (fingerprint / face / PIN). On web (dev) the
+// gate is a pass-through. See src/features/biometric/.
+import { BiometricGate } from "@/features/biometric";
 
 // ── Navigation items ────────────────────────────────────────────────────────
 
@@ -181,17 +187,20 @@ function Footer() {
 export default function App() {
   return (
     <Shell>
-      <Routes>
-        <Route path="/" element={<DashboardScreen />} />
-        <Route path="/project/:id" element={<ProjectProfileScreen />} />
-        <Route path="/project/:id/financial" element={<FinancialScreen />} />
-        <Route path="/project/:id/eligibility" element={<EligibilityScreen />} />
-        <Route path="/project/:id/dpr" element={<DprScreen />} />
-        <Route path="/knowledge" element={<KnowledgeScreen />} />
-        <Route path="/ocr" element={<OcrScreen />} />
-        <Route path="/settings" element={<SettingsScreen />} />
-        <Route path="*" element={<NavigateToDashboard />} />
-      </Routes>
+      <BiometricGate>
+        <Routes>
+          <Route path="/" element={<DashboardScreen />} />
+          <Route path="/project/:id" element={<ProjectProfileScreen />} />
+          <Route path="/project/:id/guided" element={<GuidedFormsRoute />} />
+          <Route path="/project/:id/financial" element={<FinancialScreen />} />
+          <Route path="/project/:id/eligibility" element={<EligibilityScreen />} />
+          <Route path="/project/:id/dpr" element={<DprScreen />} />
+          <Route path="/knowledge" element={<KnowledgeScreen />} />
+          <Route path="/ocr" element={<OcrScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+          <Route path="*" element={<NavigateToDashboard />} />
+        </Routes>
+      </BiometricGate>
     </Shell>
   );
 }
@@ -202,4 +211,14 @@ function NavigateToDashboard() {
   // Log unknown routes so Wave 5 navigation bugs are easy to spot.
   console.warn(`[App] Unknown route "${location.pathname}" — redirecting to /.`);
   return <Navigate to="/" replace />;
+}
+
+/**
+ * Route wrapper for the Guided Forms wizard. Pulls the `:id` URL param and
+ * passes it to `<GuidedFormsWizard>` as the `projectId` prop. The wizard
+ * itself stays route-agnostic so it can be unit-tested in isolation.
+ */
+function GuidedFormsRoute() {
+  const { id = "" } = useParams<{ id: string }>();
+  return <GuidedFormsWizard projectId={id} />;
 }

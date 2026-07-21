@@ -1,5 +1,5 @@
 // ─── Eligibility Engine Tests ───────────────────────────────────────────
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { checkEligibility } from "../index";
 import { createTestProfile } from "@/test-helpers/create-test-profile";
 

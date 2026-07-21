@@ -1,0 +1,142 @@
+{
+  "caseId": "case-4-st-male-hill-border-service",
+  "description": "ST category male, hill/border area (Uttarkashi, Uttarakhand), service sector — adventure tourism service; tests isHillBorderArea=true triggering special-category subsidy (35% for rural) for a non-women, non-OBC/SC applicant, with ST category as a secondary special-category trigger",
+  "input": {
+    "applicant": {
+      "name": "Tenzing Norbu",
+      "age": 30,
+      "gender": "MALE",
+      "category": "ST",
+      "isWomen": false,
+      "education": "10TH_PASS",
+      "entityType": "INDIVIDUAL",
+      "priorSubsidy": false,
+      "edpCompleted": true,
+      "edpCertificateNo": "EDP-2024-009933"
+    },
+    "business": {
+      "name": "Himalayan Adventure Trek & Tour Services",
+      "description": "Adventure tourism service — trekking, camping, and guide services in hill area",
+      "activityType": "SERVICE",
+      "sector": "SERVICE",
+      "subCategory": "SERVICE",
+      "nicCode": "79901"
+    },
+    "location": {
+      "state": "Uttarakhand",
+      "district": "Uttarkashi",
+      "area": "RURAL",
+      "isHillBorderArea": true,
+      "isAspirationalDistrict": false
+    },
+    "land": {
+      "status": "OWN",
+      "buildingType": "OWN"
+    },
+    "capacity": {
+      "installedCapacity": { "unit": "tours/month", "value": 12 },
+      "projectedCapacityUtil": 75,
+      "workingDaysPerMonth": 25,
+      "workingHoursPerDay": 10,
+      "shifts": 1
+    },
+    "machinery": {
+      "items": [],
+      "totalCost": 400000
+    },
+    "rawMaterials": {
+      "items": [],
+      "totalMonthlyCost": 25000
+    },
+    "employees": {
+      "skilled": { "male": 3, "female": 0, "monthlyWagePerPerson": 16000 },
+      "unskilled": { "male": 2, "female": 0, "monthlyWagePerPerson": 10000 },
+      "administrative": { "count": 1, "monthlyWagePerPerson": 14000 },
+      "totalMonthlyWages": 82000,
+      "totalEmployment": 6
+    },
+    "utilities": {
+      "monthlyPowerCost": 4000,
+      "monthlyWaterCost": 800,
+      "monthlyRentCost": 0,
+      "monthlyMaintenanceCost": 3000,
+      "monthlyTransportCost": 12000,
+      "monthlyCommunicationCost": 2000,
+      "monthlyInsuranceCost": 4000,
+      "monthlyMiscCost": 3200,
+      "totalMonthlyOverheads": 29000
+    },
+    "financials": {
+      "machineryAndEquipment": 400000,
+      "otherFixedAssets": 300000,
+      "preOperativeExpenses": 100000,
+      "buildingAndCivilWorks": 200000,
+      "workingCapital": 500000,
+      "totalProjectCost": 1500000,
+      "interestRate": 11,
+      "loanTenureYears": 7,
+      "repaymentMoratoriumMonths": 6,
+      "projectedMonthlySales": 150000
+    },
+    "workingCapitalDetail": {
+      "rawMaterialDays": 30,
+      "workInProgressDays": 7,
+      "finishedGoodsDays": 15,
+      "creditorsDays": 15,
+      "method": "USER_PROVIDED"
+    },
+    "market": {
+      "targetMarket": "Domestic and inbound adventure tourists"
+    },
+    "attachments": { "items": [] },
+    "validation": {
+      "completeness": 100,
+      "missingFields": [],
+      "errors": [],
+      "contradictions": []
+    },
+    "provenance": { "perField": {}, "aggregate": 1.0 },
+    "completion": {
+      "currentPhase": "VALIDATION_COMPLETION",
+      "phaseProgress": {
+        "APPLICANT_DISCOVERY": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "BUSINESS_DISCOVERY": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "ACTIVITY_RESOLUTION": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "PROJECT_SIZING": { "completedFields": 0, "status": "COMPLETED", "totalFields": 0 },
+        "FINANCIAL_PLANNING": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "REVIEW": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "VALIDATION_COMPLETION": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 }
+      },
+      "startedAt": "2024-07-15T11:00:00.000Z",
+      "lastUpdatedAt": "2024-09-10T15:15:00.000Z",
+      "interactionCount": 64
+    }
+  },
+  "expected": {
+    "financials": {
+      "totalProjectCost": 1500000,
+      "ownContribution": 75000,
+      "ownContributionPercent": 5,
+      "subsidyRate": 35,
+      "subsidyAmount": 369444,
+      "bankTermLoan": 555556,
+      "emi": 9512,
+      "loanTenureMonths": 84,
+      "breakEvenPercent": 25.87,
+      "dscr": 1.47
+    },
+    "eligibility": {
+      "eligible": true,
+      "criteria": {
+        "ageEligible": true,
+        "categoryEligible": true,
+        "educationEligible": true,
+        "edpEligible": true,
+        "projectCostWithinCeiling": true,
+        "areaEligible": true,
+        "noPriorSubsidy": true
+      }
+    }
+  },
+  "notes": "Hand-verified against PMEGP scheme rules + src/engines/financial-engine/index.ts and src/engines/eligibility-engine/index.ts (engine-verified by running computeFinancials + checkEligibility). Subsidy rate 35% — isSpecialCategory() (engine line 79-86) returns true via THREE independent triggers: applicant.category === 'ST' (in SPECIAL_CATEGORIES set), AND location.isHillBorderArea === true. Either alone is sufficient. Per subsidy_matrix.json SPECIAL+RURAL entry (line 28-35): subsidyRate 35, ownContributionPercent 5, maxProjectCost 5000000. Per pmegp_location_data.json (line 24): Uttarakhand is in hillBorderStates, with districts Uttarkashi/Chamoli/Rudraprayag/Pithoragarh/Bageshwar/Champawat listed — Uttarkashi qualifies, so isHillBorderArea=true is correct for this district. Note: task brief suggested 'special category + hill area' as additive, but the engine treats them as alternative triggers (no stacking — subsidy rate is 35% once special, not 35%+something for hill+ST). Location area=RURAL is what determines 35% vs 25% (urban) within the special branch; hill/border alone does not change the rate. Means-of-finance algebra: bankFinance = round((1500000 - 75000) / 1.35) = round(1425000 / 1.35) = 1055556 (rounded up from 1055555.555...); subsidyAmount = 1500000 - 75000 - 1055556 = 369444. bankTermLoan = bankFinance - workingCapital = 1055556 - 500000 = 555556. EMI (P=555556, r=0.11/12, n=84) = 9512. Break-even %: depreciation = 400000/10 = 40000; fixedCosts = 29000*12 + 40000 = 388000; variableCosts = 25000*12 = 300000; contribution = 150000*12 - 300000 = 1500000; breakEvenPercent = 388000/1500000*100 = 25.87%. DSCR: monthlyOperating = 82000+29000+25000 = 136000; annualRev = 1800000; annualExpenditure = 136000*12 + 40000 = 1672000; annualNetProfit = 128000; first-12-month debt service ≈ 12 * 9512 = 114144; DSCR = (128000 + 40000)/114144 = 1.47. Eligibility: all 7 engine checks pass (age 30 in [18,65], negative-list empty, cost 15L <= 25L SERVICE, no prior subsidy, INDIVIDUAL permitted, education 10TH_PASS rank 3 >= 8TH_PASS rank 2 required for cost > 10L — passes). No engine check exists for hill/border area — that flag only influences subsidy via isSpecialCategory(). breakEvenPercent and dscr rounded to 2 decimals; engine emits 25.866666666666667 and 1.471825063078217 — strict regression test should round to 2 decimals before comparing."
+}

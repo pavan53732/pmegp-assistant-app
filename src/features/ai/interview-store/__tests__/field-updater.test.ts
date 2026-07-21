@@ -1,5 +1,5 @@
 // ─── Field Updater Tests ──────────────────────────────────────────────
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import {
   setFieldValue,
   getFieldValue,

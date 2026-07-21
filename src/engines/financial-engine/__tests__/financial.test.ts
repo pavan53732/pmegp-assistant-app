@@ -1,5 +1,5 @@
 // ─── Financial Engine Tests ────────────────────────────────────────────
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { computeFinancials } from "../index";
 import { createTestProfile } from "@/test-helpers/create-test-profile";
 

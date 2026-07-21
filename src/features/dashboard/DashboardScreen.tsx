@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Plus, Sparkles, FileText, ShieldCheck, IndianRupee } from "lucide-react";
+import { Plus, Sparkles, FileText, ShieldCheck, IndianRupee, ClipboardList } from "lucide-react";
 
 import { getProjectRepository } from "@/database/project-repository";
 import type { ProjectSummary } from "@/database/interfaces";
@@ -206,6 +206,16 @@ export function DashboardScreen() {
                     className="min-h-9"
                   >
                     <Link to={`/project/${p.id}`}>Open profile</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="sm"
+                    variant="outline"
+                    className="min-h-9"
+                  >
+                    <Link to={`/project/${p.id}/guided`}>
+                      <ClipboardList className="size-3.5" /> Guided form
+                    </Link>
                   </Button>
                   <Button
                     asChild

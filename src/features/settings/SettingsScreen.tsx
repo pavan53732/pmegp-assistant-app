@@ -65,6 +65,8 @@ import { computeFinancials } from "@/engines/financial-engine";
 import { checkEligibility } from "@/engines/eligibility-engine";
 import type { ProjectSummary } from "@/database/interfaces";
 import { formatDateTime } from "@/shared/format";
+// Wave 6: biometric unlock settings panel.
+import { BiometricSettings } from "@/features/biometric";
 
 // ── localStorage persistence (Wave 5 will replace with SQLite + Secure Storage) ──
 
@@ -347,6 +349,9 @@ export function SettingsScreen() {
           )}
         </CardContent>
       </Card>
+
+      {/* Biometric unlock (Wave 6) */}
+      <BiometricSettings />
 
       {/* Knowledge version */}
       <Card>

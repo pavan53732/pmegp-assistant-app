@@ -1,0 +1,142 @@
+{
+  "caseId": "case-3-obc-male-rural-mfg-ceiling-edge",
+  "description": "OBC category male, rural area (aspirational district), manufacturing sector — food processing unit at the ₹25,00,000 GENERAL-rural manufacturing ceiling edge per subsidy matrix; tests boundary behaviour and OBC-as-special-category 35% subsidy + 5% own contribution",
+  "input": {
+    "applicant": {
+      "name": "Suresh Patel",
+      "age": 35,
+      "gender": "MALE",
+      "category": "OBC",
+      "isWomen": false,
+      "education": "12TH_PASS",
+      "entityType": "INDIVIDUAL",
+      "priorSubsidy": false,
+      "edpCompleted": true,
+      "edpCertificateNo": "EDP-2024-007788"
+    },
+    "business": {
+      "name": "Patel Agro Food Processing Unit",
+      "description": "Small-scale food processing unit producing spices and flours",
+      "activityType": "MANUFACTURING",
+      "sector": "MANUFACTURING",
+      "subCategory": "MANUFACTURING",
+      "nicCode": "10630"
+    },
+    "location": {
+      "state": "Madhya Pradesh",
+      "district": "Dindori",
+      "area": "RURAL",
+      "isHillBorderArea": false,
+      "isAspirationalDistrict": true
+    },
+    "land": {
+      "status": "OWN",
+      "buildingType": "OWN"
+    },
+    "capacity": {
+      "installedCapacity": { "unit": "kg/month", "value": 5000 },
+      "projectedCapacityUtil": 70,
+      "workingDaysPerMonth": 26,
+      "workingHoursPerDay": 8,
+      "shifts": 1
+    },
+    "machinery": {
+      "items": [],
+      "totalCost": 1400000
+    },
+    "rawMaterials": {
+      "items": [],
+      "totalMonthlyCost": 120000
+    },
+    "employees": {
+      "skilled": { "male": 2, "female": 0, "monthlyWagePerPerson": 18000 },
+      "unskilled": { "male": 4, "female": 1, "monthlyWagePerPerson": 9000 },
+      "administrative": { "count": 1, "monthlyWagePerPerson": 12000 },
+      "totalMonthlyWages": 93000,
+      "totalEmployment": 8
+    },
+    "utilities": {
+      "monthlyPowerCost": 18000,
+      "monthlyWaterCost": 2000,
+      "monthlyRentCost": 0,
+      "monthlyMaintenanceCost": 5000,
+      "monthlyTransportCost": 8000,
+      "monthlyCommunicationCost": 1500,
+      "monthlyInsuranceCost": 3000,
+      "monthlyMiscCost": 4500,
+      "totalMonthlyOverheads": 42000
+    },
+    "financials": {
+      "machineryAndEquipment": 1400000,
+      "otherFixedAssets": 350000,
+      "preOperativeExpenses": 150000,
+      "buildingAndCivilWorks": 250000,
+      "workingCapital": 350000,
+      "totalProjectCost": 2500000,
+      "interestRate": 11,
+      "loanTenureYears": 7,
+      "repaymentMoratoriumMonths": 6,
+      "projectedMonthlySales": 350000
+    },
+    "workingCapitalDetail": {
+      "rawMaterialDays": 30,
+      "workInProgressDays": 7,
+      "finishedGoodsDays": 15,
+      "creditorsDays": 15,
+      "method": "USER_PROVIDED"
+    },
+    "market": {
+      "targetMarket": "Wholesale buyers in MP and adjoining districts"
+    },
+    "attachments": { "items": [] },
+    "validation": {
+      "completeness": 100,
+      "missingFields": [],
+      "errors": [],
+      "contradictions": []
+    },
+    "provenance": { "perField": {}, "aggregate": 1.0 },
+    "completion": {
+      "currentPhase": "VALIDATION_COMPLETION",
+      "phaseProgress": {
+        "APPLICANT_DISCOVERY": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "BUSINESS_DISCOVERY": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "ACTIVITY_RESOLUTION": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "PROJECT_SIZING": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "FINANCIAL_PLANNING": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "REVIEW": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "VALIDATION_COMPLETION": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 }
+      },
+      "startedAt": "2024-08-10T09:00:00.000Z",
+      "lastUpdatedAt": "2024-09-12T16:45:00.000Z",
+      "interactionCount": 58
+    }
+  },
+  "expected": {
+    "financials": {
+      "totalProjectCost": 2500000,
+      "ownContribution": 125000,
+      "ownContributionPercent": 5,
+      "subsidyRate": 35,
+      "subsidyAmount": 615741,
+      "bankTermLoan": 1409259,
+      "emi": 24130,
+      "loanTenureMonths": 84,
+      "breakEvenPercent": 23.33,
+      "dscr": 3.94
+    },
+    "eligibility": {
+      "eligible": true,
+      "criteria": {
+        "ageEligible": true,
+        "categoryEligible": true,
+        "educationEligible": true,
+        "edpEligible": true,
+        "projectCostWithinCeiling": true,
+        "areaEligible": true,
+        "noPriorSubsidy": true
+      }
+    }
+  },
+  "notes": "Hand-verified against PMEGP scheme rules + src/engines/financial-engine/index.ts and src/engines/eligibility-engine/index.ts (engine-verified by running computeFinancials + checkEligibility). OBC is in SPECIAL_CATEGORIES set in financial-engine line 56-64 and subsidy_matrix specialCategories list, so: SPECIAL + RURAL → subsidyRate 35, ownContributionPercent 5, maxProjectCost 5000000 (per subsidy_matrix.json line 28-35). Ceiling-edge note: the project cost (25,00,000) equals the GENERAL-RURAL maxProjectCost from subsidy_matrix.json line 13-19, but for OBC (special) the actual cap is 50,00,000. The eligibility engine uses a simpler sector-only COST_CEILING map (line 36-39): MANUFACTURING=50,00,000, SERVICE=25,00,000 — so cost.ceiling check passes (25L <= 50L). This fixture therefore tests the GENERAL-rural manufacturing ceiling edge as recorded in the matrix, NOT the engine's hard fail boundary; to test the engine's hard fail boundary for manufacturing, a future fixture should use a TPC > 50,00,000. Means-of-finance algebra: bankFinance = round((2500000 - 125000) / 1.35) = round(2375000 / 1.35) = 1759259; subsidyAmount = 2500000 - 125000 - 1759259 = 615741. bankTermLoan = bankFinance - workingCapital = 1759259 - 350000 = 1409259. EMI (P=1409259, r=0.11/12, n=84) = 24130. Break-even %: depreciation = 1400000/10 = 140000; fixedCosts = 42000*12 + 140000 = 644000; variableCosts = 120000*12 = 1440000; contribution = 4200000 - 1440000 = 2760000; breakEvenPercent = 644000/2760000*100 = 23.33%. DSCR: monthlyOperating = 93000+42000+120000 = 255000; annualRev = 4200000; annualExpenditure = 255000*12 + 140000 = 3200000; annualNetProfit = 1000000; first-12-month debt service ≈ 12 * 24130 = 289560; DSCR = (1000000 + 140000)/289560 = 3.94. Eligibility: all 7 engine checks pass (age 35 in [18,65], negative-list empty, cost 25L <= 50L MANUFACTURING, no prior subsidy, INDIVIDUAL permitted, education 12TH_PASS >= 8TH_PASS required for cost > 10L). Education check is hard because totalProjectCost 25L > HIGH_COST_THRESHOLD (10L) — 12TH_PASS rank 4 >= 8TH_PASS rank 2, passes. isAspirationalDistrict=true does NOT change subsidy in current engine (only SC/ST/OBC/etc category, isWomen, isHillBorderArea trigger special) — recorded as observed engine behaviour. breakEvenPercent and dscr rounded to 2 decimals; engine emits 23.333333333333332 and 3.937007874015748 — strict regression test should round to 2 decimals before comparing."
+}

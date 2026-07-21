@@ -1,5 +1,5 @@
 // ─── Response Parser Tests ────────────────────────────────────────────
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { parseUserIntent, isGreeting, extractTargetPhase } from "../response-parser";
 
 /** Convenience: call parseUserIntent with empty history and APPLICANT_DISCOVERY phase. */

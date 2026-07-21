@@ -1,0 +1,12 @@
+{
+  "version": "2026.01.15-sample",
+  "schemeCode": "PMEGP",
+  "files": [
+    {
+      "path": "pack.json",
+      "sha256": "9cf12134ee9ae7afba82c4a36ec461bf0c5f660c7844e32da2e9c6cc57a24b06"
+    }
+  ],
+  "publicKeyId": "v1",
+  "signature": "TJOGXPfabVfsXoRviTx7ICoDiXWpVop+OcGQ373l6UmCddagzjwgH9KXgIcP1kgczs0qkxcX9NCGrL4lBhhSDQ=="
+}

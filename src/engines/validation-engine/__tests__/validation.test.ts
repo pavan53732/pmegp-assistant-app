@@ -1,5 +1,5 @@
 // ─── Validation Engine Tests ──────────────────────────────────────────────
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect } from "vitest";
 import { validateProject } from "../index";
 import { createTestProfile, createEmptyProfile, createConfirmedProvenance, MANDATORY_FIELDS } from "@/test-helpers/create-test-profile";
 

@@ -1,0 +1,142 @@
+{
+  "caseId": "case-2-sc-female-rural-service",
+  "description": "SC category female, rural area, service sector — small tailoring & beauty parlour unit; tests special-category × rural = 35% subsidy and 5% own contribution for women-owned SC enterprise",
+  "input": {
+    "applicant": {
+      "name": "Lakshmi Devi",
+      "age": 28,
+      "gender": "FEMALE",
+      "category": "SC",
+      "isWomen": true,
+      "education": "GRADUATE",
+      "entityType": "INDIVIDUAL",
+      "priorSubsidy": false,
+      "edpCompleted": true,
+      "edpCertificateNo": "EDP-2024-005612"
+    },
+    "business": {
+      "name": "Sri Lakshmi Tailoring & Beauty Parlour",
+      "description": "Tailoring unit with beauty parlour services for rural households",
+      "activityType": "SERVICE",
+      "sector": "SERVICE",
+      "subCategory": "SERVICE",
+      "nicCode": "96092"
+    },
+    "location": {
+      "state": "Tamil Nadu",
+      "district": "Ramanathapuram",
+      "area": "RURAL",
+      "isHillBorderArea": false,
+      "isAspirationalDistrict": false
+    },
+    "land": {
+      "status": "OWN",
+      "buildingType": "OWN"
+    },
+    "capacity": {
+      "installedCapacity": { "unit": "customers/month", "value": 200 },
+      "projectedCapacityUtil": 70,
+      "workingDaysPerMonth": 26,
+      "workingHoursPerDay": 8,
+      "shifts": 1
+    },
+    "machinery": {
+      "items": [],
+      "totalCost": 200000
+    },
+    "rawMaterials": {
+      "items": [],
+      "totalMonthlyCost": 15000
+    },
+    "employees": {
+      "skilled": { "male": 0, "female": 1, "monthlyWagePerPerson": 18000 },
+      "unskilled": { "male": 0, "female": 1, "monthlyWagePerPerson": 12000 },
+      "administrative": { "count": 0, "monthlyWagePerPerson": 0 },
+      "totalMonthlyWages": 30000,
+      "totalEmployment": 2
+    },
+    "utilities": {
+      "monthlyPowerCost": 3000,
+      "monthlyWaterCost": 500,
+      "monthlyRentCost": 0,
+      "monthlyMaintenanceCost": 1500,
+      "monthlyTransportCost": 1000,
+      "monthlyCommunicationCost": 500,
+      "monthlyInsuranceCost": 500,
+      "monthlyMiscCost": 2500,
+      "totalMonthlyOverheads": 25000
+    },
+    "financials": {
+      "machineryAndEquipment": 200000,
+      "otherFixedAssets": 100000,
+      "preOperativeExpenses": 50000,
+      "buildingAndCivilWorks": 50000,
+      "workingCapital": 400000,
+      "totalProjectCost": 800000,
+      "interestRate": 11,
+      "loanTenureYears": 7,
+      "repaymentMoratoriumMonths": 6,
+      "projectedMonthlySales": 75000
+    },
+    "workingCapitalDetail": {
+      "rawMaterialDays": 30,
+      "workInProgressDays": 7,
+      "finishedGoodsDays": 0,
+      "creditorsDays": 15,
+      "method": "USER_PROVIDED"
+    },
+    "market": {
+      "targetMarket": "Rural households within 10 km radius"
+    },
+    "attachments": { "items": [] },
+    "validation": {
+      "completeness": 100,
+      "missingFields": [],
+      "errors": [],
+      "contradictions": []
+    },
+    "provenance": { "perField": {}, "aggregate": 1.0 },
+    "completion": {
+      "currentPhase": "VALIDATION_COMPLETION",
+      "phaseProgress": {
+        "APPLICANT_DISCOVERY": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "BUSINESS_DISCOVERY": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "ACTIVITY_RESOLUTION": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "PROJECT_SIZING": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "FINANCIAL_PLANNING": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "REVIEW": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 },
+        "VALIDATION_COMPLETION": { "status": "COMPLETED", "completedFields": 0, "totalFields": 0 }
+      },
+      "startedAt": "2024-09-01T10:00:00.000Z",
+      "lastUpdatedAt": "2024-09-15T14:30:00.000Z",
+      "interactionCount": 42
+    }
+  },
+  "expected": {
+    "financials": {
+      "totalProjectCost": 800000,
+      "ownContribution": 40000,
+      "ownContributionPercent": 5,
+      "subsidyRate": 35,
+      "subsidyAmount": 197037,
+      "bankTermLoan": 162963,
+      "emi": 2790,
+      "loanTenureMonths": 84,
+      "breakEvenPercent": 44.44,
+      "dscr": 1.79
+    },
+    "eligibility": {
+      "eligible": true,
+      "criteria": {
+        "ageEligible": true,
+        "categoryEligible": true,
+        "educationEligible": true,
+        "edpEligible": true,
+        "projectCostWithinCeiling": true,
+        "areaEligible": true,
+        "noPriorSubsidy": true
+      }
+    }
+  },
+  "notes": "Hand-verified against PMEGP scheme rules + src/engines/financial-engine/index.ts and src/engines/eligibility-engine/index.ts (engine-verified by running computeFinancials + checkEligibility). Subsidy rate 35% from src/knowledge-package/data/pmegp_subsidy_matrix.json: SPECIAL category (SC) + RURAL area → subsidyRate 35, ownContributionPercent 5, maxProjectCost 5000000. isSpecialCategory() returns true because applicant.category === 'SC' (and applicant.isWomen === true would also trigger it independently). Means-of-finance algebra (engine lines 213-227): bankFinance = round((TPC - OC) / (1 + rate/100)) = round(760000 / 1.35) = 562963; subsidyAmount = TPC - OC - bankFinance = 800000 - 40000 - 562963 = 197037 (residual, avoids rounding drift). bankWorkingCapital = financials.workingCapital = 400000; bankTermLoan = max(0, bankFinance - workingCapital) = 562963 - 400000 = 162963. EMI via reducing-balance formula (P=162963, r=0.11/12, n=84) = 2790. Break-even %: fixedCosts = monthlyOverheads*12 + depreciation = 25000*12 + (200000/10) = 320000; variableCosts = rawMaterials*12 = 180000; contribution = annualRev - variableCosts = 900000 - 180000 = 720000; breakEvenPercent = 320000/720000*100 = 44.44%. DSCR: annualNetProfit = 900000 - (70000*12 + 20000) = 40000; first-12-month debt service after moratorium ≈ 12 * EMI = 33480 (interest-heavy initially); DSCR = (NP + depreciation)/debtService = (40000 + 20000)/33480 = 1.79. Eligibility: all 7 engine checks pass (age.min 28>=18, age.max 28<=65, negative-list empty, cost.ceiling 8L <= 25L SERVICE, no prior subsidy, INDIVIDUAL permitted, education GRADUATE OK for cost <= 10L). Note: matrix description says 'rates are percentages of bank finance' but engine implements algebraic subsidy as residual (engine lines 213-227), producing the subsidyAmount above rather than a literal bankFinance × rate / 100 calculation — this fixture records engine behavior, not the matrix's literal description. breakEvenPercent and dscr are rounded to 2 decimals; the engine emits raw floats (44.44444444444444 and 1.7921146953405018) — a strict regression test should round engine output to 2 decimals before comparing."
+}

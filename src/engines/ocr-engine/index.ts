@@ -421,6 +421,15 @@ interface TesseractResult {
  * dynamically imported so its (large) WASM core is only loaded when OCR is
  * actually invoked, not at module-eval time of this engine.
  *
+ * OFFLINE MODE: We build a worker via `createWorker("eng", 1, { … })` and
+ * pass local `workerPath` / `corePath` / `langPath` (see
+ * `./tesseract-config`). This forces tesseract.js to load its worker script,
+ * the SIMD WASM core, and the English trained data from `/public/tesseract/`
+ * (served at `/tesseract/`) instead of fetching ~10MB from a CDN on the first
+ * OCR call. The worker is terminated after each recognition so memory is
+ * released between captures (tesseract.js v5 workers are cheap to recreate
+ * once the WASM core is cached by the browser).
+ *
  * Note: tesseract.js v5 ships as a CommonJS module (`export = Tesseract`).
  * With esModuleInterop the dynamic import exposes the namespace either as
  * the default export or as named exports — we handle both shapes.
@@ -428,12 +437,23 @@ interface TesseractResult {
 async function runOcr(imageData: string): Promise<TesseractResult> {
   const mod: any = await import("tesseract.js");
   const tess = mod.default ?? mod;
-  const result = await tess.recognize(imageData, "eng");
-  const data = result?.data ?? {};
-  return {
-    text: typeof data.text === "string" ? data.text : "",
-    confidence: typeof data.confidence === "number" ? data.confidence : 0,
-  };
+  const { TESSERACT_CONFIG } = await import("./tesseract-config");
+
+  const worker = await tess.createWorker("eng", 1, {
+    workerPath: TESSERACT_CONFIG.workerPath,
+    corePath: TESSERACT_CONFIG.corePath,
+    langPath: TESSERACT_CONFIG.langPath,
+    // logger: (m: any) => { if (m.status) console.debug(`[tesseract] ${m.status}: ${m.progress ?? ""}`); },
+  });
+  try {
+    const { data } = await worker.recognize(imageData);
+    return {
+      text: typeof data?.text === "string" ? data.text : "",
+      confidence: typeof data?.confidence === "number" ? data.confidence : 0,
+    };
+  } finally {
+    await worker.terminate();
+  }
 }
 
 // ── Core Functions ────────────────────────────────────────────────────────

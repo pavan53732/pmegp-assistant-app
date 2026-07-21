@@ -15,6 +15,16 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    fs: {
+      // Explicitly allow the project root so that `?raw` imports (e.g. the
+      // Update Engine's `public-key.pem`) are served by the dev server.
+      allow: [path.resolve(__dirname, ".")],
+      // Vite's default deny list blocks `*.pem` to protect private keys.
+      // The Update Engine bundles a PUBLIC Ed25519 key as `public-key.pem`
+      // and imports it via `?raw` — it's safe to serve. We keep all other
+      // sensitive extensions denied.
+      deny: [".env", ".env.*", "*.crt", "*.key", "*.p12", "*.cer"],
+    },
   },
   build: {
     outDir: "dist",
