@@ -546,3 +546,25 @@ Stage Summary:
   • Wire `validateProject(profile)` into the ProjectProfile screen as a "Validate" button + completeness/errors display (the validation sub-section already shows the cached `profile.validation` fields; running `validateProject` live would refresh them).
   • The bottom tab bar shows only 4 routes (Dashboard / Knowledge / OCR / Settings) — project-scoped routes are accessible only from Dashboard cards. If a Wave 5 user-flow expects to switch between project screens from a bottom bar, add a 5th "Current project" tab that appears when a project is open.
   • Test the build output on a real Android device (Capacitor 8) — the bottom tab bar's `fixed bottom-0` + `pb-24` clearance works in browsers but should be verified against Android's safe-area insets (`env(safe-area-inset-bottom)`).
+
+---
+Task ID: 2-5 (final)
+Agent: orchestrator (main)
+Task: Waves 2-5 parallel execution + final integration.
+
+Work Log:
+- Wave 2: dispatched 5 sub-agents in parallel (2-A Import/Export, 2-B Update, 2-C Project, 2-D PDF, 2-E OCR). All returned with typecheck/lint clean. Committed 8d63214.
+- Wave 3: dispatched 1 sub-agent (3-A AI Writer with number-injection guard). Returned clean — 13 token map, post-gen verify, 3-retry regen.
+- Wave 4: dispatched 1 sub-agent (4-A feature UI shell). Built 10 files: App.tsx rewrite + 8 feature screens + shared/format.ts. All 8 features functional (call real engines). typecheck exit 0, build exit 0 (2967 modules).
+- Wave 5: wrote CI pipeline (ci.yml: lint+typecheck+test+build), release pipeline (release.yml: signed APK on tag), PII redaction utils (src/shared/security/pii.ts), 1 worked-example fixture (case-1-gen-male-urban-mfg.json).
+- Final: typecheck exit 0, lint 0 errors / 13 warnings (all unused-vars, non-blocking). Committed 5030a2e, pushed to main.
+- Dev server verified: GET / serves HTML shell, App.tsx + DashboardScreen.tsx serve as compiled modules (HTTP 200), zero runtime errors.
+
+Stage Summary:
+- 10 engines complete (5 preserved + 5 new/rewritten).
+- 8 feature UI modules functional (dashboard, profile, financial, eligibility, dpr, knowledge, ocr, settings).
+- AI Writer with number-injection guard complete.
+- CI + APK release pipelines configured (signing requires GitHub Secrets).
+- PII redaction utilities complete.
+- 1 of 4 worked-example fixtures complete.
+- Honest gaps: APK signing needs secrets, Update Engine public key is placeholder, 3 fixtures pending, Guided Forms fallback not yet built, biometric unlock not built, E2E tests not written, tesseract WASM assets need local bundling for true offline.
