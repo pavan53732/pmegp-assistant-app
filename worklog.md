@@ -408,3 +408,141 @@ Stage Summary:
   • If banks require the full loanSchedule (month-by-month amortisation table) to be rendered as an additional appendix, add drawLoanSchedule(ctx, fin.loanSchedule) and call it after drawFinancialSummary. The data shape is already available.
   • The TOC currently lists section titles without page numbers (Wave 2 simple-list form, per task brief). A future pass could fill in actual page numbers via a second render pass that records each section's start page.
   • The cover currently has no project name (DprDocument does not carry a projectTitle field). If the dpr-engine is later extended to include the project/business name in the DprDocument root, surface it on the cover.
+
+---
+
+Task ID: 3-A
+Agent: sub-agent (general-purpose)
+Task: Build the AI Writer engine — `src/features/ai/writer/index.ts` — DPR narrative generation with a mandatory post-generation number-injection guard.
+
+Work Log:
+- Read worklog.md (Stage B context, prior waves) and the four type source files the spec named: financial-engine (FinancialResult fields confirmed: totalProjectCost, subsidyAmount, emi, dscr, breakEvenPercent, ownContribution, bankTermLoan, annualRevenue, annualNetProfit, loanTenureMonths, totalInterest, totalRepayment), eligibility-engine (EligibilityResult: eligible + checks + blockers + warnings), shared/types/project-profile (ProjectProfile full shape — used business/applicant/location/capacity/market/rawMaterials/machinery sub-objects in the user prompt), providers/index.ts (getAIResponse signature: `(messages, connectionConfig, config?) → Promise<ProviderResponse>`; ProviderConnectionConfig = { baseUrl, apiKey, modelName }).
+- Created directory `src/features/ai/writer/` and wrote `index.ts` (515 lines).
+- Confirmed boundaries: imports only `@/engines/financial-engine` (type), `@/engines/eligibility-engine` (type), `@/providers` (getAIResponse + types), `@/shared/types/project-profile` (type). No `@/database/*` imports.
+
+Public API implemented (exactly as specified):
+- `WriterInput { financials, eligibility, profile, templateId }`
+- `WriterOutput { sections: Record<string,string>; provenance: Record<string,string> }`
+- `generateNarrative(input, providerConfig): Promise<WriterOutput>`
+- Plus exports for testing: `formatINR`, `buildTokenMap`, `verifyNumbers`, `parseSections`, `SECTION_IDS`, `VerificationResult`.
+
+Number-injection guard algorithm:
+1. **Token map** — `buildTokenMap(financials, eligibility)` produces 13 placeholder→formatted-value pairs. Rupee values use `formatINR` (Indian comma grouping, integer math, "Rs. " prefix, sign-before-symbol for negatives). DSCR is `toFixed(2)` (e.g. "1.45"). Break-even is `toFixed(2) + "%"`. Loan tenure is a bare integer string. `{{ELIGIBLE}}` = "eligible" / "not eligible".
+2. **System prompt** — lists the full token table and tells the AI: every digit in the output MUST be either a placeholder token or an exact value from the table; no invented/calculated/rounded numbers; no section/list numbers; no years/ages/dates; non-table numbers must be expressed in WORDS only ("several months", not "6 months").
+3. **Initial generation** — single `getAIResponse([system, user], providerConfig)` call requesting all 7 sections (`executive_summary`, `project_concept`, `market_analysis`, `technical_feasibility`, `financial_viability`, `implementation_schedule`, `risk_mitigation`) delimited by `===SECTION: <id>===`.
+4. **Section parsing** — `parseSections(content)` splits on `===SECTION:\s*([\w-]+)\s*===` with a capture group, preserving IDs in the array (preamble discarded).
+5. **Verification** — `verifyNumbers(prose, tokens)`:
+   - Builds an allowed-set of digit strings from every token value via `digitForms()` — generates equivalent representations: "65.30" → {"65.30","65.3"}; "65.00" → {"65.00","65.0","65"} (parses to integer); "1.45" → {"1.45"}; "1234567" (from "Rs. 12,34,567") → {"1234567"}.
+   - Uses ONE combined regex `Rs\.?\s?[\d,]+(?:\.\d+)?|[\d.]+%|[\d.]+x|[\d][\d,]*(?:\.\d+)?` (ordered so most-specific match wins at each position) to extract every numeric-looking substring. Combining into a single regex avoids double-counting "65" and "30" inside "65.30%".
+   - Normalises each match to its digit string and checks membership in the allowed-set. Non-matches are collected as raw substrings (for the retry prompt).
+   - Returns `{ ok, mismatches }`.
+6. **Regeneration loop (per section)** — if `verifyNumbers` fails (or the section is missing/empty), call `regenerateSection()` with a stricter prompt that names the offending numbers verbatim and re-lists the token table; the retry asks for prose only (no delimiters). Max 3 retries. If still failing after 3 retries → `throw new Error("Number-injection guard failed for section <id>")`.
+7. **Token substitution** — `replaceTokens()` uses `split(token).join(value)` (literal-string replacement — handles `{{`/`}}` metacharacters safely) to swap any residual placeholders with their formatted values in the final prose.
+8. **Provenance** — `provenance[sectionId] = "AI:template:" + input.templateId` for every section.
+
+Verification:
+- `npx tsc --noEmit` → exit 0, no errors (strict mode satisfied).
+- Inline smoke test (Node, mirroring the pure functions): 16/16 PASS —
+  • `formatINR`: 1234567→"Rs. 12,34,567"; 50000→"Rs. 50,000"; 999→"Rs. 999"; 0→"Rs. 0"; -500000→"-Rs. 5,00,000"; 10000000→"Rs. 1,00,00,000".
+  • `verifyNumbers` happy paths: rupee match, DSCR-as-multiplier (1.45x), break-even percent (65.30% and 65.3%), tenure integer (60) — all `ok:true`.
+  • `verifyNumbers` failure paths: invented rupee ("Rs. 99,99,999"), invented bare integer ("5000000"), invented percent ("50%") — all flagged as mismatches with the raw substring returned.
+  • `parseSections`: 2-section response and preamble-then-section response both parse correctly.
+- Did NOT run live AI calls (no provider config in this sandbox); the retry/generate flow is exercised by the type-checker and the smoke test of the pure helpers.
+
+Stage Summary:
+- Wave 3 AI Writer complete: 515-line engine implementing DPR narrative generation with a verifiable number-injection guard. Satisfies RULE #5 ("AI is the writer, never the calculator") by enforcing that every numeric digit in the AI's prose must trace back to a deterministic engine figure, with up to 3 regeneration attempts before throwing.
+- Artifacts touched: only `src/features/ai/writer/index.ts` (created; directory created). No package.json change, no other source files modified.
+- Next-agent action items:
+  • A follow-up test file (e.g. `src/features/ai/writer/__tests__/writer.test.ts`) should mock `getAIResponse` and exercise the retry loop end-to-end (clean pass on first try; one mismatch then clean pass; mismatch persists → throws). The pure helpers (`verifyNumbers`, `parseSections`, `formatINR`, `buildTokenMap`) are already exported and trivially unit-testable.
+  • The DPR engine (`src/engines/dpr-engine`) currently produces section content from templates — once that engine exposes a hook to swap in AI-generated sections, the orchestrator can call `generateNarrative` and merge `WriterOutput.sections` into `DprDocument.sections`.
+  • Consider adding a small allowlist for benign structural tokens (e.g. roman-numeral list markers, "Phase I") if real AI outputs show false positives — current policy is strict per the task spec, which is the safest default for a financial document.
+
+---
+
+Task ID: 4-A
+Agent: sub-agent (general-purpose)
+Task: Build the unified feature UI shell — rewrite `src/App.tsx` with sidebar/bottom-tab navigation + 8 functional feature route screens, each wired to the real Wave 2 engines.
+
+Work Log:
+- Read worklog.md (Stage B context, Waves 0–3) to anchor on what engines are available and their exact public APIs. Confirmed all referenced engine signatures by reading each engine file directly:
+  • `computeFinancials(profile)` from `@/engines/financial-engine` — returns FinancialResult with 23 fields + loanSchedule[]. Pure + sync.
+  • `checkEligibility(profile)` from `@/engines/eligibility-engine` — returns `{ eligible, checks[], blockers[], warnings[] }`. Pure + sync.
+  • `generateDPR(profile, financial, eligibility)` from `@/engines/dpr-engine` — returns DprDocument `{ sections[], financialResult, eligibilityResult, generatedAt, wordCount }` with 18 sections. Pure + sync.
+  • `generatePdf(dpr)` from `@/engines/pdf-engine` — returns `Promise<ArrayBuffer>`. Async; deterministic. Also exports `formatINR` (mirrored locally in `src/shared/format.ts` for the UI).
+  • `validateProject(profile)` from `@/engines/validation-engine` — pure + sync (NOT called directly by any screen — Wave 5 may surface it on the profile screen).
+  • Knowledge engine exports: `resolveActivity(query)` (the main search entry — returns `ActivitySuggestion[]`); `suggestMachinery`, `suggestRawMaterials`, `suggestEmployees`, `suggestUtilities`, `isOnNegativeList`, `getLocationInfo`, `getSubsidyInfo`. All pure + sync. (Task brief mentioned "read the file for exact exports" — confirmed `resolveActivity` is the search entry, not a separate `searchActivities` function.)
+  • OCR engine: `extractFromDocument(source, documentType)` returns `Promise<OcrResult>`; `mapOcrToProfile(result, docType)` returns `Partial<ProjectProfile>`. Both async/sync respectively as documented in Task 2-A's worklog.
+  • `projectEngine.createProject/inferState/canEdit/applyEdit/getStaleSnapshots` from `@/engines/project-engine`. The Dashboard's "New Project" flow uses the repository's `create()` directly (the repository already wraps `crypto.randomUUID()` + `buildEmptyProfile()` so going through `projectEngine.createProject()` + persisting manually would duplicate that).
+  • `exportProject(profile, financials, eligibility, attachments?)` and `importProject(json)` from `@/engines/import-export-engine`. `exportProject` is async (reads `knowledge_version` from `app_meta`); `importProject` is sync.
+  • `getCurrentKnowledgeVersion()` from `@/engines/update-engine` — SYNC, returns "bundled" on first call and kicks off a background DB read. The Settings screen re-polls at 800ms / 2s / 4s to pick up the cached value.
+- Repository: `getProjectRepository()` from `@/database/project-repository` — SYNC; methods are async: `create(name)`, `getById(id)`, `list()`, `updateProfile(id, profile, status?)`, `updateStatus(id, status)`, `delete(id)`, `getChatHistory(id)`, `appendChatMessages(id, msgs)`. `create()` returns ProjectSummary; `getById()` returns `(ProjectSummary & { profile: ProjectProfile }) | null`; `list()` returns `ProjectSummary[]` (sorted by updated_at DESC).
+- `createTestProfile()` from `@/test-helpers/create-test-profile` — returns a fully-valid ProjectProfile (Rajesh Pickle Unit, MANUFACTURING, NIC 103005, ₹1,10,000 total project cost, 1 machinery item, 1 raw material, all 28 mandatory fields filled). Used by the Dashboard's "Create demo project" CTA.
+
+Files created (10 new, 1 modified):
+1. `src/shared/format.ts` (new, ~135 lines) — `formatINR(n, withSymbol=true)` (integer math, Indian comma grouping — mirrors pdf-engine's `formatINR` exactly), `formatNumber`, `formatPercent`, `formatDate`, `formatDateTime`, `statusLabel`, `statusBadgeClass`. Pure, no imports.
+2. `src/features/dashboard/DashboardScreen.tsx` (new, ~220 lines) — `repo.list()` → project cards with status badges + completeness Progress + per-stage shortcut buttons (Profile / Financial / Eligibility / DPR). Empty state CTAs: "New Project" (`repo.create()`) and "Create demo project" (`repo.create("Demo Project")` + `repo.updateProfile(id, createTestProfile(), "COMPLETE")`).
+3. `src/features/project-profile/ProjectProfileScreen.tsx` (new, ~390 lines) — `repo.getById(id)` → Accordion-grouped read-only display (12 sections: applicant, business, location, land, capacity, machinery, raw-materials, employees, utilities, financials, market, validation). "Edit" toggle → JSON `<textarea>` (Wave 4 simple editor; Wave 5 replaces with guided form). Save → `JSON.parse` + `repo.updateProfile(id, profile, "COMPLETE")` + reload.
+4. `src/features/financial/FinancialScreen.tsx` (new, ~380 lines) — `computeFinancials(profile)` → 6 KPI cards (total cost / own contribution / subsidy / EMI / DSCR / break-even with color tone), Recharts `<BarChart>` of cost breakdown (5 buckets), Recharts `<LineChart>` of loan schedule (downsampled to every 6th month), full figures table grouped by Means of Finance / Loan / Profitability / Ratios, first-12-months schedule preview.
+5. `src/features/eligibility/EligibilityScreen.tsx` (new, ~240 lines) — `checkEligibility(profile)` → prominent eligible/ineligible banner (emerald/destructive), blockers Alert (destructive), warnings Alert (amber), full checklist Table with ✓/✗ icons + criterion ID + actual vs required + reason.
+6. `src/features/dpr/DprScreen.tsx` (new, ~310 lines) — calls `computeFinancials` + `checkEligibility` + `generateDPR(profile, financials, eligibility)` → 4 summary cards + Accordion of 18 sections with markdown `<pre>` content + embedded DprTable renders. "Download PDF" button → `generatePdf(dpr)` → Blob(`application/pdf`) → `URL.createObjectURL` → `<a download>` click → 5s revoke. Loader2 spinner during async generation.
+7. `src/features/knowledge/KnowledgeScreen.tsx` (new, ~360 lines) — Input + "Search" button + 6 suggested-query chips. `resolveActivity(query)` → result list (clickable cards with NIC code, description, sector, match score %). Selecting one calls `suggestMachinery`, `suggestRawMaterials`, `suggestEmployees`, `suggestUtilities`, `isOnNegativeList` → renders 4 detail tables + negative-list Alert. All synchronous (no async loading states).
+8. `src/features/ocr/OcrScreen.tsx` (new, ~290 lines) — `Select` for document type (QUOTATION / IDENTITY_PROOF / ADDRESS_PROOF / LAND_DOCUMENT / EDP_CERTIFICATE / OTHER) + two CTAs: "Capture from camera" and "Pick from gallery" → both call `extractFromDocument(source, docType)`. Renders extracted-fields Table + raw-text `<pre>` (PII-masked by the engine). "Map to profile" button calls `mapOcrToProfile(result, docType)` → JSON preview (Wave 5 will merge via `projectEngine.applyEdit` + `repo.updateProfile`).
+9. `src/features/settings/SettingsScreen.tsx` (new, ~410 lines) — AI provider form (base URL / API key [type=password] / model name) loaded from / saved to `localStorage` (Wave 5 → SQLite + Secure Storage). "Test Connection" → `getAIResponse([{system:"ping"},{user:"respond with OK"}], {baseUrl, apiKey, modelName})` → success/failure Alert with reply/error. Knowledge version display via `getCurrentKnowledgeVersion()` (sync; re-polls at 800/2000/4000ms to pick up the cached DB value). Export: Select project → `exportProject(profile, financials, eligibility)` → JSON Blob download. Import: file input → `importProject(text)` → on success shows summary (Wave 5 will persist via repo.create + repo.updateProfile); on failure shows schema error.
+10. `src/App.tsx` (rewritten, ~210 lines) — `Shell` component with sticky header (PMEGP logo + brand + Wave 4 badge), left sidebar (desktop md+, 4 primary nav links + scheme info card), bottom tab bar (mobile <md, fixed), main content area (max-w-6xl, pb-24 on mobile for bottom-bar clearance), sticky footer. Routes:
+    - `/` → Dashboard
+    - `/project/:id` → ProjectProfile
+    - `/project/:id/financial` → Financial
+    - `/project/:id/eligibility` → Eligibility
+    - `/project/:id/dpr` → DPR
+    - `/knowledge` → Knowledge
+    - `/ocr` → OCR
+    - `/settings` → Settings
+    - `*` → `<Navigate to="/" replace/>` (with console.warn for debugging)
+    All interactive elements meet the 44px touch-target spec (min-h-11 on Buttons, min-h-9 on size="sm" buttons, min-h-14 on mobile tab links). Dark mode already set on `<html class="dark">` — no toggle added (per task brief).
+
+Engine API discoveries / deviations from the brief:
+- The brief said "calls `resolveActivity(query)` (or the knowledge engine's search export — read the file)" — confirmed `resolveActivity` IS the canonical search entry (there's no `searchActivities`). Used `resolveActivity`.
+- The brief said "API key field is type='password'" — implemented.
+- The brief said "Export Project' / 'Import Project' buttons (export calls the current project's exportProject; import reads a JSON file)" — interpreted "current project" as a Select-pickable project (since the Settings screen is global, not project-scoped). Implemented with a Select dropdown of all projects + "Download JSON" button. Import reads a JSON file via `<input type="file">`.
+- The brief said "mapOcrToProfile(result, docType)" — exact signature confirmed in OCR engine (line 539). Used verbatim.
+- The brief said "Test Connection" calls `getAIResponse([{role:"system",content:"ping"},{role:"user",content:"respond with OK"}], {baseUrl, apiKey, modelName})` — exact signature confirmed in providers/index.ts (line 142). Used verbatim.
+- The brief said "Use `useParams` for `:id`" — used in 4 screens (profile, financial, eligibility, dpr).
+- The brief said "Money formatting: `formatINR(n)` — implement locally or import from pdf-engine if exported" — implemented locally in `src/shared/format.ts` with identical integer-math algorithm to pdf-engine's `formatINR`, plus a `withSymbol` option (default `true` → "₹" prefix; `false` for table cells where the column header carries the unit). The pdf-engine version returns the bare number; mine adds the ₹ symbol for UI display.
+- The brief said "calls `getProjectRepository().list()`" — confirmed `getProjectRepository()` is sync (returns the singleton immediately); methods on it are async. The Dashboard's `load()` uses `async/await` for `repo.list()`.
+- The brief said "If no projects, show a 'Create demo project' button that creates one with `createTestProfile()` via `.create('Demo')` then `.updateProfile(id, createTestProfile(), 'COMPLETE')`" — implemented verbatim, with status="COMPLETE" so `projectEngine.inferState()` doesn't downgrade it.
+- The brief said "Edit mode = simple JSON textarea editor for Wave 4" — implemented as a `<Textarea>` with `JSON.parse` on Save, error surfacing without losing the textarea contents.
+- The brief said "Recharts bar chart of cost breakdown (machinery, building, working capital, etc.)" — implemented with 5 buckets (Machinery, Building, Other fixed, Pre-op expenses, Working capital). Plus a Recharts `<LineChart>` for the loan schedule per the same bullet.
+- The brief said "18 sections in an accordion" — confirmed `generateDPR` produces exactly 18 sections (verified by reading dpr-engine/index.ts line 1783-1803). Used shadcn `<Accordion type="single" collapsible>`.
+- The brief said "Sticky footer (min-h-screen flex flex-col, footer mt-auto)" — implemented via the Shell wrapper (`min-h-screen flex flex-col` + footer has `mt-auto`).
+- The brief said "Mobile-responsive (Tailwind `sm:`/`md:` breakpoints)" — used `md:` breakpoint for the sidebar/bottom-tab swap, plus `sm:` and `lg:` for grid column counts (KPI strip is 2/3/6 cols; charts are 1/2 cols; profile sections grid is 2/3 cols).
+- The brief said "Dark mode (class='dark' on html already)" — confirmed in `index.html` line 2. No theme toggle added (out of scope).
+
+Verification:
+- `bun run typecheck` (`tsc -b --noEmit`) → exit 0 (clean). 0 errors.
+- `bun run lint` (`eslint .`) → 0 errors / 13 warnings — ALL 13 are pre-existing in OTHER files (`dpr-engine/index.ts` has 4 unused-var warnings from sub-agent 2-D; `knowledge-engine/index.ts` has 1 unused import; `features/ai/interview/*` has 5; `hooks/use-toast.ts` has 1; `shared/types/project-profile.ts` has 1). ZERO warnings in any of my new files (verified by filtering lint output for `features/dashboard`, `features/project-profile`, `features/financial`, `features/eligibility`, `features/dpr`, `features/knowledge`, `features/ocr`, `features/settings`, `shared/format`, `App.tsx`).
+- `bun run build` (`tsc -b && vite build`) → exit 0; 2967 modules transformed; `dist/` produced. Bundle is 1.77MB (540KB gzipped) — large because it includes recharts + pdf-lib + tesseract.js + all radix primitives in a single chunk. Wave 5 should code-split (e.g. lazy-load `DprScreen` + `OcrScreen` + `SettingsScreen` which pull in pdf-lib / tesseract.js). The build only emits a "chunks > 500 kB" warning, not an error.
+- `bun run test` → 31/31 passing in `project-engine.test.ts`. 6 test files FAIL but ALL failures are pre-existing in `src/features/ai/interview*` test files that import `from "bun:test"` (incompatible with the project's vitest config — these were failing before my changes and are owned by the AI-interview sub-agent's territory). My new code does NOT touch any of these test files. (Verified via `git status -u` that I did not modify any test files.)
+
+Stage Summary:
+- Wave 4 feature UI shell complete: 9 new files + 1 rewritten file wiring all 8 feature routes to the real Wave 2 engines. Every screen is FUNCTIONAL — calls real engines, displays real results, handles errors via shadcn Alerts, shows loading Skeletons during async loads. Mobile-responsive with sidebar (desktop) / bottom tab bar (mobile), sticky header/footer, 44px touch targets, dark mode. TypeScript strict passes, ESLint clean for my code, vite build succeeds.
+- Artifacts touched (per task constraints — did NOT touch `package.json`, `src/components/ui/`, `src/engines/`, or `src/database/`):
+  • `src/App.tsx` (rewritten)
+  • `src/shared/format.ts` (new)
+  • `src/features/dashboard/DashboardScreen.tsx` (new)
+  • `src/features/project-profile/ProjectProfileScreen.tsx` (new)
+  • `src/features/financial/FinancialScreen.tsx` (new)
+  • `src/features/eligibility/EligibilityScreen.tsx` (new)
+  • `src/features/dpr/DprScreen.tsx` (new)
+  • `src/features/knowledge/KnowledgeScreen.tsx` (new)
+  • `src/features/ocr/OcrScreen.tsx` (new)
+  • `src/features/settings/SettingsScreen.tsx` (new)
+- Next-agent action items (Wave 5):
+  • Replace the ProjectProfile "Edit JSON" toggle with a real guided form (per-section Inputs + Selects + validated save via `projectEngine.applyEdit` + `repo.updateProfile`). The current JSON editor is intentionally minimal — Wave 4 is the shell, Wave 5 is the polished UX.
+  • Wire OCR "Map to profile" to actually persist: `mapOcrToProfile(result, docType)` → `projectEngine.applyEdit(activeProfile, edits)` → `repo.updateProfile(id, mergedProfile, status)`. Currently it only shows the JSON preview.
+  • Wire Import Project to persist: `importProject(json)` → `repo.create(name)` + `repo.updateProfile(newId, profile, status)` + `repo.updateStatus(newId, status)`. Currently it only validates + reports.
+  • Move AI provider config from `localStorage` to SQLite (`ai_provider_config` table for baseUrl + modelName; Secure Storage / Android Keystore for apiKey). The Settings screen's localStorage keys are namespaced `pmegp.aiProvider.*` for easy migration.
+  • Code-split the bundle: lazy-load `DprScreen` (pdf-lib), `OcrScreen` (tesseract.js), `SettingsScreen` (import-export-engine) via `React.lazy` + `Suspense`. The current 1.77MB main chunk will drop materially.
+  • Add a real Markdown renderer for DPR section content (currently shown as `<pre>` preformatted text — the dpr-engine emits Markdown strings).
+  • Wire `validateProject(profile)` into the ProjectProfile screen as a "Validate" button + completeness/errors display (the validation sub-section already shows the cached `profile.validation` fields; running `validateProject` live would refresh them).
+  • The bottom tab bar shows only 4 routes (Dashboard / Knowledge / OCR / Settings) — project-scoped routes are accessible only from Dashboard cards. If a Wave 5 user-flow expects to switch between project screens from a bottom bar, add a 5th "Current project" tab that appears when a project is open.
+  • Test the build output on a real Android device (Capacitor 8) — the bottom tab bar's `fixed bottom-0` + `pb-24` clearance works in browsers but should be verified against Android's safe-area insets (`env(safe-area-inset-bottom)`).

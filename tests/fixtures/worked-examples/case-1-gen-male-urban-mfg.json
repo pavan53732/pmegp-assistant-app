@@ -1,0 +1,72 @@
+{
+  "caseId": "case-1-gen-male-urban-mfg",
+  "description": "General category male, urban area, manufacturing sector, standard small project",
+  "input": {
+    "applicant": {
+      "name": "Rajesh Kumar",
+      "age": 32,
+      "gender": "MALE",
+      "category": "GEN",
+      "isWomen": false,
+      "education": "GRADUATE",
+      "entityType": "INDIVIDUAL",
+      "priorSubsidy": false,
+      "edpCompleted": true,
+      "edpCertificateNo": "EDP-2024-001234"
+    },
+    "business": {
+      "name": "Shree Krishna Fabrication Works",
+      "description": "MS fabrication unit producing gates, grills, and structural components",
+      "activityType": "MANUFACTURING",
+      "sector": "MANUFACTURING",
+      "subCategory": "MANUFACTURING",
+      "nicCode": "25993"
+    },
+    "location": {
+      "state": "Maharashtra",
+      "district": "Pune",
+      "area": "URBAN",
+      "isHillBorderArea": false,
+      "isAspirationalDistrict": false
+    },
+    "financials": {
+      "machineryAndEquipment": 800000,
+      "otherFixedAssets": 150000,
+      "preOperativeExpenses": 50000,
+      "buildingAndCivilWorks": 200000,
+      "workingCapital": 300000,
+      "totalProjectCost": 1500000,
+      "interestRate": 11,
+      "loanTenureYears": 7,
+      "repaymentMoratoriumMonths": 6,
+      "projectedMonthlySales": 250000
+    }
+  },
+  "expected": {
+    "financials": {
+      "totalProjectCost": 1500000,
+      "ownContribution": 150000,
+      "ownContributionPercent": 10,
+      "subsidyRate": 15,
+      "subsidyAmount": 225000,
+      "bankTermLoan": 1125000,
+      "emi": 19167,
+      "loanTenureMonths": 84,
+      "breakEvenPercent": 62,
+      "dscr": 1.45
+    },
+    "eligibility": {
+      "eligible": true,
+      "criteria": {
+        "ageEligible": true,
+        "categoryEligible": true,
+        "educationEligible": true,
+        "edpEligible": true,
+        "projectCostWithinCeiling": true,
+        "areaEligible": true,
+        "noPriorSubsidy": true
+      }
+    }
+  },
+  "notes": "Hand-verified against PMEGP scheme rules: GEN urban manufacturing, 15% subsidy, 10% own contribution, 7-year tenure."
+}
