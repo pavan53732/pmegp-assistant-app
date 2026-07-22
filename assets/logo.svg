@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PMEGP Assistant — Logo SVG
+  Concept: three golden bars of increasing height (employment growth + enterprise)
+  rising on a deep emerald green badge, with a golden arc forming a stylized "P".
+  Designed to render crisply from 16px (favicon) to any size.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="PMEGP Assistant logo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b6e54"/>
+      <stop offset="1" stop-color="#064e3b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0d068"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#b8941f"/>
+    </linearGradient>
+    <clipPath id="badge">
+      <rect x="0" y="0" width="512" height="512" rx="112" ry="112"/>
+    </clipPath>
+  </defs>
+
+  <!-- Badge background -->
+  <rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="url(#bg)"/>
+
+  <!-- Subtle inner ring -->
+  <rect x="24" y="24" width="464" height="464" rx="96" ry="96" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.25"/>
+
+  <!-- Three rising bars (growth + enterprise) -->
+  <!-- Bar 1 (shortest) -->
+  <rect x="120" y="300" width="64" height="92" rx="14" fill="url(#gold)"/>
+  <!-- Bar 2 (medium) -->
+  <rect x="208" y="248" width="64" height="144" rx="14" fill="url(#gold)"/>
+  <!-- Bar 3 (tallest — forms the stem of the "P") -->
+  <rect x="296" y="116" width="64" height="276" rx="14" fill="url(#gold)"/>
+
+  <!-- Golden arc forming the bowl of the "P" (connects to the tallest bar) -->
+  <path d="M 360 148
+           A 72 72 0 0 1 360 292
+           L 360 260
+           A 40 40 0 0 0 360 180 Z"
+        fill="url(#gold)"/>
+
+  <!-- Base line (ground / foundation) -->
+  <rect x="96" y="392" width="320" height="8" rx="4" fill="#d4af37" opacity="0.4"/>
+</svg>

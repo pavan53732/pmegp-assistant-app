@@ -83,3 +83,4 @@ db/*.db
 # Vite build output — never commit build artifacts
 dist/
 dev.log
+upload/

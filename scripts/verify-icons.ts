@@ -20,7 +20,7 @@ console.log(`Total bytes in raw buffer: ${raw.length} (expected ${W * H * ch})\n
 const ALPHA_THRESHOLD = 10;
 let minX = W, maxX = -1, minY = H, maxY = -1;
 let opaquePixels = 0;
-let semiPixels = 0;
+
 let transparentPixels = 0;
 
 // Also track alpha-channel value distribution
@@ -43,7 +43,7 @@ for (let y = 0; y < H; y++) {
       if (y < minY) minY = y;
       if (y > maxY) maxY = y;
     } else if (a > 0 && a <= ALPHA_THRESHOLD) {
-      semiPixels++;
+      
     }
   }
 }
