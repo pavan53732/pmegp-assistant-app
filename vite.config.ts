@@ -25,6 +25,16 @@ export default defineConfig({
       // sensitive extensions denied.
       deny: [".env", ".env.*", "*.crt", "*.key", "*.p12", "*.cer"],
     },
+    // Prevent Vite's dependency scanner from crawling the `skills/` directory
+    // (design templates that import `three` etc. — not part of this app).
+    watch: {
+      ignored: ["**/skills/**"],
+    },
+  },
+  optimizeDeps: {
+    // Don't try to pre-bundle `three` — it's only referenced by skills/
+    // design templates, not by the PMEGP app itself.
+    exclude: ["three"],
   },
   build: {
     outDir: "dist",
