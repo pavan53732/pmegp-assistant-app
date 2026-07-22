@@ -86,9 +86,7 @@ function Header() {
   return (
     <header className="border-b bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/60 sticky top-0 z-30">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
-        <span className="grid size-9 place-items-center rounded-lg bg-emerald-700 text-lg text-white shadow-sm">
-          🏛️
-        </span>
+        <img src="/logo.svg" alt="PMEGP Assistant" width={36} height={36} className="size-9 rounded-lg shadow-sm" />
         <div className="flex-1 min-w-0">
           <h1 className="text-base font-semibold leading-tight">
             PMEGP Assistant

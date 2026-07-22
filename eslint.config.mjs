@@ -17,6 +17,7 @@ export default tseslint.config(
       "mini-services/**",
       "src/components/ui/**",
       "src/_legacy/**",
+      "skills/**",
     ],
   },
   {
