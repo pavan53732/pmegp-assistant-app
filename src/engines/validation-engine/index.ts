@@ -10,6 +10,13 @@ import type {
   Contradiction,
 } from "../../shared/types/project-profile";
 import type { FieldProvenance } from "../../shared/types/provenance";
+import {
+  COST_CEILINGS,
+  AGE_LIMITS,
+  EDUCATION_THRESHOLD,
+  INTEREST_RATE_LIMITS,
+  LOAN_TENURE_LIMITS,
+} from "../knowledge-engine/scheme-params";
 
 // ── Public Result Type ──────────────────────────────────────────────────────
 
@@ -34,33 +41,8 @@ export interface ValidationResult {
 
 // ── Constants ───────────────────────────────────────────────────────────────
 
-/** Project cost ceilings in whole rupees. */
-const COST_CEILINGS: Record<string, number> = {
-  MANUFACTURING: 50_00_000, // ₹50 Lakh
-  SERVICE: 25_00_000, // ₹25 Lakh
-};
-
-const AGE_MIN = 18;
-const AGE_MAX = 65;
-
-/** Projects above this cost require at least 8TH_PASS education. */
-const EDUCATION_THRESHOLD_COST = 10_00_000; // ₹10 Lakh
-
-const MIN_EDUCATION_FOR_HIGH_COST = new Set<string>([
-  "8TH_PASS",
-  "10TH_PASS",
-  "12TH_PASS",
-  "GRADUATE",
-  "POST_GRADUATE",
-  "PROFESSIONAL",
-  "OTHER",
-]);
-
-const INTEREST_RATE_MIN = 0;
-const INTEREST_RATE_MAX = 30;
-
-const LOAN_TENURE_MIN = 1;
-const LOAN_TENURE_MAX = 15;
+// Constants now imported from knowledge-engine/scheme-params
+// See DESIGN_PRINCIPLES §12 — scheme-parameterized, never hardcoded.
 
 // ── Mandatory Field Paths (dot-notation) ────────────────────────────────────
 
@@ -238,23 +220,23 @@ function runBusinessRules(profile: ProjectProfile): {
   }
 
   // 2. Age range (18–65) ─────────────────────────────────────────────────
-  if (applicant.age < AGE_MIN || applicant.age > AGE_MAX) {
+  if (applicant.age < AGE_LIMITS.MIN || applicant.age > AGE_LIMITS.MAX) {
     errors.push({
       fieldPath: "applicant.age",
       code: "AGE_OUT_OF_RANGE",
-      message: `Applicant age ${applicant.age} is outside the eligible range of ${AGE_MIN}–${AGE_MAX}.`,
+      message: `Applicant age ${applicant.age} is outside the eligible range of ${AGE_LIMITS.MIN}–${AGE_LIMITS.MAX}.`,
     });
   }
 
   // 3. Education requirement for projects > ₹10 Lakh ─────────────────────
   if (
-    financials.totalProjectCost > EDUCATION_THRESHOLD_COST &&
-    !MIN_EDUCATION_FOR_HIGH_COST.has(applicant.education)
+    financials.totalProjectCost > EDUCATION_THRESHOLD.HIGH_COST &&
+    !new Set(EDUCATION_THRESHOLD.MIN_EDUCATION_FOR_HIGH_COST).has(applicant.education)
   ) {
     errors.push({
       fieldPath: "applicant.education",
       code: "INSUFFICIENT_EDUCATION",
-      message: `Projects above ₹${EDUCATION_THRESHOLD_COST.toLocaleString("en-IN")} require a minimum education of 8TH_PASS.`,
+      message: `Projects above ₹${EDUCATION_THRESHOLD.HIGH_COST.toLocaleString("en-IN")} require a minimum education of 8TH_PASS.`,
     });
   }
 
@@ -308,25 +290,25 @@ function runBusinessRules(profile: ProjectProfile): {
 
   // 8. Interest rate reasonable (0–30 %) ─────────────────────────────────
   if (
-    financials.interestRate < INTEREST_RATE_MIN ||
-    financials.interestRate > INTEREST_RATE_MAX
+    financials.interestRate < INTEREST_RATE_LIMITS.MIN ||
+    financials.interestRate > INTEREST_RATE_LIMITS.MAX
   ) {
     errors.push({
       fieldPath: "financials.interestRate",
       code: "INTEREST_RATE_OUT_OF_RANGE",
-      message: `Interest rate ${financials.interestRate}% is outside the reasonable range of ${INTEREST_RATE_MIN}–${INTEREST_RATE_MAX}%.`,
+      message: `Interest rate ${financials.interestRate}% is outside the reasonable range of ${INTEREST_RATE_LIMITS.MIN}–${INTEREST_RATE_LIMITS.MAX}%.`,
     });
   }
 
   // 9. Loan tenure reasonable (1–15 years) ───────────────────────────────
   if (
-    financials.loanTenureYears < LOAN_TENURE_MIN ||
-    financials.loanTenureYears > LOAN_TENURE_MAX
+    financials.loanTenureYears < LOAN_TENURE_LIMITS.MIN ||
+    financials.loanTenureYears > LOAN_TENURE_LIMITS.MAX
   ) {
     errors.push({
       fieldPath: "financials.loanTenureYears",
       code: "LOAN_TENURE_OUT_OF_RANGE",
-      message: `Loan tenure of ${financials.loanTenureYears} year(s) is outside the reasonable range of ${LOAN_TENURE_MIN}–${LOAN_TENURE_MAX} years.`,
+      message: `Loan tenure of ${financials.loanTenureYears} year(s) is outside the reasonable range of ${LOAN_TENURE_LIMITS.MIN}–${LOAN_TENURE_LIMITS.MAX} years.`,
     });
   }
 

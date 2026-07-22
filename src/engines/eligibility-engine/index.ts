@@ -5,9 +5,23 @@
 // Pure, deterministic function.  Same input → same output.
 // NO AI, NO I/O, NO network calls.
 // "AI never calculates" — this engine never imports the AI layer.
+//
+// All scheme thresholds are injected via SchemeParams from the Knowledge
+// Engine (DESIGN_PRINCIPLES §12).  No hardcoded PMEGP values.
 // ───────────────────────────────────────────────────────────────────────────
 
 import type { ProjectProfile, Education, EntityType } from "@/shared/types/project-profile";
+import {
+  AGE_LIMITS,
+  COST_CEILINGS,
+  EDUCATION_RANK,
+  MIN_EDUCATION_RANK_FOR_HIGH_COST,
+  EDUCATION_THRESHOLD,
+  PERMITTED_ENTITY_TYPES,
+  isNegativeList,
+  SCHEME_VERSION,
+  SCHEME_SOURCE,
+} from "../knowledge-engine/scheme-params";
 
 // ── Public Types ───────────────────────────────────────────────────────────
 
@@ -18,57 +32,23 @@ export interface EligibilityCheck {
   actual?: string | number;
   required?: string | number;
   reason: string;
+  source: { clause: string; version: string };
 }
 
 export interface EligibilityResult {
   eligible: boolean;
+  asOfDate: string;
+  scheme: string;
   checks: EligibilityCheck[];
   blockers: string[];
   warnings: string[];
 }
 
-// ── PMEGP Scheme Constants ─────────────────────────────────────────────────
-
-const MIN_AGE = 18;
-const MAX_AGE = 65;
-
-/** Cost ceilings in whole rupees. */
-const COST_CEILING: Record<string, number> = {
-  MANUFACTURING: 50_00_000, // ₹50,00,000
-  SERVICE: 25_00_000,       // ₹25,00,000
-};
-
-/**
- * Education levels ordered from lowest to highest qualification.
- * Index 0 = none, index increases with higher qualification.
- * "OTHER" is excluded from ordering — handled separately.
- */
-const EDUCATION_RANK: Record<string, number> = {
-  NONE: 0,
-  BELOW_8TH: 1,
-  "8TH_PASS": 2,
-  "10TH_PASS": 3,
-  "12TH_PASS": 4,
-  GRADUATE: 5,
-  POST_GRADUATE: 6,
-  PROFESSIONAL: 7,
-};
-
-const MIN_EDUCATION_RANK_FOR_HIGH_COST = EDUCATION_RANK["8TH_PASS"];
-const HIGH_COST_THRESHOLD = 10_00_000; // ₹10,00,000
-
-/**
- * Entity types permitted under PMEGP.
- * LLP and PRIVATE_LIMITED are not eligible for PMEGP subsidy.
- */
-const PERMITTED_ENTITY_TYPES: EntityType[] = [
-  "INDIVIDUAL",
-  "SHG",
-  "TRUST",
-  "SOCIETY",
-  "COOP",
-  "PARTNERSHIP",
-];
+export interface EligibilityInput {
+  asOfDate: string; // ISO date; caller supplies, engine never reads clock
+  scheme: string;   // scheme key — engine is scheme-parameterized
+  profile: ProjectProfile;
+}
 
 // ── Formatting Helpers ─────────────────────────────────────────────────────
 
@@ -76,7 +56,6 @@ const PERMITTED_ENTITY_TYPES: EntityType[] = [
 function formatRupees(amount: number): string {
   const str = Math.abs(amount).toString();
   if (str.length <= 3) return `₹${amount.toLocaleString("en-IN")}`;
-
   const lastThree = str.slice(-3);
   const rest = str.slice(0, -3);
   const formatted = rest.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree;
@@ -114,204 +93,178 @@ function entityTypeLabel(type: EntityType): string {
   return labels[type];
 }
 
-// ── Individual Check Functions ──────────────────────────────────────────────
+/** Build a source citation for auditability. */
+function cite(clause: string): { clause: string; version: string } {
+  return { clause, version: `${SCHEME_SOURCE} v${SCHEME_VERSION}` };
+}
 
-function checkAgeMin(profile: ProjectProfile): EligibilityCheck {
-  const age = profile.applicant.age;
-  const passed = age >= MIN_AGE;
+// ── Individual Check Functions ─────────────────────────────────────────────
+
+function checkAgeMin(input: EligibilityInput): EligibilityCheck {
+  const age = input.profile.applicant.age;
+  const passed = age >= AGE_LIMITS.MIN;
   return {
     criterionId: "age.min",
     label: "Minimum age requirement",
     passed,
     actual: age,
-    required: `>= ${MIN_AGE} years`,
+    required: `>= ${AGE_LIMITS.MIN} years`,
     reason: passed
-      ? `Applicant age (${age}) meets the minimum age requirement of ${MIN_AGE} years.`
-      : `Applicant age (${age}) is below the minimum age requirement of ${MIN_AGE} years.`,
+      ? `Applicant age (${age}) meets the minimum age requirement of ${AGE_LIMITS.MIN} years.`
+      : `Applicant age (${age}) is below the minimum age requirement of ${AGE_LIMITS.MIN} years.`,
+    source: cite("Age eligibility clause"),
   };
 }
 
-function checkAgeMax(profile: ProjectProfile): EligibilityCheck {
-  const age = profile.applicant.age;
-  const passed = age <= MAX_AGE;
+function checkAgeMax(input: EligibilityInput): EligibilityCheck {
+  const age = input.profile.applicant.age;
+  const passed = age <= AGE_LIMITS.MAX;
   return {
     criterionId: "age.max",
     label: "Maximum age requirement",
     passed,
     actual: age,
-    required: `<= ${MAX_AGE} years`,
+    required: `<= ${AGE_LIMITS.MAX} years`,
     reason: passed
-      ? `Applicant age (${age}) is within the maximum age limit of ${MAX_AGE} years.`
-      : `Applicant age (${age}) exceeds the maximum age limit of ${MAX_AGE} years.`,
+      ? `Applicant age (${age}) is within the maximum age limit of ${AGE_LIMITS.MAX} years.`
+      : `Applicant age (${age}) exceeds the maximum age limit of ${AGE_LIMITS.MAX} years.`,
+    source: cite("Age eligibility clause"),
   };
 }
 
-function checkNegativeList(profile: ProjectProfile): EligibilityCheck {
-  // The negative_list.json is currently empty. This check always passes.
-  // When the negative list is populated, matching would occur by NIC code
-  // or keyword against the business description / NIC code.
-  const nicCode = profile.business.nicCode ?? "not yet resolved";
-  const description = profile.business.nicDescription ?? profile.business.description;
+function checkPriorSubsidy(input: EligibilityInput): EligibilityCheck {
+  const prior = input.profile.applicant.priorSubsidy;
+  const passed = !prior;
+  return {
+    criterionId: "subsidy.prior",
+    label: "No prior government subsidy",
+    passed,
+    actual: prior ? "Yes — has availed subsidy" : "No — first-time applicant",
+    required: "No prior PMEGP/PMRY/other subsidy",
+    reason: passed
+      ? "Applicant has not availed any prior government subsidy."
+      : `Applicant has availed a prior subsidy (${input.profile.applicant.priorSubsidyDetail || "details not provided"}).`,
+    source: cite("One-time assistance clause"),
+  };
+}
 
+function checkEntityType(input: EligibilityInput): EligibilityCheck {
+  const type = input.profile.applicant.entityType;
+  const passed = PERMITTED_ENTITY_TYPES.includes(type);
+  return {
+    criterionId: "entity.type",
+    label: "Permitted entity type",
+    passed,
+    actual: entityTypeLabel(type),
+    required: PERMITTED_ENTITY_TYPES.map(entityTypeLabel).join(", "),
+    reason: passed
+      ? `${entityTypeLabel(type)} is a permitted entity type under the scheme.`
+      : `${entityTypeLabel(type)} is NOT a permitted entity type. Only ${PERMITTED_ENTITY_TYPES.map(entityTypeLabel).join(", ")} are eligible.`,
+    source: cite("Entity type eligibility clause"),
+  };
+}
+
+function checkActivityNegativeList(input: EligibilityInput): EligibilityCheck {
+  const nic = input.profile.business.nicCode;
+  if (!nic) {
+    return {
+      criterionId: "activity.negative-list",
+      label: "Activity not on negative list",
+      passed: false,
+      reason: "NIC code not provided — cannot verify negative list.",
+      source: cite("Negative list clause"),
+    };
+  }
+  const negative = isNegativeList(nic);
+  const passed = !negative;
   return {
     criterionId: "activity.negative-list",
     label: "Activity not on negative list",
-    passed: true,
-    actual: `NIC ${nicCode} — ${description}`,
-    reason:
-      "No negative list entries are currently configured. " +
-      "This check will be enforced when the negative list is populated with excluded NIC codes or activity keywords.",
+    passed,
+    actual: negative ? negative.description : "Not listed",
+    required: "Activity must not be on the excluded list",
+    reason: passed
+      ? `NIC code ${nic} is not on the negative list.`
+      : `NIC code ${nic} (${negative?.description}) is on the negative list: ${negative?.reason}.`,
+    source: cite("Negative list clause"),
   };
 }
 
-function checkCostCeiling(profile: ProjectProfile): EligibilityCheck {
-  const activityType = profile.business.activityType;
-  const totalCost = profile.financials.totalProjectCost;
-  const ceiling = COST_CEILING[activityType] ?? 25_00_000;
-  const passed = totalCost <= ceiling;
-
+function checkCostCeiling(input: EligibilityInput): EligibilityCheck {
+  const activityType = input.profile.business.activityType;
+  const cost = input.profile.financials.totalProjectCost;
+  const ceiling = COST_CEILINGS[activityType] ?? COST_CEILINGS.SERVICE;
+  const passed = cost <= ceiling;
   return {
     criterionId: "cost.ceiling",
-    label: "Project cost within ceiling",
+    label: "Project cost within scheme ceiling",
     passed,
-    actual: formatRupees(totalCost),
-    required: `<= ${formatRupees(ceiling)} (${activityType})`,
+    actual: formatRupees(cost),
+    required: `<= ${formatRupees(ceiling)} for ${activityType}`,
     reason: passed
-      ? `Total project cost (${formatRupees(totalCost)}) is within the ${activityType.toLowerCase()} ceiling of ${formatRupees(ceiling)}.`
-      : `Total project cost (${formatRupees(totalCost)}) exceeds the ${activityType.toLowerCase()} ceiling of ${formatRupees(ceiling)} by ${formatRupees(totalCost - ceiling)}.`,
+      ? `Project cost ${formatRupees(cost)} is within the ${activityType} ceiling of ${formatRupees(ceiling)}.`
+      : `Project cost ${formatRupees(cost)} exceeds the ${activityType} ceiling of ${formatRupees(ceiling)}.`,
+    source: cite("Project cost ceiling clause"),
   };
 }
 
-function checkPriorAssistance(profile: ProjectProfile): EligibilityCheck {
-  const priorSubsidy = profile.applicant.priorSubsidy;
-  const passed = !priorSubsidy;
-
-  return {
-    criterionId: "applicant.prior-assistance",
-    label: "No prior PMEGP/PMRY subsidy",
-    passed,
-    actual: priorSubsidy ? "Yes — prior subsidy availed" : "No prior subsidy",
-    required: "No prior PMEGP or PMRY subsidy",
-    reason: passed
-      ? "Applicant has not availed PMEGP or PMRY subsidy previously."
-      : `Applicant has previously availed PMEGP/PMRY subsidy${profile.applicant.priorSubsidyDetail ? ` (${profile.applicant.priorSubsidyDetail})` : ""}. This makes them ineligible for a fresh PMEGP subsidy.`,
-  };
-}
-
-function checkEntityType(profile: ProjectProfile): EligibilityCheck {
-  const entityType = profile.applicant.entityType;
-  const passed = PERMITTED_ENTITY_TYPES.includes(entityType);
-
-  return {
-    criterionId: "applicant.entity-type",
-    label: "Permitted entity type",
-    passed,
-    actual: entityTypeLabel(entityType),
-    required: PERMITTED_ENTITY_TYPES.map(entityTypeLabel).join(", "),
-    reason: passed
-      ? `Entity type "${entityTypeLabel(entityType)}" is permitted under PMEGP.`
-      : `Entity type "${entityTypeLabel(entityType)}" is not permitted under PMEGP. Only ${PERMITTED_ENTITY_TYPES.map(entityTypeLabel).join(", ")} are eligible.`,
-  };
-}
-
-function checkEducation(profile: ProjectProfile): EligibilityCheck {
-  const education = profile.applicant.education;
-  const totalCost = profile.financials.totalProjectCost;
-  const isHighCost = totalCost > HIGH_COST_THRESHOLD;
-
-  // "OTHER" education — cannot rank automatically. If high-cost project, it's a warning
-  // asking for manual review rather than a hard fail, since the actual qualification
-  // may be at or above 8th pass.
-  if (education === "OTHER") {
-    return {
-      criterionId: "education",
-      label: "Education qualification",
-      passed: !isHighCost,
-      actual: `Other (${profile.applicant.educationDetail ?? "detail not specified"})`,
-      required: isHighCost ? "At least 8th pass (for projects above " + formatRupees(HIGH_COST_THRESHOLD) + ")" : "No minimum for projects up to " + formatRupees(HIGH_COST_THRESHOLD),
-      reason: isHighCost
-        ? "Education marked as 'Other'. Manual verification required to confirm qualification is at least 8th pass for projects exceeding " + formatRupees(HIGH_COST_THRESHOLD) + "."
-        : "Education marked as 'Other' — acceptable for projects up to " + formatRupees(HIGH_COST_THRESHOLD) + ".",
-    };
-  }
-
-  // Not a high-cost project — education check is not a hard requirement.
-  if (!isHighCost) {
-    return {
-      criterionId: "education",
-      label: "Education qualification",
-      passed: true,
-      actual: educationLabel(education),
-      required: "No minimum for projects up to " + formatRupees(HIGH_COST_THRESHOLD),
-      reason: `Project cost (${formatRupees(totalCost)}) is within ${formatRupees(HIGH_COST_THRESHOLD)}, so no minimum education qualification is required. Applicant education: ${educationLabel(education)}.`,
-    };
-  }
-
-  // High-cost project — education must be >= 8TH_PASS.
+function checkEducation(input: EligibilityInput): EligibilityCheck {
+  const education = input.profile.applicant.education;
+  const cost = input.profile.financials.totalProjectCost;
   const rank = EDUCATION_RANK[education] ?? -1;
-  const passed = rank >= MIN_EDUCATION_RANK_FOR_HIGH_COST;
+  const highCost = cost > EDUCATION_THRESHOLD.HIGH_COST;
+  const passed = !highCost || rank >= MIN_EDUCATION_RANK_FOR_HIGH_COST;
 
   return {
-    criterionId: "education",
-    label: "Education qualification",
+    criterionId: "education.min",
+    label: "Minimum education requirement",
     passed,
     actual: educationLabel(education),
-    required: "At least 8th pass (for projects above " + formatRupees(HIGH_COST_THRESHOLD) + ")",
+    required: highCost ? "At least 8th pass for projects above ₹10,00,000" : "No minimum for projects below ₹10,00,000",
     reason: passed
-      ? `Applicant education (${educationLabel(education)}) meets the minimum requirement of 8th pass for projects above ${formatRupees(HIGH_COST_THRESHOLD)}.`
-      : `Applicant education (${educationLabel(education)}) does not meet the minimum requirement of 8th pass for projects above ${formatRupees(HIGH_COST_THRESHOLD)}.`,
+      ? highCost
+        ? `Education (${educationLabel(education)}) meets the minimum requirement for high-cost projects.`
+        : `Project cost is below ₹10,00,000; no minimum education requirement applies.`
+      : `Education (${educationLabel(education)}) does not meet the minimum requirement for projects above ₹10,00,000.`,
+    source: cite("Education eligibility clause"),
   };
 }
 
-// ── Main Entry Point ───────────────────────────────────────────────────────
+// ── Public API ─────────────────────────────────────────────────────────────
 
 /**
- * Evaluate all PMEGP eligibility criteria against the given ProjectProfile.
+ * Evaluate PMEGP eligibility for a project profile.
  *
- * Pure function — same input always produces the same output.
- * Returns ALL checks (passing and failing) so the UI and DPR can render
- * a complete eligibility statement.
+ * @param input — structured input with asOfDate, scheme key, and profile
+ * @returns EligibilityResult with per-criterion checks, blockers, warnings
  *
- * Criteria evaluated:
- *   1. age.min          — Applicant age >= 18 (hard)
- *   2. age.max          — Applicant age <= 65 (hard)
- *   3. activity.negative-list — Not on the negative list (hard when match found)
- *   4. cost.ceiling     — Total project cost within sector ceiling (hard)
- *   5. applicant.prior-assistance — No prior PMEGP/PMRY subsidy (hard for NEW)
- *   6. applicant.entity-type — Entity type is permitted (hard)
- *   7. education        — For projects > ₹10L, education >= 8th pass (hard)
+ * Deterministic: same input → same output.  No side effects.
  */
-export function checkEligibility(profile: ProjectProfile): EligibilityResult {
+export function evaluateEligibility(input: EligibilityInput): EligibilityResult {
   const checks: EligibilityCheck[] = [
-    checkAgeMin(profile),
-    checkAgeMax(profile),
-    checkNegativeList(profile),
-    checkCostCeiling(profile),
-    checkPriorAssistance(profile),
-    checkEntityType(profile),
-    checkEducation(profile),
+    checkAgeMin(input),
+    checkAgeMax(input),
+    checkPriorSubsidy(input),
+    checkEntityType(input),
+    checkActivityNegativeList(input),
+    checkCostCeiling(input),
+    checkEducation(input),
   ];
 
-  // A check is a "blocker" when it fails and the criterion is hard.
-  // All seven criteria are hard under PMEGP.
-  const blockers = checks
-    .filter((c) => !c.passed)
-    .map((c) => `${c.label}: ${c.reason}`);
-
-  // Warnings are soft signals — none of the current criteria produce warnings,
-  // but the structure is preserved for future use (e.g. EDP not completed).
+  const blockers = checks.filter((c) => !c.passed).map((c) => c.criterionId);
   const warnings: string[] = [];
 
-  // No EDP certificate is a warning, not a blocker
-  if (!profile.applicant.edpCompleted) {
-    warnings.push(
-      "EDP (Entrepreneurship Development Programme) training has not been completed. " +
-        "This is recommended but not a hard eligibility requirement."
-    );
+  // Soft warnings
+  if (input.profile.applicant.education === "OTHER") {
+    warnings.push("education.self-declared");
   }
 
+  const eligible = blockers.length === 0;
+
   return {
-    eligible: blockers.length === 0,
+    eligible,
+    asOfDate: input.asOfDate,
+    scheme: input.scheme,
     checks,
     blockers,
     warnings,

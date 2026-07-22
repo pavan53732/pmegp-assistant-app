@@ -739,3 +739,6 @@ export function getSchemeDefaults(): {
     serviceCeiling: (notes.serviceCeiling as number) ?? 2500000,
   };
 }
+
+// ── Scheme Parameters (re-export for engine consumption) ──────────────────
+export * from './scheme-params';
