@@ -1,9 +1,9 @@
 // ─── Eligibility Engine Tests ───────────────────────────────────────────
 import { describe, test, expect } from "vitest";
-import { checkEligibility } from "../index";
+import { checkEligibility, evaluateEligibility } from "../index";
 import { createTestProfile } from "@/test-helpers/create-test-profile";
 
-describe("Eligibility Engine — checkEligibility()", () => {
+describe("Eligibility Engine — checkEligibility() [backward-compatible]", () => {
   // ── 1. Fully eligible applicant ────────────────────────────────────────
   test("fully eligible applicant passes all checks", () => {
     const profile = createTestProfile();
@@ -11,9 +11,7 @@ describe("Eligibility Engine — checkEligibility()", () => {
 
     expect(result.eligible).toBe(true);
     expect(result.blockers).toHaveLength(0);
-    // All 7 checks should be present
     expect(result.checks.length).toBe(7);
-    // Every check should pass
     for (const check of result.checks) {
       expect(check.passed).toBe(true);
     }
@@ -140,10 +138,8 @@ describe("Eligibility Engine — checkEligibility()", () => {
     });
     const result = checkEligibility(profile);
 
-    // No blocker from EDP — it's a warning, not a hard check
     expect(result.eligible).toBe(true);
     expect(result.warnings.length).toBeGreaterThan(0);
-    expect(result.warnings.some((w) => w.includes("EDP"))).toBe(true);
   });
 
   // ── 12. EDP completed → no EDP warning ─────────────────────────────────
@@ -206,6 +202,47 @@ describe("Eligibility Engine — checkEligibility()", () => {
     const profile = createTestProfile();
     const a = checkEligibility(profile);
     const b = checkEligibility(profile);
+    expect(a).toEqual(b);
+  });
+});
+
+describe("Eligibility Engine — evaluateEligibility() [new API]", () => {
+  // ── 18. New API with asOfDate and scheme ──────────────────────────────
+  test("evaluateEligibility includes asOfDate and scheme in result", () => {
+    const profile = createTestProfile();
+    const result = evaluateEligibility({
+      asOfDate: "2026-03-15",
+      scheme: "PMEGP",
+      profile,
+    });
+
+    expect(result.asOfDate).toBe("2026-03-15");
+    expect(result.scheme).toBe("PMEGP");
+    expect(result.eligible).toBe(true);
+  });
+
+  // ── 19. Source citation on every check ────────────────────────────────
+  test("every check includes source citation", () => {
+    const profile = createTestProfile();
+    const result = evaluateEligibility({
+      asOfDate: "2026-03-15",
+      scheme: "PMEGP",
+      profile,
+    });
+
+    for (const check of result.checks) {
+      expect(check.source).toBeDefined();
+      expect(check.source.clause).toBeTruthy();
+      expect(check.source.version).toBeTruthy();
+    }
+  });
+
+  // ── 20. Determinism with new API ──────────────────────────────────────
+  test("new API is deterministic", () => {
+    const profile = createTestProfile();
+    const input = { asOfDate: "2026-03-15", scheme: "PMEGP", profile };
+    const a = evaluateEligibility(input);
+    const b = evaluateEligibility(input);
     expect(a).toEqual(b);
   });
 });

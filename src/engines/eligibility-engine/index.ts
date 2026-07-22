@@ -136,7 +136,7 @@ function checkPriorSubsidy(input: EligibilityInput): EligibilityCheck {
   const prior = input.profile.applicant.priorSubsidy;
   const passed = !prior;
   return {
-    criterionId: "subsidy.prior",
+    criterionId: "applicant.prior-assistance",
     label: "No prior government subsidy",
     passed,
     actual: prior ? "Yes — has availed subsidy" : "No — first-time applicant",
@@ -152,7 +152,7 @@ function checkEntityType(input: EligibilityInput): EligibilityCheck {
   const type = input.profile.applicant.entityType;
   const passed = PERMITTED_ENTITY_TYPES.includes(type);
   return {
-    criterionId: "entity.type",
+    criterionId: "applicant.entity-type",
     label: "Permitted entity type",
     passed,
     actual: entityTypeLabel(type),
@@ -216,7 +216,7 @@ function checkEducation(input: EligibilityInput): EligibilityCheck {
   const passed = !highCost || rank >= MIN_EDUCATION_RANK_FOR_HIGH_COST;
 
   return {
-    criterionId: "education.min",
+    criterionId: "education",
     label: "Minimum education requirement",
     passed,
     actual: educationLabel(education),
@@ -269,4 +269,20 @@ export function evaluateEligibility(input: EligibilityInput): EligibilityResult 
     blockers,
     warnings,
   };
+}
+
+// ── Backward-Compatible Wrapper ────────────────────────────────────────────
+
+/**
+ * Convenience wrapper that calls evaluateEligibility with default asOfDate
+ * and scheme.  Maintains backward compatibility with existing callers.
+ *
+ * @deprecated Use evaluateEligibility({ asOfDate, scheme, profile }) for new code.
+ */
+export function checkEligibility(profile: ProjectProfile): EligibilityResult {
+  return evaluateEligibility({
+    asOfDate: new Date().toISOString().split("T")[0],
+    scheme: "PMEGP",
+    profile,
+  });
 }

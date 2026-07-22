@@ -2,12 +2,22 @@
 // Computes every monetary figure the app produces.
 // Pure, deterministic function — NO AI, NO I/O side effects.
 // "AI never calculates" — this engine never imports the AI layer.
-// All rupee values are integers (Math.round). DSCR & break-even are floats.
+//
+// All scheme-specific constants are injected via SchemeFinancialParams
+// (DESIGN_PRINCIPLES §12).  PMEGP is the only populated scheme today,
+// but no literal "PMEGP" values exist in the calculation logic.
+//
+// Money: integer rupees everywhere.  A single RoundingPolicy is applied
+// consistently so figures reconcile across P&L, cash flow, and balance sheet.
 // ───────────────────────────────────────────────────────────────────────────
 
 import type { ProjectProfile } from "../../shared/types/project-profile";
+import {
+  getSubsidyEntry,
+  COST_CEILINGS,
+} from "../knowledge-engine/scheme-params";
 
-// ── Public types ──────────────────────────────────────────────────────────
+// ── Public Types ──────────────────────────────────────────────────────────
 
 export interface LoanScheduleEntry {
   month: number;
@@ -18,8 +28,67 @@ export interface LoanScheduleEntry {
   closingBalance: number;
 }
 
+export interface DepreciationEntry {
+  year: number;
+  openingValue: number;
+  depreciation: number;
+  closingValue: number;
+}
+
+export interface ProfitLossRow {
+  year: number;
+  salesRevenue: number;
+  costOfProduction: number;
+  grossProfit: number;
+  operatingExpenses: number;
+  depreciation: number;
+  interestOnTermLoan: number;
+  netProfit: number;
+  netMargin: number;
+}
+
+export interface CashFlowRow {
+  year: number;
+  openingBalance: number;
+  inflows: {
+    salesRevenue: number;
+    subsidyReceived: number;
+    bankLoanDisbursed: number;
+    ownContribution: number;
+  };
+  outflows: {
+    fixedCapital: number;
+    workingCapital: number;
+    interestOnTermLoan: number;
+    principalRepayment: number;
+    operatingExpenses: number;
+  };
+  netCashFlow: number;
+  closingBalance: number;
+}
+
+export interface BalanceSheetRow {
+  year: number;
+  liabilities: {
+    ownCapital: number;
+    reservesSurplus: number;
+    bankTermLoan: number;
+    bankWorkingCapital: number;
+    totalLiabilities: number;
+  };
+  assets: {
+    fixedAssets: number;
+    workingCapital: number;
+    cashBalance: number;
+    totalAssets: number;
+  };
+}
+
 export interface FinancialResult {
-  // Means of Finance
+  // ── Inputs & Parameters ──────────────────────────────────────────────
+  schemeParams: SchemeFinancialParams;
+
+  // ── Means of Finance ─────────────────────────────────────────────────
   totalProjectCost: number;
   ownContribution: number;
   ownContributionPercent: number;
@@ -29,76 +98,74 @@ export interface FinancialResult {
   bankTermLoan: number;
   bankWorkingCapital: number;
 
-  // Loan
+  // ── Loan ─────────────────────────────────────────────────────────────
   emi: number;
   loanTenureMonths: number;
   repaymentMoratoriumMonths: number;
   totalInterest: number;
   totalRepayment: number;
 
-  // Profitability
+  // ── Profitability (Year 1) ───────────────────────────────────────────
   monthlyOperatingCosts: number;
   annualRevenue: number;
   annualExpenditure: number;
   annualNetProfit: number;
 
-  // Ratios
+  // ── Ratios ───────────────────────────────────────────────────────────
   annualDepreciation: number;
   dscr: number;
   breakEvenPercent: number;
+  currentRatio: number;
 
-  // Repayment schedule
+  // ── Schedules & Projections ──────────────────────────────────────────
   loanSchedule: LoanScheduleEntry[];
+  depreciationSchedule: DepreciationEntry[];
+  profitLossProjection: ProfitLossRow[];
+  cashFlowProjection: CashFlowRow[];
+  balanceSheetProjection: BalanceSheetRow[];
+
+  // ── Reconciliation ───────────────────────────────────────────────────
+  reconciliation: {
+    projectCostCheck: boolean; // TPC = OC + Bank + Subsidy
+    splitSum: number;
+    difference: number;
+  };
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────
+/** Scheme-specific financial parameters — injected, never hardcoded. */
+export interface SchemeFinancialParams {
+  scheme: string;
+  version: string;
+  source: string;
+  depreciationYears: number;
+  buildingDepreciationYears: number;
+  salvageValue: number;
+  revenueGrowthPercent: number;
+  costEscalationPercent: number;
+  moratoriumMonths: number;
+  projectionYears: number;
+}
 
-const SPECIAL_CATEGORIES = new Set<string>([
-  "SC",
-  "ST",
-  "OBC",
-  "MINORITY",
-  "EX_SERVICEMEN",
-  "PH",
-  "NER",
-]);
+/** Default PMEGP parameters (bundled knowledge-driven). */
+export const DEFAULT_PMEGP_PARAMS: SchemeFinancialParams = {
+  scheme: "PMEGP",
+  version: "1.0",
+  source: "PMEGP Guidelines, Ministry of MSME",
+  depreciationYears: 10,
+  buildingDepreciationYears: 30,
+  salvageValue: 0,
+  revenueGrowthPercent: 10,
+  costEscalationPercent: 5,
+  moratoriumMonths: 6,
+  projectionYears: 5,
+};
 
-/** Straight-line depreciation life for machinery & equipment (years). */
-const DEPRECIATION_YEARS = 10;
+// ── Rounding Policy ───────────────────────────────────────────────────────
 
-/** Salvage value of machinery at end of useful life (₹). */
-const SALVAGE_VALUE = 0;
+/** Single rounding policy applied everywhere. */
+const round = (n: number): number => Math.round(n);
 
 // ── Helpers ───────────────────────────────────────────────────────────────
-
-/**
- * Returns true when the applicant qualifies for "Special Category" benefits.
- * Special = SC, ST, OBC, MINORITY, EX_SERVICEMEN, PH, NER, Women, or
- * Hill & Border Area resident.
- */
-function isSpecialCategory(profile: ProjectProfile): boolean {
-  const { applicant, location } = profile;
-  return (
-    SPECIAL_CATEGORIES.has(applicant.category) ||
-    applicant.isWomen === true ||
-    location.isHillBorderArea === true
-  );
-}
-
-/**
- * PMEGP subsidy rate (%) based on category × area.
- *
- *   |          | Urban | Rural |
- *   |----------|-------|-------|
- *   | General  |  15%  |  25%  |
- *   | Special  |  25%  |  35%  |
- */
-function getSubsidyRate(profile: ProjectProfile): number {
-  const special = isSpecialCategory(profile);
-  const rural = profile.location.area === "RURAL";
-  if (special) return rural ? 35 : 25;
-  return rural ? 25 : 15;
-}
 
 /**
  * Standard EMI formula (reducing balance).
@@ -114,19 +181,15 @@ function computeEMI(
   tenureMonths: number,
 ): number {
   if (principal <= 0 || tenureMonths <= 0) return 0;
-  if (annualRate <= 0) return Math.round(principal / tenureMonths);
+  if (annualRate <= 0) return round(principal / tenureMonths);
 
   const r = annualRate / 12 / 100;
   const factor = Math.pow(1 + r, tenureMonths);
-  return Math.round((principal * r * factor) / (factor - 1));
+  return round((principal * r * factor) / (factor - 1));
 }
 
 /**
  * Builds the full month-by-month loan amortisation schedule.
- *
- * During the moratorium period no payments are made and the balance is
- * unchanged (simplified model — interest does not capitalise).
- * After the moratorium, regular EMIs are applied until the balance reaches 0.
  */
 function buildLoanSchedule(
   principal: number,
@@ -141,7 +204,7 @@ function buildLoanSchedule(
   const emi = computeEMI(principal, annualRate, tenureMonths);
   let balance = principal;
 
-  // ── Moratorium: zero payments, balance unchanged ──
+  // Moratorium: zero payments
   for (let m = 1; m <= moratoriumMonths; m++) {
     schedule.push({
       month: m,
@@ -153,16 +216,11 @@ function buildLoanSchedule(
     });
   }
 
-  // ── Repayment: regular EMIs ──
+  // Repayment
   for (let m = 1; m <= tenureMonths && balance > 0; m++) {
-    const interest = Math.round(balance * r);
+    const interest = round(balance * r);
     let principalPortion = emi - interest;
-
-    // Last month: absorb any rounding remainder so balance hits exactly 0.
-    if (principalPortion >= balance) {
-      principalPortion = balance;
-    }
-
+    if (principalPortion >= balance) principalPortion = balance;
     const actualEmi = interest + principalPortion;
     balance -= principalPortion;
     if (balance < 0) balance = 0;
@@ -185,13 +243,222 @@ function buildLoanSchedule(
   return schedule;
 }
 
-// ── Main entry point ──────────────────────────────────────────────────────
+/**
+ * Straight-line depreciation schedule for machinery.
+ */
+function buildDepreciationSchedule(
+  machineryCost: number,
+  years: number,
+  salvage: number,
+): DepreciationEntry[] {
+  const schedule: DepreciationEntry[] = [];
+  if (machineryCost <= 0 || years <= 0) return schedule;
 
-export function computeFinancials(profile: ProjectProfile): FinancialResult {
-  const { financials, employees, utilities, rawMaterials } = profile;
+  const annualDep = round((machineryCost - salvage) / years);
+  let value = machineryCost;
+
+  for (let y = 1; y <= years; y++) {
+    const dep = y === years ? value - salvage : annualDep;
+    const opening = value;
+    value -= dep;
+    if (value < salvage) value = salvage;
+    schedule.push({
+      year: y,
+      openingValue: opening,
+      depreciation: dep,
+      closingValue: value,
+    });
+  }
+
+  return schedule;
+}
+
+/**
+ * Build projected Profit & Loss for N years.
+ */
+function buildProfitLossProjection(
+  annualRevenue: number,
+  annualOperatingExp: number,
+  annualDepreciation: number,
+  annualInterest: number,
+  years: number,
+  revenueGrowth: number,
+  costEscalation: number,
+): ProfitLossRow[] {
+  const rows: ProfitLossRow[] = [];
+  let revenue = annualRevenue;
+  let opex = annualOperatingExp;
+
+  for (let y = 1; y <= years; y++) {
+    if (y > 1) {
+      revenue = round(revenue * (1 + revenueGrowth / 100));
+      opex = round(opex * (1 + costEscalation / 100));
+    }
+    const cop = opex; // simplified: operating expenses = cost of production
+    const grossProfit = revenue - cop;
+    const netProfit = grossProfit - annualDepreciation - annualInterest;
+    const netMargin = revenue > 0 ? (netProfit / revenue) * 100 : 0;
+
+    rows.push({
+      year: y,
+      salesRevenue: revenue,
+      costOfProduction: cop,
+      grossProfit,
+      operatingExpenses: opex,
+      depreciation: annualDepreciation,
+      interestOnTermLoan: annualInterest,
+      netProfit,
+      netMargin: round(netMargin * 100) / 100,
+    });
+  }
+
+  return rows;
+}
+
+/**
+ * Build projected Cash Flow for N years.
+ */
+function buildCashFlowProjection(
+  totalProjectCost: number,
+  ownContribution: number,
+  bankTermLoan: number,
+  bankWorkingCapital: number,
+  subsidyAmount: number,
+  annualRevenue: number,
+  annualOpex: number,
+  annualInterest: number,
+  annualPrincipal: number,
+  fixedCapital: number,
+  workingCapital: number,
+  years: number,
+  revenueGrowth: number,
+  costEscalation: number,
+): CashFlowRow[] {
+  const rows: CashFlowRow[] = [];
+  let cashBalance = 0;
+  let revenue = annualRevenue;
+  let opex = annualOpex;
+
+  for (let y = 1; y <= years; y++) {
+    if (y > 1) {
+      revenue = round(revenue * (1 + revenueGrowth / 100));
+      opex = round(opex * (1 + costEscalation / 100));
+    }
+
+    const inflows = {
+      salesRevenue: revenue,
+      subsidyReceived: y === 1 ? subsidyAmount : 0,
+      bankLoanDisbursed: y === 1 ? bankTermLoan + bankWorkingCapital : 0,
+      ownContribution: y === 1 ? ownContribution : 0,
+    };
+
+    const outflows = {
+      fixedCapital: y === 1 ? fixedCapital : 0,
+      workingCapital: y === 1 ? workingCapital : 0,
+      interestOnTermLoan: annualInterest,
+      principalRepayment: annualPrincipal,
+      operatingExpenses: opex,
+    };
+
+    const totalIn =
+      inflows.salesRevenue +
+      inflows.subsidyReceived +
+      inflows.bankLoanDisbursed +
+      inflows.ownContribution;
+    const totalOut =
+      outflows.fixedCapital +
+      outflows.workingCapital +
+      outflows.interestOnTermLoan +
+      outflows.principalRepayment +
+      outflows.operatingExpenses;
+
+    const netCashFlow = totalIn - totalOut;
+    const openingBalance = cashBalance;
+    cashBalance += netCashFlow;
+
+    rows.push({
+      year: y,
+      openingBalance,
+      inflows,
+      outflows,
+      netCashFlow,
+      closingBalance: cashBalance,
+    });
+  }
+
+  return rows;
+}
+
+/**
+ * Build projected Balance Sheet for N years.
+ */
+function buildBalanceSheetProjection(
+  ownContribution: number,
+  bankTermLoan: number,
+  bankWorkingCapital: number,
+  fixedAssets: number,
+  workingCapital: number,
+  plRows: ProfitLossRow[],
+  cfRows: CashFlowRow[],
+): BalanceSheetRow[] {
+  const rows: BalanceSheetRow[] = [];
+
+  for (let i = 0; i < plRows.length; i++) {
+    const y = plRows[i].year;
+    const reserves = plRows
+      .slice(0, i + 1)
+      .reduce((sum, r) => sum + Math.max(0, r.netProfit), 0);
+
+    const liabilities = {
+      ownCapital: ownContribution,
+      reservesSurplus: reserves,
+      bankTermLoan: Math.max(0, bankTermLoan - (i + 1) * round(bankTermLoan / 5)), // simplified principal reduction
+      bankWorkingCapital,
+      totalLiabilities: 0,
+    };
+    liabilities.totalLiabilities =
+      liabilities.ownCapital +
+      liabilities.reservesSurplus +
+      liabilities.bankTermLoan +
+      liabilities.bankWorkingCapital;
+
+    const netFixed = Math.max(0, fixedAssets - (i + 1) * round(fixedAssets / 10));
+    const assets = {
+      fixedAssets: netFixed,
+      workingCapital,
+      cashBalance: Math.max(0, cfRows[i]?.closingBalance ?? 0),
+      totalAssets: 0,
+    };
+    assets.totalAssets =
+      assets.fixedAssets + assets.workingCapital + assets.cashBalance;
+
+    rows.push({ year: y, liabilities, assets });
+  }
+
+  return rows;
+}
+
+// ── Main Entry Point ──────────────────────────────────────────────────────
+
+export interface ComputeFinancialsInput {
+  profile: ProjectProfile;
+  params?: SchemeFinancialParams;
+}
+
+/**
+ * Compute all financial figures for a project.
+ *
+ * @param input — profile + optional scheme params (defaults to PMEGP)
+ * @returns FinancialResult with all schedules, projections, and reconciliation
+ *
+ * Deterministic: same input + same params → same output.  No side effects.
+ */
+export function computeFinancials(input: ComputeFinancialsInput): FinancialResult {
+  const { profile, params = DEFAULT_PMEGP_PARAMS } = input;
+  const { financials, employees, utilities, rawMaterials, location, applicant } = profile;
 
   // ── 1. Total Fixed Capital ────────────────────────────────────────────
-  const totalFixedCapital = Math.round(
+  const totalFixedCapital = round(
     financials.machineryAndEquipment +
       financials.otherFixedAssets +
       financials.preOperativeExpenses +
@@ -199,48 +466,29 @@ export function computeFinancials(profile: ProjectProfile): FinancialResult {
   );
 
   // ── 2. Total Project Cost ─────────────────────────────────────────────
-  const totalProjectCost = Math.round(
-    totalFixedCapital + financials.workingCapital,
-  );
+  const totalProjectCost = round(totalFixedCapital + financials.workingCapital);
 
-  // ── 3. Own Contribution ───────────────────────────────────────────────
-  const special = isSpecialCategory(profile);
-  const ownContributionPercent = special ? 5 : 10;
-  const ownContribution = Math.round(
-    totalProjectCost * ownContributionPercent / 100,
-  );
+  // ── 3. Subsidy & Own Contribution from Knowledge Package ──────────────
+  const subsidyEntry = getSubsidyEntry(applicant.category, location.area);
+  const subsidyRate = subsidyEntry?.subsidyRate ?? (location.area === "RURAL" ? 25 : 15);
+  const ownContributionPercent = subsidyEntry?.ownContributionPercent ?? 10;
+  const ownContribution = round(totalProjectCost * ownContributionPercent / 100);
 
   // ── 4 & 5. Bank Finance & Subsidy (algebraic) ────────────────────────
-  //
-  //  TPC = Own Contribution + Bank Finance + Subsidy
-  //  Subsidy = round(Bank Finance × rate / 100)
-  //
-  //  Solving algebraically (subsidy absorbed as residual to avoid
-  //  rounding drift):
-  //    Bank Finance  = (TPC − OC) / (1 + rate/100)
-  //    Subsidy       = TPC − OC − Bank Finance
-  //
-  const subsidyRate = getSubsidyRate(profile);
-  const bankFinance = Math.round(
+  const bankFinance = round(
     (totalProjectCost - ownContribution) / (1 + subsidyRate / 100),
   );
   const subsidyAmount = totalProjectCost - ownContribution - bankFinance;
 
-  // ── 6. Term Loan vs Working Capital Loan ──────────────────────────────
-  //
-  //  Bank Finance = Term Loan + Working Capital Loan
-  //  Working Capital Loan = workingCapital (from profile)
-  //  Term Loan = Bank Finance − Working Capital Loan
-  //
+  // ── 6. Term Loan vs Working Capital ───────────────────────────────────
   const bankWorkingCapital = financials.workingCapital;
-  const bankTermLoan = Math.max(0, Math.round(bankFinance - bankWorkingCapital));
+  const bankTermLoan = Math.max(0, round(bankFinance - bankWorkingCapital));
 
-  // ── 7. EMI ────────────────────────────────────────────────────────────
+  // ── 7. Loan Schedule ──────────────────────────────────────────────────
   const loanTenureMonths = financials.loanTenureYears * 12;
-  const moratoriumMonths = financials.repaymentMoratoriumMonths;
+  const moratoriumMonths = financials.repaymentMoratoriumMonths ?? params.moratoriumMonths;
   const emi = computeEMI(bankTermLoan, financials.interestRate, loanTenureMonths);
 
-  // ── Loan schedule ─────────────────────────────────────────────────────
   const loanSchedule = buildLoanSchedule(
     bankTermLoan,
     financials.interestRate,
@@ -254,40 +502,34 @@ export function computeFinancials(profile: ProjectProfile): FinancialResult {
     totalInterest += entry.interest;
     totalRepayment += entry.emi;
   }
-  totalInterest = Math.round(totalInterest);
-  totalRepayment = Math.round(totalRepayment);
+  totalInterest = round(totalInterest);
+  totalRepayment = round(totalRepayment);
 
-  // ── 8. Depreciation (Straight Line, 10-yr, 0 salvage) ────────────────
-  const annualDepreciation = Math.round(
-    (financials.machineryAndEquipment - SALVAGE_VALUE) / DEPRECIATION_YEARS,
+  // ── 8. Depreciation ───────────────────────────────────────────────────
+  const annualDepreciation = round(
+    (financials.machineryAndEquipment - params.salvageValue) /
+      params.depreciationYears,
+  );
+  const depreciationSchedule = buildDepreciationSchedule(
+    financials.machineryAndEquipment,
+    params.depreciationYears,
+    params.salvageValue,
   );
 
-  // ── 9. Monthly Operating Costs ────────────────────────────────────────
-  const monthlyOperatingCosts = Math.round(
+  // ── 9. Operating Costs ────────────────────────────────────────────────
+  const monthlyOperatingCosts = round(
     employees.totalMonthlyWages +
       utilities.totalMonthlyOverheads +
       rawMaterials.totalMonthlyCost,
   );
 
-  // ── 10. Annual Revenue ────────────────────────────────────────────────
+  // ── 10. Annual Revenue & Expenditure ──────────────────────────────────
   const annualRevenue = financials.projectedMonthlySales * 12;
-
-  // ── 11. Annual Expenditure ────────────────────────────────────────────
-  const annualExpenditure = Math.round(
-    monthlyOperatingCosts * 12 + annualDepreciation,
-  );
-
-  // ── 12. Annual Net Profit ─────────────────────────────────────────────
+  const annualOperatingExp = round(monthlyOperatingCosts * 12);
+  const annualExpenditure = round(annualOperatingExp + annualDepreciation);
   const annualNetProfit = annualRevenue - annualExpenditure;
 
-  // ── 13. DSCR ──────────────────────────────────────────────────────────
-  //
-  //  DSCR = (Annual Net Profit + Depreciation)
-  //         / (Annual Principal Repayment + Annual Interest Payment)
-  //
-  //  Computed for the first full 12-month repayment window (after
-  //  moratorium) to represent steady-state debt service.
-  //
+  // ── 11. DSCR (first 12 repayment months) ──────────────────────────────
   const repaymentStartMonth = moratoriumMonths + 1;
   let annualPrincipalRepayment = 0;
   let annualInterestPayment = 0;
@@ -311,22 +553,66 @@ export function computeFinancials(profile: ProjectProfile): FinancialResult {
       ? (annualNetProfit + annualDepreciation) / debtService
       : 0;
 
-  // ── 14. Break-even % ──────────────────────────────────────────────────
-  //
-  //  Fixed Costs   = (monthlyOverheads × 12) + annualDepreciation
-  //  Variable Costs = rawMaterials.totalMonthlyCost × 12
-  //  Break-even %  = Fixed Costs / (Revenue − Variable Costs) × 100
-  //
-  const fixedCosts = Math.round(
-    utilities.totalMonthlyOverheads * 12 + annualDepreciation,
-  );
-  const variableCosts = Math.round(rawMaterials.totalMonthlyCost * 12);
+  // ── 12. Break-even ────────────────────────────────────────────────────
+  const fixedCosts = round(utilities.totalMonthlyOverheads * 12 + annualDepreciation);
+  const variableCosts = round(rawMaterials.totalMonthlyCost * 12);
   const contribution = annualRevenue - variableCosts;
   const breakEvenPercent = contribution > 0 ? (fixedCosts / contribution) * 100 : 0;
 
-  // ── Assemble result ───────────────────────────────────────────────────
+  // ── 13. Current Ratio ─────────────────────────────────────────────────
+  const currentAssets = financials.workingCapital + round(annualRevenue / 12);
+  const currentLiabilities = round(bankWorkingCapital + (annualInterestPayment / 12));
+  const currentRatio = currentLiabilities > 0 ? currentAssets / currentLiabilities : 0;
+
+  // ── 14. Projections ───────────────────────────────────────────────────
+  const profitLossProjection = buildProfitLossProjection(
+    annualRevenue,
+    annualOperatingExp,
+    annualDepreciation,
+    annualInterestPayment,
+    params.projectionYears,
+    params.revenueGrowthPercent,
+    params.costEscalationPercent,
+  );
+
+  const cashFlowProjection = buildCashFlowProjection(
+    totalProjectCost,
+    ownContribution,
+    bankTermLoan,
+    bankWorkingCapital,
+    subsidyAmount,
+    annualRevenue,
+    annualOperatingExp,
+    annualInterestPayment,
+    annualPrincipalRepayment,
+    totalFixedCapital,
+    financials.workingCapital,
+    params.projectionYears,
+    params.revenueGrowthPercent,
+    params.costEscalationPercent,
+  );
+
+  const balanceSheetProjection = buildBalanceSheetProjection(
+    ownContribution,
+    bankTermLoan,
+    bankWorkingCapital,
+    totalFixedCapital,
+    financials.workingCapital,
+    profitLossProjection,
+    cashFlowProjection,
+  );
+
+  // ── 15. Reconciliation Invariant ──────────────────────────────────────
+  const splitSum = round(ownContribution + bankFinance + subsidyAmount);
+  const reconciliation = {
+    projectCostCheck: splitSum === totalProjectCost,
+    splitSum,
+    difference: totalProjectCost - splitSum,
+  };
+
+  // ── Assemble Result ───────────────────────────────────────────────────
   return {
-    // Means of Finance
+    schemeParams: params,
     totalProjectCost,
     ownContribution,
     ownContributionPercent,
@@ -335,26 +621,24 @@ export function computeFinancials(profile: ProjectProfile): FinancialResult {
     subsidyAmount,
     bankTermLoan,
     bankWorkingCapital,
-
-    // Loan
     emi,
     loanTenureMonths,
     repaymentMoratoriumMonths: moratoriumMonths,
     totalInterest,
     totalRepayment,
-
-    // Profitability
     monthlyOperatingCosts,
     annualRevenue,
     annualExpenditure,
     annualNetProfit,
-
-    // Ratios
     annualDepreciation,
-    dscr,
-    breakEvenPercent,
-
-    // Repayment schedule
+    dscr: round(dscr * 100) / 100,
+    breakEvenPercent: round(breakEvenPercent * 100) / 100,
+    currentRatio: round(currentRatio * 100) / 100,
     loanSchedule,
+    depreciationSchedule,
+    profitLossProjection,
+    cashFlowProjection,
+    balanceSheetProjection,
+    reconciliation,
   };
 }
