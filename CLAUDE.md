@@ -77,7 +77,7 @@ entrepreneurs, and district officers. It must feel like a serious business appli
 - Vite
 
 ### Mobile
-- Capacitor 7 → Android APK
+- Capacitor 8 → Android APK
 
 ### UI
 - Tailwind CSS

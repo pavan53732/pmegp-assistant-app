@@ -44,7 +44,7 @@ export type { InterviewPhase, PhaseProgress } from "./interview";
 
 ### Forbidden Imports
 - `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/knowledge-package/*`
-- `react`, `next`, `prisma`, `@/lib/db`
+- `react`, `next`, `prisma`, `@/database/sqlite`
 
 ### Events Emitted
 - None (types only).
@@ -106,7 +106,7 @@ export type { NicCodeEntry, NicSector, NicSubCategory, NicCodeMetadata } from ".
 - `zod` (for internal validation only, not re-exported).
 
 ### Forbidden Imports
-- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`
 - `@/shared/types/*` (knowledge package is standalone data; it does NOT depend on app types)
 
@@ -170,7 +170,7 @@ export function getEventBus(): EventBus;
 - `@/shared/types/*` (for type references in event payloads)
 
 ### Forbidden Imports
-- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`
 
 ### Rules
@@ -213,12 +213,12 @@ export interface ProjectSummary {
 
 ### Allowed Imports
 - `@/shared/types/*` (ProjectProfile, ProjectStatus)
-- `@/lib/db` (Prisma client — ONLY within `src/database/`)
+- `@/database/sqlite` (Capacitor SQLite client — ONLY within `src/database/`)
 
 ### Forbidden Imports
 - `@/engines/*`, `@/features/*`, `@/providers/*`
 - `react`, `next`
-- Any direct `import { db } from '@/lib/db'` OUTSIDE `src/database/` is a RULE #8 violation.
+- Any direct `import { db } from '@/database/sqlite'` OUTSIDE `src/database/` is a RULE #8 violation.
 
 ### Events Consumed
 - `PROJECT_DELETED` (to clean up)
@@ -229,7 +229,7 @@ export interface ProjectSummary {
 ### Rules
 - ALL database access MUST go through `IProjectRepository`.
 - `ProjectProfile` is serialized as JSON in the `profileData` column.
-- Repository is the ONLY module that imports `@/lib/db`.
+- Repository is the ONLY module that imports `@/database/sqlite`.
 
 ---
 
@@ -261,7 +261,7 @@ export function validateProject(profile: ProjectProfile): ValidationResult;
 
 ### Forbidden Imports
 - `@/engines/*` (sibling engines)
-- `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`, `ai` / any AI SDK
 
 ### Events Emitted
@@ -308,7 +308,7 @@ export function checkEligibility(profile: ProjectProfile): EligibilityResult;
 - `@/shared/types/project-profile` (ProjectProfile, Education, EntityType)
 
 ### Forbidden Imports
-- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`, `ai` / any AI SDK
 - `@/knowledge-package/*` (eligibility rules are self-contained)
 
@@ -382,7 +382,7 @@ export function computeFinancials(profile: ProjectProfile): FinancialResult;
 - `@/shared/types/project-profile` (ProjectProfile)
 
 ### Forbidden Imports
-- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/engines/*`, `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`, `ai` / any AI SDK
 - `@/knowledge-package/*`
 
@@ -490,7 +490,7 @@ export function suggestProjectSize(activityType: ActivityType, category: Applica
 
 ### Forbidden Imports
 - `@/engines/*` (sibling engines)
-- `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`, `ai` / any AI SDK
 
 ### Events Emitted
@@ -547,7 +547,7 @@ export function generateDPR(profile: ProjectProfile, financial: FinancialResult,
 - `@/engines/eligibility-engine` (EligibilityResult)
 
 ### Forbidden Imports
-- `@/features/*`, `@/database/*`, `@/providers/*`, `@/lib/db`
+- `@/features/*`, `@/database/*`, `@/providers/*`, `@/database/sqlite`
 - `react`, `next`, `prisma`, `ai` / any AI SDK
 
 ### Events Emitted
@@ -610,7 +610,7 @@ export function computeDerivedFields(profile: ProjectProfile): ProjectProfile;
 
 ### Forbidden Imports
 - `react` (framework-agnostic)
-- `next`, `prisma`, `@/lib/db`
+- `next`, `prisma`, `@/database/sqlite`
 - `@/engines/eligibility-engine`, `@/engines/financial-engine` (not called from store)
 - `@/providers/*` (AI access is NOT in the store)
 
@@ -665,7 +665,7 @@ export interface ChatMessage {
 ### Forbidden Imports
 - `react`, `next` (framework-agnostic controller)
 - `@/engines/validation-engine`, `@/engines/eligibility-engine`, `@/engines/financial-engine`
-- `@/database/*`, `@/lib/db`
+- `@/database/*`, `@/database/sqlite`
 
 ### Events Emitted
 - `AI_MESSAGE`, `SUGGESTION_PRESENTED`, `INTERVIEW_PHASE_CHANGED`
@@ -704,7 +704,7 @@ export function mapOcrToProfile(ocrResult: OcrResult, documentType: AttachmentTy
 - `@/shared/types/*` (ProjectProfile, AttachmentType)
 
 ### Forbidden Imports
-- `react`, `next`, `prisma`, `@/lib/db`
+- `react`, `next`, `prisma`, `@/database/sqlite`
 - `@/engines/*` (sibling engines)
 - `@/features/*`, `@/database/*`, `@/providers/*`
 
@@ -735,7 +735,7 @@ export function printDpr(dpr: DprDocument): void;
 - `@/engines/dpr-engine` (DprDocument)
 
 ### Forbidden Imports
-- `react`, `next`, `prisma`, `@/lib/db`
+- `react`, `next`, `prisma`, `@/database/sqlite`
 - `@/engines/*` (except dpr-engine)
 - `@/features/*`, `@/database/*`, `@/providers/*`
 
@@ -758,7 +758,7 @@ UI Team (Milestone 4 — NOT YET STARTED beyond landing page).
 - `@/lib/utils` (cn helper)
 
 ### Forbidden Imports
-- `@/lib/db`, `prisma` (UI never touches database directly)
+- `@/database/sqlite`, `prisma` (UI never touches database directly)
 - `@/database/*` (UI uses store, not repository)
 - `@/engines/validation-engine`, `@/engines/eligibility-engine`, `@/engines/financial-engine`
   (UI displays engine results; it does NOT call engines directly)
@@ -793,7 +793,7 @@ export function getAIResponse(systemPrompt: string, userMessage: string, history
 - `ai` / AI SDK (z-ai-web-dev-sdk on backend only)
 
 ### Forbidden Imports
-- `@/engines/*`, `@/features/*`, `@/database/*`, `@/lib/db`
+- `@/engines/*`, `@/features/*`, `@/database/*`, `@/database/sqlite`
 
 ### Rules
 - The ONLY outbound network call is to the AI endpoint.
@@ -834,7 +834,7 @@ Before marking a milestone as "ready for merge":
 - [ ] No forbidden imports detected (check with `rg` across src/)
 - [ ] Event types used match the EventTypeMap
 - [ ] Money fields are integers (no `toFixed`, no `parseFloat` for currency)
-- [ ] No direct `@/lib/db` outside `src/database/`
+- [ ] No direct `@/database/sqlite` outside `src/database/`
 - [ ] No engine imports from `@/features/*` or `@/providers/*`
 - [ ] Knowledge Package files are read-only at runtime
 - [ ] PII is masked in any log or prompt

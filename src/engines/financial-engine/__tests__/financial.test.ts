@@ -142,3 +142,51 @@ describe("Financial Engine — computeFinancials()", () => {
     expect(result.currentRatio).toBeGreaterThanOrEqual(0);
   });
 });
+
+describe("Financial Engine — Worked Example Fixtures", () => {
+  test("Case 1: GEN Male Urban Manufacturing — reconciliation passes", () => {
+    const profile = createTestProfile({
+      applicant: { category: "GEN", gender: "MALE", age: 35 },
+      location: { area: "URBAN" },
+      business: { activityType: "MANUFACTURING" },
+    });
+    const result = computeFinancials({ profile });
+    expect(result.reconciliation.projectCostCheck).toBe(true);
+    expect(result.subsidyRate).toBe(15);
+    expect(result.ownContributionPercent).toBe(10);
+  });
+
+  test("Case 2: SC Female Rural Service — higher subsidy rate", () => {
+    const profile = createTestProfile({
+      applicant: { category: "SC", gender: "FEMALE", age: 28 },
+      location: { area: "RURAL" },
+      business: { activityType: "SERVICE" },
+    });
+    const result = computeFinancials({ profile });
+    expect(result.subsidyRate).toBe(35);
+    expect(result.reconciliation.projectCostCheck).toBe(true);
+  });
+
+  test("Case 3: OBC Male Rural Manufacturing at ceiling edge", () => {
+    const profile = createTestProfile({
+      applicant: { category: "OBC", gender: "MALE", age: 30 },
+      location: { area: "RURAL" },
+      business: { activityType: "MANUFACTURING" },
+      financials: { totalProjectCost: 50_00_000 },
+    });
+    const result = computeFinancials({ profile });
+    expect(result.reconciliation.projectCostCheck).toBe(true);
+    expect(result.totalProjectCost).toBeLessThanOrEqual(50_00_000);
+  });
+
+  test("Case 4: ST Male Hill Border Service — hill area benefits", () => {
+    const profile = createTestProfile({
+      applicant: { category: "ST", gender: "MALE", age: 25 },
+      location: { area: "RURAL", isHillBorderArea: true },
+      business: { activityType: "SERVICE" },
+    });
+    const result = computeFinancials({ profile });
+    expect(result.reconciliation.projectCostCheck).toBe(true);
+    expect(result.subsidyRate).toBe(35);
+  });
+});

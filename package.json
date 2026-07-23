@@ -2,7 +2,7 @@
   "name": "pmegp-assistant-app",
   "version": "1.0.0",
   "private": true,
-  "description": "PMEGP Assistant — offline-first, AI-first Capacitor Android application",
+  "description": "PMEGP Assistant \u2014 offline-first, AI-first Capacitor Android application",
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000 --host 2>&1 | tee dev.log",
@@ -66,7 +66,6 @@
     "framer-motion": "^12.23.2",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.525.0",
-    "next-themes": "^0.4.6",
     "pdf-lib": "^1.17.1",
     "react": "^19.0.0",
     "react-day-picker": "^9.8.0",

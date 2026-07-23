@@ -84,3 +84,10 @@ db/*.db
 dist/
 dev.log
 upload/
+
+# Backend artifacts (P2: no backend)
+.env
+Caddyfile
+mini-services/
+.zscripts/
+worklog.md

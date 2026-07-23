@@ -7,7 +7,7 @@ Related: [01-system-architecture.md](01-system-architecture.md) · [11-ocr-archi
 
 ## 1. Approach
 
-The app is a **web app (React 19 + TS + Vite) packaged as a native Android app via Capacitor 7**. The web layer is the UI and orchestration; Capacitor bridges to native Android capabilities (camera, filesystem, secure storage, share).
+The app is a **web app (React 19 + TS + Vite) packaged as a native Android app via Capacitor 8**. The web layer is the UI and orchestration; Capacitor bridges to native Android capabilities (camera, filesystem, secure storage, share).
 
 Why Capacitor rather than React Native (recorded decision):
 - The app is **form- and document-heavy**, which suits web technologies.

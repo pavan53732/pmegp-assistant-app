@@ -89,7 +89,7 @@ hand-verified expected outputs. Reconciliation invariants asserted.
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19, TypeScript (strict), Vite |
-| Mobile | Capacitor 7 → Android APK |
+| Mobile | Capacitor 8 → Android APK |
 | UI | Tailwind CSS, shadcn/ui |
 | Forms | React Hook Form + Zod |
 | State | Zustand + TanStack Query |
@@ -261,7 +261,7 @@ With OK / Don't-show-again. Do NOT make the offline tool feel like an online ser
 ### Why Capacitor, not React Native
 
 Chosen because: form-heavy app suits web tech, future reuse for web/admin/desktop
-versions of the same codebase. Capacitor 7 → Android APK is the production target.
+versions of the same codebase. Capacitor 8 → Android APK is the production target.
 
 ### The `claude-api` / Claude Code skill
 

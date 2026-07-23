@@ -43,6 +43,7 @@ import { DprScreen } from "@/features/dpr/DprScreen";
 import { KnowledgeScreen } from "@/features/knowledge/KnowledgeScreen";
 import { OcrScreen } from "@/features/ocr/OcrScreen";
 import { SettingsScreen } from "@/features/settings/SettingsScreen";
+import { InterviewController } from "@/features/ai/interview";
 import { GuidedFormsWizard } from "@/features/guided-forms";
 // Wave 6: biometric unlock gate. Wraps <Routes> below so the entire app
 // content is gated on native (fingerprint / face / PIN). On web (dev) the
@@ -190,6 +191,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DashboardScreen />} />
           <Route path="/project/:id" element={<ProjectProfileScreen />} />
+          <Route path="/project/:id/interview" element={<InterviewController />} />
           <Route path="/project/:id/guided" element={<GuidedFormsRoute />} />
           <Route path="/project/:id/financial" element={<FinancialScreen />} />
           <Route path="/project/:id/eligibility" element={<EligibilityScreen />} />

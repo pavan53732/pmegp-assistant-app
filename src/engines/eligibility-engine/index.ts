@@ -270,19 +270,3 @@ export function evaluateEligibility(input: EligibilityInput): EligibilityResult 
     warnings,
   };
 }
-
-// ── Backward-Compatible Wrapper ────────────────────────────────────────────
-
-/**
- * Convenience wrapper that calls evaluateEligibility with default asOfDate
- * and scheme.  Maintains backward compatibility with existing callers.
- *
- * @deprecated Use evaluateEligibility({ asOfDate, scheme, profile }) for new code.
- */
-export function checkEligibility(profile: ProjectProfile): EligibilityResult {
-  return evaluateEligibility({
-    asOfDate: new Date().toISOString().split("T")[0],
-    scheme: "PMEGP",
-    profile,
-  });
-}

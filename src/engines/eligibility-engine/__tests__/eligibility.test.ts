@@ -246,3 +246,53 @@ describe("Eligibility Engine — evaluateEligibility() [new API]", () => {
     expect(a).toEqual(b);
   });
 });
+
+describe("Eligibility Engine — Worked Example Fixtures", () => {
+  test("Case 1: GEN Male Urban Manufacturing — fully eligible", () => {
+    const profile = createTestProfile({
+      applicant: { category: "GEN", gender: "MALE", age: 35, education: "GRADUATE" },
+      location: { area: "URBAN" },
+      business: { activityType: "MANUFACTURING" },
+      financials: { totalProjectCost: 25_00_000 },
+    });
+    const result = evaluateEligibility({ asOfDate: "2026-01-01", scheme: "PMEGP", profile });
+    expect(result.eligible).toBe(true);
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  test("Case 2: SC Female Rural Service — fully eligible with higher subsidy", () => {
+    const profile = createTestProfile({
+      applicant: { category: "SC", gender: "FEMALE", age: 28, education: "12TH_PASS" },
+      location: { area: "RURAL" },
+      business: { activityType: "SERVICE" },
+      financials: { totalProjectCost: 15_00_000 },
+    });
+    const result = evaluateEligibility({ asOfDate: "2026-01-01", scheme: "PMEGP", profile });
+    expect(result.eligible).toBe(true);
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  test("Case 3: OBC Male Rural Manufacturing at ceiling — eligible at boundary", () => {
+    const profile = createTestProfile({
+      applicant: { category: "OBC", gender: "MALE", age: 30, education: "10TH_PASS" },
+      location: { area: "RURAL" },
+      business: { activityType: "MANUFACTURING" },
+      financials: { totalProjectCost: 50_00_000 },
+    });
+    const result = evaluateEligibility({ asOfDate: "2026-01-01", scheme: "PMEGP", profile });
+    expect(result.eligible).toBe(true);
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  test("Case 4: ST Male Hill Border Service — eligible with special location", () => {
+    const profile = createTestProfile({
+      applicant: { category: "ST", gender: "MALE", age: 25, education: "8TH_PASS" },
+      location: { area: "RURAL", isHillBorderArea: true },
+      business: { activityType: "SERVICE" },
+      financials: { totalProjectCost: 20_00_000 },
+    });
+    const result = evaluateEligibility({ asOfDate: "2026-01-01", scheme: "PMEGP", profile });
+    expect(result.eligible).toBe(true);
+    expect(result.blockers).toHaveLength(0);
+  });
+});
