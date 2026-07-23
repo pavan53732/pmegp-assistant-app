@@ -14,7 +14,12 @@
     "cap:sync": "cap sync android",
     "cap:add:android": "cap add android",
     "cap:open:android": "cap open android",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright test --reporter=html",
+    "test:coverage": "vitest run --coverage",
+    "benchmark": "node scripts/benchmark.js",
+    "benchmark:build": "npm run build && node scripts/benchmark.js"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^8.1.0",

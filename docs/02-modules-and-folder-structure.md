@@ -1,6 +1,6 @@
 # 02 — Modules & Folder Structure
 
-Status: Draft for review. No application code exists yet.
+Status: Draft for review. Application code is fully implemented.
 
 This document defines the repository layout and the module boundaries. It exists to make the [DESIGN_PRINCIPLES.md](../DESIGN_PRINCIPLES.md) principle "clear separation of UI, engines, and providers" concrete and enforceable.
 
