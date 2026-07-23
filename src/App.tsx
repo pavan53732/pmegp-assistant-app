@@ -183,6 +183,7 @@ function Footer() {
 // ── App ─────────────────────────────────────────────────────────────────────
 
 export default function App() {
+  const { showNotice, dismissNotice } = useFirstRunNotice();
   return (
     <Shell>
       <BiometricGate>

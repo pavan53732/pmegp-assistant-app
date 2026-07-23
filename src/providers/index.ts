@@ -13,6 +13,8 @@
 //   - No z-ai-web-dev-sdk (server-only SDK removed for the Capacitor build).
 // ───────────────────────────────────────────────────────────────────────────────
 
+import { redactPii } from "@/shared/security/pii";
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 export interface ProviderMessage {
@@ -127,12 +129,30 @@ async function callOpenAICompatible(
   };
 }
 
+// ── PII Redaction ─────────────────────────────────────────────────────────
+
+/**
+ * Redact PII from all message contents before sending to AI provider.
+ * RULE #16: PII must never enter an AI prompt unmasked.
+ */
+function redactMessages(
+  messages: Array<{ role: string; content: string }>
+): Array<{ role: string; content: string }> {
+  return messages.map((m) => ({
+    role: m.role,
+    content: redactPii(m.content),
+  }));
+}
+
 // ── Public API ─────────────────────────────────────────────────────────────
 
 /**
  * Send a chat completion request with conversation history to the user's
  * configured AI provider. This is the ONLY function that makes an outbound
  * network call. All AI access in the application flows through it.
+ *
+ * PII is automatically redacted from all message contents before the request
+ * is sent (RULE #16).
  *
  * @param messages        - Full conversation history (system prompt first).
  * @param connectionConfig - The user's provider config (required — there is no
@@ -153,7 +173,10 @@ export async function getAIResponse(
     trimmed = [trimmed[0], ...trimmed.slice(-(maxHistoryLength - 1))];
   }
 
-  const sdkMessages = trimmed.map((m) => ({ role: m.role, content: m.content }));
+  // RULE #16: Redact PII before sending to AI provider
+  const sdkMessages = redactMessages(
+    trimmed.map((m) => ({ role: m.role, content: m.content }))
+  );
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -176,4 +199,28 @@ export async function getAIResponse(
     content: null,
     error: lastError?.message ?? "Unknown provider error",
   };
+}
+
+/**
+ * Test the connection to the user's configured AI provider.
+ * Returns success if the provider responds with a valid completion.
+ */
+export async function testProviderConnection(
+  connectionConfig: ProviderConnectionConfig
+): Promise<{ success: boolean; error?: string; model?: string }> {
+  try {
+    const resp = await callOpenAICompatible(
+      [{ role: "user", content: "Hello" }],
+      connectionConfig
+    );
+    return {
+      success: true,
+      model: connectionConfig.modelName,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
 }
